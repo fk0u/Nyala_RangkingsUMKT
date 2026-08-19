@@ -15,7 +15,8 @@ export type MascotMood =
   | "confused"
   | "nervous"
   | "studying"
-  | "salim";
+  | "salim"
+  | "waving";
 
 export interface MascotFlameProps {
   size?: "sm" | "md" | "lg" | "xl" | "2xl";
@@ -26,6 +27,11 @@ export interface MascotFlameProps {
 }
 
 export const MASCOT_MOOD_DESCRIPTIONS: Record<MascotMood, { label: string; quote: string; tag: string }> = {
+  waving: {
+    label: "Menyapa MABA",
+    quote: "Halo Inovator Muda UMKT 2026! Nyala siap jadi teman terbaikmu dari MASTA sampai wisuda!",
+    tag: "Welcoming Hero"
+  },
   happy: {
     label: "Semangat Menyala",
     quote: "Siap mendampingi perjalanan MABA UMKT 2026!",
@@ -130,6 +136,12 @@ export default function MascotFlame({
           y: [0, -2, 0],
           transition: { duration: 0.25, repeat: Infinity, ease: "linear" as const }
         };
+      case "waving":
+        return {
+          y: [0, -6, 0],
+          rotate: [-1.5, 1.5, -1.5],
+          transition: { duration: 2, repeat: Infinity, ease: "easeInOut" as const }
+        };
       case "cheering":
       case "excited":
         return {
@@ -168,7 +180,8 @@ export default function MascotFlame({
     "cheering",
     "confused",
     "sleepy",
-    "nervous"
+    "nervous",
+    "waving"
   ].includes(mood);
 
   return (
@@ -658,39 +671,64 @@ export default function MascotFlame({
           </g>
         )}
 
-        {/* MOOD PROPS: 2. CODING WITH MINI LAPTOP */}
+        {/* MOOD PROPS: 2. CODING WITH MINI LAPTOP (CORRECT PERSPECTIVE: BACK LID FACING CAMERA) */}
         {mood === "coding" && (
           <g className="rig-prop-coding">
-            {/* Laptop Base */}
-            <rect x="42" y="90" width="46" height="6" rx="2" fill="#334155" stroke="#0F172A" strokeWidth="1" />
-            
-            {/* Laptop Screen Open */}
-            <g transform="translate(45, 68)">
-              <rect x="0" y="0" width="40" height="24" rx="2" fill="#0F172A" stroke="#475569" strokeWidth="1" />
-              <rect x="2" y="2" width="36" height="20" rx="1" fill="url(#laptopScreen)" />
-              {/* Code lines */}
-              <line x1="6" y1="6" x2="16" y2="6" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" />
-              <line x1="6" y1="10" x2="28" y2="10" stroke="#FEF08A" strokeWidth="1.2" strokeLinecap="round" />
-              <line x1="9" y1="14" x2="22" y2="14" stroke="#BBF7D0" strokeWidth="1.2" strokeLinecap="round" />
-              <line x1="6" y1="18" x2="18" y2="18" stroke="#FED7AA" strokeWidth="1.2" strokeLinecap="round" />
+            {/* Screen Blue Glow Reflection Upward onto Face */}
+            <ellipse cx="65" cy="74" rx="20" ry="8" fill="#38BDF8" opacity="0.25" />
+
+            {/* Laptop Base (Chassis on Lap) */}
+            <path
+              d="M40 94L45 88L85 88L90 94Z"
+              fill="#0F172A"
+              stroke="#334155"
+              strokeWidth="0.8"
+            />
+            {/* Front Edge Highlight */}
+            <line x1="42" y1="94" x2="88" y2="94" stroke="#475569" strokeWidth="1" />
+
+            {/* Laptop Lid (Facing Camera - Back Cover with Metallic Finish) */}
+            <path
+              d="M45 88L47 70L83 70L85 88Z"
+              fill="#1E293B"
+              stroke="#334155"
+              strokeWidth="1"
+            />
+            {/* Sleek Inner Lid Panel Accent */}
+            <path
+              d="M47 86L48.5 72L81.5 72L83 86Z"
+              fill="#0F172A"
+              opacity="0.5"
+            />
+
+            {/* Glowing Logo on Laptop Lid (Cute Flame / Hacker Symbol) */}
+            <g transform="translate(65, 79)">
+              {/* Glowing Aura */}
+              <circle cx="0" cy="0" r="5" fill="#FF5A1F" opacity="0.3" />
+              {/* Flame Symbol on Back Lid */}
+              <path
+                d="M0 -3.5C1.5 -1.5 3 0 2 2.5C1 4.5 -1 4.5 -2 2.5C-3 0 -1.5 -1.5 0 -3.5Z"
+                fill="#FF7A00"
+              />
+              <circle cx="0" cy="2" r="1" fill="#FEF08A" />
             </g>
 
-            {/* Little Typing Hands */}
+            {/* Little Animated Typing Hands on Keyboard Sides */}
             <motion.circle
-              cx="50"
-              cy="92"
-              r="3.8"
+              cx="44"
+              cy="87"
+              r="3.5"
               fill="#FFF7ED"
-              animate={{ y: [0, -2, 0] }}
-              transition={{ duration: 0.4, repeat: Infinity }}
+              animate={{ y: [-1.5, 1.5, -1.5] }}
+              transition={{ duration: 0.35, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.circle
-              cx="80"
-              cy="92"
-              r="3.8"
+              cx="86"
+              cy="87"
+              r="3.5"
               fill="#FFF7ED"
-              animate={{ y: [-2, 0, -2] }}
-              transition={{ duration: 0.4, repeat: Infinity }}
+              animate={{ y: [1.5, -1.5, 1.5] }}
+              transition={{ duration: 0.35, repeat: Infinity, ease: "easeInOut" }}
             />
           </g>
         )}
@@ -757,6 +795,29 @@ export default function MascotFlame({
             {/* Hand under chin */}
             <path d="M46 84C52 86 58 87 64 85" stroke="#FFF7ED" strokeWidth="4.5" strokeLinecap="round" />
             <circle cx="64" cy="85" r="3.5" fill="#FFF7ED" />
+          </g>
+        )}
+
+        {/* MOOD PROPS: 8. WAVING / MENYAPA MABA */}
+        {mood === "waving" && (
+          <g className="rig-prop-waving">
+            {/* Left Hand Relaxed */}
+            <circle cx="42" cy="84" r="4" fill="#FFF7ED" />
+
+            {/* Right Arm Animated Wave */}
+            <motion.g
+              animate={{
+                rotate: [-12, 22, -12],
+              }}
+              style={{ originX: "86px", originY: "78px" }}
+              transition={{ duration: 0.85, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <path d="M86 78C94 70 100 58 104 46" stroke="#FFF7ED" strokeWidth="5.5" strokeLinecap="round" />
+              <circle cx="104" cy="46" r="4.5" fill="#FFF7ED" />
+              {/* Joyful Little Sparkles Around Hand */}
+              <circle cx="112" cy="42" r="2.2" fill="#FBBF24" />
+              <circle cx="96" cy="38" r="1.5" fill="#F59E0B" />
+            </motion.g>
           </g>
         )}
 

@@ -156,10 +156,24 @@ export default function Footer() {
           {/* Bottom Credits */}
           <div className="pt-6 border-t border-navy-200/60 dark:border-navy-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-navy-500 dark:text-navy-400">
             <p>© 2026 Nyala • Karya Inovasi MABA Universitas Muhammadiyah Kalimantan Timur.</p>
-            <div className="flex items-center gap-1">
-              <span>Dibuat dengan</span>
-              <Heart weight="fill" className="w-3.5 h-3.5 text-nyala-500" />
-              <span>untuk menyalakan semangat MABA UMKT</span>
+            
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+              <button
+                onClick={() => {
+                  sessionStorage.removeItem("nyala_splash_seen");
+                  window.dispatchEvent(new Event("replay-nyala-intro"));
+                }}
+                className="hover:text-nyala-600 dark:hover:text-nyala-400 font-bold transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <Sparkle weight="bold" className="w-3.5 h-3.5 text-nyala-500" />
+                <span>Putar Ulang Welcoming Intro</span>
+              </button>
+
+              <div className="flex items-center gap-1">
+                <span>Dibuat dengan</span>
+                <Heart weight="fill" className="w-3.5 h-3.5 text-nyala-500" />
+                <span>untuk MABA UMKT 2026</span>
+              </div>
             </div>
           </div>
         </div>

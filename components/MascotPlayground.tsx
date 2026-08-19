@@ -15,7 +15,8 @@ import {
   Lightbulb,
   Heart,
   ArrowsClockwise,
-  Quotes
+  Quotes,
+  HandWaving
 } from "@phosphor-icons/react";
 import MascotFlame, { MascotMood, MASCOT_MOOD_DESCRIPTIONS } from "./MascotFlame";
 import { useToast } from "@/context/ToastContext";
@@ -28,6 +29,7 @@ interface MoodItem {
 }
 
 const MOODS_LIST: MoodItem[] = [
+  { id: "waving", label: "Menyapa MABA", icon: HandWaving, color: "text-nyala-500 bg-nyala-500/10 border-nyala-500/20" },
   { id: "happy", label: "Semangat", icon: Sparkle, color: "text-amber-500 bg-amber-500/10 border-amber-500/20" },
   { id: "coding", label: "Ngoding", icon: Code, color: "text-cyan-500 bg-cyan-500/10 border-cyan-500/20" },
   { id: "withClipboard", label: "Checklist", icon: CheckSquare, color: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20" },

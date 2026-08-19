@@ -23,6 +23,7 @@ import {
 } from "@phosphor-icons/react";
 import { BlogPost, OFFICIAL_CONTACTS, BLOG_POSTS } from "@/lib/masta-data";
 import { getAllBlogPosts, getBlogPostBySlug } from "@/lib/blog-store";
+import { formatIndonesianDate, stripHtml } from "@/lib/umkt-api";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import AdminContactCard from "@/components/AdminContactCard";
 import { useToast } from "@/context/ToastContext";
@@ -38,11 +39,47 @@ export default function BlogPostDetailPage() {
   const toast = useToast();
 
   useEffect(() => {
-    const list = getAllBlogPosts();
-    setAllPosts(list);
-    const found = list.find((p) => p.slug === slug) || BLOG_POSTS.find((p) => p.slug === slug) || null;
-    setPost(found);
-    setIsLoading(false);
+    const loadPost = async () => {
+      const list = getAllBlogPosts();
+      setAllPosts(list);
+      let found = list.find((p) => p.slug === slug) || BLOG_POSTS.find((p) => p.slug === slug) || null;
+
+      if (!found && slug) {
+        // Fallback: Query live UMKT API
+        try {
+          const res = await fetch(`/api/umkt-portal?type=berita&search=${encodeURIComponent(slug)}`);
+          if (res.ok) {
+            const json = await res.json();
+            const results = json.data?.results || [];
+            const item = results.find((r: any) => r.slug === slug) || results[0];
+            if (item) {
+              found = {
+                slug: item.slug,
+                title: item.judul,
+                excerpt: stripHtml(item.isi).slice(0, 180) + "...",
+                category: "Berita Kampus",
+                readTime: "3 menit baca",
+                author: item.created || "Humas & Protokoler UMKT",
+                authorRole: "Humas & Redaksi Kampus",
+                date: formatIndonesianDate(item.tanggal),
+                coverImage: item.thumbnail || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80",
+                tags: ["Berita UMKT", "Resmi"],
+                content: item.isi,
+                keyTakeaways: item.sdgs && item.sdgs.length > 0 ? item.sdgs.map((s: any) => s.sdgs).slice(0, 3) : ["Berita resmi terverifikasi Humas UMKT."],
+                sourceUrl: item.url
+              };
+            }
+          }
+        } catch (e) {
+          console.warn("Could not fetch remote article:", e);
+        }
+      }
+
+      setPost(found);
+      setIsLoading(false);
+    };
+
+    loadPost();
   }, [slug]);
 
   if (isLoading) {
@@ -195,9 +232,16 @@ export default function BlogPostDetailPage() {
 
       {/* 5. Article Content */}
       <article className="prose prose-sm sm:prose-base dark:prose-invert max-w-none text-navy-800 dark:text-navy-200 leading-relaxed font-normal space-y-6">
-        <div className="whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed">
-          {post.content}
-        </div>
+        {post.content && (post.content.includes("<p>") || post.content.includes("<figure") || post.content.includes("<span")) ? (
+          <div
+            className="umkt-article-html leading-relaxed space-y-4"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+        ) : (
+          <div className="whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed">
+            {post.content}
+          </div>
+        )}
       </article>
 
       {/* 6. Tags Strip */}

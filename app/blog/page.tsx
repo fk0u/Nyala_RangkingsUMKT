@@ -26,6 +26,7 @@ import { getAllBlogPosts } from "@/lib/blog-store";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import AdminContactCard from "@/components/AdminContactCard";
 import MascotFlame from "@/components/MascotFlame";
+import UMKTLiveFeed from "@/components/UMKTLiveFeed";
 
 const CATEGORIES = [
   "Semua",
@@ -39,6 +40,7 @@ const CATEGORIES = [
 ];
 
 export default function BlogIndexPage() {
+  const [mainView, setMainView] = useState<"live_portal" | "panduan_maba">("live_portal");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -91,112 +93,154 @@ export default function BlogIndexPage() {
         </div>
       </div>
 
-      {/* 2. Featured Article Banner */}
-      {selectedCategory === "Semua" && !searchQuery && featuredPost && (
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-white p-6 sm:p-8 lg:p-10 border border-navy-800 shadow-2xl">
-          <div className="absolute top-0 right-0 w-72 h-72 bg-nyala-500/20 rounded-full blur-3xl -z-0" />
-          
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Left Cover Image for Featured */}
-            {featuredPost.coverImage && (
-              <div className="lg:col-span-5 overflow-hidden rounded-2xl border border-navy-700/60 shadow-lg group">
-                <img
-                  src={featuredPost.coverImage}
-                  alt={featuredPost.title}
-                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            )}
+      {/* 2. Main View Mode Segmented Switcher */}
+      <div className="flex items-center justify-center">
+        <div className="p-1.5 rounded-2xl bg-navy-100 dark:bg-navy-900 border border-navy-200/60 dark:border-navy-800 flex items-center gap-2 max-w-xl w-full shadow-xs">
+          <button
+            onClick={() => setMainView("live_portal")}
+            className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 ${
+              mainView === "live_portal"
+                ? "bg-white dark:bg-navy-800 text-nyala-600 dark:text-nyala-400 shadow-sm"
+                : "text-navy-500 hover:text-navy-900 dark:hover:text-white"
+            }`}
+          >
+            <Newspaper weight="bold" className="w-4 h-4 text-nyala-500" />
+            <span>Warta & Hub Portal API UMKT</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-mono font-bold">
+              Live
+            </span>
+          </button>
 
-            <div className={featuredPost.coverImage ? "lg:col-span-7 space-y-4" : "lg:col-span-12 space-y-4"}>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-3 py-1 rounded-full bg-nyala-500 text-white text-xs font-black uppercase tracking-wider flex items-center gap-1">
-                  <Sparkle weight="fill" className="w-3.5 h-3.5" />
-                  <span>Artikel Unggulan</span>
-                </span>
-                <span className="px-3 py-1 rounded-full bg-white/10 text-navy-200 text-xs font-semibold">
-                  {featuredPost.category}
-                </span>
-                <span className="text-xs text-navy-300 flex items-center gap-1 font-mono">
-                  <Clock weight="bold" className="w-3.5 h-3.5" />
-                  {featuredPost.readTime}
-                </span>
-              </div>
+          <button
+            onClick={() => setMainView("panduan_maba")}
+            className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 ${
+              mainView === "panduan_maba"
+                ? "bg-white dark:bg-navy-800 text-nyala-600 dark:text-nyala-400 shadow-sm"
+                : "text-navy-500 hover:text-navy-900 dark:hover:text-white"
+            }`}
+          >
+            <BookOpen weight="bold" className="w-4 h-4 text-nyala-500" />
+            <span>Panduan Edukasi MABA</span>
+          </button>
+        </div>
+      </div>
 
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug">
-                <Link href={`/blog/${featuredPost.slug}`} className="hover:text-nyala-400 transition-colors">
-                  {featuredPost.title}
-                </Link>
-              </h2>
-
-              <p className="text-xs sm:text-sm text-navy-200 leading-relaxed line-clamp-3">
-                {featuredPost.excerpt}
-              </p>
-
-              <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2.5 text-xs text-navy-300">
-                  <div className="w-7 h-7 rounded-full bg-nyala-500/20 text-nyala-400 flex items-center justify-center font-bold">
-                    <User weight="bold" className="w-3.5 h-3.5" />
-                  </div>
-                  <div>
-                    <span className="font-semibold text-white block">{featuredPost.author}</span>
-                    <span className="text-[11px] text-navy-400">{featuredPost.authorRole}</span>
-                  </div>
-                </div>
-
-                <Link
-                  href={`/blog/${featuredPost.slug}`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-nyala-500 hover:bg-nyala-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-nyala-500/25 transition-all"
-                >
-                  <span>Baca Selengkapnya</span>
-                  <ArrowRight weight="bold" className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-
-          </div>
+      {/* 3. LIVE REST API FEED MODE */}
+      {mainView === "live_portal" && (
+        <div className="space-y-8">
+          <UMKTLiveFeed />
         </div>
       )}
 
-      {/* 3. Search & Category Filters */}
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          
-          {/* Category Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
-            {CATEGORIES.map((cat) => {
-              const active = selectedCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
-                    active
-                      ? "bg-nyala-600 text-white shadow-md shadow-nyala-600/20"
-                      : "bg-navy-100 dark:bg-navy-900 text-navy-600 dark:text-navy-300 hover:bg-navy-200 dark:hover:bg-navy-800"
-                  }`}
-                >
-                  {cat}
-                </button>
-              );
-            })}
-          </div>
+      {/* 4. CURATED GUIDES & TIPS MODE */}
+      {mainView === "panduan_maba" && (
+        <div className="space-y-16">
+          {/* Featured Article Banner */}
+          {selectedCategory === "Semua" && !searchQuery && featuredPost && (
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-white p-6 sm:p-8 lg:p-10 border border-navy-800 shadow-2xl">
+              <div className="absolute top-0 right-0 w-72 h-72 bg-nyala-500/20 rounded-full blur-3xl -z-0" />
+              
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                {/* Left Cover Image for Featured */}
+                {featuredPost.coverImage && (
+                  <div className="lg:col-span-5 overflow-hidden rounded-2xl border border-navy-700/60 shadow-lg group">
+                    <img
+                      src={featuredPost.coverImage}
+                      alt={featuredPost.title}
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                )}
 
-          {/* Search Input */}
-          <div className="relative w-full md:w-72 flex-shrink-0">
-            <MagnifyingGlass weight="bold" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-400" />
-            <input
-              type="text"
-              placeholder="Cari topik atau kata kunci..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-navy-900 dark:text-white placeholder-navy-400 focus:outline-none focus:ring-2 focus:ring-nyala-500 shadow-sm"
-            />
-          </div>
+                <div className={featuredPost.coverImage ? "lg:col-span-7 space-y-4" : "lg:col-span-12 space-y-4"}>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-nyala-500 text-white text-xs font-black uppercase tracking-wider flex items-center gap-1">
+                      <Sparkle weight="fill" className="w-3.5 h-3.5" />
+                      <span>Artikel Unggulan</span>
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-white/10 text-navy-200 text-xs font-semibold">
+                      {featuredPost.category}
+                    </span>
+                    <span className="text-xs text-navy-300 flex items-center gap-1 font-mono">
+                      <Clock weight="bold" className="w-3.5 h-3.5" />
+                      {featuredPost.readTime}
+                    </span>
+                  </div>
 
-        </div>
-      </div>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug">
+                    <Link href={`/blog/${featuredPost.slug}`} className="hover:text-nyala-400 transition-colors">
+                      {featuredPost.title}
+                    </Link>
+                  </h2>
+
+                  <p className="text-xs sm:text-sm text-navy-200 leading-relaxed line-clamp-3">
+                    {featuredPost.excerpt}
+                  </p>
+
+                  <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex items-center gap-2.5 text-xs text-navy-300">
+                      <div className="w-7 h-7 rounded-full bg-nyala-500/20 text-nyala-400 flex items-center justify-center font-bold">
+                        <User weight="bold" className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <span className="font-semibold text-white block">{featuredPost.author}</span>
+                        <span className="text-[11px] text-navy-400">{featuredPost.authorRole}</span>
+                      </div>
+                    </div>
+
+                    <Link
+                      href={`/blog/${featuredPost.slug}`}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-nyala-500 hover:bg-nyala-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-nyala-500/25 transition-all"
+                    >
+                      <span>Baca Selengkapnya</span>
+                      <ArrowRight weight="bold" className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* Search & Category Filters */}
+          <div className="space-y-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              
+              {/* Category Pills */}
+              <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
+                {CATEGORIES.map((cat) => {
+                  const active = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                        active
+                          ? "bg-nyala-600 text-white shadow-md shadow-nyala-600/20"
+                          : "bg-navy-100 dark:bg-navy-900 text-navy-600 dark:text-navy-300 hover:bg-navy-200 dark:hover:bg-navy-800"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Search Input */}
+              <div className="relative w-full md:w-72 flex-shrink-0">
+                <MagnifyingGlass weight="bold" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-400" />
+                <input
+                  type="text"
+                  placeholder="Cari topik atau kata kunci..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-navy-900 dark:text-white placeholder-navy-400 focus:outline-none focus:ring-2 focus:ring-nyala-500 shadow-sm"
+                />
+              </div>
+
+            </div>
+          </div>
 
       {/* 4. Articles Grid */}
       <div className="space-y-8">
@@ -306,6 +350,8 @@ export default function BlogIndexPage() {
           </div>
         )}
       </div>
+      </div>
+      )}
 
       {/* 5. Direct Official Admin Support Section */}
       <div className="space-y-6 pt-6">
@@ -322,10 +368,8 @@ export default function BlogIndexPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {OFFICIAL_CONTACTS.map((contact) => (
-            <AdminContactCard key={contact.id} contact={contact} />
-          ))}
+        <div className="max-w-4xl mx-auto">
+          <AdminContactCard />
         </div>
       </div>
 

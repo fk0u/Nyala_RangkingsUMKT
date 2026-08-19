@@ -66,8 +66,21 @@ DATA AKADEMIK PRODI TEKNOLOGI INFORMASI UMKT 2026:
 
 PORTAL & TAUTAN RESMI:
 - Website Utama: https://www.umkt.ac.id/
+- REST API Live: https://web.umkt.ac.id/api/
 - Portal Mahasiswa (SIKAD): https://mahasiswa.umkt.ac.id/
 - Portal Resmi MASTA: https://masta-maba.odoo.com/
+
+DAFTAR 10 FAKULTAS RESMI UMKT:
+1. Fakultas Sains dan Teknologi (FST) - Mengayomi Prodi Teknologi Informasi, Teknik Informatika, Teknik Sipil, Teknik Mesin.
+2. Fakultas Ekonomi Bisnis dan Politik (FEBP) - Manajemen, Akuntansi, Hubungan Internasional, Ilmu Politik.
+3. Fakultas Farmasi - Farmasi Klinis & Komunitas, Profesi Apoteker.
+4. Fakultas Kedokteran - Pendidikan Dokter & Profesi Dokter.
+5. Fakultas Ilmu Keperawatan - S1 Keperawatan & Profesi Ners.
+6. Fakultas Kesehatan Masyarakat (FKM) - S1 Kesehatan Masyarakat.
+7. Fakultas Psikologi - S1 Psikologi.
+8. Fakultas Keguruan dan Ilmu Pendidikan (FKIP) - Pend. Bahasa Inggris, Pend. Matematika, Pend. Olahraga, PG-PAUD.
+9. Fakultas Hukum - S1 Ilmu Hukum.
+10. Fakultas Pertanian dan Bisnis Digital (FPBD) - Agribisnis & Bisnis Digital.
 `;
 
 // Smart Offline Fallback Engine
@@ -251,7 +264,38 @@ Portal ini merupakan pusat aktivitas akademik:
 Kamu dapat mencoba simulator menu SIKAD di tab **[Panduan SIKAD](/panduan-sikad)**.`;
   }
 
-  // 4. BEASISWA & ORGANISASI
+  // 4. FAKULTAS & PROGRAM STUDI UMKT
+  if (query.includes("fakultas") || query.includes("prodi") || query.includes("jurusan") || query.includes("unit")) {
+    return `🏛️ **10 Fakultas Resmi di Universitas Muhammadiyah Kalimantan Timur (UMKT)**:
+
+1. **Fakultas Sains dan Teknologi (FST)** — S1 Teknologi Informasi, S1 Teknik Informatika, S1 Teknik Sipil, S1 Teknik Mesin.
+2. **Fakultas Ekonomi Bisnis dan Politik (FEBP)** — S1 Manajemen, S1 Akuntansi, S1 Hubungan Internasional, S1 Ilmu Politik.
+3. **Fakultas Farmasi** — S1 Farmasi, Profesi Apoteker.
+4. **Fakultas Kedokteran** — S1 Kedokteran, Profesi Dokter.
+5. **Fakultas Ilmu Keperawatan** — S1 Ilmu Keperawatan, Profesi Ners.
+6. **Fakultas Kesehatan Masyarakat (FKM)** — S1 Kesehatan Masyarakat.
+7. **Fakultas Psikologi** — S1 Psikologi.
+8. **Fakultas Keguruan dan Ilmu Pendidikan (FKIP)** — Pend. Bahasa Inggris, Pend. Matematika, Pend. Olahraga, PG-PAUD.
+9. **Fakultas Hukum** — S1 Ilmu Hukum.
+10. **Fakultas Pertanian dan Bisnis Digital (FPBD)** — S1 Agribisnis, S1 Bisnis Digital.
+
+Seluruh data fakultas terintegrasi langsung dengan portal **[web.umkt.ac.id/api/info-fakultas/](https://web.umkt.ac.id/api/info-fakultas/)**.`;
+  }
+
+  // 5. BERITA, EVENT, PENGUMUMAN & PORTAL REST API
+  if (query.includes("berita") || query.includes("event") || query.includes("pengumuman") || query.includes("agenda") || query.includes("sdgs")) {
+    return `📰 **Warta, Agenda & Pengumuman Resmi Kampus UMKT**:
+
+Website Nyala telah terhubung langsung secara *real-time* dengan **REST API Resmi UMKT** (\`https://web.umkt.ac.id/api/\`):
+- **📰 Berita Kampus**: 2.100+ artikel warta prestasi, riset, dan pengabdian masyarakat (termasuk aksi KKP Mahasiswa Farmasi di Posyandu & Prestasi Nasional).
+- **📢 Pengumuman Resmi**: 340+ edaran resmi, kompetisi short video SDGs MABA 2026, dan panduan beasiswa.
+- **🗓️ Agenda & Event**: 85+ agenda kegiatan kampus, seminar, dan *Education Visit* IKN.
+- **🌱 Komitmen SDGs**: Seluruh rilis berita kampus terpetakan pada pilar *Sustainable Development Goals* (Kesehatan, Pendidikan Berkualitas, Keadilan).
+
+Kamu bisa melihat live feed berita dan menyaring pengumuman langsung di menu **[Blog & Warta Kampus](/blog)** atau di halaman Beranda!`;
+  }
+
+  // 6. BEASISWA & ORGANISASI
   if (query.includes("beasiswa") || query.includes("kip") || query.includes("tahfidz") || query.includes("ukm") || query.includes("himatif")) {
     return `🌟 **Beasiswa & Organisasi Mahasiswa UMKT 2026**:
 

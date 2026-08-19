@@ -29,12 +29,22 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
   const [persiapanOpen, setPersiapanOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [isDockedLanding, setIsDockedLanding] = useState(false);
 
   useEffect(() => {
     setAkademikOpen(false);
     setPersiapanOpen(false);
     setMobileOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const handleDocked = () => {
+      setIsDockedLanding(true);
+      setTimeout(() => setIsDockedLanding(false), 1200);
+    };
+    window.addEventListener("nyala-mascot-docked", handleDocked);
+    return () => window.removeEventListener("nyala-mascot-docked", handleDocked);
+  }, []);
 
   const isActiveGroup = (paths: string[]) => paths.some((p) => pathname === p);
 
@@ -44,8 +54,30 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
 
           {/* ── Brand ── */}
-          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <MascotFlame size="sm" className="w-7 h-7 group-hover:scale-110 transition-transform" />
+          <Link href="/" id="navbar-brand-link" className="flex items-center gap-2.5 group flex-shrink-0">
+            <motion.div
+              id="navbar-brand-mascot"
+              animate={
+                isDockedLanding
+                  ? {
+                      scale: [1, 1.45, 0.9, 1.15, 1],
+                      rotate: [0, -12, 12, -6, 0],
+                    }
+                  : {}
+              }
+              transition={{ duration: 0.85, ease: "easeOut" }}
+              className="relative flex items-center justify-center"
+            >
+              <MascotFlame size="sm" className="w-7 h-7 group-hover:scale-110 transition-transform" />
+              {isDockedLanding && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 1 }}
+                  animate={{ scale: 2, opacity: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="absolute inset-0 rounded-full bg-nyala-500/40 pointer-events-none"
+                />
+              )}
+            </motion.div>
             <span className="text-lg font-black tracking-tight text-navy-900 dark:text-white">
               Nyala
             </span>
