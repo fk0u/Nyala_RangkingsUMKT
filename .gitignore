@@ -14,5 +14,7 @@ graphify-out/
 graphify-obsidian/
 .env*
 .env.local
+.admin.config.local
+*.config.local
 .agents/rules/*
 !.agents/rules/GEMINI.md

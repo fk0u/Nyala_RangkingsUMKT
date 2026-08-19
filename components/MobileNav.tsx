@@ -15,10 +15,11 @@ import {
   Newspaper, 
   Headset, 
   BookOpenText, 
-  X,
-  CaretUp,
-  Fire,
-  GridFour
+  Globe,
+  X, 
+  CaretUp, 
+  Fire, 
+  GridFour 
 } from "@phosphor-icons/react";
 import AdminHelpModal from "./AdminHelpModal";
 import MascotFlame from "./MascotFlame";
@@ -30,18 +31,18 @@ export default function MobileNav() {
 
   const PRIMARY_TABS = [
     { href: "/", label: "Beranda", icon: House },
-    { href: "/panduan-ti", label: "Akademik", icon: Code, badge: "TI" },
+    { href: "/panduan", label: "Panduan", icon: BookOpenText },
     { href: "/companion", label: "Tanya AI", icon: Sparkle, isCenter: true },
-    { href: "/jadwal", label: "Persiapan", icon: CalendarCheck, badge: "Alur" },
-    { href: "/blog", label: "Warta", icon: Newspaper, badge: "Live" },
+    { href: "/jadwal", label: "Alur", icon: CalendarCheck, badge: "Alur" },
+    { href: "/hub-umkt", label: "Hub UMKT", icon: Globe, badge: "Live" },
   ];
 
   const QUICK_APPS = [
+    { href: "/health", label: "Health Check & Mood", desc: "Kesiapan fisik & mental MABA", icon: Heartbeat, color: "text-rose-500 bg-rose-500/10" },
+    { href: "/checklist", label: "Checklist Persiapan", desc: "Kelengkapan berkas & pakaian", icon: CheckSquare, color: "text-emerald-500 bg-emerald-500/10" },
     { href: "/panduan-ti", label: "Kurikulum TI 2026", desc: "Dosen, standar nilai S.Kom & karir", icon: Code, color: "text-nyala-500 bg-nyala-500/10" },
     { href: "/panduan-sikad", label: "Simulator SIKAD", desc: "KRS, presensi 75%, tagihan SPP", icon: Laptop, color: "text-blue-500 bg-blue-500/10" },
     { href: "/jadwal", label: "Alur 5 Tahap MASTA", desc: "Daring (24/26) & Luring (28 Agt)", icon: CalendarCheck, color: "text-amber-500 bg-amber-500/10" },
-    { href: "/checklist", label: "Checklist Berkas", desc: "Kelengkapan & pakaian resmi", icon: CheckSquare, color: "text-emerald-500 bg-emerald-500/10" },
-    { href: "/health-check", label: "Health & Mood Check", desc: "Kesiapan fisik & mental MABA", icon: Heartbeat, color: "text-rose-500 bg-rose-500/10" },
     { href: "/tentang-masta", label: "Edukasi & 4 Pilar", desc: "Nilai AIK & pedoman orientasi", icon: BookOpenText, color: "text-purple-500 bg-purple-500/10" },
   ];
 

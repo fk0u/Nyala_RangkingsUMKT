@@ -91,44 +91,24 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
 
             <NavLink href="/" label="Beranda" active={pathname === "/"} />
 
-            {/* Akademik Dropdown */}
-            <Dropdown
-              label="Akademik"
-              open={akademikOpen}
-              setOpen={setAkademikOpen}
-              active={isActiveGroup(["/panduan-ti", "/panduan-sikad", "/tentang-masta"])}
-            >
-              <DropdownItem
-                href="/panduan-ti"
-                icon={<Code weight="bold" className="w-4 h-4" />}
-                color="nyala"
-                title="Prodi Teknologi Informasi"
-                desc="Kurikulum 2026, Dosen, Standar Nilai & Karir"
-                badge="2026"
-              />
-              <DropdownItem
-                href="/panduan-sikad"
-                icon={<Laptop weight="bold" className="w-4 h-4" />}
-                color="blue"
-                title="Portal SIKAD UMKT"
-                desc="Simulator KRS, Jadwal, Tagihan & Presensi"
-                badge="Simulator"
-              />
-              <DropdownItem
-                href="/tentang-masta"
-                icon={<BookOpenText weight="bold" className="w-4 h-4" />}
-                color="purple"
-                title="Edukasi & Pilar MASTA"
-                desc="Fokus pembinaan, tata nilai & FAQ"
-              />
-            </Dropdown>
+            <NavLink 
+              href="/hub-umkt" 
+              label="Hub UMKT" 
+              active={pathname.startsWith("/hub-umkt")} 
+            />
+
+            <NavLink 
+              href="/panduan" 
+              label="Panduan Edukasi" 
+              active={pathname.startsWith("/panduan")} 
+            />
 
             {/* Persiapan Dropdown */}
             <Dropdown
               label="Persiapan"
               open={persiapanOpen}
               setOpen={setPersiapanOpen}
-              active={isActiveGroup(["/jadwal", "/checklist", "/health-check"])}
+              active={isActiveGroup(["/jadwal", "/checklist", "/health", "/panduan-ti", "/panduan-sikad"])}
             >
               <DropdownItem
                 href="/jadwal"
@@ -141,24 +121,33 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
                 href="/checklist"
                 icon={<CheckSquare weight="bold" className="w-4 h-4" />}
                 color="emerald"
-                title="Checklist Perlengkapan"
-                desc="Berkas, pakaian & task kustom"
+                title="Checklist Persiapan"
+                desc="Berkas, pakaian & kelengkapan"
               />
               <DropdownItem
-                href="/health-check"
+                href="/health"
                 icon={<Heartbeat weight="bold" className="w-4 h-4" />}
                 color="rose"
-                title="Health Check & Mood"
-                desc="Asesmen kesiapan fisik & mental"
+                title="Health & Mood Check"
+                desc="Kesiapan fisik & mental MABA"
+              />
+              <DropdownItem
+                href="/panduan-ti"
+                icon={<Code weight="bold" className="w-4 h-4" />}
+                color="nyala"
+                title="Prodi Teknologi Informasi"
+                desc="Kurikulum 2026, Dosen & Standar S.Kom"
+                badge="TI"
+              />
+              <DropdownItem
+                href="/panduan-sikad"
+                icon={<Laptop weight="bold" className="w-4 h-4" />}
+                color="blue"
+                title="Portal SIKAD UMKT"
+                desc="Simulator KRS, Tagihan & Presensi"
+                badge="Simulator"
               />
             </Dropdown>
-
-            {/* Blog & Artikel */}
-            <NavLink 
-              href="/blog" 
-              label="Blog & Tips" 
-              active={pathname.startsWith("/blog")} 
-            />
 
             <NavLink
               href="/companion"
