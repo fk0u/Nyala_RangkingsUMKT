@@ -12,7 +12,7 @@ import {
   CurrencyDollar, 
   Users, 
   ShieldCheck, 
-  Award, 
+  Trophy, 
   MagnifyingGlass, 
   CheckCircle, 
   Fire, 
@@ -23,7 +23,7 @@ import {
   Laptop,
   Briefcase,
   TrendUp,
-  FileCheck,
+  Checks,
   Lightbulb
 } from "@phosphor-icons/react";
 import { PRODI_TI_DATA, OFFICIAL_LINKS, Course, Lecturer } from "@/lib/masta-data";
@@ -131,7 +131,7 @@ export default function PanduanTiPage() {
               className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden"
             >
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-nyala-500 to-amber-500 text-white flex items-center justify-center shadow-fire">
-                {idx === 0 ? <Cpu weight="duotone" className="w-6 h-6" /> : idx === 1 ? <Lightbulb weight="duotone" className="w-6 h-6" /> : <Award weight="duotone" className="w-6 h-6" />}
+                {idx === 0 ? <Cpu weight="duotone" className="w-6 h-6" /> : idx === 1 ? <Lightbulb weight="duotone" className="w-6 h-6" /> : <Trophy weight="duotone" className="w-6 h-6" />}
               </div>
               <h3 className="text-lg font-bold text-navy-900 dark:text-white">
                 {pilar.title}
@@ -264,7 +264,7 @@ export default function PanduanTiPage() {
               className="p-4 rounded-2xl glass-card border border-navy-200/60 dark:border-navy-800 flex items-center justify-between gap-3"
             >
               <div className="flex items-center gap-2.5">
-                <FileCheck weight="bold" className="w-4 h-4 text-nyala-500" />
+                <Checks weight="bold" className="w-4 h-4 text-nyala-500" />
                 <span className="text-xs font-bold text-navy-800 dark:text-navy-200">{grade.category}</span>
               </div>
               <span className={`px-2.5 py-1 rounded-xl text-xs font-black ${

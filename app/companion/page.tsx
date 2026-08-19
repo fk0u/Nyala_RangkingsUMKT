@@ -12,14 +12,19 @@ import {
   Check, 
   Laptop, 
   Robot, 
-  Fire
+  Fire,
+  Headset,
+  WhatsappLogo,
+  ArrowSquareOut,
+  Info
 } from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import TypewriterText from "@/components/TypewriterText";
+import AdminHelpModal from "@/components/AdminHelpModal";
 import { useToast } from "@/context/ToastContext";
-import { OFFICIAL_LINKS } from "@/lib/masta-data";
+import { OFFICIAL_LINKS, OFFICIAL_CONTACTS } from "@/lib/masta-data";
 
 interface Message {
   id: string;
@@ -30,6 +35,7 @@ interface Message {
 }
 
 const QUICK_PROMPTS = [
+  "Kontak & WhatsApp Admin UMKT?",
   "Cara login di mahasiswa.umkt.ac.id?",
   "Bagaimana alur resmi MASTA UMKT 2026?",
   "Pengisian KRS Semester 1 untuk MABA?",
@@ -45,7 +51,7 @@ export default function CompanionPage() {
     {
       id: "welcome-1",
       role: "assistant",
-      content: "Halo Sobat MABA UMKT 2026! Aku **Nyala**, sahabat virtual perjalanan MABA-mu!\n\nAda hal yang ingin kamu tanyakan seputar persiapan MASTA, portal akademik SIKAD (mahasiswa.umkt.ac.id), KRS, tata tertib, atau tips perkuliahan di UMKT? Tanyakan apa saja, Nyala siap membantumu!",
+      content: "Halo Sobat MABA UMKT 2026! Aku **Nyala**, sahabat virtual perjalanan MABA-mu!\n\nAda hal yang ingin kamu tanyakan seputar persiapan MASTA, portal akademik SIKAD (mahasiswa.umkt.ac.id), KRS, tata tertib, atau tips perkuliahan di UMKT? Tanyakan apa saja, Nyala siap membantumu! Jika kamu memerlukan bantuan khusus atau berkas resmi, kamu juga bisa langsung terhubung ke **Admin PMB** atau **Biro Kemahasiswaan (Gedung C Lt. 1)** melalui tombol di bawah.",
       timestamp: "Baru saja",
       isStreaming: false,
     },
@@ -53,6 +59,7 @@ export default function CompanionPage() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const toast = useToast();
@@ -112,7 +119,7 @@ export default function CompanionPage() {
       const fallbackReply: Message = {
         id: `bot-${Date.now()}`,
         role: "assistant",
-        content: "Halo Sobat! Jika ada kendala koneksi, kamu tetap dapat membuka panduan resmi di portal [mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/) dan [masta-maba.odoo.com](https://masta-maba.odoo.com/) ya!",
+        content: "Halo Sobat! Jika ada kendala koneksi atau butuh konfirmasi langsung terkait administrasi, kamu dapat menghubungi **Admin PMB (+62 812-3001-7008)** atau **Biro Kemahasiswaan UMKT Gedung C Lt. 1 (082250878843)** ya!",
         timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
         isStreaming: false,
       };
@@ -169,6 +176,14 @@ export default function CompanionPage() {
 
         <div className="flex items-center gap-2 self-end sm:self-center">
           <button
+            onClick={() => setIsAdminModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-colors"
+          >
+            <Headset weight="bold" className="w-3.5 h-3.5" />
+            <span>Kontak Admin UMKT</span>
+          </button>
+
+          <button
             onClick={handleClearChat}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-navy-600 dark:text-navy-400 hover:text-rose-600 dark:hover:text-rose-400 bg-navy-100 dark:bg-navy-800 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
             title="Reset Obrolan"
@@ -176,6 +191,36 @@ export default function CompanionPage() {
             <Trash weight="bold" className="w-3.5 h-3.5" />
             <span>Reset</span>
           </button>
+        </div>
+      </div>
+
+      {/* Admin Fast Escalation Strip */}
+      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2 text-navy-800 dark:text-navy-200">
+          <Headset weight="bold" className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+          <span>
+            <strong>AI belum bisa menjawab pertanyaanmu?</strong> Tim Admin Resmi UMKT siap melayani via WhatsApp:
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <a
+            href="https://wa.me/6281230017008?text=Halo%20Admin%20PMB%20UMKT%2C%20saya%20Mahasiswa%20Baru%202026%20ingin%20bertanya."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1 transition-colors"
+          >
+            <WhatsappLogo weight="fill" className="w-3.5 h-3.5" />
+            <span>Admin PMB</span>
+          </a>
+          <a
+            href="https://wa.me/6282250878843?text=Halo%20Biro%20Kemahasiswaan%20UMKT%20(Gedung%20C%20Lt.%201)%2C%20saya%20MABA%202026%20ingin%20konsultasi."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1 transition-colors"
+          >
+            <WhatsappLogo weight="fill" className="w-3.5 h-3.5" />
+            <span>Biro Kemahasiswaan (Gd. C)</span>
+          </a>
         </div>
       </div>
 
@@ -316,7 +361,7 @@ export default function CompanionPage() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Tanyakan seputar MASTA, KRS, atau login SIKAD UMKT..."
+              placeholder="Tanyakan seputar MASTA, KRS, login SIKAD, atau kontak admin..."
               disabled={isLoading}
               className="flex-1 bg-navy-50 dark:bg-navy-800 text-navy-900 dark:text-white placeholder-navy-400 dark:placeholder-navy-500 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-nyala-500 border border-navy-200/60 dark:border-navy-700 transition-all"
             />
@@ -332,6 +377,12 @@ export default function CompanionPage() {
         </div>
 
       </div>
+
+      {/* Admin Help Modal Trigger */}
+      <AdminHelpModal 
+        isOpen={isAdminModalOpen} 
+        onClose={() => setIsAdminModalOpen(false)} 
+      />
 
       {/* Verified Official Links Footer in Companion */}
       <BacklinkBanner compact />

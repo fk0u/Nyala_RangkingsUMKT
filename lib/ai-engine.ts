@@ -17,6 +17,19 @@ BRAND & PERSONALITY:
 - Bahasa: Bahasa Indonesia yang santai, luwes, dan lugas namun tetap informatif, jelas, dan akurat.
 - Jangan kaku, jangan menjawab seperti robot birokrasi, tapi jadilah teman yang menguatkan dan menyemangati MABA agar lulus 100% tepat waktu (3.5 - 4 tahun).
 
+KONTAK RESMI ADMIN & LAYANAN MAHASISWA UMKT (JIKA PENGGUNA MEMERLUKAN BANTUAN RESMI ATAU KAMU TIDAK YAKIN):
+1. Admin Penerimaan Mahasiswa Baru (PMB) UMKT:
+   - WhatsApp: +62 812-3001-7008 (https://wa.me/6281230017008)
+   - Layanan: Kelulusan seleksi, aktivasi NIM, berkas pendaftaran & biaya daftar ulang.
+2. Biro Kemahasiswaan dan Alumni (BIMA) UMKT:
+   - Lokasi: Gedung C Lantai 1 UMKT, Samarinda
+   - Jam Pelayanan:
+     * Senin - Kamis : 08.00 - 16.00 WITA
+     * Jumat : 08.00 - 11.30 WITA
+     * Sabtu - Minggu : Tutup (Libur Layanan)
+   - WhatsApp Admin: 082250878843 / +62 822-5087-8843 (https://wa.me/6282250878843)
+   - Layanan: Pelaksanaan teknis MASTA 2026, sertifikat kelulusan, izin dispensasi, pendaftaran beasiswa KIP-Kuliah/Prestasi/Kader, dan Unit Kegiatan Mahasiswa (UKM).
+
 INFORMASI RESMI MASTA, SIKAD & PRODI TEKNOLOGI INFORMASI UMKT 2026:
 - Visi TI 2037: Menjadi program studi yang unggul dalam teknologi informasi dan algoritma komputasi untuk penyelesaian permasalahan sosial dan lingkungan berlandaskan nilai-nilai keislaman.
 - Akreditasi: "Baik Sekali" (2025 - 2030).
@@ -44,7 +57,25 @@ INFORMASI RESMI MASTA, SIKAD & PRODI TEKNOLOGI INFORMASI UMKT 2026:
 export function generateLocalResponse(userMessage: string): string {
   const query = userMessage.toLowerCase().trim();
 
-  // 1. PRODI TEKNOLOGI INFORMASI UMKT & KURIKULUM
+  // 1. ADMIN, KONTAK, WHATSAPP, GEDUNG C, BIMA, PMB
+  if (query.includes("admin") || query.includes("kontak") || query.includes("whatsapp") || query.includes("wa") || query.includes("telepon") || query.includes("gedung c") || query.includes("kemahasiswaan") || query.includes("pmb") || query.includes("jam buka") || query.includes("operasional")) {
+    return `Berikut adalah **Kontak Resmi & Jam Pelayanan Admin UMKT**:
+
+1. 🏛️ **Biro Kemahasiswaan dan Alumni (BIMA) UMKT** (Untuk MASTA, Beasiswa, Sertifikat & UKM):
+- 📍 **Lokasi**: Gedung C Lantai 1 UMKT, Samarinda
+- ⏰ **Jam Operasional Pelayanan**:
+  - **Senin - Kamis**: 08.00 - 16.00 WITA
+  - **Jumat**: 08.00 - 11.30 WITA
+  - **Sabtu - Minggu**: Libur
+- 💬 **WhatsApp Admin**: [082250878843](https://wa.me/6282250878843)
+
+2. 🎓 **Admin Penerimaan Mahasiswa Baru (PMB) UMKT** (Untuk Pendaftaran, NIM & Registrasi Ulang):
+- 💬 **WhatsApp Admin**: [+62 812-3001-7008](https://wa.me/6281230017008)
+
+Silakan hubungi admin terkait pada jam kerja di atas ya!`;
+  }
+
+  // 2. PRODI TEKNOLOGI INFORMASI UMKT & KURIKULUM
   if (query.includes("prodi ti") || query.includes("teknologi informasi") || query.includes("kurikulum") || query.includes("mata kuliah") || query.includes("s.kom") || query.includes("kaprodi") || query.includes("no skill")) {
     if (query.includes("semester 1") || query.includes("sem 1") || query.includes("makul")) {
       return `Mata kuliah **Semester 1 Prodi Teknologi Informasi UMKT 2026** (Total 20 SKS):
@@ -100,7 +131,7 @@ Di industri IT 2026, yang dinilai bukan hanya ijazah, melainkan kapasitas nyata 
 Buka menu **Akademik TI** di atas untuk panduan lengkap kurikulum dan profil dosen tetap.`;
   }
 
-  // 2. SIKAD & Portal Mahasiswa UMKT
+  // 3. SIKAD & Portal Mahasiswa UMKT
   if (query.includes("sikad") || query.includes("siakad") || query.includes("mahasiswa.umkt") || query.includes("krs") || query.includes("khs") || query.includes("dosen pa") || query.includes("spp") || query.includes("presensi")) {
     if (query.includes("krs") || query.includes("kartu rencana")) {
       return `Untuk pengisian **KRS Online** di UMKT:
@@ -114,7 +145,16 @@ Buka menu **Akademik TI** di atas untuk panduan lengkap kurikulum dan profil dos
     return `Portal **SIKAD Mahasiswa UMKT** ([https://mahasiswa.umkt.ac.id/](https://mahasiswa.umkt.ac.id/)) digunakan untuk pengisian KRS, jadwal kuliah, presensi (min. 75%), tagihan SPP Virtual Account, dan cek nilai KHS.`;
   }
 
-  // 3. Alur MASTA & Panduan Umum
+  // 4. BEASISWA & UKM
+  if (query.includes("beasiswa") || query.includes("kip") || query.includes("tahfidz") || query.includes("ukm") || query.includes("organisasi")) {
+    return `Informasi **Beasiswa & Kemahasiswaan UMKT 2026**:
+- **Skema Beasiswa**: KIP-Kuliah, Prestasi Akademik/Olahraga/Seni, Tahfidz Al-Qur'an, dan Kader Muhammadiyah/Aisyiyah.
+- **Pusat Pengajuan & Seleksi**: **Biro Kemahasiswaan dan Alumni (BIMA)**, Gedung C Lantai 1 UMKT.
+- **WhatsApp BIMA**: [082250878843](https://wa.me/6282250878843) (Senin-Kamis 08.00-16.00 WITA, Jumat 08.00-11.30 WITA).
+- **Pendaftaran UKM**: Dibuka pada sesi UKM Expo di Tahap 4 MASTA!`;
+  }
+
+  // 5. Alur MASTA & Panduan Umum
   if (query.includes("alur") || query.includes("tahap") || query.includes("jadwal") || query.includes("proses")) {
     return `Alur resmi **MASTA MABA UMKT 2026** terdiri dari 5 tahapan:
 1. **Membaca Panduan Resmi**
@@ -140,9 +180,11 @@ Cek timeline detail di menu **Alur MASTA** ya.`;
 
   return `Pertanyaan yang bagus sekali, Sobat MABA!
 
-Kamu bisa mengeksplorasi panduan **Akademik TI UMKT**, portal **SIKAD** (mahasiswa.umkt.ac.id), atau materi resmi di [masta-maba.odoo.com](https://masta-maba.odoo.com/) dan [umkt.ac.id](https://www.umkt.ac.id/).
+Kamu bisa mengeksplorasi panduan **Akademik TI UMKT**, portal **SIKAD** (mahasiswa.umkt.ac.id), membaca **Blog MABA**, atau menghubungi admin resmi:
+- 🏛️ **Biro Kemahasiswaan (Gedung C Lt. 1)**: WhatsApp [082250878843](https://wa.me/6282250878843) (Senin-Kamis 08.00-16.00, Jumat 08.00-11.30 WITA)
+- 🎓 **Admin PMB**: WhatsApp [+62 812-3001-7008](https://wa.me/6281230017008)
 
-Ada yang ingin kamu tanyakan lebih lanjut seputar mata kuliah, dosen, atau persiapan orientasi? Nyala siap bantu!`;
+Ada hal spesifik yang ingin kamu tanyakan lagi? Nyala siap menemani!`;
 }
 
 /**

@@ -15,15 +15,18 @@ import {
   ArrowRight, 
   ArrowSquareOut,
   Command,
-  X
+  X,
+  Newspaper,
+  Headset,
+  WhatsappLogo
 } from "@phosphor-icons/react";
-import { OFFICIAL_LINKS } from "@/lib/masta-data";
+import { OFFICIAL_LINKS, OFFICIAL_CONTACTS, BLOG_POSTS } from "@/lib/masta-data";
 
 interface SearchItem {
   id: string;
   title: string;
   desc: string;
-  category: "Navigasi" | "SIKAD UMKT" | "Prodi TI 2026" | "Panduan MASTA" | "Tautan Resmi";
+  category: "Navigasi" | "SIKAD UMKT" | "Prodi TI 2026" | "Panduan MASTA" | "Blog & Tips" | "Kontak Admin" | "Tautan Resmi";
   href: string;
   icon: any;
   isExternal?: boolean;
@@ -33,12 +36,27 @@ const SEARCH_ITEMS: SearchItem[] = [
   // Navigasi Utama
   { id: "nav-home", title: "Beranda Utama", desc: "Hero, countdown timer, dan ringkasan fitur Nyala", category: "Navigasi", href: "/", icon: Sparkle },
   { id: "nav-ai", title: "Tanya Nyala AI", desc: "Virtual companion cerdas seputar MASTA & perkuliahan", category: "Navigasi", href: "/companion", icon: Sparkle },
+  { id: "nav-blog", title: "Blog & Artikel Panduan MABA", desc: "Kumpulan artikel tips adaptasi, beasiswa, kost, & MASTA 2026", category: "Blog & Tips", href: "/blog", icon: Newspaper },
   { id: "nav-sikad", title: "Panduan Portal SIKAD", desc: "Simulasi 1:1 mahasiswa.umkt.ac.id, login NIM, KRS, & tagihan", category: "SIKAD UMKT", href: "/panduan-sikad", icon: Laptop },
   { id: "nav-ti", title: "Akademik & Karir TI UMKT 2026", desc: "Kurikulum Semester 1-4, dosen tetap, standar nilai, & gaji IT", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code },
   { id: "nav-health", title: "Health Check & Mood Tracker", desc: "Pantau kesiapan tidur, nutrisi, hidrasi, & kestabilan mental", category: "Navigasi", href: "/health-check", icon: Heartbeat },
   { id: "nav-jadwal", title: "Alur 5 Tahap MASTA 2026", desc: "Timeline interaktif dari Membaca Panduan hingga Inaugurasi", category: "Panduan MASTA", href: "/jadwal", icon: CalendarCheck },
   { id: "nav-check", title: "Checklist Persiapan MABA", desc: "Daftar perlengkapan, berkas wajib, dan pakaian resmi", category: "Panduan MASTA", href: "/checklist", icon: CheckSquare },
   { id: "nav-masta", title: "Edukasi & 4 Pilar MASTA", desc: "3 fokus pembinaan dan FAQ resmi orientasi kampus", category: "Panduan MASTA", href: "/tentang-masta", icon: BookOpenText },
+
+  // Kontak Admin Resmi
+  { id: "contact-pmb", title: "Chat Admin PMB UMKT (+62 812-3001-7008)", desc: "WhatsApp resmi untuk konfirmasi pendaftaran, kelulusan & NIM", category: "Kontak Admin", href: "https://wa.me/6281230017008?text=Halo%20Admin%20PMB%20UMKT%2C%20saya%20Mahasiswa%20Baru%202026.", icon: WhatsappLogo, isExternal: true },
+  { id: "contact-bima", title: "Biro Kemahasiswaan Gedung C Lt. 1 (0822-5087-8843)", desc: "WhatsApp resmi untuk dispensasi MASTA, beasiswa & sertifikat", category: "Kontak Admin", href: "https://wa.me/6282250878843?text=Halo%20Biro%20Kemahasiswaan%20UMKT%2C%20saya%20MABA%202026.", icon: WhatsappLogo, isExternal: true },
+
+  // Blog Posts Index
+  ...BLOG_POSTS.map((post) => ({
+    id: `blog-${post.slug}`,
+    title: post.title,
+    desc: `${post.category} • ${post.excerpt.slice(0, 75)}...`,
+    category: "Blog & Tips" as const,
+    href: `/blog/${post.slug}`,
+    icon: Newspaper
+  })),
 
   // SIKAD Shortcuts
   { id: "sikad-krs", title: "Pengisian KRS Online", desc: "Panduan paket mata kuliah Semester 1 & bimbingan Dosen PA", category: "SIKAD UMKT", href: "/panduan-sikad", icon: Laptop },
@@ -143,7 +161,7 @@ export default function CommandSearchModal({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Cari fitur, kurikulum TI, SIKAD, atau panduan MASTA..."
+              placeholder="Cari artikel blog, kontak admin WA, kurikulum, atau SIKAD..."
               className="w-full bg-transparent text-sm sm:text-base font-medium text-navy-900 dark:text-white placeholder-navy-400 outline-none"
               autoFocus
             />
@@ -191,7 +209,13 @@ export default function CommandSearchModal({
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs sm:text-sm font-bold">{item.title}</span>
-                          <span className="text-[10px] font-semibold px-2 py-0.2 rounded-full bg-navy-100 dark:bg-navy-800 text-navy-500">
+                          <span className={`text-[10px] font-semibold px-2 py-0.2 rounded-full ${
+                            item.category === "Kontak Admin"
+                              ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400"
+                              : item.category === "Blog & Tips"
+                              ? "bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400"
+                              : "bg-navy-100 dark:bg-navy-800 text-navy-500"
+                          }`}>
                             {item.category}
                           </span>
                         </div>

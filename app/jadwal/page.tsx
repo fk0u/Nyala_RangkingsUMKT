@@ -7,7 +7,7 @@ import {
   ShieldCheck, 
   VideoCamera, 
   Sparkle, 
-  Award, 
+  Trophy, 
   CalendarCheck, 
   CheckCircle, 
   CaretDown, 
@@ -30,7 +30,7 @@ export default function JadwalPage() {
       case "ShieldCheck": return ShieldCheck;
       case "Video": return VideoCamera;
       case "Sparkles": return Sparkle;
-      case "Award": return Award;
+      case "Award": return Trophy;
       default: return Sparkle;
     }
   };

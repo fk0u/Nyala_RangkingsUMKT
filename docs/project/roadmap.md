@@ -1,7 +1,7 @@
 # Project Roadmap: Nyala UMKT 2026
 
 ## Fase 1: Perancangan & Fondasi ✅
-- [x] Inisialisasi arsitektur Next.js 14 App Router, TypeScript, dan Tailwind CSS
+- [x] Inisialisasi arsitektur Next.js App Router, TypeScript, dan Tailwind CSS
 - [x] Konfigurasi design tokens resmi Nyala (Fire Orange, Deep Navy, Warm White, Dark Mode)
 - [x] Standar anti-AI-slop & Hallmark styling (tipografi bebas italic headers, copywriting natural)
 
@@ -29,4 +29,10 @@
 - [x] Kalender Akademik Semester Ganjil 2026/2027 lengkap dengan milestone KRS, UTS, UAS, dan batas entri nilai
 - [x] Estimasi gaji & prospek karir Software Engineer, Data Analyst, Cyber Security, Mobile Dev 2026
 - [x] Informasi Himpunan Mahasiswa Teknik Informatika (HIMATIF) & semboyan "NO SKILL NO TRUST!"
-- [x] Validasi production build (`npm run build`) berhasil 100% (12 rute terkompilasi bersih)
+
+## Fase 5: Modern Tech Stack & Phosphor Icons Ecosystem ✅
+- [x] Upgrade ke **Next.js 16.3.1 (Turbopack)** & **React 19.2.8 / React DOM 19.2.8**
+- [x] Upgrade **Framer Motion 13.1.0**
+- [x] Migrasi 100% dari `lucide-react` ke **`@phosphor-icons/react` (v2.1.10)** di seluruh komponen & halaman
+- [x] Penggantian seluruh emoji raw dengan Phosphor Icons berbobot visual presisi (`duotone`, `bold`, `fill`)
+- [x] Verifikasi build produksi (`npm run build`) berhasil 100% dengan Turbopack

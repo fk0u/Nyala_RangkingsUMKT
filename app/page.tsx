@@ -15,13 +15,18 @@ import {
   ArrowSquareOut, 
   Fire,
   Laptop,
-  Smiley
+  Smiley,
+  Newspaper,
+  Headset,
+  WhatsappLogo,
+  Clock
 } from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
 import CountdownTimer from "@/components/CountdownTimer";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import ProgressBar from "@/components/ProgressBar";
-import { MASTA_STAGES, OFFICIAL_LINKS } from "@/lib/masta-data";
+import AdminContactCard from "@/components/AdminContactCard";
+import { MASTA_STAGES, OFFICIAL_LINKS, BLOG_POSTS } from "@/lib/masta-data";
 
 export default function HomePage() {
   const [checklistProgress, setChecklistProgress] = useState(0);
@@ -52,6 +57,8 @@ export default function HomePage() {
       }
     }
   }, []);
+
+  const latestPosts = BLOG_POSTS.slice(0, 3);
 
   return (
     <div className="space-y-16 sm:space-y-24 pb-16">
@@ -90,7 +97,7 @@ export default function HomePage() {
 
               {/* Subheadline */}
               <p className="text-base sm:text-lg text-navy-600 dark:text-navy-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Persiapkan masa ta’aruf kampus dengan tenang. Nyala memandu alur resmi MASTA UMKT 2026, sistem akademik SIKAD mahasiswa.umkt.ac.id, kesiapan fisik dan mental harian, serta asisten AI responsif.
+                Persiapkan masa ta’aruf kampus dengan tenang. Nyala memandu alur resmi MASTA UMKT 2026, sistem akademik SIKAD mahasiswa.umkt.ac.id, kesiapan fisik dan mental harian, artikel panduan mahasiswa baru, serta kontak langsung ke Biro Kemahasiswaan (Gedung C Lantai 1) dan Admin PMB.
               </p>
 
               {/* Call to Actions */}
@@ -105,19 +112,19 @@ export default function HomePage() {
                 </Link>
 
                 <Link
+                  href="/blog"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base shadow-soft hover:scale-[1.02] active:scale-[0.98] transition-all"
+                >
+                  <Newspaper weight="bold" className="w-5 h-5" />
+                  <span>Blog & Tips MABA</span>
+                </Link>
+
+                <Link
                   href="/panduan-sikad"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base shadow-soft hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
                   <Laptop weight="bold" className="w-5 h-5" />
-                  <span>Panduan SIKAD UMKT</span>
-                </Link>
-
-                <Link
-                  href="/checklist"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white dark:bg-navy-800 hover:bg-navy-50 dark:hover:bg-navy-750 text-navy-800 dark:text-white font-semibold text-base border border-navy-200 dark:border-navy-700 shadow-soft hover:scale-[1.02] active:scale-[0.98] transition-all"
-                >
-                  <CheckCircle weight="bold" className="w-5 h-5 text-nyala-500" />
-                  <span>Checklist</span>
+                  <span>Panduan SIKAD</span>
                 </Link>
               </div>
 
@@ -129,7 +136,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <MapPin weight="fill" className="w-3.5 h-3.5 text-nyala-500" />
-                  <span>Kampus UMKT Samarinda</span>
+                  <span>Kampus UMKT Samarinda (Gedung C Lantai 1)</span>
                 </div>
               </div>
 
@@ -158,7 +165,7 @@ export default function HomePage() {
                       </span>
                     </div>
                     <p className="text-xs sm:text-sm text-navy-800 dark:text-navy-200 leading-snug">
-                      Selamat datang di Universitas Muhammadiyah Kalimantan Timur! Buka panduan SIKAD atau tanyakan apa pun seputar MASTA.
+                      Selamat datang di Universitas Muhammadiyah Kalimantan Timur! Buka panduan SIKAD, baca artikel blog MABA, atau tanyakan apa pun seputar MASTA.
                     </p>
                   </div>
 
@@ -204,7 +211,68 @@ export default function HomePage() {
         <BacklinkBanner compact />
       </section>
 
-      {/* 3. CORE FEATURES HIGHLIGHT */}
+      {/* 3. BLOG & TIPS MABA SPOTLIGHT */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider">
+              <Newspaper weight="bold" className="w-4 h-4" />
+              <span>Wawasan & Artikel Panduan</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-900 dark:text-white">
+              Blog & Tips Mahasiswa Baru
+            </h2>
+            <p className="text-sm text-navy-600 dark:text-navy-400">
+              Artikel informatif seputar adaptasi kost di Samarinda, raih IPK 4.0, beasiswa, hingga persiapan MASTA.
+            </p>
+          </div>
+
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline self-start sm:self-auto"
+          >
+            <span>Lihat Semua Artikel</span>
+            <ArrowRight weight="bold" className="w-4 h-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {latestPosts.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="glass-card rounded-3xl p-6 border border-navy-200/60 dark:border-navy-800 space-y-3 hover:border-indigo-500/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-extrabold uppercase">
+                    {post.category}
+                  </span>
+                  <span className="text-[10px] text-navy-400 font-mono flex items-center gap-1">
+                    <Clock weight="bold" className="w-3 h-3" />
+                    {post.readTime}
+                  </span>
+                </div>
+
+                <h3 className="text-base font-bold text-navy-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
+                  {post.title}
+                </h3>
+
+                <p className="text-xs text-navy-600 dark:text-navy-300 line-clamp-2 leading-relaxed">
+                  {post.excerpt}
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-navy-100 dark:border-navy-800/80 flex items-center justify-between text-xs text-indigo-600 dark:text-indigo-400 font-bold">
+                <span>Baca Artikel</span>
+                <ArrowRight weight="bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. CORE FEATURES HIGHLIGHT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-3 mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-bold uppercase tracking-wider">
@@ -356,7 +424,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. TAHAPAN ALUR MASTA PREVIEW */}
+      {/* 5. TAHAPAN ALUR MASTA PREVIEW */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-cream-100/60 dark:bg-navy-900/60 border border-amber-200/50 dark:border-navy-800 p-6 sm:p-10 space-y-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -398,7 +466,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. PROMINENT BACKLINK BANNER SECTION */}
+      {/* 6. PUSAT LAYANAN & KONTAK ADMIN RESMI */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="text-center space-y-2 max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
+            <Headset weight="bold" className="w-4 h-4" />
+            <span>Pusat Bantuan Resmi</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-900 dark:text-white">
+            Kontak Admin & Biro Kemahasiswaan
+          </h2>
+          <p className="text-xs sm:text-sm text-navy-500 dark:text-navy-400">
+            Perlu konfirmasi berkas pendaftaran, dispensasi kegiatan orientasi, atau informasi beasiswa? Hubungi admin resmi kampus via WhatsApp atau kunjungi Gedung C Lantai 1.
+          </p>
+        </div>
+
+        <AdminContactCard />
+      </section>
+
+      {/* 7. PROMINENT BACKLINK BANNER SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <BacklinkBanner />
       </section>

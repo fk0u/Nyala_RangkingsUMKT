@@ -30,7 +30,7 @@ import {
   CaretDown,
   FileText,
   ChatCenteredText,
-  Award,
+  Trophy,
   Stack,
   Certificate,
   SignOut,
@@ -70,7 +70,7 @@ export default function PanduanSikadPage() {
     { name: "Kegiatan", icon: Stack, hasSub: true },
     { name: "Pengajuan", icon: FileText, hasSub: true },
     { name: "SKPI", icon: Certificate },
-    { name: "Tracer Study", icon: Award },
+    { name: "Tracer Study", icon: Trophy },
     { name: "Panduan", icon: Question },
     { name: "Akun Lain", icon: User },
   ];
@@ -246,7 +246,7 @@ export default function PanduanSikadPage() {
                   <div className="p-4 rounded-2xl bg-gradient-to-br from-[#F87171] to-[#DC2626] text-white shadow-md space-y-3 relative overflow-hidden">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold flex items-center gap-1 opacity-90">
-                        <Award weight="bold" className="w-3.5 h-3.5" />
+                        <Trophy weight="bold" className="w-3.5 h-3.5" />
                         Semester
                       </span>
                     </div>

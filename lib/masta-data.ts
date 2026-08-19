@@ -57,6 +57,34 @@ export interface AcademicMilestone {
   status: "active" | "upcoming";
 }
 
+export interface AdminContact {
+  id: string;
+  name: string;
+  badge: string;
+  department: string;
+  location: string;
+  operationalHours: { days: string; time: string }[];
+  whatsapp: string;
+  whatsappFormatted: string;
+  whatsappUrl: string;
+  services: string[];
+  quickGreeting: string;
+}
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: "Adaptasi & Rantau" | "Akademik & SIKAD" | "Beasiswa" | "Organisasi & UKM" | "Teknis MASTA" | "Fasilitas Kampus";
+  readTime: string;
+  author: string;
+  authorRole: string;
+  date: string;
+  tags: string[];
+  content: string;
+  keyTakeaways: string[];
+}
+
 export const OFFICIAL_LINKS = {
   umktMain: "https://www.umkt.ac.id/",
   umktKemahasiswaan: "https://www.umkt.ac.id/kemahasiswaan/",
@@ -64,6 +92,294 @@ export const OFFICIAL_LINKS = {
   mastaOdoo: "https://masta-maba.odoo.com/",
   sikadMahasiswa: "https://mahasiswa.umkt.ac.id/",
 };
+
+// ==========================================
+// KONTAK RESMI ADMIN & LAYANAN MAHASISWA UMKT
+// ==========================================
+export const OFFICIAL_CONTACTS: AdminContact[] = [
+  {
+    id: "admin-pmb",
+    name: "Admin Penerimaan Mahasiswa Baru (PMB)",
+    badge: "Pendaftaran & Registrasi",
+    department: "Biro Admisi & PMB UMKT",
+    location: "Gedung Utama UMKT Lantai 1, Samarinda",
+    operationalHours: [
+      { days: "Senin - Kamis", time: "08.00 - 16.00 WITA" },
+      { days: "Jumat", time: "08.00 - 11.30 WITA" },
+      { days: "Sabtu - Minggu", time: "Tutup (Libur Layanan)" }
+    ],
+    whatsapp: "6281230017008",
+    whatsappFormatted: "+62 812-3001-7008",
+    whatsappUrl: "https://wa.me/6281230017008?text=Halo%20Admin%20PMB%20UMKT%2C%20saya%20Mahasiswa%20Baru%202026%20ingin%20bertanya%20seputar%20registrasi%2FNIM%2Fpendaftaran.",
+    services: [
+      "Informasi kelulusan jalur seleksi PMB",
+      "Aktivasi Nomor Induk Mahasiswa (NIM)",
+      "Verifikasi berkas ijazah & kartu pendaftaran",
+      "Kendala pembayaran biaya daftar ulang"
+    ],
+    quickGreeting: "Halo Admin PMB UMKT, saya calon mahasiswa baru 2026 ingin mengonfirmasi terkait berkas pendaftaran saya."
+  },
+  {
+    id: "admin-kemahasiswaan",
+    name: "Biro Kemahasiswaan dan Alumni (BIMA) UMKT",
+    badge: "MASTA & Beasiswa",
+    department: "Biro Kemahasiswaan & Alumni (BIMA)",
+    location: "Gedung C Lantai 1 UMKT, Samarinda",
+    operationalHours: [
+      { days: "Senin - Kamis", time: "08.00 - 16.00 WITA" },
+      { days: "Jumat", time: "08.00 - 11.30 WITA" },
+      { days: "Sabtu - Minggu", time: "Tutup (Libur Layanan)" }
+    ],
+    whatsapp: "6282250878843",
+    whatsappFormatted: "+62 822-5087-8843",
+    whatsappUrl: "https://wa.me/6282250878843?text=Halo%20Admin%20Biro%20Kemahasiswaan%20dan%20Alumni%20UMKT%2C%20saya%20MABA%202026%20ingin%20konsultasi%20seputar%20pelaksanaan%20MASTA%2Fbeasiswa%2Fkegiatan%20kemahasiswaan.",
+    services: [
+      "Pelaksanaan & jadwal teknis MASTA UMKT 2026",
+      "Penerbitan & kendala e-Sertifikat kelulusan MASTA",
+      "Pendaftaran Beasiswa KIP-Kuliah, Prestasi & Kader",
+      "Izin dispensasi resmi kegiatan orientasi",
+      "Legalitas Unit Kegiatan Mahasiswa (UKM) & Organisasi"
+    ],
+    quickGreeting: "Halo Biro Kemahasiswaan UMKT (Gedung C Lt. 1), saya peserta MASTA 2026 ingin menanyakan izin dispensasi/sertifikat."
+  }
+];
+
+// ==========================================
+// ARTIKEL / BLOG PANDUAN MABA UMKT 2026
+// ==========================================
+export const BLOG_POSTS: BlogPost[] = [
+  {
+    slug: "tips-adaptasi-mahasiswa-rantau-samarinda",
+    title: "Panduan Bertahan & Sukses Adaptasi Kuliah di Samarinda untuk Mahasiswa Rantau",
+    excerpt: "Panduan lengkap seputar biaya hidup, mencari kost sekitar Jl. Ir. H. Juanda, transportasi lokal, hingga tips kuliner hemat di Samarinda bagi MABA.",
+    category: "Adaptasi & Rantau",
+    readTime: "5 menit baca",
+    author: "Tim Kemahasiswaan & BIMA UMKT",
+    authorRole: "Biro Kemahasiswaan",
+    date: "18 Agustus 2026",
+    tags: ["Rantau", "Kost Samarinda", "Biaya Hidup", "Tips Mahasiswa"],
+    content: `
+Memulai masa perkuliahan di kota baru seringkali memicu rasa cemas sekaligus antusias. Bagi kalian mahasiswa rantau yang baru pertama kali menginjakkan kaki di Samarinda untuk berkuliah di **Universitas Muhammadiyah Kalimantan Timur (UMKT)**, berikut adalah panduan praktis agar adaptasi kalian berjalan lancar dan hemat.
+
+### 1. Memilih Hunian Kost di Sekitar Kampus
+Kampus utama UMKT terletak strategis di kawasan Jl. Ir. H. Juanda, Samarinda Ulu. Kawasan ini memiliki banyak pilihan kost dengan harga bervariasi:
+- **Rentang Harga:** Rp 500.000 - Rp 900.000 / bulan untuk kamar standar, dan Rp 1.100.000 - Rp 1.800.000 / bulan untuk kamar berfasilitas AC dan kamar mandi dalam.
+- **Lokasi Strategis:** Pilih gang atau jalan di sepanjang Jl. Juanda, Jl. P. Antasari, atau Jl. Siradj Salman agar mudah menjangkau kampus dengan berjalan kaki atau kendaraan roda dua dalam 5-10 menit.
+- **Fasilitas Wajib:** Pastikan kost memiliki ventilasi udara baik, keamanan gerbang memadai, dan akses air PDAM/tandon yang stabil.
+
+### 2. Transportasi dan Mobilitas di Samarinda
+- **Ojek Daring (Gojek / Maxim / Grab):** Sangat mudah diakses di sekitar kampus dan tarifnya ramah di kantong mahasiswa.
+- **Angkutan Kota (Angkot):** Trayek A dan B sering melintasi jalan arteri utama Samarinda jika ingin bepergian hemat ke Pasar Segiri atau Mall Lembuswana.
+- **Sepeda Motor:** Transportasi paling efisien untuk mobilitas kuliah harian dan kegiatan kerja kelompok.
+
+### 3. Estimasi Anggaran Biaya Hidup Bulanan
+Sebagai estimasi rata-rata mahasiswa di Samarinda:
+- **Makan Harian:** Rp 25.000 - Rp 45.000 / hari (Warung nasi campur, warung padang, dan warung burjo di sekitar kampus sangat terjangkau).
+- **Kebutuhan Bulanan (Total):** Rp 1.500.000 - Rp 2.500.000 (sudah termasuk makan, kuota internet cadangan, dan laundry kiloan).
+
+### 4. Menjaga Kesehatan Fisik dan Mental
+Perubahan cuaca di Samarinda yang cukup dinamis menuntut hidrasi yang baik. Selalu bawa botol air minum pribadi, konsumsi makanan bergizi, dan jangan ragu memanfaatkan fitur **Health Check** di portal Nyala untuk memonitor kebugaranmu!
+`,
+    keyTakeaways: [
+      "Pilih kost dalam radius 1-2 km dari Jl. Ir. H. Juanda untuk efisiensi biaya transportasi.",
+      "Estimasi biaya makan dan kebutuhan hidup bulanan berkisar Rp 1,5 - 2,5 juta.",
+      "Gunakan layanan ojek daring atau motor pribadi untuk mobilitas optimal."
+    ]
+  },
+  {
+    slug: "strategi-krs-dan-raih-ipk-4-semester-1",
+    title: "Trik Pengisian KRS SIKAD & Strategi Meraih IPK 4.0 di Semester 1",
+    excerpt: "Bagaimana cara memaksimalkan SIKAD, membangun relasi dengan Dosen Pembimbing Akademik (PA), dan menyusun jadwal belajar anti-burnout.",
+    category: "Akademik & SIKAD",
+    readTime: "6 menit baca",
+    author: "Abdul Rahim, M.Kom",
+    authorRole: "Dosen Program Studi TI",
+    date: "17 Agustus 2026",
+    tags: ["SIKAD", "KRS Online", "IPK 4.0", "Teknik Belajar"],
+    content: `
+Banyak mahasiswa baru mengira semester 1 adalah waktu untuk santai. Faktanya, **nilai di semester 1 adalah fondasi psikologis dan akademis paling krusial**. Indeks Prestasi Semester (IPS) awal menentukan apakah kalian berhak mengambil beban maksimal 24 SKS di semester berikutnya untuk lulus 3,5 tahun!
+
+### 1. Pahami Alur KRS di Portal SIKAD (mahasiswa.umkt.ac.id)
+- Pada Semester 1, seluruh mata kuliah dipaketkan oleh Program Studi (20 SKS).
+- Tugas utama kalian adalah memverifikasi nama dosen pengampu, kode kelas (A/B/C), dan memastikan tidak ada status mata kuliah yang berstatus *unapproved*.
+- **Wajib Bimbingan Dosen PA:** Jadwalkan konsultasi awal dengan Dosen Pembimbing Akademik kalian untuk perkenalan dan validasi KRS. Jangan menunggu sampai batas penutupan sistem pada 27 Agustus 2026!
+
+### 2. Rumus Pembagian Waktu Kuliah vs Belajar Mandiri
+Setiap 1 SKS perkuliahan setara dengan 50 menit tatap muka di kelas, 60 menit tugas terstruktur, dan 60 menit belajar mandiri.
+- Jika mengambil 20 SKS, alokasikan minimal 2-3 jam per hari untuk mengulang materi coding (Dasar Pemrograman) dan latihan soal matematika (Aljabar Linear & Matematika Diskrit).
+- **Pro Tips:** Buat *Cheat Sheet* rumus logika matematika dan git command sejak minggu pertama!
+
+### 3. Kuasai Standar Nilai Minimum Kelulusan
+Ingat, di Program Studi Teknologi Informasi UMKT:
+- MK Wajib Prodi & Konsentrasi: Minimal nilai **C**.
+- MKDU (Universitas): Minimal nilai **B**.
+- Basic Science & Praktikum: Minimal **BC**.
+- Semboyan kita adalah: **HIDUP TEKNIK! NO SKILL NO TRUST!**
+
+### 4. Etika Menghubungi Dosen PA Melalui WhatsApp
+1. Hubungi di jam kerja resmi (Senin-Jumat, 08.00 - 16.00 WITA).
+2. Awali salam formal, perkenalkan diri lengkap: Nama, NIM, Program Studi, dan Angkatan.
+3. Sampaikan maksud dengan lugas, santun, dan tanpa singkatan berlebihan (misal: gunakan *dengan* bukan *dgn*).
+4. Akhiri dengan ucapan terima kasih dan doa kebaikan.
+`,
+    keyTakeaways: [
+      "Validasi KRS di SIKAD sebelum 27 Agustus 2026 bersama Dosen PA.",
+      "IPS > 3.00 di semester 1 membuka kesempatan mengambil 24 SKS untuk lulus 3,5 tahun.",
+      "Terapkan etika formal saat berkomunikasi dengan dosen via WhatsApp."
+    ]
+  },
+  {
+    slug: "kupas-tuntas-beasiswa-umkt-kip-prestasi-kader",
+    title: "Kupas Tuntas Beasiswa UMKT: KIP-Kuliah, Prestasi, Tahfidz & Kader Muhammadiyah",
+    excerpt: "Informasi resmi persyaratan, alur seleksi, serta panduan pengajuan beasiswa di Biro Kemahasiswaan dan Alumni (Gedung C Lantai 1 UMKT).",
+    category: "Beasiswa",
+    readTime: "4 menit baca",
+    author: "Biro Kemahasiswaan & Alumni (BIMA)",
+    authorRole: "Unit Pengelola Beasiswa",
+    date: "16 Agustus 2026",
+    tags: ["Beasiswa", "KIP Kuliah", "BIMA UMKT", "Tahfidz"],
+    content: `
+Universitas Muhammadiyah Kalimantan Timur berkomitmen memberikan akses pendidikan tinggi yang inklusif melalui berbagai skema beasiswa penuh maupun parsial bagi mahasiswa berprestasi dan berdedikasi.
+
+### Jenis Beasiswa yang Tersedia di UMKT
+1. **Beasiswa KIP-Kuliah (Kemendikbudristek):**
+   - Ditujukan bagi mahasiswa baru berprestasi dari keluarga kurang mampu secara ekonomi.
+   - Fasilitas: Pembebasan biaya kuliah penuh dan bantuan biaya hidup bulanan.
+2. **Beasiswa Prestasi Akademik & Olahraga / Seni:**
+   - Ditujukan bagi peraih medali kejuaraan tingkat provinsi, nasional, atau internasional (misal: Olimpiade Sains, Kejuaraan Silat Tapak Suci).
+3. **Beasiswa Tahfidz Al-Qur'an:**
+   - Diberikan bagi penghafal Al-Qur'an minimal 5 Juz, 10 Juz, hingga 30 Juz dengan evaluasi berkala oleh Lembaga Al-Islam Kemuhammadiyahan (AIK).
+4. **Beasiswa Kader Persyarikatan Muhammadiyah / Aisyiyah:**
+   - Rekomendasi resmi dari Pimpinan Daerah Muhammadiyah (PDM) atau organisasi otonom (IPM/IMM).
+
+### Lokasi & Layanan Informasi Beasiswa
+Seluruh administrasi beasiswa dikoordinasikan secara terpadu di:
+- **Lokasi:** Biro Kemahasiswaan dan Alumni (BIMA), Gedung C Lantai 1 UMKT.
+- **Jam Pelayanan:** Senin - Kamis (08.00 - 16.00 WITA) dan Jumat (08.00 - 11.30 WITA).
+- **Kontak WhatsApp Resmi BIMA:** \`0822-5087-8843\`.
+`,
+    keyTakeaways: [
+      "Tersedia skema KIP-Kuliah, Prestasi, Tahfidz, dan Beasiswa Kader Muhammadiyah.",
+      "Konsultasi berkas dan seleksi dipusatkan di Gedung C Lantai 1 UMKT.",
+      "Layanan WhatsApp resmi Biro Kemahasiswaan aktif di nomor 0822-5087-8843."
+    ]
+  },
+  {
+    slug: "daftar-ukm-dan-organisasi-mahasiswa-umkt",
+    title: "Daftar Unit Kegiatan Mahasiswa (UKM) & Komunitas Unggulan di Kampus UMKT",
+    excerpt: "Tingkatkan soft skill, kepemimpinan, dan jejaring karir melalui organisasi kemahasiswaan, dari bidang teknologi, seni, hingga bela diri.",
+    category: "Organisasi & UKM",
+    readTime: "5 menit baca",
+    author: "Presidium BEM UMKT",
+    authorRole: "Lembaga Eksekutif Mahasiswa",
+    date: "15 Agustus 2026",
+    tags: ["UKM", "HIMATIF", "Organisasi", "Kepemimpinan"],
+    content: `
+Kuliah bukan hanya soal ruang kelas dan nilai di transkrip. Dunia industri di tahun 2026 sangat mengapresiasi kandidat yang memiliki kemampuan kepemimpinan, komunikasi, dan kerja tim yang terasah nyata di organisasi kampus.
+
+### 1. Organisasi Jurusan: HIMATIF (Himpunan Mahasiswa Teknik Informatika)
+Sebagai mahasiswa Teknologi Informasi, HIMATIF adalah rumah pertama kalian. Memiliki 4 departemen aktif:
+- **Dept. PSDM:** Pengembangan skill anggota, kaderisasi, dan pelatihan kepemimpinan.
+- **Dept. Kominfo / Media Kreatif:** Desain grafis, podcast kampus, dan branding media digital.
+- **Dept. Sosma:** Bakti sosial, tanggap bencana, dan pengabdian masyarakat.
+- **Dept. Kerohanian:** Menjaga nilai Al-Islam dan kekeluargaan antar angkatan.
+
+### 2. Unit Kegiatan Mahasiswa (UKM) Olahraga & Bela Diri
+- **Tapak Suci Putera Muhammadiyah:** Seni bela diri pencak silat berprestasi internasional.
+- **UKM Futsal & Sepak Bola:** Mengikuti liga mahasiswa tingkat regional dan nasional.
+- **UKM Badminton & Bola Voli:** Wadah olahraga rutin dan turnamen tahunan.
+
+### 3. UKM Seni, Budaya & Minat Khusus
+- **UKM Paduan Suara Mahasiswa (PSM):** Penampil utama di wisuda dan kompetisi paduan suara.
+- **UKM Teater & Seni Musik:** Kolaborasi pertunjukan drama dan konser akustik kampus.
+- **Mapala (Mahasiswa Pecinta Alam):** Ekspedisi alam bebas, konservasi lingkungan Kalimantan Timur.
+- **Hizbul Wathan (HW) & KSR PMI:** Korps sukarelawan kemanusiaan dan kepanduan.
+
+### 4. Kapan Mendaftar UKM?
+Seluruh UKM akan membuka pendaftaran anggota baru pada **Sesi UKM Expo di Tahap 4 MASTA 2026**. Pastikan kalian memilih minimal satu organisasi yang sesuai dengan minat!
+`,
+    keyTakeaways: [
+      "HIMATIF adalah himpunan resmi mahasiswa TI dengan 4 departemen aktif.",
+      "Pendaftaran seluruh UKM dibuka serentak pada sesi UKM Expo MASTA Tahap 4.",
+      "Keaktifan organisasi akan masuk ke dokumen SKPI (Surat Keterangan Pendamping Ijazah)."
+    ]
+  },
+  {
+    slug: "checklist-teknis-h-3-masta-umkt-zoom-dresscode",
+    title: "Checklist Teknis H-3 MASTA UMKT: Setup Zoom, Dresscode & Ketentuan On-Cam",
+    excerpt: "Panduan teknis menghindari kendala koneksi, aturan pakaian hitam-putih, format penamaan akun Zoom, dan tata tertib presensi online.",
+    category: "Teknis MASTA",
+    readTime: "4 menit baca",
+    author: "Panitia Pelaksana MASTA 2026",
+    authorRole: "Divisi Teknis & Acara",
+    date: "14 Agustus 2026",
+    tags: ["MASTA 2026", "Zoom Meeting", "Dresscode", "Tata Tertib"],
+    content: `
+Agar partisipasi kalian di Masa Ta’aruf (MASTA) UMKT 2026 berjalan mulus tanpa teguran dari panitia pendamping gugus, ikuti panduan teknis wajib berikut ini.
+
+### 1. Format Penamaan Akun Zoom Meeting
+Seluruh peserta wajib menggunakan format nama baku sebelum masuk ke ruang rapat Zoom:
+\`\`\`text
+[Nomor Gugus]_[Nama Lengkap]
+Contoh: Gugus 04_Muhammad Rizky Pratama
+\`\`\`
+*Catatan: Akun yang tidak menggunakan format resmi akan dipindahkan ke Waiting Room oleh host panitia.*
+
+### 2. Ketentuan Pakaian (Dresscode) Resmi
+- **Pria:** Kemeja putih polos lengan panjang berkerah, celana kain warna hitam formal (bukan jeans/chino ketat), peci hitam (sesuai arahan gugus), dan sepatu formal.
+- **Wanita:** Kemeja/tunik putih polos panjang tidak menerawang, rok panjang kain warna hitam formal (bukan plisket tipis), jilbab warna hitam/putih rapi, dan sepatu formal.
+
+### 3. Ketentuan Kamera (On-Cam) & Virtual Background
+- Kamera wajib menyala (On-Cam) selama seluruh sesi materi berlangsung dengan pencahayaan yang jelas menampakkan wajah.
+- Gunakan Virtual Background resmi MASTA 2026 yang dapat diunduh di portal resmi \`https://masta-maba.odoo.com/\`.
+- Pastikan mikrofon dalam keadaan **Mute** kecuali dipersilakan bertanya oleh moderator.
+
+### 4. Layanan Bantuan Darurat Saat Sesi Berlangsung
+Jika mengalami mati listrik atau kendala teknis mendadak, segera hubungi pendamping gugus kalian atau kirim pesan ke WhatsApp Biro Kemahasiswaan di \`0822-5087-8843\`.
+`,
+    keyTakeaways: [
+      "Format nama Zoom wajib: [Nomor Gugus]_[Nama Lengkap].",
+      "Pakaian resmi: Kemeja putih lengan panjang dan bawahan kain hitam formal.",
+      "Kamera wajib On-Cam dan mic wajib Mute selama pemaparan materi."
+    ]
+  },
+  {
+    slug: "eksplorasi-fasilitas-kampus-umkt-samarinda",
+    title: "Eksplorasi Fasilitas Kampus UMKT: Perpustakaan Digital, Lab Komputer, & Spot Belajar",
+    excerpt: "Kenali fasilitas penunjang akademik di Kampus UMKT Samarinda, mulai dari laboratorium riset komputasi hingga spot WiFi gratis berkecepatan tinggi.",
+    category: "Fasilitas Kampus",
+    readTime: "5 menit baca",
+    author: "Tim Humas & Protokoler UMKT",
+    authorRole: "Humas Universitas",
+    date: "13 Agustus 2026",
+    tags: ["Fasilitas", "Perpustakaan", "Laboratorium Komputer", "Kampus Juanda"],
+    content: `
+Universitas Muhammadiyah Kalimantan Timur terus berinvestasi menghadirkan fasilitas akademik dan non-akademik berstandar modern untuk menunjang kenyamanan belajar mahasiswa.
+
+### 1. Laboratorium Komputer & Riset TI
+Fakultas Sains & Teknologi UMKT dilengkapi dengan laboratorium modern berpendingin udara dan perangkat komputasi tinggi untuk:
+- Laboratorium Pemrograman & Algoritma
+- Laboratorium Jaringan Komputer & Cyber Security
+- Laboratorium Komputasi Cerdas & Data Science
+
+### 2. Perpustakaan Universitas & Ruang Diskusi
+Perpustakaan UMKT menyediakan ribuan koleksi buku fisik, jurnal ilmiah internasional terindeks Scopus/SINTA, serta ruang belajar ber-AC yang tenang dan dilengkapi stopkontak di setiap meja.
+- Mahasiswa dapat mengakses e-book dan jurnal daring menggunakan akun SSO email mahasiswa.
+
+### 3. Akses Internet & Spot Belajar Terbuka
+- Seluruh area kampus terhubung dengan jaringan **UMKT Edu-WiFi** berkecepatan tinggi.
+- Gazebo terbuka di area taman kampus menjadi spot favorit mahasiswa untuk berdiskusi tugas kelompok di sore hari.
+
+### 4. Masjid Kampus & Pusat Kegiatan Islam
+Masjid megah di lingkungan kampus menjadi pusat kegiatan keagamaan, kajian Al-Islam Kemuhammadiyahan, dan shalat berjamaah civitas akademika UMKT.
+`,
+    keyTakeaways: [
+      "Tersedia lab pemrograman, jaringan, dan data science untuk mahasiswa TI.",
+      "Perpustakaan menyediakan akses e-journal dan ruang diskusi ber-AC.",
+      "Akses Edu-WiFi gratis tersedia di seluruh penjuru gedung dan taman kampus."
+    ]
+  }
+];
 
 // ==========================================
 // DATA PROGRAM STUDI TEKNOLOGI INFORMASI UMKT 2026
@@ -447,6 +763,11 @@ export const MASTA_FAQS: FAQItem[] = [
     question: "Apa itu MASTA MABA UMKT?",
     answer: "MASTA (Masa Ta’aruf) MABA UMKT adalah kegiatan orientasi resmi bagi seluruh mahasiswa baru Universitas Muhammadiyah Kalimantan Timur untuk mengenal lingkungan kampus, sistem akademik, nilai-nilai Kemuhammadiyahan, dan organisasi kemahasiswaan.",
     category: "Umum"
+  },
+  {
+    question: "Bagaimana cara menghubungi Admin Resmi UMKT jika ada kendala pendaftaran atau MASTA?",
+    answer: "Untuk kendala PMB & NIM: hubungi WhatsApp Admin PMB UMKT di +62 812-3001-7008. Untuk kendala MASTA, beasiswa, dan kemahasiswaan: hubungi Biro Kemahasiswaan dan Alumni UMKT di Gedung C Lantai 1 atau WhatsApp di 0822-5087-8843 (Senin-Kamis 08.00-16.00 WITA, Jumat 08.00-11.30 WITA).",
+    category: "Kontak & Layanan"
   },
   {
     question: "Bagaimana cara mengakses portal mahasiswa SIKAD UMKT?",

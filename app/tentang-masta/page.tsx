@@ -12,7 +12,7 @@ import {
   CaretDown, 
   Users, 
   Fire,
-  Award
+  Trophy
 } from "@phosphor-icons/react";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import MascotFlame from "@/components/MascotFlame";
@@ -109,7 +109,7 @@ export default function TentangMastaPage() {
           {/* Fokus 3 */}
           <div className="p-6 sm:p-7 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md">
-              <Award weight="duotone" className="w-6 h-6" />
+              <Trophy weight="duotone" className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-navy-900 dark:text-white">
               3. Pengenalan Peluang Mahasiswa
