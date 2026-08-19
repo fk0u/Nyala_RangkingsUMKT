@@ -14,8 +14,7 @@ import {
   Headset, 
   WhatsappLogo, 
   MapPin, 
-  Clock,
-  BookOpenText 
+  Clock 
 } from "@phosphor-icons/react";
 import { OFFICIAL_LINKS, OFFICIAL_CONTACTS } from "@/lib/masta-data";
 import MascotFlame from "./MascotFlame";
@@ -68,19 +67,23 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/panduan" className="hover:text-nyala-500 transition-colors flex items-center gap-1.5 font-semibold text-indigo-600 dark:text-indigo-400">
-                    <BookOpenText weight="bold" className="w-3.5 h-3.5 text-indigo-500" />
-                    <span>Panduan Edukasi MABA</span>
+                  <Link href="/blog" className="hover:text-nyala-500 transition-colors flex items-center gap-1.5 font-semibold text-indigo-600 dark:text-indigo-400">
+                    <Newspaper weight="bold" className="w-3.5 h-3.5 text-indigo-500" />
+                    <span>Blog & Artikel MABA</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/hub-umkt" className="hover:text-nyala-500 transition-colors flex items-center gap-1.5 font-semibold text-cyan-600 dark:text-cyan-400">
-                    <Globe weight="bold" className="w-3.5 h-3.5 text-cyan-500" />
-                    <span>Hub Kampus & API UMKT</span>
+                  <Link href="/panduan-ti" className="hover:text-nyala-500 transition-colors">
+                    Akademik & Karir TI 2026
                   </Link>
                 </li>
                 <li>
-                  <Link href="/health" className="hover:text-nyala-500 transition-colors">
+                  <Link href="/panduan-sikad" className="hover:text-nyala-500 transition-colors">
+                    Simulator SIKAD UMKT
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/health-check" className="hover:text-nyala-500 transition-colors">
                     Health Check & Mood Tracker
                   </Link>
                 </li>
@@ -92,16 +95,6 @@ export default function Footer() {
                 <li>
                   <Link href="/checklist" className="hover:text-nyala-500 transition-colors">
                     Checklist Persiapan MABA
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/panduan-ti" className="hover:text-nyala-500 transition-colors">
-                    Akademik & Karir TI 2026
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/panduan-sikad" className="hover:text-nyala-500 transition-colors">
-                    Simulator SIKAD UMKT
                   </Link>
                 </li>
               </ul>

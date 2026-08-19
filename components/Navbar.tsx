@@ -91,24 +91,58 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
 
             <NavLink href="/" label="Beranda" active={pathname === "/"} />
 
+            {/* Hub UMKT Live API */}
             <NavLink 
               href="/hub-umkt" 
-              label="Hub UMKT" 
+              label="Hub Kampus UMKT" 
               active={pathname.startsWith("/hub-umkt")} 
             />
 
+            {/* Panduan MABA */}
             <NavLink 
-              href="/panduan" 
-              label="Panduan Edukasi" 
-              active={pathname.startsWith("/panduan")} 
+              href="/blog" 
+              label="Panduan MABA" 
+              active={pathname.startsWith("/blog")} 
             />
+
+            {/* Akademik Dropdown */}
+            <Dropdown
+              label="Akademik"
+              open={akademikOpen}
+              setOpen={setAkademikOpen}
+              active={isActiveGroup(["/panduan-ti", "/panduan-sikad", "/tentang-masta"])}
+            >
+              <DropdownItem
+                href="/panduan-ti"
+                icon={<Code weight="bold" className="w-4 h-4" />}
+                color="nyala"
+                title="Prodi Teknologi Informasi"
+                desc="Kurikulum 2026, Dosen, Standar Nilai & Karir"
+                badge="2026"
+              />
+              <DropdownItem
+                href="/panduan-sikad"
+                icon={<Laptop weight="bold" className="w-4 h-4" />}
+                color="blue"
+                title="Portal SIKAD UMKT"
+                desc="Simulator KRS, Jadwal, Tagihan & Presensi"
+                badge="Simulator"
+              />
+              <DropdownItem
+                href="/tentang-masta"
+                icon={<BookOpenText weight="bold" className="w-4 h-4" />}
+                color="purple"
+                title="Edukasi & Pilar MASTA"
+                desc="Fokus pembinaan, tata nilai & FAQ"
+              />
+            </Dropdown>
 
             {/* Persiapan Dropdown */}
             <Dropdown
               label="Persiapan"
               open={persiapanOpen}
               setOpen={setPersiapanOpen}
-              active={isActiveGroup(["/jadwal", "/checklist", "/health", "/panduan-ti", "/panduan-sikad"])}
+              active={isActiveGroup(["/jadwal", "/checklist", "/health-check"])}
             >
               <DropdownItem
                 href="/jadwal"
@@ -121,31 +155,15 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
                 href="/checklist"
                 icon={<CheckSquare weight="bold" className="w-4 h-4" />}
                 color="emerald"
-                title="Checklist Persiapan"
-                desc="Berkas, pakaian & kelengkapan"
+                title="Checklist Perlengkapan"
+                desc="Berkas, pakaian & task kustom"
               />
               <DropdownItem
-                href="/health"
+                href="/health-check"
                 icon={<Heartbeat weight="bold" className="w-4 h-4" />}
                 color="rose"
-                title="Health & Mood Check"
-                desc="Kesiapan fisik & mental MABA"
-              />
-              <DropdownItem
-                href="/panduan-ti"
-                icon={<Code weight="bold" className="w-4 h-4" />}
-                color="nyala"
-                title="Prodi Teknologi Informasi"
-                desc="Kurikulum 2026, Dosen & Standar S.Kom"
-                badge="TI"
-              />
-              <DropdownItem
-                href="/panduan-sikad"
-                icon={<Laptop weight="bold" className="w-4 h-4" />}
-                color="blue"
-                title="Portal SIKAD UMKT"
-                desc="Simulator KRS, Tagihan & Presensi"
-                badge="Simulator"
+                title="Health Check & Mood"
+                desc="Asesmen kesiapan fisik & mental"
               />
             </Dropdown>
 

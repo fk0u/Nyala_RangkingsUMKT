@@ -21,51 +21,77 @@ import {
   Newspaper,
   Eye,
   CheckCircle,
-  TextAa,
-  User,
-  ThumbsUp,
-  Heart,
-  ChatCircleText
+  TextAa
 } from "@phosphor-icons/react";
-import { BlogPost, BLOG_POSTS } from "@/lib/masta-data";
-import { getAllBlogPosts } from "@/lib/blog-store";
+import { 
+  UMKTBerita, 
+  formatDateIndo, 
+  cleanHTML, 
+  extractImageFromHTML,
+  generateSlug 
+} from "@/lib/umkt-api";
 import { useToast } from "@/context/ToastContext";
 import MascotFlame from "@/components/MascotFlame";
 
-export default function BlogGuideDetailPage() {
+export default function HubArticleDetailPage() {
   const params = useParams();
   const router = useRouter();
   const rawSlug = Array.isArray(params.slug) ? params.slug[0] : params.slug || "";
   const toast = useToast();
 
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [article, setArticle] = useState<UMKTBerita | null>(null);
+  const [relatedArticles, setRelatedArticles] = useState<UMKTBerita[]>([]);
   const [loading, setLoading] = useState(true);
   const [fontSize, setFontSize] = useState<"normal" | "large" | "xl">("normal");
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [hasLiked, setHasLiked] = useState(false);
 
   // Top Reading Progress
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 400, damping: 40 });
 
   useEffect(() => {
-    const list = getAllBlogPosts();
-    let found = list.find((p) => p.slug === rawSlug) || BLOG_POSTS.find((p) => p.slug === rawSlug) || null;
+    async function loadArticle() {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/umkt-portal?type=berita");
+        const data = await res.json();
+        const list: UMKTBerita[] = data.data?.results || (Array.isArray(data.data) ? data.data : []) || data.berita || [];
 
-    if (!found && list.length > 0) {
-      found = list[0];
+        if (list.length > 0) {
+          // Match by id at end of slug (e.g., "judul-berita-2199" -> 2199) or slug match
+          const idMatch = rawSlug.match(/-(\d+)$/);
+          const targetId = idMatch ? parseInt(idMatch[1], 10) : null;
+
+          let found = targetId ? list.find(b => b.id === targetId) : null;
+          
+          if (!found) {
+            found = list.find(b => generateSlug(b.judul, b.id) === rawSlug);
+          }
+
+          if (!found && list.length > 0) {
+            // Fallback to first article if not found
+            found = list[0];
+          }
+
+          setArticle(found || null);
+          setRelatedArticles(list.filter(b => b.id !== (found?.id || 0)).slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Gagal memuat detail warta:", err);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    setPost(found);
-    setRelatedPosts(list.filter(p => p.slug !== (found?.slug || "")).slice(0, 3));
-    setLoading(false);
+    if (rawSlug) {
+      loadArticle();
+    }
   }, [rawSlug]);
 
   const handleShare = (platform: "wa" | "twitter" | "copy") => {
-    if (typeof window === "undefined" || !post) return;
+    if (typeof window === "undefined" || !article) return;
     const url = window.location.href;
-    const text = `${post.title} - Panduan Resmi MABA UMKT 2026`;
+    const text = `${article.judul} - Portal Warta Resmi UMKT`;
 
     if (platform === "wa") {
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, "_blank");
@@ -73,12 +99,12 @@ export default function BlogGuideDetailPage() {
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, "_blank");
     } else {
       navigator.clipboard.writeText(url);
-      toast.success("Tautan artikel berhasil disalin ke clipboard!", "Tautan Disalin");
+      toast.success("Tautan warta berhasil disalin ke clipboard!", "Tautan Disalin");
     }
   };
 
   const handleToggleTTS = () => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window) || !post) {
+    if (typeof window === "undefined" || !("speechSynthesis" in window) || !article) {
       toast.info("Fitur suara tidak didukung di browser ini.", "Informasi");
       return;
     }
@@ -87,7 +113,7 @@ export default function BlogGuideDetailPage() {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
     } else {
-      const plainText = `${post.title}. ${post.excerpt}. ${post.content.slice(0, 600)}`;
+      const plainText = `${article.judul}. ${cleanHTML(article.isi).slice(0, 500)}`;
       const utterance = new SpeechSynthesisUtterance(plainText);
       utterance.lang = "id-ID";
       utterance.onend = () => setIsSpeaking(false);
@@ -95,14 +121,7 @@ export default function BlogGuideDetailPage() {
 
       window.speechSynthesis.speak(utterance);
       setIsSpeaking(true);
-      toast.info("Memutar narasi panduan MABA...", "Audio Nyala Aktif");
-    }
-  };
-
-  const handleLike = () => {
-    setHasLiked(!hasLiked);
-    if (!hasLiked) {
-      toast.success("Terima kasih atas apresiasimu!", "Membantu MABA");
+      toast.info("Memutar pembacaan naskah warta...", "Audio Nyala Aktif");
     }
   };
 
@@ -111,37 +130,39 @@ export default function BlogGuideDetailPage() {
       <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4">
         <MascotFlame size="xl" mood="studying" className="animate-pulse" />
         <p className="text-sm font-bold text-navy-600 dark:text-navy-300 font-mono">
-          Memuat artikel panduan MABA...
+          Memuat naskah warta resmi UMKT...
         </p>
       </div>
     );
   }
 
-  if (!post) {
+  if (!article) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6 text-center px-4">
         <MascotFlame size="2xl" mood="confused" />
         <div className="space-y-2">
           <h2 className="text-2xl font-bold text-navy-900 dark:text-white">
-            Panduan Tidak Ditemukan
+            Warta Tidak Ditemukan
           </h2>
           <p className="text-sm text-navy-500 max-w-md">
-            Artikel yang kamu cari tidak tersedia di repositori panduan.
+            Artikel yang kamu cari mungkin telah diperbarui atau dipindahkan di server web.umkt.ac.id.
           </p>
         </div>
         <Link
-          href="/blog"
+          href="/hub-umkt"
           className="px-6 py-3 rounded-2xl bg-nyala-500 text-white text-xs font-bold shadow-lg shadow-nyala-500/30"
         >
-          Kembali ke Daftar Panduan MABA
+          Kembali ke Hub Warta UMKT
         </Link>
       </div>
     );
   }
 
+  const coverImage = article.foto || extractImageFromHTML(article.isi) || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80";
+
   return (
     <>
-      {/* Top Reading Progress Bar */}
+      {/* ── TOP READING PROGRESS BAR ── */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-nyala-500 via-amber-400 to-cyan-400 z-50 origin-left"
         style={{ scaleX }}
@@ -152,53 +173,59 @@ export default function BlogGuideDetailPage() {
         {/* Navigation Back */}
         <div className="flex items-center justify-between">
           <Link
-            href="/blog"
+            href="/hub-umkt"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300 hover:text-nyala-500 text-xs font-bold transition-colors"
           >
             <ArrowLeft weight="bold" className="w-4 h-4" />
-            <span>Kembali ke Majalah Panduan MABA</span>
+            <span>Kembali ke Hub Warta UMKT</span>
           </Link>
 
           <span className="text-xs font-mono text-navy-400">
-            Kategori: {post.category}
+            ID Rilis: #{article.id}
           </span>
         </div>
 
         {/* ── HEADER EDITORIAL ── */}
         <header className="space-y-6">
+          {/* Metadata Badges */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3.5 py-1 rounded-full bg-nyala-500/15 text-nyala-600 dark:text-nyala-400 text-xs font-extrabold uppercase tracking-wider border border-nyala-500/25 shadow-sm">
-              {post.category}
+            <span className="px-3 py-1 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-extrabold uppercase tracking-wider border border-nyala-500/20">
+              {article.tags || "Warta Resmi UMKT"}
             </span>
-            <span className="text-xs text-navy-400">
-              {post.date}
-            </span>
+
+            {Array.isArray(article.sdgs) && article.sdgs.map((sdg) => (
+              <span
+                key={sdg.id}
+                className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm"
+                style={{ backgroundColor: sdg.color || "#FF5A1F" }}
+              >
+                {sdg.sdgs}
+              </span>
+            ))}
           </div>
 
+          {/* Headline */}
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-900 dark:text-white tracking-tight leading-tight">
-            {post.title}
+            {article.judul}
           </h1>
 
-          <p className="text-sm sm:text-base text-navy-600 dark:text-navy-300 leading-relaxed font-medium">
-            {post.excerpt}
-          </p>
-
-          {/* Author & Action Bar */}
+          {/* Byline & Read Metrics */}
           <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-navy-200/60 dark:border-navy-800 text-xs text-navy-500 dark:text-navy-400">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-nyala-500 to-amber-400 text-white flex items-center justify-center font-black text-base shadow-sm">
-                {post.author[0]}
+              <div className="w-10 h-10 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 flex items-center justify-center font-black text-sm border border-nyala-500/20">
+                UMKT
               </div>
               <div>
                 <p className="font-bold text-navy-900 dark:text-white">
-                  {post.author}
+                  Humas & Biro Kemahasiswaan
                 </p>
                 <p className="text-[11px] text-navy-400">
-                  {post.authorRole} • {post.readTime}
+                  {formatDateIndo(article.tgl_upload)} • 4 menit baca
                 </p>
               </div>
             </div>
 
+            {/* Quick Actions */}
             <div className="flex items-center gap-2">
               <button
                 onClick={handleToggleTTS}
@@ -209,7 +236,7 @@ export default function BlogGuideDetailPage() {
                 }`}
                 title="Dengarkan pembacaan naskah"
               >
-                <SpeakerHigh weight={isSpeaking ? "fill" : "bold"} className="w-4 h-4" />
+                {isSpeaking ? <SpeakerHigh weight="fill" className="w-4 h-4" /> : <SpeakerHigh weight="bold" className="w-4 h-4" />}
                 <span>{isSpeaking ? "Mendengarkan..." : "Dengarkan"}</span>
               </button>
 
@@ -240,33 +267,16 @@ export default function BlogGuideDetailPage() {
           </div>
         </header>
 
-        {/* ── KEY TAKEAWAYS BOX ── */}
-        {post.keyTakeaways && post.keyTakeaways.length > 0 && (
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-nyala-500/10 via-amber-500/5 to-transparent border border-nyala-500/25 space-y-3 shadow-sm">
-            <div className="flex items-center gap-2 text-nyala-600 dark:text-nyala-400">
-              <Sparkle weight="fill" className="w-5 h-5 text-nyala-500" />
-              <h3 className="text-sm font-black uppercase tracking-wider">
-                Poin Inti / Key Takeaways untuk MABA 2026:
-              </h3>
-            </div>
-            <ul className="space-y-2 text-xs sm:text-sm text-navy-800 dark:text-navy-200">
-              {post.keyTakeaways.map((takeaway, index) => (
-                <li key={index} className="flex items-start gap-2.5">
-                  <CheckCircle weight="fill" className="w-4 h-4 text-nyala-500 flex-shrink-0 mt-0.5" />
-                  <span>{takeaway}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* ── HIGH-RES COVER IMAGE ── */}
+        {/* ── HIGH-RES HERO IMAGE ── */}
         <div className="relative rounded-3xl overflow-hidden aspect-video bg-navy-950 shadow-2xl border border-navy-200/60 dark:border-navy-800">
           <img
-            src={post.coverImage}
-            alt={post.title}
+            src={coverImage}
+            alt={article.judul}
             className="w-full h-full object-cover"
           />
+          <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono text-white/90">
+            Dokumentasi Humas UMKT
+          </div>
         </div>
 
         {/* ── ARTICLE PROSE CONTENT ── */}
@@ -275,92 +285,81 @@ export default function BlogGuideDetailPage() {
             fontSize === "large" ? "text-lg" : fontSize === "xl" ? "text-xl" : "text-base"
           }`}
         >
-          <div className="prose prose-navy dark:prose-invert max-w-none prose-img:rounded-3xl prose-headings:font-black prose-headings:tracking-tight prose-a:text-nyala-500 whitespace-pre-wrap">
-            {post.content}
-          </div>
+          {/* Render raw HTML safely with enhanced styling */}
+          <div
+            className="prose prose-navy dark:prose-invert max-w-none prose-img:rounded-3xl prose-img:shadow-lg prose-a:text-nyala-500 prose-headings:font-black prose-p:leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: article.isi }}
+          />
         </div>
 
-        {/* ── TAGS CHIPS ── */}
-        {post.tags && post.tags.length > 0 && (
-          <div className="space-y-2 pt-4">
-            <span className="text-xs font-bold text-navy-400">Topik Terkait:</span>
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 rounded-xl bg-navy-100 dark:bg-navy-800 text-xs font-semibold text-navy-700 dark:text-navy-300"
-                >
-                  #{tag}
-                </span>
-              ))}
+        {/* ── OFFICIAL VERIFICATION BADGE & SOURCE ── */}
+        <div className="p-6 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <CheckCircle weight="fill" className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-sm font-black text-navy-900 dark:text-white">
+                Rilis Resmi Terverifikasi Universitas Muhammadiyah Kalimantan Timur
+              </h4>
+              <p className="text-xs text-navy-500 dark:text-navy-400">
+                Data bersumber langsung dari Django REST Framework web.umkt.ac.id.
+              </p>
             </div>
           </div>
-        )}
 
-        {/* ── FEEDBACK & HELPFUL RATING ── */}
-        <div className="p-6 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <div className="space-y-1">
-            <h4 className="text-sm font-bold text-navy-900 dark:text-white">
-              Apakah panduan ini bermanfaat untuk masa orientasimu?
-            </h4>
-            <p className="text-xs text-navy-500">
-              Umpan balikmu membantu tim redaksi meningkatkan panduan MABA UMKT 2026.
-            </p>
-          </div>
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-navy-100 dark:border-navy-800">
+            <span className="text-xs font-mono text-navy-400">
+              URL Sumber Asli: web.umkt.ac.id/berita/{article.id}/
+            </span>
 
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleLike}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                hasLiked
-                  ? "bg-nyala-500 text-white shadow-md"
-                  : "bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300 hover:bg-navy-200"
-              }`}
+            <a
+              href="https://web.umkt.ac.id"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 hover:bg-nyala-500 hover:text-white text-xs font-bold transition-all text-navy-700 dark:text-navy-300"
             >
-              <ThumbsUp weight={hasLiked ? "fill" : "bold"} className="w-4 h-4" />
-              <span>{hasLiked ? "Sangat Membantu!" : "Membantu"}</span>
-            </button>
-
-            <Link
-              href="/companion"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-bold hover:bg-nyala-500/20 transition-colors"
-            >
-              <ChatCircleText weight="bold" className="w-4 h-4" />
-              <span>Tanya Nyala AI</span>
-            </Link>
+              <span>Kunjungi Portal Resmi UMKT</span>
+              <ArrowSquareOut weight="bold" className="w-4 h-4" />
+            </a>
           </div>
         </div>
 
-        {/* ── RELATED GUIDES CAROUSEL ── */}
-        {relatedPosts.length > 0 && (
+        {/* ── RELATED ARTICLES CAROUSEL ── */}
+        {relatedArticles.length > 0 && (
           <div className="space-y-6 pt-8 border-t border-navy-200/60 dark:border-navy-800">
             <div className="flex items-center gap-2">
               <Sparkle weight="fill" className="w-5 h-5 text-nyala-500" />
               <h3 className="text-lg font-black text-navy-900 dark:text-white tracking-tight">
-                Panduan Edukasi Lainnya
+                Warta Terkait Lainnya
               </h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {relatedPosts.map((rel) => (
-                <Link
-                  key={rel.slug}
-                  href={`/blog/${rel.slug}`}
-                  className="group rounded-2xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500/40 transition-all flex flex-col justify-between"
-                >
-                  <div className="aspect-video overflow-hidden bg-navy-950">
-                    <img src={rel.coverImage} alt={rel.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                  </div>
-                  <div className="p-4 space-y-2">
-                    <span className="text-[10px] font-bold text-nyala-600 dark:text-nyala-400">
-                      {rel.category}
-                    </span>
-                    <h4 className="text-xs font-bold text-navy-900 dark:text-white line-clamp-2 group-hover:text-nyala-500 transition-colors">
-                      {rel.title}
-                    </h4>
-                  </div>
-                </Link>
-              ))}
+              {relatedArticles.map((rel) => {
+                const relSlug = generateSlug(rel.judul, rel.id);
+                const relCover = rel.foto || extractImageFromHTML(rel.isi) || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80";
+
+                return (
+                  <Link
+                    key={`rel-${rel.id}`}
+                    href={`/hub-umkt/${relSlug}`}
+                    className="group rounded-2xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500/40 transition-all flex flex-col justify-between"
+                  >
+                    <div className="aspect-video overflow-hidden bg-navy-950">
+                      <img src={relCover} alt={rel.judul} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    </div>
+                    <div className="p-4 space-y-2">
+                      <span className="text-[10px] font-bold text-nyala-600 dark:text-nyala-400">
+                        {formatDateIndo(rel.tgl_upload)}
+                      </span>
+                      <h4 className="text-xs font-bold text-navy-900 dark:text-white line-clamp-2 group-hover:text-nyala-500 transition-colors">
+                        {rel.judul}
+                      </h4>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}

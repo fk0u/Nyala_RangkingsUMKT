@@ -428,7 +428,7 @@ export default function UMKTLiveFeed() {
           {activeTab === "fakultas" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {fakultasList
-                .filter((f) => !searchQuery || f.nama_lembaga.toLowerCase().includes(searchQuery.toLowerCase()))
+                .filter((f) => !searchQuery || (f.nama_lembaga || f.nama || "").toLowerCase().includes(searchQuery.toLowerCase()))
                 .map((f, idx) => (
                   <motion.div
                     key={f.kode_lembaga || idx}
@@ -441,7 +441,7 @@ export default function UMKTLiveFeed() {
                       <div className="flex items-center gap-3">
                         {f.logo ? (
                           <div className="w-12 h-12 rounded-2xl bg-white p-1 border border-navy-200 shadow-sm flex items-center justify-center flex-shrink-0">
-                            <img src={f.logo} alt={f.nama_lembaga} className="w-full h-full object-contain" />
+                            <img src={f.logo} alt={f.nama_lembaga || f.nama || "Fakultas"} className="w-full h-full object-contain" />
                           </div>
                         ) : (
                           <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0">
@@ -453,18 +453,18 @@ export default function UMKTLiveFeed() {
                             {f.jenis || "Fakultas"}
                           </span>
                           <h4 className="text-sm font-bold text-navy-900 dark:text-white leading-snug">
-                            {f.nama_lembaga}
+                            {f.nama_lembaga || f.nama}
                           </h4>
                         </div>
                       </div>
 
                       <p className="text-xs text-navy-600 dark:text-navy-400 line-clamp-3 leading-relaxed">
-                        {f.deskripsi || "Fakultas resmi di Universitas Muhammadiyah Kalimantan Timur."}
+                        {f.deskripsi || f.keterangan || "Fakultas resmi di Universitas Muhammadiyah Kalimantan Timur."}
                       </p>
                     </div>
 
                     <a
-                      href={f.url}
+                      href={f.url || f.link || "https://web.umkt.ac.id"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400 pt-3 border-t border-navy-100 dark:border-navy-800 hover:underline"
@@ -481,7 +481,7 @@ export default function UMKTLiveFeed() {
           {activeTab === "unit" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {unitList
-                .filter((u) => !searchQuery || u.nama_lembaga.toLowerCase().includes(searchQuery.toLowerCase()))
+                .filter((u) => !searchQuery || (u.nama_lembaga || u.nama || "").toLowerCase().includes(searchQuery.toLowerCase()))
                 .map((u, idx) => (
                   <motion.div
                     key={u.kode_lembaga || idx}

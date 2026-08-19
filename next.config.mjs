@@ -10,6 +10,14 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'web.umkt.ac.id',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.umkt.ac.id',
+      },
+      {
+        protocol: 'https',
         hostname: 'images.unsplash.com',
       }
     ],
@@ -31,8 +39,8 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: blob: https://www.umkt.ac.id https://images.unsplash.com",
-              "connect-src 'self' https://zpi.sh https://*.zpi.sh",
+              "img-src 'self' data: blob: https://www.umkt.ac.id https://web.umkt.ac.id https://media.umkt.ac.id https://images.unsplash.com",
+              "connect-src 'self' https://web.umkt.ac.id https://*.umkt.ac.id https://zpi.sh https://*.zpi.sh",
               "frame-ancestors 'none'",
             ].join('; '),
           },

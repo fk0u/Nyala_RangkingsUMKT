@@ -1,14 +1,6 @@
 /**
  * UMKT Official REST API Client & Data Types
  * Base URL: https://web.umkt.ac.id/api/
- * 
- * Endpoints:
- * - /api/berita/ (2,199+ news articles)
- * - /api/event/ (85+ live agendas & events)
- * - /api/pengumuman/ (349+ official academic announcements)
- * - /api/info-fakultas/ (10 official faculties)
- * - /api/informasi/ (59 official prodi, units & biro)
- * - /api/last-update/ (live portal update timestamps)
  */
 
 export interface UMKTArticleSDG {
@@ -17,80 +9,107 @@ export interface UMKTArticleSDG {
   color: string;
 }
 
-export interface UMKTBeritaItem {
+export interface UMKTBerita {
+  id?: number;
   thumbnail: string | null;
+  foto?: string | null;
   judul: string;
   isi: string;
   kategori?: {
     kategori: string;
   };
-  url: string;
+  url?: string;
   slug: string;
   tags?: string | string[];
   sdgs?: UMKTArticleSDG[];
-  tanggal: string;
+  tanggal?: string;
+  tgl_upload?: string;
   kode_lembaga?: string;
-  publish: boolean;
+  publish?: boolean;
   created?: string | null;
 }
 
-export interface UMKTEventItem {
+export interface UMKTEvent {
+  id?: number;
   thumbnail: string | null;
+  foto?: string | null;
   judul: string;
   isi: string;
   kategori?: {
     kategori: string;
   };
-  url: string;
+  url?: string;
   slug: string;
   tags?: string | string[];
-  tanggal: string;
+  tanggal?: string;
+  tgl_event?: string;
+  tgl_upload?: string;
   kode_lembaga?: string;
-  publish: boolean;
+  publish?: boolean;
   created?: string | null;
 }
 
-export interface UMKTPengumumanItem {
+export interface UMKTPengumuman {
+  id?: number;
   thumbnail: string | null;
+  foto?: string | null;
   judul: string;
   isi: string;
   kategori?: {
     kategori: string;
   };
-  url: string;
+  url?: string;
   slug: string;
   tags?: string | string[];
-  tanggal: string;
+  tanggal?: string;
+  tgl_upload?: string;
   kode_lembaga?: string;
-  publish: boolean;
+  publish?: boolean;
   created?: string | null;
 }
 
-export interface UMKTFakultasItem {
+export interface UMKTFakultas {
+  id?: number;
   logo: string | null;
-  kode_lembaga: string;
-  nama_lembaga: string;
-  deskripsi: string;
-  jenis: string;
-  url: string;
+  kode_lembaga?: string;
+  nama_lembaga?: string;
+  nama?: string;
+  singkatan?: string;
+  deskripsi?: string;
+  keterangan?: string;
+  jenis?: string;
+  url?: string;
+  link?: string;
 }
 
-export interface UMKTInformasiItem {
+export interface UMKTInformasi {
+  id?: number;
   logo: string | null;
-  kode_lembaga: string;
-  nama_lembaga: string;
-  deskripsi: string;
-  jenis: string;
-  url: string;
+  kode_lembaga?: string;
+  nama_lembaga?: string;
+  nama?: string;
+  deskripsi?: string;
+  keterangan?: string;
+  jenis?: string;
+  url?: string;
+  link?: string;
 }
 
-export interface UMKTLastUpdateItem {
-  kode_lembaga: string;
-  judul: string;
-  tanggal: string;
-  created: string | null;
-  tanggal_formatted: string;
+export interface UMKTLastUpdate {
+  kode_lembaga?: string;
+  judul?: string;
+  tanggal?: string;
+  created?: string | null;
+  tanggal_formatted?: string;
+  last_update?: string;
 }
+
+export type UMKTBeritaItem = UMKTBerita;
+export type UMKTEventItem = UMKTEvent;
+export type UMKTPengumumanItem = UMKTPengumuman;
+export type UMKTFakultasItem = UMKTFakultas;
+export type UMKTInformasiItem = UMKTInformasi;
+export type UMKTLastUpdateItem = UMKTLastUpdate;
 
 export interface UMKTListResponse<T> {
   count: number;
@@ -150,7 +169,7 @@ export async function fetchUMKTApi<T>(
 /**
  * Helper to strip HTML tags for clean text preview
  */
-export function stripHtml(html: string): string {
+export function stripHtml(html?: string): string {
   if (!html) return "";
   return html
     .replace(/<[^>]*>/g, " ")
@@ -163,10 +182,13 @@ export function stripHtml(html: string): string {
     .trim();
 }
 
+export const cleanHTML = stripHtml;
+
 /**
  * Format ISO Date into Indonesian Friendly Date
  */
-export function formatIndonesianDate(isoString: string): string {
+export function formatIndonesianDate(isoString?: string): string {
+  if (!isoString) return "Terbaru";
   try {
     const date = new Date(isoString);
     if (isNaN(date.getTime())) return isoString;
@@ -178,4 +200,34 @@ export function formatIndonesianDate(isoString: string): string {
   } catch {
     return isoString;
   }
+}
+
+export const formatDateIndo = formatIndonesianDate;
+
+/**
+ * Extract first image URL from HTML content string
+ */
+export function extractImageFromHTML(html?: string): string | null {
+  if (!html) return null;
+  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return match ? match[1] : null;
+}
+
+/**
+ * Generate clean URL slug from title and ID
+ */
+export function generateSlug(title: string, id?: number | string): string {
+  const clean = (title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .slice(0, 60);
+
+  return id ? `${clean}-${id}` : clean || `berita-${Date.now()}`;
+}
+
+export async function fetchUMKTHub() {
+  const res = await fetch("/api/umkt-portal?type=all-hub");
+  return await res.json();
 }

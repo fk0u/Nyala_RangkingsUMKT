@@ -9,572 +9,612 @@ import {
   Megaphone, 
   CalendarCheck, 
   Buildings, 
-  ArrowUpRight, 
-  MagnifyingGlass, 
   ArrowClockwise, 
+  MagnifyingGlass, 
+  ArrowSquareOut, 
   Sparkle, 
-  BookOpenText, 
-  Laptop, 
-  Headset, 
-  ShieldCheck,
-  CheckCircle,
-  Clock,
-  Tag,
+  Clock, 
+  Tag, 
+  SlidersHorizontal,
+  BookmarkSimple,
   ShareNetwork,
-  X
+  Eye,
+  CheckCircle,
+  WarningCircle,
+  Funnel,
+  ArrowRight,
+  Student
 } from "@phosphor-icons/react";
-import { OFFICIAL_LINKS } from "@/lib/masta-data";
 import { 
-  UMKTBeritaItem, 
-  UMKTEventItem, 
-  UMKTPengumumanItem, 
-  UMKTFakultasItem, 
-  UMKTInformasiItem 
+  fetchUMKTHub, 
+  UMKTBerita, 
+  UMKTPengumuman, 
+  UMKTEvent, 
+  UMKTFakultas, 
+  UMKTInformasi,
+  cleanHTML,
+  formatDateIndo,
+  extractImageFromHTML,
+  generateSlug
 } from "@/lib/umkt-api";
 import { useToast } from "@/context/ToastContext";
-import BacklinkBanner from "@/components/BacklinkBanner";
-
-const CAMPUS_SYSTEMS = [
-  {
-    name: "SIKAD UMKT",
-    desc: "Sistem Informasi Akademik terpadu untuk pengisian KRS, jadwal kuliah, presensi, dan rekap KHS.",
-    url: "https://mahasiswa.umkt.ac.id/",
-    badge: "Akademik",
-  },
-  {
-    name: "Odoo MASTA 2026",
-    desc: "Portal resmi orientasi dan registrasi kegiatan Masa Ta'aruf Mahasiswa Baru UMKT 2026.",
-    url: "https://masta-maba.odoo.com/",
-    badge: "MASTA Resmi",
-  },
-  {
-    name: "PMB UMKT",
-    desc: "Portal Penerimaan Mahasiswa Baru, registrasi ulang NIM, dan verifikasi berkas.",
-    url: "https://pmb.umkt.ac.id/",
-    badge: "PMB",
-  },
-  {
-    name: "Biro Kemahasiswaan (BIMA)",
-    desc: "Layanan pembinaan kemahasiswaan, beasiswa, ormawa, dan layanan karir alumni.",
-    url: "https://kemahasiswaan.umkt.ac.id/",
-    badge: "Kemahasiswaan",
-  },
-  {
-    name: "Perpustakaan UMKT",
-    desc: "Akses e-library, repositori tugas akhir, jurnal internasional, dan peminjaman buku.",
-    url: "https://library.umkt.ac.id/",
-    badge: "E-Library",
-  },
-  {
-    name: "Prodi Teknologi Informasi",
-    desc: "Laman resmi Program Studi Teknologi Informasi Fakultas Sains dan Teknologi UMKT.",
-    url: "https://ti.umkt.ac.id/",
-    badge: "Prodi TI",
-  },
-];
-
-type HubTab = "berita" | "pengumuman" | "event" | "fakultas" | "sistem";
+import MascotFlame from "@/components/MascotFlame";
 
 export default function HubUMKTPage() {
-  const toast = useToast();
-  const [activeTab, setActiveTab] = useState<HubTab>("berita");
+  const [activeTab, setActiveTab] = useState<"all" | "berita" | "pengumuman" | "event" | "fakultas" | "unit">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSDG, setSelectedSDG] = useState<string>("all");
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<string>("");
+  const toast = useToast();
 
-  // Data states
-  const [beritaList, setBeritaList] = useState<UMKTBeritaItem[]>([]);
-  const [pengumumanList, setPengumumanList] = useState<UMKTPengumumanItem[]>([]);
-  const [eventList, setEventList] = useState<UMKTEventItem[]>([]);
-  const [fakultasList, setFakultasList] = useState<UMKTFakultasItem[]>([]);
-  const [unitList, setUnitList] = useState<UMKTInformasiItem[]>([]);
+  // Data Stores
+  const [beritaList, setBeritaList] = useState<UMKTBerita[]>([]);
+  const [pengumumanList, setPengumumanList] = useState<UMKTPengumuman[]>([]);
+  const [eventList, setEventList] = useState<UMKTEvent[]>([]);
+  const [fakultasList, setFakultasList] = useState<UMKTFakultas[]>([]);
+  const [informasiList, setInformasiList] = useState<UMKTInformasi[]>([]);
 
-  // Reader Modal State
-  const [selectedArticle, setSelectedArticle] = useState<{
-    title: string;
-    date: string;
-    category: string;
-    coverImage?: string;
-    content: string;
-    author?: string;
-    tags?: string[];
-    officialUrl?: string;
-  } | null>(null);
-
-  const fetchData = async () => {
+  const loadData = async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/umkt-portal?type=all-hub");
       const data = await res.json();
+      const payload = data.data || data.hub || {};
 
-      if (data.success) {
-        setBeritaList(data.berita?.results || []);
-        setPengumumanList(data.pengumuman?.results || []);
-        setEventList(data.event?.results || []);
-        setFakultasList(data.fakultas?.results || []);
-        setUnitList(data.informasi?.results || []);
-        if (data.lastUpdate?.last_update) {
-          setLastUpdate(data.lastUpdate.last_update);
-        }
+      if (payload) {
+        setBeritaList(payload.berita || []);
+        setPengumumanList(payload.pengumuman || []);
+        setEventList(payload.event || []);
+        setFakultasList(payload.fakultas || []);
+        setInformasiList(payload.informasi || []);
+        setLastUpdate(payload.lastUpdate?.[0]?.tanggal_formatted || new Date().toISOString());
       }
     } catch (err) {
-      console.error("Error fetching UMKT Portal data:", err);
-      toast.error("Gagal terhubung ke API portal UMKT.", "Koneksi Bermasalah");
+      console.error("Gagal memuat data API UMKT:", err);
+      toast.error("Gagal terhubung ke REST API web.umkt.ac.id", "Koneksi Bermasalah");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    loadData();
   }, []);
 
-  // Filtered queries
-  const filteredBerita = beritaList.filter((item) =>
-    item.judul.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredPengumuman = pengumumanList.filter((item) =>
-    item.judul.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredEvent = eventList.filter((item) =>
-    item.judul.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter Berita
+  const filteredBerita = beritaList.filter((b) => {
+    const matchesSearch =
+      b.judul.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      b.isi.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesSDG =
+      selectedSDG === "all" ||
+      (Array.isArray(b.sdgs) && b.sdgs.some((s) => s.sdgs.toLowerCase().includes(selectedSDG.toLowerCase())));
+
+    return matchesSearch && matchesSDG;
+  });
+
+  // Filter Pengumuman
+  const filteredPengumuman = pengumumanList.filter((p) => {
+    return (
+      p.judul.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.isi.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
+  // Filter Event
+  const filteredEvent = eventList.filter((e) => {
+    return (
+      e.judul.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      e.isi.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
+  // Filter Fakultas
+  const filteredFakultas = fakultasList.filter((f) => {
+    const name = (f.nama || f.nama_lembaga || "").toLowerCase();
+    const shortName = (f.singkatan || f.kode_lembaga || "").toLowerCase();
+    return name.includes(searchQuery.toLowerCase()) || shortName.includes(searchQuery.toLowerCase());
+  });
+
+  // Filter Unit
+  const filteredUnit = informasiList.filter((u) => {
+    const name = (u.nama || u.nama_lembaga || "").toLowerCase();
+    const desc = (u.keterangan || u.deskripsi || "").toLowerCase();
+    return name.includes(searchQuery.toLowerCase()) || desc.includes(searchQuery.toLowerCase());
+  });
+
+  const spotlightArticle = beritaList[0];
 
   return (
-    <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+    <div className="space-y-12 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
       
-      {/* ── Editorial Header ── */}
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-black uppercase tracking-wider border border-nyala-500/20">
-            <Globe weight="bold" className="w-4 h-4" />
-            <span>Portal Resmi & Direktori Terpadu UMKT</span>
+      {/* ── 1. EDITORIAL HERO HEADER ── */}
+      <section className="relative p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-white overflow-hidden shadow-2xl border border-white/10">
+        {/* Ambient Glows */}
+        <div className="absolute w-96 h-96 rounded-full bg-nyala-500/20 blur-[100px] pointer-events-none -top-20 -left-20" />
+        <div className="absolute w-80 h-80 rounded-full bg-cyan-500/15 blur-[100px] pointer-events-none -bottom-20 -right-20" />
+
+        <div className="relative z-10 max-w-3xl space-y-5">
+          {/* Live Status Pill */}
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-mono text-emerald-400">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+            <span className="font-bold text-white">Live Data REST API</span>
+            <span className="text-navy-300">• web.umkt.ac.id</span>
           </div>
 
-          {/* Live Status Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-bold border border-emerald-500/20">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-            <span>Live API: web.umkt.ac.id</span>
-            {lastUpdate && <span className="text-[10px] opacity-75">• {lastUpdate}</span>}
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            Hub Warta, Pengumuman & <br />
+            <span className="fire-text-gradient">Direktori Resmi Kampus</span>
+          </h1>
+
+          <p className="text-sm sm:text-base text-navy-200 leading-relaxed max-w-2xl">
+            Pusat informasi terpadu Universitas Muhammadiyah Kalimantan Timur. Terhubung langsung ke 2.100+ artikel berita, rilis kegiatan IKN & FEBP, edaran beasiswa MABA, serta 10 fakultas resmi.
+          </p>
+
+          {/* Quick Refresh & Last Sync Badge */}
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              onClick={loadData}
+              disabled={loading}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-nyala-500 hover:bg-nyala-600 text-white text-xs font-bold transition-all shadow-md shadow-nyala-500/30 active:scale-95 disabled:opacity-50"
+            >
+              <ArrowClockwise weight="bold" className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+              <span>{loading ? "Menyinkronkan..." : "Segarkan Data Portal"}</span>
+            </button>
+
+            {lastUpdate && (
+              <span className="text-xs font-mono text-navy-300">
+                Terakhir disinkronkan: {new Date(lastUpdate).toLocaleTimeString("id-ID")} WITA
+              </span>
+            )}
           </div>
         </div>
+      </section>
 
-        <div className="max-w-3xl space-y-2">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-navy-900 dark:text-white tracking-tight">
-            Hub Informasi & <br />
-            <span className="fire-text-gradient">Ekosistem Kampus UMKT</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-400 leading-relaxed">
-            Akses langsung ke seluruh kanal informasi resmi Universitas Muhammadiyah Kalimantan Timur. Terhubung dengan 2.100+ artikel berita, rilis pengumuman, agenda universitas, 10 fakultas resmi, dan sistem layanan terpadu.
+      {/* ── 2. SPOTLIGHT BREAKING NEWS CARD ── */}
+      {spotlightArticle && !searchQuery && activeTab === "all" && (
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Sparkle weight="fill" className="w-5 h-5 text-nyala-500" />
+            <h2 className="text-lg font-black text-navy-900 dark:text-white tracking-tight uppercase">
+              Sorotan Warta Utama
+            </h2>
+          </div>
+
+          <div className="group relative rounded-3xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 shadow-xl hover:border-nyala-500/40 transition-all">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+              
+              {/* Cover Image */}
+              <div className="lg:col-span-7 relative aspect-video lg:aspect-auto overflow-hidden bg-navy-950 min-h-[280px]">
+                <img
+                  src={spotlightArticle.foto || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80"}
+                  alt={spotlightArticle.judul}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-transparent lg:hidden" />
+              </div>
+
+              {/* Copy & CTA */}
+              <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-extrabold uppercase">
+                      Kabar Kampus Resmi
+                    </span>
+                    <span className="text-xs text-navy-400">
+                      {formatDateIndo(spotlightArticle.tgl_upload)}
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl sm:text-2xl font-black text-navy-900 dark:text-white leading-snug group-hover:text-nyala-500 transition-colors">
+                    {spotlightArticle.judul}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 line-clamp-3 leading-relaxed">
+                    {cleanHTML(spotlightArticle.isi)}
+                  </p>
+
+                  {/* SDGs badges */}
+                  {Array.isArray(spotlightArticle.sdgs) && spotlightArticle.sdgs.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {spotlightArticle.sdgs.map((sdg) => (
+                        <span
+                          key={sdg.id}
+                          className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white shadow-sm"
+                          style={{ backgroundColor: sdg.color || "#FF5A1F" }}
+                        >
+                          {sdg.sdgs}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <Link
+                  href={`/hub-umkt/${generateSlug(spotlightArticle.judul, spotlightArticle.id)}`}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-nyala-600 to-amber-500 hover:from-nyala-500 hover:to-amber-400 text-white text-xs font-extrabold shadow-lg shadow-nyala-500/25 transition-all active:scale-95 w-full sm:w-auto"
+                >
+                  <span>Baca Selengkapnya</span>
+                  <ArrowRight weight="bold" className="w-4 h-4" />
+                </Link>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── 3. SEARCH & CATEGORY SELECTOR ── */}
+      <section className="space-y-4">
+        {/* Search Bar */}
+        <div className="relative max-w-2xl mx-auto">
+          <MagnifyingGlass weight="bold" className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Cari berita riset, pengumuman lomba, agenda IKN, atau nama fakultas..."
+            className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white dark:bg-navy-900 border border-navy-200/80 dark:border-navy-800 text-sm text-navy-900 dark:text-white placeholder:text-navy-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-nyala-500 transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-navy-400 hover:text-navy-600"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        {/* Tab Pills */}
+        <div className="flex items-center justify-center gap-2 overflow-x-auto no-scrollbar py-2">
+          {[
+            { id: "all", label: "Semua Warta", count: beritaList.length + pengumumanList.length + eventList.length, icon: Globe },
+            { id: "berita", label: "Berita Kampus", count: beritaList.length, icon: Newspaper },
+            { id: "pengumuman", label: "Pengumuman Resmi", count: pengumumanList.length, icon: Megaphone },
+            { id: "event", label: "Agenda & Event", count: eventList.length, icon: CalendarCheck },
+            { id: "fakultas", label: "10 Fakultas Resmi", count: fakultasList.length, icon: Buildings },
+            { id: "unit", label: "Biro & Layanan", count: informasiList.length, icon: Student },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all active:scale-95 ${
+                  isActive
+                    ? "bg-nyala-500 text-white shadow-md shadow-nyala-500/25"
+                    : "bg-navy-100 dark:bg-navy-800/80 text-navy-600 dark:text-navy-300 hover:bg-navy-200"
+                }`}
+              >
+                <Icon weight={isActive ? "fill" : "bold"} className="w-4 h-4" />
+                <span>{tab.label}</span>
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                  isActive ? "bg-white/20 text-white" : "bg-navy-200 dark:bg-navy-700 text-navy-600 dark:text-navy-400"
+                }`}>
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ── 4. CONTENT GRID LAYOUT ── */}
+      {loading ? (
+        <div className="py-20 text-center space-y-4">
+          <MascotFlame size="lg" mood="cheering" className="mx-auto animate-bounce" />
+          <p className="text-sm font-bold text-navy-700 dark:text-navy-300 font-mono">
+            Menghubungkan & memuat berkas API resmi UMKT...
           </p>
         </div>
-      </div>
-
-      {/* ── Backlink Banner to Official UMKT ── */}
-      <BacklinkBanner />
-
-      {/* ── Search & Navigation Tabs ── */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
-        
-        {/* Tabs */}
-        <div className="flex items-center gap-1.5 p-1.5 bg-navy-100/70 dark:bg-navy-900/70 rounded-2xl overflow-x-auto no-scrollbar border border-navy-200/50 dark:border-navy-800">
-          <button
-            onClick={() => setActiveTab("berita")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === "berita"
-                ? "bg-white dark:bg-navy-800 text-nyala-600 dark:text-nyala-400 shadow-sm"
-                : "text-navy-600 dark:text-navy-400 hover:text-navy-900"
-            }`}
-          >
-            <Newspaper weight="bold" className="w-4 h-4" />
-            <span>Berita Kampus ({beritaList.length})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("pengumuman")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === "pengumuman"
-                ? "bg-white dark:bg-navy-800 text-nyala-600 dark:text-nyala-400 shadow-sm"
-                : "text-navy-600 dark:text-navy-400 hover:text-navy-900"
-            }`}
-          >
-            <Megaphone weight="bold" className="w-4 h-4" />
-            <span>Pengumuman ({pengumumanList.length})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("event")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === "event"
-                ? "bg-white dark:bg-navy-800 text-nyala-600 dark:text-nyala-400 shadow-sm"
-                : "text-navy-600 dark:text-navy-400 hover:text-navy-900"
-            }`}
-          >
-            <CalendarCheck weight="bold" className="w-4 h-4" />
-            <span>Agenda & Event ({eventList.length})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("fakultas")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === "fakultas"
-                ? "bg-white dark:bg-navy-800 text-nyala-600 dark:text-nyala-400 shadow-sm"
-                : "text-navy-600 dark:text-navy-400 hover:text-navy-900"
-            }`}
-          >
-            <Buildings weight="bold" className="w-4 h-4" />
-            <span>10 Fakultas Resmi</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("sistem")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
-              activeTab === "sistem"
-                ? "bg-white dark:bg-navy-800 text-nyala-600 dark:text-nyala-400 shadow-sm"
-                : "text-navy-600 dark:text-navy-400 hover:text-navy-900"
-            }`}
-          >
-            <Laptop weight="bold" className="w-4 h-4" />
-            <span>Portal Layanan</span>
-          </button>
-        </div>
-
-        {/* Search Bar & Refresh */}
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1 sm:w-64">
-            <MagnifyingGlass weight="bold" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari rilis / info..."
-              className="w-full pl-9 pr-4 py-2 rounded-2xl bg-white dark:bg-navy-900 border border-navy-200/60 dark:border-navy-800 text-xs focus:ring-2 focus:ring-nyala-500 outline-none text-navy-900 dark:text-white"
-            />
-          </div>
-
-          <button
-            onClick={fetchData}
-            title="Segarkan Data"
-            className="p-2.5 rounded-2xl bg-white dark:bg-navy-900 border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500 text-navy-600 dark:text-navy-300 transition-all active:scale-95 shadow-sm"
-          >
-            <ArrowClockwise weight="bold" className={`w-4 h-4 ${loading ? "animate-spin text-nyala-500" : ""}`} />
-          </button>
-        </div>
-
-      </div>
-
-      {/* ── Content Grid ── */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-12">
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <div key={n} className="h-64 rounded-3xl bg-navy-100/50 dark:bg-navy-900/50 animate-pulse border border-navy-200/40 dark:border-navy-800" />
-          ))}
-        </div>
       ) : (
-        <>
-          {/* 1. TAB: BERITA KAMPUS */}
-          {activeTab === "berita" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredBerita.map((item, idx) => (
-                <div
-                  key={item.slug || idx}
-                  onClick={() =>
-                    setSelectedArticle({
-                      title: item.judul,
-                      date: item.tanggal,
-                      category: "Warta Kampus",
-                      coverImage: item.thumbnail || undefined,
-                      content: item.isi,
-                      author: "Humas UMKT",
-                      tags: item.tags ? (typeof item.tags === "string" ? JSON.parse(item.tags) : item.tags) : undefined,
-                      officialUrl: `https://web.umkt.ac.id/berita/${item.slug}`,
-                    })
-                  }
-                  className="glass-card rounded-3xl border border-navy-200/60 dark:border-navy-800 overflow-hidden space-y-4 hover:border-nyala-500/50 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex flex-col justify-between group shadow-lg"
-                >
-                  <div className="space-y-3">
-                    {/* Cover Thumbnail */}
-                    <div className="relative h-48 w-full bg-navy-900 overflow-hidden">
-                      {item.thumbnail ? (
+        <div className="space-y-12">
+          
+          {/* A. BERITA SECTION */}
+          {(activeTab === "all" || activeTab === "berita") && filteredBerita.length > 0 && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Newspaper weight="bold" className="w-5 h-5 text-nyala-500" />
+                  <h3 className="text-xl font-black text-navy-900 dark:text-white tracking-tight">
+                    Warta Berita Kampus ({filteredBerita.length})
+                  </h3>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredBerita.map((item) => {
+                  const slug = generateSlug(item.judul, item.id);
+                  const cover = item.foto || extractImageFromHTML(item.isi) || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80";
+
+                  return (
+                    <article
+                      key={`berita-${item.id}`}
+                      className="group flex flex-col justify-between rounded-3xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500/50 hover:shadow-xl transition-all"
+                    >
+                      {/* Image Thumbnail */}
+                      <Link href={`/hub-umkt/${slug}`} className="block relative aspect-video overflow-hidden bg-navy-950">
                         <img
-                          src={item.thumbnail}
+                          src={cover}
                           alt={item.judul}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-nyala-600 to-amber-500 text-white font-black text-xl">
-                          Warta UMKT
+                        <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+                          {Array.isArray(item.sdgs) && item.sdgs.slice(0, 1).map((s) => (
+                            <span
+                              key={s.id}
+                              className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white shadow-sm"
+                              style={{ backgroundColor: s.color || "#FF5A1F" }}
+                            >
+                              {s.sdgs}
+                            </span>
+                          ))}
                         </div>
-                      )}
-                      <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-navy-950/80 backdrop-blur-md text-[10px] font-bold text-nyala-400 border border-white/10">
-                        {item.tanggal}
-                      </div>
-                    </div>
+                      </Link>
 
-                    <div className="px-5 space-y-2">
-                      <h3 className="text-base font-extrabold text-navy-900 dark:text-white line-clamp-2 group-hover:text-nyala-500 transition-colors">
-                        {item.judul}
-                      </h3>
-                      <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-2">
-                        {item.isi?.replace(/<[^>]*>?/gm, "").slice(0, 110) + "..."}
-                      </p>
-                    </div>
-                  </div>
+                      {/* Content */}
+                      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-xs text-navy-400">
+                            <span className="font-semibold text-nyala-600 dark:text-nyala-400">
+                              {item.tags || "Warta Kampus"}
+                            </span>
+                            <span>{formatDateIndo(item.tgl_upload)}</span>
+                          </div>
 
-                  <div className="px-5 pb-5 pt-2 flex items-center justify-between text-xs font-bold text-nyala-600 dark:text-nyala-400 border-t border-navy-100 dark:border-navy-800/60">
-                    <span>Baca Artikel Lengkap</span>
-                    <ArrowUpRight weight="bold" className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+                          <Link href={`/hub-umkt/${slug}`}>
+                            <h4 className="text-base font-bold text-navy-900 dark:text-white leading-snug group-hover:text-nyala-500 transition-colors line-clamp-2">
+                              {item.judul}
+                            </h4>
+                          </Link>
 
-          {/* 2. TAB: PENGUMUMAN */}
-          {activeTab === "pengumuman" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPengumuman.map((item, idx) => (
-                <div
-                  key={item.slug || idx}
-                  onClick={() =>
-                    setSelectedArticle({
-                      title: item.judul,
-                      date: item.tanggal,
-                      category: "Pengumuman Resmi",
-                      coverImage: item.thumbnail || undefined,
-                      content: item.isi,
-                      officialUrl: `https://web.umkt.ac.id/pengumuman/${item.slug}`,
-                    })
-                  }
-                  className="glass-card p-6 rounded-3xl border border-navy-200/60 dark:border-navy-800 space-y-4 hover:border-nyala-500/50 transition-all cursor-pointer flex flex-col justify-between group shadow-lg"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-black uppercase">
-                        Edaran Resmi
-                      </span>
-                      <span className="text-[10px] text-navy-400 font-mono">
-                        {item.tanggal}
-                      </span>
-                    </div>
-
-                    <h3 className="text-base font-extrabold text-navy-900 dark:text-white line-clamp-3 group-hover:text-nyala-500 transition-colors">
-                      {item.judul}
-                    </h3>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs font-bold text-amber-600 dark:text-amber-400 pt-3 border-t border-navy-100 dark:border-navy-800">
-                    <span>Buka Flyer & Naskah</span>
-                    <ArrowUpRight weight="bold" className="w-4 h-4" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* 3. TAB: EVENT */}
-          {activeTab === "event" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredEvent.map((item, idx) => (
-                <div
-                  key={item.slug || idx}
-                  onClick={() =>
-                    setSelectedArticle({
-                      title: item.judul,
-                      date: item.tanggal,
-                      category: "Agenda & Kegiatan",
-                      coverImage: item.thumbnail || undefined,
-                      content: item.isi,
-                      officialUrl: `https://web.umkt.ac.id/event/${item.slug}`,
-                    })
-                  }
-                  className="glass-card p-6 rounded-3xl border border-navy-200/60 dark:border-navy-800 space-y-4 hover:border-nyala-500/50 transition-all cursor-pointer flex flex-col justify-between group shadow-lg"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-[10px] font-black uppercase">
-                        Agenda Kampus
-                      </span>
-                      <span className="text-[10px] text-navy-400 font-mono">
-                        {item.tanggal}
-                      </span>
-                    </div>
-
-                    <h3 className="text-base font-extrabold text-navy-900 dark:text-white line-clamp-3 group-hover:text-cyan-500 transition-colors">
-                      {item.judul}
-                    </h3>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs font-bold text-cyan-600 dark:text-cyan-400 pt-3 border-t border-navy-100 dark:border-navy-800">
-                    <span>Rincian Agenda</span>
-                    <ArrowUpRight weight="bold" className="w-4 h-4" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* 4. TAB: 10 FAKULTAS RESMI */}
-          {activeTab === "fakultas" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {fakultasList.map((fak, idx) => (
-                <div
-                  key={fak.kode_lembaga || idx}
-                  className="glass-card p-6 rounded-3xl border border-navy-200/60 dark:border-navy-800 space-y-4 flex flex-col justify-between shadow-lg"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      {fak.logo ? (
-                        <img src={fak.logo} alt={fak.nama_lembaga} className="w-10 h-10 object-contain rounded-xl" />
-                      ) : (
-                        <div className="w-10 h-10 rounded-xl bg-nyala-500/10 text-nyala-600 flex items-center justify-center font-bold">
-                          🏛️
+                          <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-2 leading-relaxed">
+                            {cleanHTML(item.isi)}
+                          </p>
                         </div>
-                      )}
-                      <div>
-                        <span className="text-[10px] font-black text-nyala-500 uppercase tracking-wider">
-                          Fakultas Resmi UMKT
-                        </span>
-                        <h3 className="text-base font-extrabold text-navy-900 dark:text-white leading-tight">
-                          {fak.nama_lembaga}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
 
-                  {fak.url && (
-                    <a
-                      href={fak.url.startsWith("http") ? fak.url : `https://${fak.url}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-between w-full py-2.5 px-4 rounded-xl bg-navy-100 dark:bg-navy-800 hover:bg-nyala-500 hover:text-white text-xs font-bold text-navy-800 dark:text-navy-200 transition-all"
+                        {/* Read CTA */}
+                        <div className="pt-2 border-t border-navy-100 dark:border-navy-800 flex items-center justify-between">
+                          <span className="text-[11px] text-navy-400 flex items-center gap-1">
+                            <Clock weight="bold" className="w-3.5 h-3.5" />
+                            <span>3 menit baca</span>
+                          </span>
+
+                          <Link
+                            href={`/hub-umkt/${slug}`}
+                            className="inline-flex items-center gap-1 text-xs font-bold text-nyala-600 dark:text-nyala-400 hover:gap-2 transition-all"
+                          >
+                            <span>Baca Lengkap</span>
+                            <ArrowRight weight="bold" className="w-3.5 h-3.5" />
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* B. PENGUMUMAN SECTION */}
+          {(activeTab === "all" || activeTab === "pengumuman") && filteredPengumuman.length > 0 && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <Megaphone weight="bold" className="w-5 h-5 text-amber-500" />
+                <h3 className="text-xl font-black text-navy-900 dark:text-white tracking-tight">
+                  Pengumuman Resmi & Lomba ({filteredPengumuman.length})
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredPengumuman.map((item) => {
+                  const cover = item.foto || extractImageFromHTML(item.isi) || "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80";
+
+                  return (
+                    <div
+                      key={`pengumuman-${item.id}`}
+                      className="rounded-3xl p-5 glass-card border border-navy-200/60 dark:border-navy-800 space-y-4 hover:border-amber-500/50 transition-all flex flex-col justify-between"
                     >
-                      <span>Kunjungi Website Fakultas</span>
-                      <ArrowUpRight weight="bold" className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
-              ))}
+                      <div className="space-y-3">
+                        {item.foto && (
+                          <div className="rounded-2xl overflow-hidden aspect-video bg-navy-950">
+                            <img src={cover} alt={item.judul} className="w-full h-full object-cover" />
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between text-xs text-navy-400">
+                          <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-extrabold text-[10px] uppercase">
+                            Edaran Resmi
+                          </span>
+                          <span>{formatDateIndo(item.tgl_upload)}</span>
+                        </div>
+
+                        <h4 className="text-base font-bold text-navy-900 dark:text-white line-clamp-2">
+                          {item.judul}
+                        </h4>
+
+                        <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-3">
+                          {cleanHTML(item.isi)}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-navy-100 dark:border-navy-800 flex items-center justify-between">
+                        <span className="text-[11px] text-navy-400 font-mono">
+                          ID: #{item.id}
+                        </span>
+
+                        <a
+                          href={`https://web.umkt.ac.id/pengumuman/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline"
+                        >
+                          <span>Portal UMKT</span>
+                          <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 
-          {/* 5. TAB: PORTAL LAYANAN & SISTEM TERPADU */}
-          {activeTab === "sistem" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {CAMPUS_SYSTEMS.map((sys) => (
-                <div
-                  key={sys.name}
-                  className="glass-card p-6 rounded-3xl border border-navy-200/60 dark:border-navy-800 space-y-4 flex flex-col justify-between shadow-lg"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-2xl bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 flex items-center justify-center font-black">
-                        <Laptop weight="bold" className="w-5 h-5" />
-                      </div>
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black">
-                        {sys.badge}
-                      </span>
-                    </div>
+          {/* C. AGENDA & EVENT SECTION */}
+          {(activeTab === "all" || activeTab === "event") && filteredEvent.length > 0 && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <CalendarCheck weight="bold" className="w-5 h-5 text-blue-500" />
+                <h3 className="text-xl font-black text-navy-900 dark:text-white tracking-tight">
+                  Agenda & Kegiatan Universitas ({filteredEvent.length})
+                </h3>
+              </div>
 
-                    <div>
-                      <h3 className="text-base font-extrabold text-navy-900 dark:text-white">
-                        {sys.name}
-                      </h3>
-                      <p className="text-xs text-navy-500 dark:text-navy-400 mt-1 leading-relaxed">
-                        {sys.desc}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredEvent.map((item) => (
+                  <div
+                    key={`event-${item.id}`}
+                    className="rounded-3xl p-5 glass-card border border-navy-200/60 dark:border-navy-800 space-y-4 hover:border-blue-500/50 transition-all flex flex-col justify-between"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-extrabold text-[10px] uppercase">
+                          Event Kampus
+                        </span>
+                        <span className="text-navy-400">{item.tgl_event || formatDateIndo(item.tgl_upload)}</span>
+                      </div>
+
+                      <h4 className="text-base font-bold text-navy-900 dark:text-white line-clamp-2">
+                        {item.judul}
+                      </h4>
+
+                      <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-3">
+                        {cleanHTML(item.isi)}
                       </p>
                     </div>
-                  </div>
 
-                  <a
-                    href={sys.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-between w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-nyala-500 to-amber-500 hover:from-nyala-600 hover:to-amber-600 text-white text-xs font-bold shadow-md transition-all active:scale-95"
-                  >
-                    <span>Buka Portal Resmi</span>
-                    <ArrowUpRight weight="bold" className="w-4 h-4" />
-                  </a>
-                </div>
-              ))}
+                    <div className="pt-3 border-t border-navy-100 dark:border-navy-800 flex items-center justify-between">
+                      <span className="text-[11px] text-navy-400">
+                        📍 Kampus UMKT Samarinda
+                      </span>
+
+                      <a
+                        href={`https://web.umkt.ac.id/event/`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        <span>Jadwal Lengkap</span>
+                        <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
-        </>
-      )}
 
-      {/* ── Article Reader Modal Drawer ── */}
-      <AnimatePresence>
-        {selectedArticle && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-md">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-navy-900 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-navy-200 dark:border-navy-800 shadow-2xl space-y-6 p-6 sm:p-8 relative"
-            >
-              <button
-                onClick={() => setSelectedArticle(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300 hover:scale-110 active:scale-95 transition-all"
-              >
-                <X weight="bold" className="w-5 h-5" />
-              </button>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-xs text-navy-400 font-mono">
-                  <span className="px-2.5 py-0.5 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 font-bold">
-                    {selectedArticle.category}
-                  </span>
-                  <span>•</span>
-                  <span>{selectedArticle.date}</span>
-                </div>
-
-                <h2 className="text-2xl sm:text-3xl font-black text-navy-900 dark:text-white leading-tight">
-                  {selectedArticle.title}
-                </h2>
+          {/* D. 10 FAKULTAS RESMI */}
+          {(activeTab === "all" || activeTab === "fakultas") && filteredFakultas.length > 0 && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <Buildings weight="bold" className="w-5 h-5 text-purple-500" />
+                <h3 className="text-xl font-black text-navy-900 dark:text-white tracking-tight">
+                  10 Fakultas Resmi Universitas Muhammadiyah Kalimantan Timur
+                </h3>
               </div>
 
-              {selectedArticle.coverImage && (
-                <div className="rounded-2xl overflow-hidden max-h-80 w-full bg-navy-950">
-                  <img
-                    src={selectedArticle.coverImage}
-                    alt={selectedArticle.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-
-              {/* HTML Content Body */}
-              <div
-                className="prose dark:prose-invert max-w-none text-xs sm:text-sm text-navy-700 dark:text-navy-300 leading-relaxed space-y-3"
-                dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
-              />
-
-              {/* Action Buttons */}
-              <div className="pt-4 border-t border-navy-100 dark:border-navy-800 flex items-center justify-between">
-                {selectedArticle.officialUrl && (
-                  <a
-                    href={selectedArticle.officialUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-bold text-nyala-600 dark:text-nyala-400 hover:underline"
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {filteredFakultas.map((item) => (
+                  <div
+                    key={`fakultas-${item.id}`}
+                    className="p-5 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 hover:border-purple-500/50 hover:shadow-lg transition-all flex items-start gap-4"
                   >
-                    <span>Buka di Laman Resmi UMKT</span>
-                    <ArrowUpRight weight="bold" className="w-4 h-4" />
-                  </a>
-                )}
+                    <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0 border border-purple-500/20">
+                      <Buildings weight="bold" className="w-6 h-6" />
+                    </div>
 
-                <button
-                  onClick={() => setSelectedArticle(null)}
-                  className="px-5 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-800 dark:text-navy-200 text-xs font-bold"
-                >
-                  Tutup
-                </button>
+                    <div className="space-y-1.5 flex-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-400 font-bold">
+                          {item.singkatan || `FAK #${item.id}`}
+                        </span>
+                        {item.link && (
+                          <a
+                            href={item.link.startsWith("http") ? item.link : `https://${item.link}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-navy-400 hover:text-purple-500"
+                          >
+                            <ArrowSquareOut weight="bold" className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+
+                      <h4 className="text-sm font-bold text-navy-900 dark:text-white leading-snug">
+                        {item.nama}
+                      </h4>
+
+                      {item.keterangan && (
+                        <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-2">
+                          {item.keterangan}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* E. BIRO & UNIT LAYANAN */}
+          {(activeTab === "all" || activeTab === "unit") && filteredUnit.length > 0 && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <Student weight="bold" className="w-5 h-5 text-emerald-500" />
+                <h3 className="text-xl font-black text-navy-900 dark:text-white tracking-tight">
+                  Direktori Biro, Lembaga & Unit Kampus ({filteredUnit.length})
+                </h3>
               </div>
 
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {filteredUnit.map((item) => (
+                  <div
+                    key={`unit-${item.id}`}
+                    className="p-4 rounded-2xl bg-white dark:bg-navy-900 border border-navy-200/60 dark:border-navy-800 space-y-2 hover:border-emerald-500/50 transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold uppercase">
+                        Unit Pendukung
+                      </span>
+                      <h4 className="text-xs font-bold text-navy-900 dark:text-white mt-1.5">
+                        {item.nama}
+                      </h4>
+                    </div>
+
+                    {item.link && (
+                      <a
+                        href={item.link.startsWith("http") ? item.link : `https://${item.link}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline pt-2"
+                      >
+                        <span>Kunjungi Web</span>
+                        <ArrowSquareOut weight="bold" className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+      )}
 
     </div>
   );
