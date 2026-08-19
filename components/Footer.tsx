@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ExternalLink, Heart, Sparkles, Globe, GraduationCap, Flame } from "lucide-react";
+import { ExternalLink, Heart, Sparkles, Globe, GraduationCap, Flame, Laptop } from "lucide-react";
 import { OFFICIAL_LINKS } from "@/lib/masta-data";
 import MascotFlame from "./MascotFlame";
 
@@ -24,7 +24,7 @@ export default function Footer() {
               “Nyala. Teman perjalanan MABA-mu.”
             </p>
             <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-400 max-w-md leading-relaxed">
-              Companion digital interaktif yang dirancang khusus untuk mendampingi Mahasiswa Baru Universitas Muhammadiyah Kalimantan Timur (UMKT) Angkatan 2026 selama masa orientasi MASTA.
+              Companion digital interaktif yang dirancang khusus untuk mendampingi Mahasiswa Baru Universitas Muhammadiyah Kalimantan Timur (UMKT) Angkatan 2026 selama masa orientasi MASTA dan adaptasi sistem perkuliahan SIKAD.
             </p>
           </div>
 
@@ -38,6 +38,12 @@ export default function Footer() {
                 <Link href="/companion" className="hover:text-nyala-500 transition-colors flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-nyala-500" />
                   <span>AI Companion Nyala</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/panduan-sikad" className="hover:text-nyala-500 transition-colors flex items-center gap-1.5 font-semibold text-nyala-600 dark:text-nyala-400">
+                  <Laptop className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Panduan SIKAD UMKT</span>
                 </Link>
               </li>
               <li>
@@ -79,6 +85,20 @@ export default function Footer() {
                   <span className="flex items-center gap-2 font-medium">
                     <Globe className="w-4 h-4 text-nyala-500" />
                     <span>Website Utama UMKT</span>
+                  </span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={OFFICIAL_LINKS.sikadMahasiswa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between p-2 rounded-xl bg-blue-50 dark:bg-navy-900/80 border border-blue-200/50 dark:border-navy-700 text-navy-800 dark:text-navy-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-500/40 transition-all"
+                >
+                  <span className="flex items-center gap-2 font-semibold">
+                    <Laptop className="w-4 h-4 text-blue-500" />
+                    <span>Portal Mahasiswa SIKAD</span>
                   </span>
                   <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                 </a>

@@ -9,10 +9,7 @@ import {
   Compass, 
   HeartHandshake, 
   GraduationCap, 
-  ShieldCheck, 
-  ExternalLink, 
   ChevronDown, 
-  Globe, 
   Users, 
   Flame,
   Award
@@ -42,7 +39,7 @@ export default function TentangMastaPage() {
           <span className="fire-text-gradient">UMKT Angkatan 2026</span>
         </h1>
         <p className="text-sm sm:text-base text-navy-600 dark:text-navy-300 leading-relaxed">
-          MASTA MABA adalah gerbang awal transformasi dari siswa menjadi insan akademis berkarakter islami di Universitas Muhammadiyah Kalimantan Timur.
+          Panduan orientasi resmi bagi mahasiswa baru untuk memahami tata kelola akademik, nilai Al-Islam Kemuhammadiyahan, dan peluang pengembangan diri di UMKT.
         </p>
       </div>
 
@@ -52,16 +49,16 @@ export default function TentangMastaPage() {
           <div className="lg:col-span-8 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-nyala-600 dark:text-nyala-400 uppercase tracking-wider">
               <Sparkles className="w-4 h-4" />
-              <span>Apa Itu MASTA MABA?</span>
+              <span>Esensi Kegiatan MASTA</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-navy-900 dark:text-white">
-              Bukan Sekadar Orientasi, Ini Langkah Awal Masa Depanmu
+              Pengenalan Nilai, Budaya Akademik, dan Layanan Mahasiswa
             </h2>
             <p className="text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
-              MASTA (Masa Ta’aruf) Mahasiswa Baru UMKT 2026 merupakan proses pengenalan awal yang dirancang untuk membantu mahasiswa baru memahami lingkungan kampus, sistem akademik, nilai-nilai Kemuhammadiyahan, tata tertib, serta berbagai layanan kemahasiswaan dan peluang pengembangan diri.
+              Masa Ta’aruf (MASTA) Mahasiswa Baru UMKT 2026 adalah program orientasi wajib yang diselenggarakan oleh universitas. Program ini mengenalkan kurikulum program studi, tata kelola sistem informasi akademik (SIAKAD), kode etik mahasiswa, serta hak dan kewajiban selama menempuh studi.
             </p>
             <p className="text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
-              Di UMKT, orientasi menjunjung tinggi nilai persaudaraan, edukasi positif, dan pembentukan karakter mulia tanpa perpeloncoan.
+              Pelaksanaan MASTA mengedepankan pendekatan edukatif, persaudaraan, dan penanaman integritas tanpa praktik perpeloncoan.
             </p>
           </div>
           <div className="lg:col-span-4 flex justify-center">
@@ -77,7 +74,7 @@ export default function TentangMastaPage() {
             3 Fokus Utama Pembinaan
           </h2>
           <p className="text-xs sm:text-sm text-navy-500 dark:text-navy-400">
-            Kurikulum orientasi MASTA UMKT 2026 bertumpu pada 3 fondasi penting:
+            Materi MASTA UMKT 2026 berfokus pada tiga bidang pembinaan mahasiswa:
           </p>
         </div>
 
@@ -92,7 +89,7 @@ export default function TentangMastaPage() {
               1. Adaptasi Kehidupan Kampus
             </h3>
             <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
-              Transisi lancar dari pola belajar sekolah ke iklim perguruan tinggi mandiri, pengenalan sistem informasi akademik (SIAKAD), serta sarana prasarana kampus.
+              Penyesuaian metode belajar mandiri di perguruan tinggi, penggunaan portal SIAKAD, dan pengenalan fasilitas fisik maupun daring kampus.
             </p>
           </div>
 
@@ -105,7 +102,7 @@ export default function TentangMastaPage() {
               2. Pembentukan Karakter
             </h3>
             <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
-              Menanamkan integritas moral, etika akademik, kepedulian sosial, serta nilai-nilai luhur Al-Islam dan Kemuhammadiyahan yang berkemajuan.
+              Penanaman kejujuran akademik, etika pergaulan kampus, disiplin, dan penguatan nilai-nilai Al-Islam Kemuhammadiyahan.
             </p>
           </div>
 
@@ -118,7 +115,7 @@ export default function TentangMastaPage() {
               3. Pengenalan Peluang Mahasiswa
             </h3>
             <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
-              Eksplorasi potensi diri melalui Program Kreativitas Mahasiswa (PKM), beasiswa, kompetisi nasional/internasional, dan Unit Kegiatan Mahasiswa (UKM).
+              Peluang riset (PKM), beasiswa, kompetisi akademik/non-akademik, dan organisasi kemahasiswaan (UKM, BEM, DPM).
             </p>
           </div>
 
@@ -140,22 +137,22 @@ export default function TentangMastaPage() {
           {[
             {
               title: "Orientasi",
-              desc: "Mengenal ekosistem, tata kelola, dan fasilitas pendukung di lingkungan UMKT.",
+              desc: "Mengenal tata kelola, fasilitas laboratorium, perpustakaan, dan sarana universitas.",
               icon: Target,
             },
             {
               title: "Akademik",
-              desc: "Memahami kurikulum, SKS, bimbingan KRS, dan etika perkuliahan di era digital.",
+              desc: "Memahami sistem kredit semester (SKS), pengisian KRS, dan kalender akademik.",
               icon: GraduationCap,
             },
             {
               title: "Relasi",
-              desc: "Membangun jejaring pertemanan kolaboratif lintas program studi dan fakultas.",
+              desc: "Membangun jejaring pertemanan dan kolaborasi lintas program studi.",
               icon: Users,
             },
             {
               title: "Karakter",
-              desc: "Menumbuhkan sikap disiplin, santun, kritis, dan berwawasan kebangsaan.",
+              desc: "Menerapkan sikap santun, integritas ilmiah, dan tanggung jawab sosial.",
               icon: HeartHandshake,
             },
           ].map((pillar, i) => {
@@ -181,7 +178,7 @@ export default function TentangMastaPage() {
             Pertanyaan yang Sering Diajukan (FAQ)
           </h2>
           <p className="text-xs sm:text-sm text-navy-500 dark:text-navy-400">
-            Jawaban seputar teknis dan kepesertaan MASTA MABA UMKT 2026
+            Jawaban resmi seputar kepesertaan dan pelaksanaan MASTA UMKT 2026
           </p>
         </div>
 

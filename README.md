@@ -1,177 +1,177 @@
-# 🔥 Nyala — Teman Perjalanan MABA-mu
-> **Web Application Digital Companion Resmi & Interaktif untuk Mahasiswa Baru (MABA) Universitas Muhammadiyah Kalimantan Timur (UMKT) Angkatan 2026**
+# Nyala — Teman Perjalanan MABA-mu
 
-[![UMKT Official](https://img.shields.io/badge/UMKT-Official_Partner-FF5A1F.svg)](https://www.umkt.ac.id/)
-[![Framework](https://img.shields.io/badge/Next.js-14_App_Router-0F172A.svg)](https://nextjs.org/)
-[![Styling](https://img.shields.io/badge/Tailwind_CSS-Modern_UI-38BDF8.svg)](https://tailwindcss.com/)
-[![Animation](https://img.shields.io/badge/Framer_Motion-Smooth-FF5A1F.svg)](https://www.framer.com/motion/)
+Companion digital untuk Mahasiswa Baru (MABA) Universitas Muhammadiyah Kalimantan Timur (UMKT) Angkatan 2026. Aplikasi ini memadukan panduan resmi orientasi MASTA, pelacak kesiapan harian, checklist perlengkapan, dan asisten virtual cerdas berbasis Zpi SDK.
 
----
-
-## 🌟 Tentang Proyek
-
-**Nyala** adalah companion digital yang terasa hidup, modern, dan peduli. Bukan sekadar website informasi statis, melainkan teman virtual yang mendampingi Mahasiswa Baru selama menjalani masa orientasi **Masa Ta’aruf (MASTA) UMKT 2026**.
-
-- **Tagline:** *“Nyala. Teman perjalanan MABA-mu.”*
-- **Target Pengguna:** Seluruh Mahasiswa Baru UMKT 2026 & Mahasiswa yang belum menyelesaikan MASTA.
-- **Nilai Utama:** Positif, Edukatif, Suportif, Energetik, dan Ramah (Gen-Z friendly).
+- **Tagline:** Nyala. Teman perjalanan MABA-mu.
+- **Sasaran:** Mahasiswa Baru UMKT 2026 dan mahasiswa yang belum menyelesaikan MASTA.
+- **Rujukan Resmi:** [Portal MASTA UMKT (Odoo)](https://masta-maba.odoo.com/)
 
 ---
 
-## 🔗 Tautan Resmi & Backlink Aktif
+## Tautan Resmi & Backlink
 
-Aplikasi ini terhubung langsung dengan ekosistem resmi Universitas Muhammadiyah Kalimantan Timur:
-- 🌐 **Website Utama UMKT**: [https://www.umkt.ac.id/](https://www.umkt.ac.id/)
-- 🏛️ **Biro Kemahasiswaan & Alumni UMKT**: [https://www.umkt.ac.id/kemahasiswaan/](https://www.umkt.ac.id/kemahasiswaan/)
-- 📖 **Portal Informasi Resmi MASTA MABA**: [https://masta-maba.odoo.com/](https://masta-maba.odoo.com/)
+Aplikasi ini terhubung langsung dengan situs resmi Universitas Muhammadiyah Kalimantan Timur:
 
----
-
-## 🚀 Fitur Utama (Core Features)
-
-1. **🤖 Tanya Nyala (Companion AI)**
-   - Asisten virtual dengan persona ramah, bersahabat, enerjik, dan suportif.
-   - Menjawab seputar alur MASTA, tips On-Cam Zoom, mengatasi rasa cemas/gugup, serta info kampus.
-   - Terintegrasi dengan **Google Gemini API**, **Groq API**, atau **OpenRouter**.
-   - **Smart Local Knowledge Fallback**: Tetap dapat menjawab dengan cerdas secara instan meski tanpa API key eksternal!
-
-2. **❤️ Health Check & Mood Tracker**
-   - Mood selector harian dengan emoji interaktif.
-   - Checklist kebiasaan fisik (kualitas tidur 6-8 jam, makan sehat, hidrasi 2L air, relaksasi pikiran).
-   - Perhitungan skor kesiapan harian (0–100%) & rekomendasi personal hangat.
-   - Penyimpanan riwayat 7 hari terakhir di `localStorage`.
-
-3. **📅 5 Alur Pelaksanaan Resmi MASTA**
-   - Visual timeline interaktif 5 tahapan resmi:
-     1. Membaca Panduan Resmi
-     2. Verifikasi Identitas
-     3. Kegiatan Daring (Zoom Meeting)
-     4. UKM Expo
-     5. Puncak dan Evaluasi
-   - Countdown timer langsung menuju hari pelaksanaan MASTA UMKT 2026.
-
-4. **✅ Checklist Persiapan Interaktif**
-   - Kategori lengkap: Dokumen & Identitas, Perangkat & Jaringan, Pakaian & Atribut, Kesehatan & Mental.
-   - Progress bar dinamis dengan efek animasi api.
-   - Animasi **Confetti Perayaan** saat mencapai kelengkapan 100%.
-   - Fitur tambah item kustom sendiri & tersimpan otomatis di `localStorage`.
-
-5. **📚 Edukasi & Pedoman MASTA**
-   - Penjelasan esensi orientasi yang humanis dan islami di UMKT.
-   - 3 Fokus Utama (Adaptasi Kampus, Karakter, Peluang Mahasiswa).
-   - 4 Pilar Capaian (Orientasi, Akademik, Relasi, Karakter).
-   - FAQ Accordion interaktif & Backlink terverifikasi.
-
-6. **🎨 Desain & Identitas Visual**
-   - Warna Brand: Fire Orange (`#FF5A1F`), Deep Ember (`#E04500`), Deep Navy (`#0F172A`), Soft Cream (`#FFF7ED`).
-   - Dukungan penuh **Dark Mode** & **Light Mode**.
-   - Maskot api hidup **MascotFlame** berekspresi dinamis dengan Framer Motion.
-   - PWA-ready & responsive mobile-first dengan floating navigation bar.
+- [Website Utama UMKT](https://www.umkt.ac.id/)
+- [Biro Kemahasiswaan & Alumni UMKT](https://www.umkt.ac.id/kemahasiswaan/)
+- [Portal Resmi MASTA MABA UMKT](https://masta-maba.odoo.com/)
 
 ---
 
-## 🛠️ Panduan Instalasi & Menjalankan Lokal
+## Fitur Utama
 
-### 1. Prasyarat
-- **Node.js**: Versi 18.x atau lebih baru (Disarankan Node 20+)
-- **NPM** atau **PNPM / Yarn**
+### 1. Tanya Nyala (AI Companion)
 
-### 2. Kloning / Buka Direktori Proyek
+- Asisten virtual informatif dengan persona ramah dan komunikatif.
+- Menjawab aturan MASTA, teknis On-Cam Zoom, tips adaptasi kampus, dan info organisasi.
+- Terintegrasi dengan **Zpi SDK (`zpi-sdk`)** menggunakan model `ai:z-ai` (GLM-4.7).
+- **Keamanan & Anti-DDoS / Anti-Spam:**
+  - Sliding Window Rate Limiting (20 permintaan per menit per IP).
+  - Burst Flood Throttle (maksimal 5 permintaan dalam 5 detik) dengan karantina IP otomatis.
+  - Sanitasi input dan proteksi XSS (maksimal 1.200 karakter).
+- **Sistem Cache Semantik:**
+  - In-Memory Normalized Hash Cache dengan masa aktif (TTL) 2 jam.
+  - Pertanyaan berulang dijawab instan (< 1ms) tanpa membebani kuota API.
+- **Smart Fallback:** Otomatis beralih ke basis pengetahuan lokal jika koneksi eksternal terputus.
+
+### 2. Health Check & Mood Tracker
+
+- Mood tracker harian dengan 5 pilihan emosi dan catatan refleksi.
+- Checklist kesiapan fisik harian (tidur 6–8 jam, pola makan, air 2 liter, relaksasi).
+- Perhitungan skor kesiapan (0–100%) dan saran harian yang kontekstual.
+- Riwayat 7 hari terakhir tersimpan di `localStorage`.
+
+### 3. Alur 5 Tahap MASTA
+
+Visualisasi tahapan resmi berdasarkan kurikulum universitas:
+
+1. **Membaca Panduan Resmi:** Memahami tata tertib dan petunjuk pelaksanaan.
+2. **Verifikasi Identitas:** Validasi berkas dan nomor induk mahasiswa.
+3. **Kegiatan Daring (Zoom Meeting):** Sesi kuliah umum, pengenalan SIAKAD, dan Al-Islam Kemuhammadiyahan.
+4. **UKM Expo:** Eksplorasi unit kegiatan dan organisasi kemahasiswaan.
+5. **Puncak dan Evaluasi:** Inaugurasi mahasiswa baru dan penerbitan sertifikat.
+
+Dilengkapi hitung mundur live menuju hari pelaksanaan orientasi.
+
+### 4. Checklist Persiapan Interaktif
+
+- Kategori bawaan: Dokumen & Identitas, Perangkat & Jaringan, Pakaian Resmi, serta Kesehatan.
+- Progress bar dinamis dan animasi perayaan saat semua item tercentang.
+- Opsi menambah perlengkapan pribadi yang tersimpan di `localStorage`.
+
+### 5. Informasi & Nilai Edukatif MASTA
+
+- Penjelasan 3 Fokus Pembinaan (Adaptasi Kampus, Karakter, Peluang Mahasiswa).
+- Penjelasan 4 Pilar Capaian (Orientasi, Akademik, Relasi, Karakter).
+- Daftar FAQ interaktif seputar administrasi dan teknis orientasi.
+
+### 6. Desain & Aksesibilitas
+
+- Palet warna: Fire Orange (`#FF5A1F`), Deep Ember (`#E04500`), Deep Navy (`#0F172A`), Warm White (`#FAFAF9`), dan Dark Mode (`#0B1120`).
+- Toggle Dark Mode instan.
+- Mobile-first dengan floating navigation bar dan dukungan PWA (`manifest.json`).
+
+---
+
+## Panduan Instalasi & Menjalankan Lokal
+
+### Prasyarat
+
+- Node.js versi 18 ke atas (disarankan Node 20+)
+- NPM atau package manager kompatibel
+
+### 1. Kloning Repositori
+
 ```bash
 git clone <repository-url>
 cd Nyala_RangkingsUMKT
 ```
 
-### 3. Instalasi Dependensi
+### 2. Instalasi Dependensi
+
 ```bash
 npm install
 ```
 
-### 4. Konfigurasi Environment Variables (Opsional)
-Salin template konfigurasi:
+### 3. Konfigurasi Environment Variables
+
+Salin berkas contoh konfigurasi:
+
 ```bash
 cp .env.local.example .env.local
 ```
 
-Buka file `.env.local` dan masukkan API Key AI pilihanmu (bisa gratis):
+Buka `.env.local` dan tentukan API Key Zpi Anda:
+
 ```env
-# Opsi 1: Google Gemini API (Sangat Direkomendasikan - Cepat & Gratis)
-# Dapatkan di: https://aistudio.google.com/app/apikey
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Opsi 2: Groq API
-# Dapatkan di: https://console.groq.com/keys
-GROQ_API_KEY=
-
-# Opsi 3: OpenRouter API
-OPENROUTER_API_KEY=
+ZPI_API_KEY=zpi_blablablabla
 ```
 
-> **Catatan:** Jika `.env.local` tidak diisi, Nyala AI tetap akan berjalan sempurna menggunakan **Smart Local Knowledge Engine** bawaan khusus konten MASTA UMKT 2026.
+_Catatan: Jika API Key tidak diisi, fitur chat tetap berjalan dengan Smart Local Knowledge Engine bawaan._
 
-### 5. Jalankan Server Pengembangan
+### 4. Jalankan Aplikasi
+
 ```bash
 npm run dev
 ```
-Buka browser di [http://localhost:3000](http://localhost:3000) untuk melihat aplikasi.
+
+Buka browser pada [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 🚀 Panduan Deployment ke Vercel
+## Panduan Deployment ke Vercel
 
-1. Push repository ke GitHub / GitLab.
-2. Buka dashboard [Vercel](https://vercel.com/) lalu pilih **Add New Project**.
-3. Import repository **Nyala**.
-4. Di bagian *Environment Variables*, tambahkan `GEMINI_API_KEY` (jika menggunakan API eksternal).
-5. Klik **Deploy**. Aplikasi akan live dalam hitungan detik!
+1. Unggah kode ke repositori Git (GitHub/GitLab).
+2. Buat proyek baru di [dashboard Vercel](https://vercel.com/).
+3. Hubungkan repositori **Nyala**.
+4. Masukkan `ZPI_API_KEY` pada menu _Environment Variables_.
+5. Klik **Deploy**.
 
 ---
 
-## 📁 Struktur Direktori
+## Struktur Direktori
 
 ```
 Nyala_RangkingsUMKT/
 ├── app/
-│   ├── api/chat/route.ts       # Endpoint AI Companion (Gemini/Groq/Fallback)
-│   ├── checklist/page.tsx      # Halaman Checklist Persiapan & Confetti
+│   ├── api/chat/route.ts       # Endpoint AI Companion (Zpi SDK + Anti-DDoS & Cache)
+│   ├── checklist/page.tsx      # Halaman Checklist Persiapan
 │   ├── companion/page.tsx      # Halaman Tanya Nyala AI Companion
-│   ├── health-check/page.tsx   # Halaman Mood & Health Tracker 7 Hari
-│   ├── jadwal/page.tsx         # Halaman 5 Tahap Alur MASTA UMKT 2026
-│   ├── tentang-masta/page.tsx  # Halaman Edukasi, Nilai & Backlink Resmi
-│   ├── globals.css             # Styling Global & Keyframe Animasi Nyala
-│   ├── layout.tsx              # Root Layout, SEO Metadata, PWA, Navigation
-│   └── page.tsx                # Beranda / Landing Hero Section
+│   ├── health-check/page.tsx   # Halaman Mood & Health Tracker
+│   ├── jadwal/page.tsx         # Halaman Alur 5 Tahap MASTA
+│   ├── tentang-masta/page.tsx  # Halaman Edukasi & Backlink Resmi
+│   ├── globals.css             # Styling & Animasi Tema
+│   ├── layout.tsx              # Root Layout, Metadata SEO, & Navigasi
+│   └── page.tsx                # Beranda / Landing Page
 ├── components/
-│   ├── BacklinkBanner.tsx      # Banner Verifikasi & Backlink Resmi UMKT
-│   ├── CountdownTimer.tsx      # Timer Hitung Mundur MASTA 2026
-│   ├── Footer.tsx              # Footer Terstruktur & Tautan Resmi
-│   ├── MascotFlame.tsx         # Karakter Api Animasi Interaktif
-│   ├── MobileNav.tsx           # Floating Bottom Navigation Mobile
-│   ├── Navbar.tsx              # Header Navigasi Desktop & Dark Mode
-│   ├── ProgressBar.tsx         # Indikator Progress Gradient Animasi
-│   └── ThemeToggle.tsx         # Tombol Switch Dark/Light Mode
+│   ├── BacklinkBanner.tsx      # Komponen Backlink Resmi UMKT
+│   ├── CountdownTimer.tsx      # Hitung Mundur MASTA 2026
+│   ├── Footer.tsx              # Footer Aplikasi & Tautan Penting
+│   ├── MascotFlame.tsx         # Maskot Animasi Nyala
+│   ├── MobileNav.tsx           # Navigasi Bawah untuk Mobile
+│   ├── Navbar.tsx              # Navigasi Utama & Switcher Tema
+│   ├── ProgressBar.tsx         # Indikator Progres Animasi
+│   └── ThemeToggle.tsx         # Pengalih Mode Gelap / Terang
 ├── context/
-│   └── ThemeContext.tsx        # Provider Tema Terintegrasi LocalStorage
+│   └── ThemeContext.tsx        # Penyimpanan Preferensi Tema
 ├── lib/
-│   ├── ai-engine.ts            # Logika Pemrosesan AI Hybrid & Fallback
-│   ├── masta-data.ts           # Data Resmi MASTA UMKT (Alur, Syarat, FAQ)
+│   ├── ai-engine.ts            # Integrasi Zpi SDK & Smart Fallback
+│   ├── cache.ts                # Cache Semantik In-Memory (TTL 2 Jam)
+│   ├── masta-data.ts           # Data Rujukan Resmi MASTA UMKT
+│   ├── security.ts             # Rate Limiter, Anti-DDoS, & Input Sanitizer
 │   └── utils.ts                # Helper & Utility Class Merge
 ├── public/
-│   └── manifest.json           # Konfigurasi Progressive Web App
-├── tailwind.config.ts          # Konfigurasi Token Warna Nyala Fire & Navy
+│   └── manifest.json           # Konfigurasi PWA
+├── tailwind.config.ts          # Token Warna & Radius Desain
 ├── tsconfig.json               # Konfigurasi TypeScript
-└── README.md                   # Dokumentasi Lengkap Proyek
+└── README.md                   # Dokumentasi Resmi Proyek
 ```
 
 ---
 
-## 🏆 Kepatuhan Kriteria Kompetisi
+## Kepatuhan Syarat Kompetisi
 
-- [x] **Originalitas & Konsep**: Maskot unik "Nyala" dengan tagline resmi *“Nyala. Teman perjalanan MABA-mu.”*.
-- [x] **Akurasi Konten**: Mengadopsi 5 tahapan alur resmi dan 3 fokus MASTA UMKT 2026 dari sumber rujukan `https://masta-maba.odoo.com/`.
-- [x] **Backlink Aktif**: Backlink jelas dan menonjol ke `https://www.umkt.ac.id/` dan `https://www.umkt.ac.id/kemahasiswaan/`.
-- [x] **Kesiapan Teknis**: Next.js App Router, TypeScript, Tailwind CSS, Framer Motion, PWA Ready, dan lolos uji build produksi tanpa error.
-
----
-
-Dibuat dengan 🔥 penuh cinta dan dedikasi untuk menyalakan semangat Mahasiswa Baru **Universitas Muhammadiyah Kalimantan Timur**.
+1. **Originalitas:** Konsep dan maskot unik Nyala dengan identitas visual terarah.
+2. **Akurasi Materi:** 5 tahapan resmi dan 3 fokus pembinaan disadur langsung dari panduan resmi MASTA UMKT 2026.
+3. **Backlink Aktif:** Tautan aktif yang mudah diakses menuju `https://www.umkt.ac.id/` dan `https://www.umkt.ac.id/kemahasiswaan/`.
+4. **Kualitas Teknis:** Next.js 14 App Router, TypeScript, Tailwind CSS, Framer Motion, sistem keamanan API mandiri, dan lolos uji build produksi.

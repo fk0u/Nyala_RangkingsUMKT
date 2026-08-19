@@ -23,6 +23,7 @@ import ProgressBar from "@/components/ProgressBar";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import MascotFlame from "@/components/MascotFlame";
 import { INITIAL_CHECKLIST, ChecklistItem } from "@/lib/masta-data";
+import { useToast } from "@/context/ToastContext";
 
 export default function ChecklistPage() {
   const [items, setItems] = useState<ChecklistItem[]>(INITIAL_CHECKLIST);
@@ -32,6 +33,7 @@ export default function ChecklistPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newItemCategory, setNewItemCategory] = useState<ChecklistItem["category"]>("Dokumen & Identitas");
   const [celebrated, setCelebrated] = useState(false);
+  const toast = useToast();
 
   // Load from localStorage
   useEffect(() => {
@@ -70,18 +72,24 @@ export default function ChecklistPage() {
         origin: { y: 0.6 },
         colors: ["#FF5A1F", "#FFA885", "#FDBA74", "#0F172A", "#10B981"],
       });
+      toast.nyala("Selamat! Seluruh persiapan MASTA-mu telah lengkap 100%! 🔥🎉", "Luar Biasa!");
     } else if (progressPercent < 100) {
       setCelebrated(false);
     }
-  }, [progressPercent, totalCount, celebrated]);
+  }, [progressPercent, totalCount, celebrated, toast]);
 
-  const handleToggleItem = (id: string) => {
+  const handleToggleItem = (id: string, title: string) => {
+    const nextState = !checkedState[id];
     const updated = {
       ...checkedState,
-      [id]: !checkedState[id],
+      [id]: nextState,
     };
     setCheckedState(updated);
     localStorage.setItem("nyala_checklist", JSON.stringify(updated));
+
+    if (nextState) {
+      toast.success(`"${title.slice(0, 28)}..." selesai!`, "Item Dicentang");
+    }
   };
 
   const handleResetChecklist = () => {
@@ -89,6 +97,7 @@ export default function ChecklistPage() {
       setCheckedState({});
       localStorage.setItem("nyala_checklist", JSON.stringify({}));
       setCelebrated(false);
+      toast.info("Centang persiapan berhasil di-reset.", "Reset");
     }
   };
 
@@ -100,7 +109,7 @@ export default function ChecklistPage() {
       id: `custom-${Date.now()}`,
       category: newItemCategory,
       title: newItemTitle.trim(),
-      description: "Item catatan kustom yang kamu tambahkan sendiri.",
+      description: "Catatan perlengkapan kustom tambahan.",
       required: false,
     };
 
@@ -112,6 +121,7 @@ export default function ChecklistPage() {
 
     setNewItemTitle("");
     setShowAddForm(false);
+    toast.success(`Item "${newItem.title.slice(0, 24)}" berhasil ditambahkan!`, "Item Baru");
   };
 
   const handleDeleteCustomItem = (id: string) => {
@@ -125,6 +135,7 @@ export default function ChecklistPage() {
     delete newChecked[id];
     setCheckedState(newChecked);
     localStorage.setItem("nyala_checklist", JSON.stringify(newChecked));
+    toast.info("Item kustom dihapus.", "Dihapus");
   };
 
   const categories = [
@@ -159,61 +170,98 @@ export default function ChecklistPage() {
           <span>Interactive Readiness Tracker</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 dark:text-white tracking-tight">
-          Checklist Persiapan MASTA UMKT
+          Checklist Persiapan MASTA UMKT 2026
         </h1>
         <p className="text-sm sm:text-base text-navy-600 dark:text-navy-300">
-          Pastikan semua syarat administrasi, pakaian resmi, perangkat Zoom, dan kesiapan diri lengkap sebelum hari H.
+          Centang setiap perlengkapan dan dokumen wajib agar kamu siap 100% menghadapi seluruh rangkaian Masa Ta’aruf.
         </p>
       </div>
 
-      {/* Progress & Summary Card */}
-      <div className="glass-card rounded-3xl p-6 sm:p-8 border border-navy-200/60 dark:border-navy-800 space-y-6 shadow-xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-nyala-600 dark:text-nyala-400">
-                Status Kesiapan Bawaan
-              </span>
-              {progressPercent === 100 && (
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold">
-                  Lengkap 100%! 🎉
+      {/* Progress Card with Mascot */}
+      <div className="glass-card rounded-3xl p-6 sm:p-8 border border-navy-200/60 dark:border-navy-800 shadow-xl space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+          
+          <div className="sm:col-span-8 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-nyala-600 dark:text-nyala-400">
+                  Status Kelengkapan
                 </span>
-              )}
+                <h3 className="text-xl sm:text-2xl font-black text-navy-900 dark:text-white">
+                  {completedCount} dari {totalCount} Item Terpenuhi
+                </h3>
+              </div>
+              <span className="text-2xl sm:text-3xl font-black text-nyala-600 dark:text-nyala-400">
+                {progressPercent}%
+              </span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-navy-900 dark:text-white">
-              {completedCount} dari {totalCount} Item Selesai
-            </h2>
+
+            <ProgressBar progress={progressPercent} size="lg" showPercentage={false} />
+
+            <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
+              {progressPercent === 100
+                ? "Hebat! Semua perlengkapan resmi dan berkas telah siap. Kamu siap menjalani MASTA UMKT 2026 dengan percaya diri!"
+                : progressPercent >= 50
+                ? "Bagus sekali! Lebih dari separuh perlengkapan sudah siap. Lanjutkan mencentang item lainnya ya!"
+                : "Ayo mulai periksa dan siapkan berkas serta perlengkapanmu dari sekarang."}
+            </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowAddForm(!showAddForm)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-navy-900 dark:bg-navy-700 hover:bg-nyala-500 text-white text-xs font-semibold transition-all shadow-xs"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Tambah Item Sendiri</span>
-            </button>
-            <button
-              onClick={handleResetChecklist}
-              className="p-2 rounded-xl bg-navy-100 dark:bg-navy-800 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-navy-600 dark:text-navy-300 hover:text-rose-600 transition-colors"
-              title="Reset checklist"
-            >
-              <RotateCcw className="w-4 h-4" />
-            </button>
+          <div className="sm:col-span-4 flex justify-center sm:justify-end">
+            <MascotFlame 
+              size="lg" 
+              mood={progressPercent === 100 ? "cheering" : progressPercent >= 50 ? "excited" : "happy"} 
+            />
           </div>
+
         </div>
-
-        <ProgressBar progress={progressPercent} size="lg" />
-
-        {progressPercent === 100 && (
-          <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center gap-3 text-emerald-800 dark:text-emerald-200 text-xs sm:text-sm font-semibold">
-            <Sparkles className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-            <span>Keren banget! Semua persiapan MASTA 2026 kamu sudah lengkap 100%. Selamat mengikuti masa orientasi! 🔥</span>
-          </div>
-        )}
       </div>
 
-      {/* Add Custom Item Modal / Dropdown */}
+      {/* Action Controls & Filter Bar */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        
+        {/* Category Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar w-full sm:w-auto">
+          {categories.map((cat) => {
+            const isSelected = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`whitespace-nowrap text-xs px-3.5 py-2 rounded-xl font-bold transition-all ${
+                  isSelected
+                    ? "bg-nyala-500 text-white shadow-fire scale-[1.02]"
+                    : "bg-white dark:bg-navy-800 text-navy-600 dark:text-navy-300 hover:bg-navy-100 dark:hover:bg-navy-700 border border-navy-200/50 dark:border-navy-700"
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Buttons: Add Item & Reset */}
+        <div className="flex items-center gap-2 self-end sm:self-auto flex-shrink-0">
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-navy-900 dark:bg-navy-800 hover:bg-nyala-500 text-white text-xs font-bold transition-all shadow-xs active:scale-95"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Tambah Catatan</span>
+          </button>
+
+          <button
+            onClick={handleResetChecklist}
+            className="p-2 rounded-xl bg-white dark:bg-navy-800 border border-navy-200/60 dark:border-navy-700 text-navy-500 hover:text-rose-500 hover:border-rose-300 transition-colors"
+            title="Reset Centang"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        </div>
+
+      </div>
+
+      {/* Add Custom Item Modal / Form */}
       <AnimatePresence>
         {showAddForm && (
           <motion.form
@@ -221,25 +269,35 @@ export default function ChecklistPage() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             onSubmit={handleAddNewItem}
-            className="glass-card rounded-3xl p-5 sm:p-6 border border-nyala-500/30 space-y-4 shadow-lg overflow-hidden"
+            className="p-5 rounded-3xl glass-card border border-amber-200 dark:border-navy-700 space-y-4 shadow-lg overflow-hidden"
           >
-            <h3 className="text-sm font-bold text-navy-900 dark:text-white flex items-center gap-2">
-              <Plus className="w-4 h-4 text-nyala-500" />
-              <span>Tambah Perlengkapan Pribadi:</span>
-            </h3>
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-bold text-navy-900 dark:text-white flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-nyala-500" />
+                <span>Tambah Perlengkapan Khusus</span>
+              </h4>
+              <button
+                type="button"
+                onClick={() => setShowAddForm(false)}
+                className="text-xs text-navy-400 hover:text-navy-700"
+              >
+                Batal
+              </button>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <input
                 type="text"
                 value={newItemTitle}
                 onChange={(e) => setNewItemTitle(e.target.value)}
-                placeholder="Contoh: Powerbank cadangan / Catatan gugus"
-                className="sm:col-span-2 bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-700 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:ring-2 focus:ring-nyala-500 focus:outline-none"
+                placeholder="Misal: Obat pribadi / Vitamin / Powerbank..."
+                className="sm:col-span-2 bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-700 rounded-xl px-3.5 py-2 text-xs focus:ring-2 focus:ring-nyala-500 outline-none text-navy-900 dark:text-white"
+                autoFocus
               />
               <select
                 value={newItemCategory}
                 onChange={(e) => setNewItemCategory(e.target.value as any)}
-                className="bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:ring-2 focus:ring-nyala-500 focus:outline-none"
+                className="bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-700 rounded-xl px-3 py-2 text-xs font-semibold focus:ring-2 focus:ring-nyala-500 outline-none text-navy-900 dark:text-white"
               >
                 <option value="Dokumen & Identitas">Dokumen & Identitas</option>
                 <option value="Perangkat & Jaringan">Perangkat & Jaringan</option>
@@ -248,83 +306,52 @@ export default function ChecklistPage() {
               </select>
             </div>
 
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setShowAddForm(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-navy-600 dark:text-navy-400 hover:bg-navy-100 dark:hover:bg-navy-800"
-              >
-                Batal
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-1.5 rounded-xl bg-nyala-500 text-white text-xs font-bold shadow-fire hover:bg-nyala-600"
-              >
-                Simpan Item
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={!newItemTitle.trim()}
+              className="px-4 py-2 rounded-xl bg-nyala-500 hover:bg-nyala-600 disabled:opacity-50 text-white font-bold text-xs shadow-fire transition-all"
+            >
+              Simpan Item
+            </button>
           </motion.form>
         )}
       </AnimatePresence>
 
-      {/* Filter Category Chips */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-        <Filter className="w-4 h-4 text-navy-400 flex-shrink-0 ml-1" />
-        {categories.map((cat) => {
-          const isSelected = activeCategory === cat;
-          return (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                isSelected
-                  ? "bg-navy-900 dark:bg-nyala-500 text-white shadow-sm"
-                  : "bg-white/80 dark:bg-navy-800/80 text-navy-600 dark:text-navy-300 border border-navy-200/60 dark:border-navy-700 hover:border-nyala-400"
-              }`}
-            >
-              {cat}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Checklist Items List */}
+      {/* Items List */}
       <div className="space-y-3">
-        <AnimatePresence initial={false}>
+        <AnimatePresence>
           {filteredItems.map((item) => {
             const isChecked = !!checkedState[item.id];
+            const Icon = getCategoryIcon(item.category);
             const isCustom = item.id.startsWith("custom-");
-            const CatIcon = getCategoryIcon(item.category);
 
             return (
               <motion.div
                 key={item.id}
+                layout
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                onClick={() => handleToggleItem(item.id)}
-                className={`p-4 sm:p-5 rounded-2xl border cursor-pointer select-none transition-all flex items-start justify-between gap-3.5 ${
+                onClick={() => handleToggleItem(item.id, item.title)}
+                className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-start justify-between gap-4 group ${
                   isChecked
-                    ? "bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-500/40"
-                    : "glass-card border-navy-200/60 dark:border-navy-800 hover:border-nyala-400"
+                    ? "bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-300/80 dark:border-emerald-800/60 shadow-xs"
+                    : "glass-card border-navy-200/60 dark:border-navy-800 hover:border-nyala-400/80"
                 }`}
               >
                 <div className="flex items-start gap-3.5">
-                  <div
-                    className={`w-6 h-6 rounded-lg flex items-center justify-center mt-0.5 transition-colors flex-shrink-0 ${
-                      isChecked
-                        ? "bg-emerald-500 text-white shadow-xs"
-                        : "border-2 border-navy-300 dark:border-navy-600"
-                    }`}
-                  >
-                    {isChecked ? <CheckCircle2 className="w-4 h-4" /> : <Circle className="w-4 h-4 opacity-0" />}
+                  <div className="mt-0.5 flex-shrink-0">
+                    {isChecked ? (
+                      <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-100 dark:fill-emerald-950" />
+                    ) : (
+                      <Circle className="w-5 h-5 text-navy-300 dark:text-navy-600 group-hover:text-nyala-500 transition-colors" />
+                    )}
                   </div>
 
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h4
-                        className={`text-sm font-bold leading-tight ${
+                        className={`text-sm sm:text-base font-bold transition-all ${
                           isChecked
                             ? "line-through text-navy-400 dark:text-navy-500"
                             : "text-navy-900 dark:text-white"
@@ -333,18 +360,25 @@ export default function ChecklistPage() {
                         {item.title}
                       </h4>
                       {item.required && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-500/15 text-rose-600 dark:text-rose-400">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-rose-500/10 text-rose-600 dark:text-rose-400">
                           Wajib
                         </span>
                       )}
+                      <span className="text-[10px] font-semibold text-navy-400 dark:text-navy-500 flex items-center gap-1">
+                        <Icon className="w-3 h-3" />
+                        <span>{item.category}</span>
+                      </span>
                     </div>
-                    <p className="text-xs text-navy-500 dark:text-navy-400 leading-relaxed">
+
+                    <p
+                      className={`text-xs leading-relaxed ${
+                        isChecked
+                          ? "text-navy-400 dark:text-navy-500"
+                          : "text-navy-600 dark:text-navy-300"
+                      }`}
+                    >
                       {item.description}
                     </p>
-                    <div className="flex items-center gap-1.5 text-[11px] font-medium text-navy-400 dark:text-navy-500 pt-0.5">
-                      <CatIcon className="w-3.5 h-3.5 text-nyala-500" />
-                      <span>{item.category}</span>
-                    </div>
                   </div>
                 </div>
 
@@ -354,8 +388,8 @@ export default function ChecklistPage() {
                       e.stopPropagation();
                       handleDeleteCustomItem(item.id);
                     }}
-                    className="p-1.5 rounded-lg text-navy-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-                    title="Hapus item kustom"
+                    className="opacity-40 hover:opacity-100 p-1.5 text-navy-400 hover:text-rose-500 transition-opacity"
+                    title="Hapus Catatan Kustom"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -366,7 +400,8 @@ export default function ChecklistPage() {
         </AnimatePresence>
       </div>
 
-      <BacklinkBanner compact />
+      {/* Verified Official Links Banner */}
+      <BacklinkBanner />
 
     </div>
   );

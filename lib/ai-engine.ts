@@ -1,209 +1,225 @@
+import { ZpiClient } from "zpi-sdk";
+import { getFromCache, saveToCache } from "./cache";
+
 export interface ChatMessage {
   role: "user" | "assistant" | "system";
   content: string;
 }
 
 export const SYSTEM_PROMPT = `
-Kamu adalah "Nyala", virtual companion dan asisten digital resmi untuk Mahasiswa Baru (MABA) Universitas Muhammadiyah Kalimantan Timur (UMKT) Angkatan 2026.
+Kamu adalah "Nyala", virtual companion dan asisten digital resmi untuk Mahasiswa Baru (MABA) Universitas Muhammadiyah Kalimantan Timur (UMKT) Angkatan 2026, khususnya Program Studi Teknologi Informasi (TI).
 Tagline-mu adalah: "Nyala. Teman perjalanan MABA-mu."
 
 BRAND & PERSONALITY:
 - Kamu ramah, hangat, penuh energi positif, suportif, dan dekat (seperti sahabat atau kakak tingkat yang asik).
 - Sedikit playful (sesekali pakai emoji api 🔥, senyum 😊, semangat ✨), namun tetap santun, respect, dan edukatif.
-- Bahasa: Bahasa Indonesia yang santai, luwes, dan Gen-Z friendly namun tetap informatif dan jelas.
-- Jangan kaku, jangan menjawab seperti bot birokrasi, tapi jadilah teman yang menguatkan dan menyemangati.
+- Semboyan Tekno: "HIDUP TEKNIK! NO SKILL NO TRUST!"
+- Bahasa: Bahasa Indonesia yang santai, luwes, dan Gen-Z friendly namun tetap informatif, jelas, dan akurat.
+- Jangan kaku, jangan menjawab seperti robot birokrasi, tapi jadilah teman yang menguatkan dan menyemangati MABA agar lulus 100% tepat waktu (3.5 - 4 tahun).
 
-INFORMASI RESMI MASTA UMKT 2026:
-- MASTA MABA = Masa Ta'aruf Mahasiswa Baru UMKT 2026.
-- 3 Fokus Utama: 1) Adaptasi Kehidupan Kampus, 2) Pembentukan Karakter, 3) Pengenalan Peluang Mahasiswa.
-- 4 Pilar Tujuan: Orientasi, Akademik, Relasi, dan Karakter.
-- 5 Tahapan Alur Resmi:
-  1. Membaca Panduan Resmi
-  2. Verifikasi Identitas
-  3. Kegiatan Daring (Zoom Meeting)
-  4. UKM Expo
-  5. Puncak dan Evaluasi
-- Website Resmi UMKT: https://www.umkt.ac.id/
-- Portal Resmi MASTA: https://masta-maba.odoo.com/
-- Layanan Kemahasiswaan: https://www.umkt.ac.id/kemahasiswaan/
-
-TUGAS UTAMA:
-1. Menjawab pertanyaan seputar alur dan persiapan MASTA UMKT 2026.
-2. Memberikan tips praktis (mengatasi rasa gugup/anxiety, tips On-Cam Zoom, manajemen waktu, mencari teman baru).
-3. Memberikan motivasi dan dukungan kesehatan mental bagi MABA.
-4. Mengingatkan MABA untuk menjaga kesehatan fisik (tidur cukup, minum air, sarapan).
-5. Selalu sertakan dorongan positif dan jika relevan sertakan tautan ke website resmi UMKT (https://www.umkt.ac.id/).
+INFORMASI RESMI MASTA, SIKAD & PRODI TEKNOLOGI INFORMASI UMKT 2026:
+- Visi TI 2037: Menjadi program studi yang unggul dalam teknologi informasi dan algoritma komputasi untuk penyelesaian permasalahan sosial dan lingkungan berlandaskan nilai-nilai keislaman.
+- Akreditasi: "Baik Sekali" (2025 - 2030).
+- Gelar: Sarjana Komputer (S.Kom).
+- Konsentrasi: 1) Jaringan dan Rekayasa Sistem (JRS), 2) Komputasi Cerdas (KC).
+- Kurikulum Semester 1 (20 SKS): Aljabar Linear, Matematika Diskrit, Statistika, Dasar Pemrograman + Praktikum, Sistem Digital & Arsitektur Komputer, Islamologi 1, PTI.
+- Standar Nilai Minimum: MK Wajib (C), MKDU (B), Konsentrasi (C), Basic Science/Praktikum (BC), Magang/Capstone (B), Skripsi (AB).
+- Kalender Akademik Semester Ganjil 2026/2027:
+  - 27 Juli - 27 Agustus 2026: Pengambilan MK / KRS di SIKAD
+  - 31 Agustus - 7 Oktober 2026: Perkuliahan Periode I
+  - 19 - 24 Oktober 2026: Ujian Tengah Semester (UTS)
+  - 26 Oktober - 19 Desember 2026: Perkuliahan Periode II
+  - 21 Desember 2026 - 9 Januari 2027: Ujian Akhir Semester (UAS)
+  - 16 Januari 2027: Batas Entri Nilai UAS di SIKAD
+- Bimbingan Dosen PA: Wajib minimal 4 kali per semester (KRS, pra-UTS, pra-UAS, evaluasi KHS).
+- Semester Pendek (SP): Berlangsung 2 minggu intensif untuk memperbaiki nilai tanpa harus menunda kelulusan.
+- Organisasi Mahasiswa: HIMATIF (Himpunan Mahasiswa Teknik Informatika) - Dept PSDM, Kominfo/Media Kreatif, Sosma, Kerohanian.
+- Portal Resmi:
+  - Website UMKT: https://www.umkt.ac.id/
+  - Portal Mahasiswa SIKAD: https://mahasiswa.umkt.ac.id/
+  - Portal Resmi MASTA: https://masta-maba.odoo.com/
 `;
 
-// Offline Smart Knowledge Base Responder
+// Offline Smart Knowledge Base Responder (Zero-failure fallback)
 export function generateLocalResponse(userMessage: string): string {
   const query = userMessage.toLowerCase().trim();
 
-  if (query.includes("halo") || query.includes("hai") || query.includes("siapa kamu") || query.includes("nyala")) {
-    return "Halo Sobat MABA UMKT 2026! 🔥 Aku **Nyala**, teman perjalanan MABA-mu! Aku siap nemenin kamu melewati masa orientasi (MASTA) dari awal sampai puncak acara. Ada yang bikin kamu penasaran atau bingung tentang MASTA?";
+  // 1. PRODI TEKNOLOGI INFORMASI UMKT & KURIKULUM
+  if (query.includes("prodi ti") || query.includes("teknologi informasi") || query.includes("kurikulum") || query.includes("mata kuliah") || query.includes("s.kom") || query.includes("kaprodi") || query.includes("no skill")) {
+    if (query.includes("semester 1") || query.includes("sem 1") || query.includes("makul")) {
+      return `Mata kuliah **Semester 1 Prodi Teknologi Informasi UMKT 2026** (Total 20 SKS):
+1. 🔢 **Aljabar Linear** (3 SKS)
+2. 🧮 **Matematika Diskrit** (3 SKS)
+3. 📊 **Statistika** (3 SKS)
+4. 💻 **Dasar Pemrograman** (3 SKS) + **Praktikum Dasar Pemrograman** (1 SKS)
+5. ⚙️ **Sistem Digital dan Arsitektur Komputer** (3 SKS)
+6. 🕌 **Kemanusiaan dan Keimanan / Islamologi 1** (2 SKS)
+7. 🖥️ **Aplikasi Komputer & Pengantar Teknologi Informasi** (2 SKS)
+
+Tips Kaprodi: Pastikan nilai Dasar Pemrograman dan Matematika minimal BC ya! Buka tab **Akademik TI** di atas untuk melihat semester 2-4! 🔥`;
+    }
+
+    if (query.includes("nilai") || query.includes("standar kelulusan") || query.includes("syarat lulus")) {
+      return `Standar nilai minimum kelulusan di **Teknologi Informasi UMKT**:
+- 📚 **MK Wajib Prodi & Konsentrasi (JRS/KC)**: Minimal **C**
+- 🏛️ **MK Dasar Umum (MKDU)**: Minimal **B**
+- 🔬 **Basic Science & Praktikum**: Minimal **BC**
+- 💼 **Kerja Praktik / Magang & Capstone Design**: Minimal **B**
+- 🎓 **Skripsi / Tugas Akhir**: Minimal **AB**
+
+Rentang nilai: A (>80), AB (75-79), B (70-74), BC (66-70). Ingat slogan kita: *HIDUP TEKNIK! NO SKILL NO TRUST!* 💪`;
+    }
+
+    if (query.includes("kalender") || query.includes("uts") || query.includes("uas") || query.includes("jadwal kuliah")) {
+      return `Agenda penting **Kalender Akademik Semester Ganjil 2026/2027**:
+- 📅 **27 Juli - 27 Agustus 2026**: Masa Pengambilan MK / KRS di SIKAD
+- 📖 **31 Agustus - 7 Oktober 2026**: Perkuliahan Periode I
+- 📝 **19 - 24 Oktober 2026**: Ujian Tengah Semester (UTS)
+- 💻 **26 Oktober - 19 Desember 2026**: Perkuliahan Periode II
+- 🎯 **21 Desember 2026 - 9 Januari 2027**: Ujian Akhir Semester (UAS)
+- 🏆 **16 Januari 2027**: Batas Entri Nilai UAS di SIKAD`;
+    }
+
+    if (query.includes("gaji") || query.includes("karir") || query.includes("prospek")) {
+      return `Prospek karir lulusan **Sarjana Komputer (S.Kom) TI UMKT**:
+- 💻 **Software Engineer**: Kisaran Rp 190 Juta - Rp 205 Juta / tahun (Traveloka, Tokopedia, Bukalapak).
+- 📊 **Data Scientist / Analyst**: Analisis keputusan bisnis berbasis empiris.
+- 🛡️ **Cyber Security Engineer**: Pengamanan infrastruktur jaringan & kriptografi.
+- 📱 **Mobile Developer**: Spesialis aplikasi Android / iOS modern.
+
+Di industri IT 2026, yang dinilai bukan hanya ijazah, melainkan kapasitas nyata menyelesaikan masalah (problem solving)! 🔥`;
+    }
+
+    return `Program Studi **Teknologi Informasi UMKT**:
+- 🏆 **Akreditasi**: "Baik Sekali" (2025 - 2030)
+- 🎓 **Gelar**: Sarjana Komputer (S.Kom)
+- 🎯 **Konsentrasi**: Jaringan dan Rekayasa Sistem (JRS) & Komputasi Cerdas (KC)
+- 🚩 **Semboyan**: "HIDUP TEKNIK! NO SKILL NO TRUST!"
+- 👨‍🏫 **Dosen PA**: Wajib bimbingan minimal 4 kali per semester (KRS, pra-UTS, pra-UAS, KHS).
+
+Yuk buka menu **Akademik TI** di atas untuk panduan lengkap kurikulum dan profil dosen tetap! ✨`;
   }
 
+  // 2. SIKAD & Portal Mahasiswa UMKT
+  if (query.includes("sikad") || query.includes("siakad") || query.includes("mahasiswa.umkt") || query.includes("krs") || query.includes("khs") || query.includes("dosen pa") || query.includes("spp") || query.includes("presensi")) {
+    if (query.includes("krs") || query.includes("kartu rencana")) {
+      return `Untuk pengisian **KRS Online** di UMKT:
+1. Buka [https://mahasiswa.umkt.ac.id/](https://mahasiswa.umkt.ac.id/).
+2. Untuk MABA Semester 1, paket mata kuliah (20 SKS) sudah otomatis disiapkan.
+3. Masuk menu **KRS** -> periksa nama dosen & jadwal.
+4. Klik **Ajukan Bimbingan / Simpan KRS** untuk divalidasi oleh Dosen PA.
+5. Cek panduan visual di tab **SIKAD** aplikasi ini ya! ✨`;
+    }
+
+    return `Portal **SIKAD Mahasiswa UMKT** ([https://mahasiswa.umkt.ac.id/](https://mahasiswa.umkt.ac.id/)) digunakan untuk pengisian KRS, jadwal kuliah, presensi (min. 75%), tagihan SPP Virtual Account, dan cek nilai KHS.`;
+  }
+
+  // 3. Alur MASTA & Panduan Umum
   if (query.includes("alur") || query.includes("tahap") || query.includes("jadwal") || query.includes("proses")) {
-    return `Alur resmi **MASTA MABA UMKT 2026** terdiri dari 5 tahapan utama nih Sobat:
-1. 📖 **Membaca Panduan**: Memahami tata tertib dan petunjuk teknis.
-2. 🆔 **Verifikasi Identitas**: Validasi NIM dan berkas registrasi.
-3. 💻 **Kegiatan Daring (Zoom)**: Sesi materi akademik & sidang terbuka.
-4. 🎪 **UKM Expo**: Eksplorasi minat, bakat, dan organisasi mahasiswa.
-5. 🏆 **Puncak dan Evaluasi**: Inaugurasi resmi, evaluasi, & penerbitan sertifikat.
+    return `Alur resmi **MASTA MABA UMKT 2026** terdiri dari 5 tahapan:
+1. 📖 **Membaca Panduan Resmi**
+2. 🆔 **Verifikasi Identitas & NIM**
+3. 💻 **Kegiatan Daring Zoom Meeting**
+4. 🎪 **UKM Expo & Minat Bakat**
+5. 🏆 **Puncak Inagurasi & Sertifikasi**
 
-Kamu bisa cek timeline lengkapnya di menu **Jadwal & Alur** di atas ya! ✨`;
+Cek timeline detail di menu **Alur MASTA** ya! ✨`;
   }
 
-  if (query.includes("bawa") || query.includes("syarat") || query.includes("perlengkapan") || query.includes("siap") || query.includes("checklist")) {
-    return `Beberapa perlengkapan wajib yang harus kamu siapkan untuk MASTA 2026:
-- 📄 **Dokumen**: Kartu Peserta MASTA & bukti registrasi aktif.
-- 💻 **Perangkat**: Laptop/Smartphone dengan aplikasi Zoom versi terbaru & kuota cadangan.
-- 👔 **Pakaian**: Kemeja putih polos berkerah, bawahan hitam formal (bukan jeans), jilbab/dasi sesuai ketentuan gugus.
-- 💧 **Kesehatan**: Air minum dalam botol & kondisi fisik yang fit!
-
-Biar gak ada yang kelupaan, yuk buka menu **Checklist Persiapan** untuk mencentang barang bawaanmu! 🔥`;
+  if (query.includes("bawa") || query.includes("syarat") || query.includes("perlengkapan") || query.includes("checklist")) {
+    return `Perlengkapan wajib MASTA 2026:
+- 📄 Kartu Peserta MASTA & berkas registrasi
+- 💻 Laptop/Smartphone + Zoom terbaru + kuota cadangan
+- 👔 Kemeja putih polos lengan panjang & bawahan hitam formal
+- 💧 Air minum botol & fisik yang fit! Buka menu **Checklist** untuk mencentang ya! 🔥`;
   }
 
-  if (query.includes("gugup") || query.includes("takut") || query.includes("stres") || query.includes("cemas") || query.includes("anxiety") || query.includes("teman")) {
-    return `Wajar banget kalau kamu merasa sedikit nervous atau gugup, Sobat! Memulai dunia baru di kampus memang tantangan seru. 
-Berikut tips dari Nyala:
-1. 🫁 **Tarik napas dalam-dalam**: Tenangkan pikiran, kamu tidak sendirian—ribuan MABA lain juga merasakan hal yang sama!
-2. 🤝 **Sapa teman se-gugus**: Jangan ragu untuk melempar senyum atau mengetik salam di chat Zoom/grup WhatsApp.
-3. 🧘 **Cek Kondisi Mental**: Manfaatkan fitur **Health Check** di aplikasi Nyala ini untuk memantau mood dan energi harianmu.
-
-Ingat, kamu hebat dan pantas berada di UMKT! Nyala selalu ada di sini buat nemenin kamu. 🔥💪`;
+  if (query.includes("gugup") || query.includes("takut") || query.includes("cemas") || query.includes("teman")) {
+    return `Wajar merasa nervous saat memulai masa perkuliahan baru, Sobat! Tarik napas teratur, sapa teman se-gugus, dan gunakan fitur **Health Check** untuk memantau energimu. Kamu pasti bisa! 🔥💪`;
   }
 
-  if (query.includes("zoom") || query.includes("oncam") || query.includes("kamera") || query.includes("daring")) {
-    return `Saat sesi daring (Zoom Meeting) MASTA UMKT 2026:
-- Pastikan format nama akun: \`[Nomor Gugus]_[Nama Lengkap]\`.
-- Siapkan koneksi internet stabil (bisa pakai hotspot cadangan jika WiFi kampus/rumah drop).
-- Gunakan pencahayaan yang cukup dari depan (menghadap jendela/lampu).
-- Wajib On-Cam dengan pakaian rapi sesuai tata tertib! ✨`;
-  }
+  return `Pertanyaan yang bagus sekali, Sobat MABA! 🔥
 
-  if (query.includes("ukm") || query.includes("organisasi") || query.includes("expo") || query.includes("kegiatan")) {
-    return `Di sesi **UKM Expo**, kamu bakal berkenalan dengan beragam Unit Kegiatan Mahasiswa (UKM) di UMKT—mulai dari seni, olahraga, riset, penalaran, jurnalistik, tapak suci, hingga pecinta alam! 🎨⚽
-Tips dari Nyala: Pilih organisasi yang sesuai minatmu untuk mengasah relasi dan soft skill kepemimpinan ya!`;
-  }
+Kamu bisa mengeksplorasi panduan **Akademik TI UMKT**, portal **SIKAD** (mahasiswa.umkt.ac.id), atau materi resmi di [masta-maba.odoo.com](https://masta-maba.odoo.com/) dan [umkt.ac.id](https://www.umkt.ac.id/).
 
-  if (query.includes("link") || query.includes("web") || query.includes("website") || query.includes("resmi") || query.includes("odoo") || query.includes("umkt")) {
-    return `Tentu! Ini portal resmi yang wajib kamu simpan:
-- 🌐 **Website Utama UMKT**: [https://www.umkt.ac.id/](https://www.umkt.ac.id/)
-- 🏛️ **Biro Kemahasiswaan**: [https://www.umkt.ac.id/kemahasiswaan/](https://www.umkt.ac.id/kemahasiswaan/)
-- 📖 **Portal Resmi MASTA**: [https://masta-maba.odoo.com/](https://masta-maba.odoo.com/)
-
-Ada hal lain yang mau kamu tanyakan seputar kampus UMKT? 😊`;
-  }
-
-  return `Pertanyaan yang bagus sekali, Sobat MABA! 🔥 
-
-Terkait hal tersebut, pastikan kamu selalu merujuk pada pedoman resmi di portal [masta-maba.odoo.com](https://masta-maba.odoo.com/) dan website resmi [Universitas Muhammadiyah Kalimantan Timur](https://www.umkt.ac.id/). 
-
-Apakah ada bagian khusus yang ingin kamu bahas lebih detail, misalnya tentang **Jadwal Kegiatan**, **Checklist Bawaan**, atau **Tips Menjaga Mood & Stamina**? Nyala siap bantu! ✨`;
+Ada yang ingin kamu tanyakan lebih lanjut seputar mata kuliah, dosen, atau persiapan orientasi? Nyala siap bantu! ✨`;
 }
 
-// Handler for AI APIs
-export async function queryAICompanion(messages: ChatMessage[]): Promise<string> {
-  const geminiKey = process.env.GEMINI_API_KEY;
-  const groqKey = process.env.GROQ_API_KEY;
-  const openRouterKey = process.env.OPENROUTER_API_KEY;
+/**
+ * Core AI Companion Query Runner with Top-Level Cache, Fast Timeout & Zpi SDK
+ */
+export async function queryAICompanion(messages: ChatMessage[]): Promise<{ reply: string; cached: boolean }> {
+  const lastUserMessage = messages.filter((m) => m.role === "user").pop()?.content || "";
 
-  const lastUserMessage = messages.filter(m => m.role === "user").pop()?.content || "";
+  // 1. Top-Level Cache Lookup
+  const cachedResponse = getFromCache(lastUserMessage);
+  if (cachedResponse) {
+    return { reply: cachedResponse, cached: true };
+  }
 
-  // 1. Coba Gemini API jika API Key tersedia
-  if (geminiKey && geminiKey.trim() !== "") {
+  const zpiApiKey = process.env.ZPI_API_KEY;
+
+  // 2. Live Zpi AI SDK Call with Fast Timeout Race
+  if (zpiApiKey && zpiApiKey.trim() !== "") {
     try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
+      const client = new ZpiClient({ apiKey: zpiApiKey.trim() });
+
+      const formattedMessages = [
+        {
+          role: "system",
+          content: SYSTEM_PROMPT,
+        },
+        ...messages.slice(-6).map((m) => ({
+          role: m.role,
+          content: m.content,
+        })),
+      ];
+
+      const apiPromise = client.run(
+        "ai:z-ai",
+        "chat",
+        {
+          messages: formattedMessages,
+          stream: false,
+        },
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-            contents: messages.map(m => ({
-              role: m.role === "assistant" ? "model" : "user",
-              parts: [{ text: m.content }]
-            })),
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 800,
-            }
-          })
+          timeoutMs: 6500,
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) return text;
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Zpi timeout")), 6500)
+      );
+
+      const result: any = await Promise.race([apiPromise, timeoutPromise]);
+
+      let replyText = "";
+      if (result && typeof result === "object") {
+        if (Array.isArray(result.choices) && result.choices[0]?.message?.content) {
+          replyText = result.choices[0].message.content;
+        } else if (result.message?.content) {
+          replyText = result.message.content;
+        } else if (typeof result.response === "string") {
+          replyText = result.response;
+        } else if (typeof result.content === "string") {
+          replyText = result.content;
+        }
+      } else if (typeof result === "string") {
+        replyText = result;
       }
-    } catch (e) {
-      console.warn("Gemini API error, falling back:", e);
+
+      if (replyText && replyText.trim().length > 0) {
+        saveToCache(lastUserMessage, replyText.trim());
+        return { reply: replyText.trim(), cached: false };
+      }
+    } catch (err: any) {
+      console.warn("Zpi SDK notice (switching to smart knowledge base):", err?.message || err);
     }
   }
 
-  // 2. Coba Groq API jika API Key tersedia
-  if (groqKey && groqKey.trim() !== "") {
-    try {
-      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${groqKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            ...messages
-          ],
-          temperature: 0.7,
-          max_tokens: 800,
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const text = data.choices?.[0]?.message?.content;
-        if (text) return text;
-      }
-    } catch (e) {
-      console.warn("Groq API error, falling back:", e);
-    }
-  }
-
-  // 3. Coba OpenRouter jika API Key tersedia
-  if (openRouterKey && openRouterKey.trim() !== "") {
-    try {
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${openRouterKey}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://nyala.umkt.ac.id",
-          "X-Title": "Nyala Companion UMKT",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-flash-1.5-exp",
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            ...messages
-          ],
-          temperature: 0.7,
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const text = data.choices?.[0]?.message?.content;
-        if (text) return text;
-      }
-    } catch (e) {
-      console.warn("OpenRouter error, falling back:", e);
-    }
-  }
-
-  // Fallback: Smart Local Knowledge Engine
-  return generateLocalResponse(lastUserMessage);
+  // 3. Smart Local Knowledge Fallback
+  const localFallback = generateLocalResponse(lastUserMessage);
+  saveToCache(lastUserMessage, localFallback);
+  return { reply: localFallback, cached: false };
 }

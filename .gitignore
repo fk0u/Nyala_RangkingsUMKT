@@ -12,5 +12,7 @@ coverage/
 .cache/
 graphify-out/
 graphify-obsidian/
+.env*
+.env.local
 .agents/rules/*
 !.agents/rules/GEMINI.md

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="flameGrad" x1="50" y1="90" x2="50" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF2E00"/>
+      <stop offset="50%" stop-color="#FF5A1F"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+    <linearGradient id="innerGrad" x1="50" y1="85" x2="50" y2="35" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF9900"/>
+      <stop offset="100%" stop-color="#FEF08A"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer Flame Body -->
+  <path d="M50 10 C50 10, 78 35, 78 62 C78 77, 65 90, 50 90 C35 90, 22 77, 22 62 C22 35, 50 10, 50 10Z" fill="url(#flameGrad)"/>
+  <!-- Inner Flame Core -->
+  <path d="M50 35 C50 35, 68 52, 68 68 C68 78, 60 85, 50 85 C40 85, 32 78, 32 68 C32 52, 50 35, 50 35Z" fill="url(#innerGrad)"/>
+  <!-- Mascot Eyes -->
+  <circle cx="43" cy="62" r="3.5" fill="#0F172A"/>
+  <circle cx="57" cy="62" r="3.5" fill="#0F172A"/>
+  <circle cx="44.5" cy="60.5" r="1.2" fill="#FFFFFF"/>
+  <circle cx="58.5" cy="60.5" r="1.2" fill="#FFFFFF"/>
+  <!-- Mascot Smile -->
+  <path d="M46 68 Q50 72 54 68" stroke="#0F172A" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>
