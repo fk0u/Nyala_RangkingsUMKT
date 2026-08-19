@@ -19,9 +19,10 @@ import { useToast } from "@/context/ToastContext";
 interface AdminContactCardProps {
   compact?: boolean;
   filterId?: string;
+  contact?: AdminContact;
 }
 
-export default function AdminContactCard({ compact = false, filterId }: AdminContactCardProps) {
+export default function AdminContactCard({ compact = false, filterId, contact }: AdminContactCardProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isOpenNow, setIsOpenNow] = useState<boolean>(false);
   const [currentWitaTime, setCurrentWitaTime] = useState<string>("");
@@ -66,7 +67,9 @@ export default function AdminContactCard({ compact = false, filterId }: AdminCon
     setTimeout(() => setCopiedId(null), 2500);
   };
 
-  const contactsToDisplay = filterId 
+  const contactsToDisplay = contact 
+    ? [contact]
+    : filterId 
     ? OFFICIAL_CONTACTS.filter((c) => c.id === filterId)
     : OFFICIAL_CONTACTS;
 

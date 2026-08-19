@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { 
   PaperPlaneRight, 
   Sparkle, 
@@ -21,7 +23,6 @@ import {
 import MascotFlame from "@/components/MascotFlame";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import SkeletonLoader from "@/components/SkeletonLoader";
-import TypewriterText from "@/components/TypewriterText";
 import AdminHelpModal from "@/components/AdminHelpModal";
 import { useToast } from "@/context/ToastContext";
 import { OFFICIAL_LINKS, OFFICIAL_CONTACTS } from "@/lib/masta-data";
@@ -31,19 +32,17 @@ interface Message {
   role: "assistant" | "user";
   content: string;
   timestamp: string;
-  isStreaming?: boolean;
 }
 
 const QUICK_PROMPTS = [
   "Kontak & WhatsApp Admin UMKT?",
-  "Cara login di mahasiswa.umkt.ac.id?",
-  "Bagaimana alur resmi MASTA UMKT 2026?",
-  "Pengisian KRS Semester 1 untuk MABA?",
-  "Berapa batas minimal presensi kuliah?",
-  "Barang apa saja yang wajib disiapkan?",
-  "Tips mengatasi rasa gugup dan cemas?",
-  "Aturan On-Cam dan dresscode sesi Zoom?",
-  "Bagaimana cara bayar tagihan SPP?"
+  "Mata kuliah Semester 1 TI 2026?",
+  "Cara pengisian KRS di SIKAD?",
+  "Berapa batas minimal presensi?",
+  "Standar nilai kelulusan prodi TI?",
+  "Agenda Kalender Akademik 2026?",
+  "Ketentuan dresscode & on-cam Zoom?",
+  "Info beasiswa KIP-Kuliah & Tahfidz?"
 ];
 
 export default function CompanionPage() {
@@ -51,9 +50,16 @@ export default function CompanionPage() {
     {
       id: "welcome-1",
       role: "assistant",
-      content: "Halo Sobat MABA UMKT 2026! Aku **Nyala**, sahabat virtual perjalanan MABA-mu!\n\nAda hal yang ingin kamu tanyakan seputar persiapan MASTA, portal akademik SIKAD (mahasiswa.umkt.ac.id), KRS, tata tertib, atau tips perkuliahan di UMKT? Tanyakan apa saja, Nyala siap membantumu! Jika kamu memerlukan bantuan khusus atau berkas resmi, kamu juga bisa langsung terhubung ke **Admin PMB** atau **Biro Kemahasiswaan (Gedung C Lt. 1)** melalui tombol di bawah.",
+      content: `Halo Sobat MABA UMKT 2026! Aku **Nyala**, sahabat virtual perjalanan MABA-mu! 🔥
+
+Ada yang ingin kamu tanyakan seputar:
+- 📋 **KRS & SIKAD** ([mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/))
+- 🎓 **Kurikulum & Perkuliahan TI 2026**
+- 🏛️ **Kontak Admin PMB & Biro Kemahasiswaan (Gedung C Lt. 1)**
+- 🌟 **Beasiswa & Rangkaian MASTA 2026**
+
+Tanyakan apa saja, Nyala siap memberikan jawaban akurat & terverifikasi!`,
       timestamp: "Baru saja",
-      isStreaming: false,
     },
   ]);
   const [input, setInput] = useState("");
@@ -100,106 +106,109 @@ export default function CompanionPage() {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Gagal mengambil respon");
+        throw new Error(data.error || "Gagal memproses pesan.");
       }
 
-      const data = await response.json();
-      const botReply: Message = {
+      const botMessage: Message = {
         id: `bot-${Date.now()}`,
         role: "assistant",
-        content: data.reply || "Halo Sobat MABA! Nyala siap bantu seputar MASTA & SIKAD UMKT.",
+        content: data.reply || "Maaf, Nyala belum dapat memproses jawaban tersebut.",
         timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
-        isStreaming: true,
       };
 
-      setMessages((prev) => [...prev, botReply]);
-    } catch (error) {
-      console.error(error);
-      const fallbackReply: Message = {
-        id: `bot-${Date.now()}`,
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (err: any) {
+      console.error("Chat error:", err);
+      toast.error("Gagal terhubung ke AI. Silakan coba kembali.", "Kendala Jaringan");
+      
+      const fallbackMsg: Message = {
+        id: `bot-fallback-${Date.now()}`,
         role: "assistant",
-        content: "Halo Sobat! Jika ada kendala koneksi atau butuh konfirmasi langsung terkait administrasi, kamu dapat menghubungi **Admin PMB (+62 812-3001-7008)** atau **Biro Kemahasiswaan UMKT Gedung C Lt. 1 (082250878843)** ya!",
+        content: "Mohon maaf, koneksi ke server sedang mengalami kendala. Jika kamu butuh bantuan darurat, silakan langsung hubungi WhatsApp resmi **Biro Kemahasiswaan Gedung C Lt. 1 di [0822-5087-8843](https://wa.me/6282250878843)** atau **Admin PMB di [+62 812-3001-7008](https://wa.me/6281230017008)** ya!",
         timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
-        isStreaming: false,
       };
-      setMessages((prev) => [...prev, fallbackReply]);
+      setMessages((prev) => [...prev, fallbackMsg]);
     } finally {
       setIsLoading(false);
-      setTimeout(() => inputRef.current?.focus(), 100);
+      inputRef.current?.focus();
     }
   };
 
-  const handleCopyMessage = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    toast.success("Pesan berhasil disalin ke clipboard!", "Tersalin");
-    setTimeout(() => {
-      setCopiedId(null);
-    }, 2000);
+  const handleClearHistory = () => {
+    if (confirm("Hapus seluruh riwayat percakapan?")) {
+      setMessages([
+        {
+          id: `welcome-${Date.now()}`,
+          role: "assistant",
+          content: "Riwayat telah dibersihkan. Halo lagi! Apa yang bisa Nyala bantu hari ini?",
+          timestamp: "Baru saja",
+        },
+      ]);
+      toast.info("Riwayat chat berhasil dibersihkan.", "Chat Direset");
+    }
   };
 
-  const handleClearChat = () => {
-    setMessages([
-      {
-        id: `welcome-${Date.now()}`,
-        role: "assistant",
-        content: "Percakapan baru telah dimulai! Ada yang ingin kamu diskusikan seputar MASTA atau SIKAD UMKT 2026?",
-        timestamp: "Baru saja",
-        isStreaming: false,
-      },
-    ]);
-    toast.info("Riwayat obrolan telah dibersihkan.", "Reset Chat");
+  const handleCopyMessage = (content: string, id: string) => {
+    navigator.clipboard.writeText(content);
+    setCopiedId(id);
+    toast.success("Teks pesan disalin ke papan klip.", "Tersalin");
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6">
       
-      {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800">
-        <div className="flex items-center gap-3.5">
-          <MascotFlame size="md" mood={isLoading ? "thinking" : "happy"} />
+      {/* Header Info */}
+      <div className="glass-card rounded-3xl p-6 border border-navy-200/60 dark:border-navy-800 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <MascotFlame size="md" mood={isLoading ? "thinking" : "happy"} />
+            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white dark:border-navy-900" />
+          </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-extrabold text-navy-900 dark:text-white">
+              <h1 className="text-xl sm:text-2xl font-black text-navy-900 dark:text-white">
                 Tanya Nyala AI
               </h1>
-              <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-nyala-500 text-white shadow-xs">
-                Virtual Companion
+              <span className="px-2.5 py-0.5 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-bold font-mono">
+                v2.0 Markdown
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-400">
-              Teman virtual yang siap membimbing MASTA & sistem portal mahasiswa.umkt.ac.id
+            <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 mt-0.5">
+              Sahabat AI resmi MABA UMKT 2026. Faktual, cerdas, dan responsif.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-center">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
           <button
             onClick={() => setIsAdminModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-bold transition-colors"
+            title="Hubungi Admin Resmi UMKT"
           >
-            <Headset weight="bold" className="w-3.5 h-3.5" />
-            <span>Kontak Admin UMKT</span>
+            <Headset weight="bold" className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span>Kontak Admin</span>
           </button>
 
           <button
-            onClick={handleClearChat}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-navy-600 dark:text-navy-400 hover:text-rose-600 dark:hover:text-rose-400 bg-navy-100 dark:bg-navy-800 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
-            title="Reset Obrolan"
+            onClick={handleClearHistory}
+            className="p-2 rounded-xl text-navy-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+            title="Bersihkan Percakapan"
           >
-            <Trash weight="bold" className="w-3.5 h-3.5" />
-            <span>Reset</span>
+            <Trash weight="bold" className="w-5 h-5" />
           </button>
         </div>
       </div>
 
-      {/* Admin Fast Escalation Strip */}
-      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2 text-navy-800 dark:text-navy-200">
+      {/* Fast Admin Escalation Banner */}
+      <div className="rounded-2xl p-3.5 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/20 border border-emerald-200 dark:border-emerald-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-emerald-900 dark:text-emerald-200">
+        <div className="flex items-center gap-2">
           <Headset weight="bold" className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
           <span>
-            <strong>AI belum bisa menjawab pertanyaanmu?</strong> Tim Admin Resmi UMKT siap melayani via WhatsApp:
+            <strong>Perlu konfirmasi berkas atau dispensasi?</strong> Admin Resmi UMKT siap melayani via WhatsApp:
           </span>
         </div>
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
@@ -245,34 +254,65 @@ export default function CompanionPage() {
                 >
                   {/* Bot Avatar */}
                   {isBot && (
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-nyala-500/15 border border-nyala-500/30 flex items-center justify-center text-nyala-600 dark:text-nyala-400">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-nyala-500/15 border border-nyala-500/30 flex items-center justify-center text-nyala-600 dark:text-nyala-400 mt-1">
                       <Sparkle weight="fill" className="w-4 h-4 text-nyala-500" />
                     </div>
                   )}
 
-                  {/* Message Bubble */}
+                  {/* Message Bubble with ReactMarkdown */}
                   <div
-                    className={`max-w-[85%] sm:max-w-[78%] rounded-2xl p-4 sm:p-5 text-sm sm:text-base leading-relaxed relative ${
+                    className={`max-w-[88%] sm:max-w-[82%] rounded-2xl p-4 sm:p-5 text-xs sm:text-sm leading-relaxed relative ${
                       isBot
                         ? "bg-cream-100 dark:bg-navy-800 text-navy-900 dark:text-slate-100 border border-amber-200/60 dark:border-navy-700 shadow-sm"
                         : "bg-navy-900 dark:bg-nyala-600 text-white shadow-md font-normal rounded-tr-none"
                     }`}
                   >
-                    <div className="whitespace-pre-wrap font-sans">
-                      {isBot && message.isStreaming ? (
-                        <TypewriterText
-                          text={message.content}
-                          speed={8}
-                          onComplete={() => {
-                            setMessages((prev) =>
-                              prev.map((m) =>
-                                m.id === message.id ? { ...m, isStreaming: false } : m
-                              )
-                            );
+                    <div className="font-sans prose prose-xs dark:prose-invert max-w-none text-xs sm:text-sm">
+                      {isBot ? (
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
+                            strong: ({ children }) => <strong className="font-extrabold text-navy-900 dark:text-white">{children}</strong>,
+                            ul: ({ children }) => <ul className="list-disc pl-4 my-2 space-y-1">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal pl-4 my-2 space-y-1">{children}</ol>,
+                            li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                            h1: ({ children }) => <h1 className="text-base font-black mt-3 mb-1.5 text-navy-900 dark:text-white">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-sm font-bold mt-2.5 mb-1 text-navy-900 dark:text-white">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-xs font-bold mt-2 mb-1 text-navy-900 dark:text-white">{children}</h3>,
+                            table: ({ children }) => (
+                              <div className="overflow-x-auto my-3 rounded-lg border border-navy-200 dark:border-navy-700">
+                                <table className="w-full text-xs text-left border-collapse">{children}</table>
+                              </div>
+                            ),
+                            th: ({ children }) => <th className="px-3 py-2 bg-navy-100/70 dark:bg-navy-900 font-bold border-b border-navy-200 dark:border-navy-700">{children}</th>,
+                            td: ({ children }) => <td className="px-3 py-1.5 border-b border-navy-100 dark:border-navy-800">{children}</td>,
+                            code: ({ children }) => (
+                              <code className="px-1.5 py-0.5 rounded bg-navy-200/60 dark:bg-navy-900 font-mono text-[11px] text-nyala-600 dark:text-nyala-300">
+                                {children}
+                              </code>
+                            ),
+                            a: ({ href, children }) => (
+                              <a
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-nyala-600 dark:text-nyala-400 font-bold underline hover:text-nyala-700 inline-flex items-center gap-0.5"
+                              >
+                                {children}
+                              </a>
+                            ),
+                            blockquote: ({ children }) => (
+                              <blockquote className="border-l-4 border-nyala-500 pl-3 my-2 text-xs italic text-navy-600 dark:text-navy-300 bg-nyala-500/5 py-1 rounded-r">
+                                {children}
+                              </blockquote>
+                            ),
                           }}
-                        />
+                        >
+                          {message.content}
+                        </ReactMarkdown>
                       ) : (
-                        message.content
+                        <div className="whitespace-pre-wrap">{message.content}</div>
                       )}
                     </div>
 
@@ -304,7 +344,7 @@ export default function CompanionPage() {
 
                   {/* User Avatar */}
                   {!isBot && (
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-navy-800 dark:bg-navy-700 text-white flex items-center justify-center">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-navy-800 dark:bg-navy-700 text-white flex items-center justify-center mt-1">
                       <User weight="bold" className="w-4 h-4" />
                     </div>
                   )}
@@ -318,74 +358,76 @@ export default function CompanionPage() {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-2"
+              className="flex items-start gap-3 justify-start"
             >
-              <SkeletonLoader variant="chat" />
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-nyala-500/15 border border-nyala-500/30 flex items-center justify-center text-nyala-500 animate-pulse">
+                <Sparkle weight="fill" className="w-4 h-4" />
+              </div>
+              <div className="bg-cream-100 dark:bg-navy-800 rounded-2xl p-4 border border-amber-200/60 dark:border-navy-700 shadow-sm max-w-sm">
+                <SkeletonLoader count={2} />
+              </div>
             </motion.div>
           )}
 
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick Suggested Prompts Bar */}
-        <div className="px-4 py-2 border-t border-navy-100 dark:border-navy-800 bg-white/50 dark:bg-navy-900/50">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-            <span className="text-[11px] font-bold text-navy-500 dark:text-navy-400 whitespace-nowrap flex items-center gap-1">
-              <Lightning weight="fill" className="w-3 h-3 text-nyala-500" />
-              Tanya Cepat:
-            </span>
-            {QUICK_PROMPTS.map((prompt, i) => (
-              <button
-                key={i}
-                onClick={() => handleSendMessage(prompt)}
-                disabled={isLoading}
-                className="whitespace-nowrap text-xs px-3 py-1.5 rounded-full bg-white dark:bg-navy-800 text-navy-700 dark:text-navy-300 border border-navy-200/70 dark:border-navy-700 hover:border-nyala-500 hover:text-nyala-600 dark:hover:text-nyala-400 transition-all active:scale-95 shadow-xs"
-              >
-                {prompt}
-              </button>
-            ))}
-          </div>
+        {/* Quick Prompts Carousel */}
+        <div className="px-4 py-2 border-t border-navy-100 dark:border-navy-800/60 bg-white/50 dark:bg-navy-900/50 flex items-center gap-2 overflow-x-auto scrollbar-none">
+          <span className="text-[11px] font-bold text-navy-400 dark:text-navy-500 uppercase tracking-wider flex items-center gap-1 flex-shrink-0">
+            <Lightning weight="fill" className="w-3 h-3 text-nyala-500" />
+            <span>Saran:</span>
+          </span>
+          {QUICK_PROMPTS.map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => handleSendMessage(prompt)}
+              disabled={isLoading}
+              className="text-xs px-3 py-1.5 rounded-full bg-white dark:bg-navy-800 border border-navy-200/80 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:border-nyala-500 hover:text-nyala-600 dark:hover:text-nyala-400 whitespace-nowrap transition-all shadow-xs disabled:opacity-50"
+            >
+              {prompt}
+            </button>
+          ))}
         </div>
 
-        {/* Input Bar */}
-        <div className="p-3 sm:p-4 bg-white dark:bg-navy-900 border-t border-navy-200/60 dark:border-navy-800">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-            className="flex items-center gap-2 sm:gap-3"
+        {/* Input Form Box */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendMessage();
+          }}
+          className="p-3 sm:p-4 border-t border-navy-200/80 dark:border-navy-800 bg-white dark:bg-navy-950 flex items-center gap-2"
+        >
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Tanyakan hal seputar MASTA, SIKAD, KRS, kurikulum TI, atau jam buka admin..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            disabled={isLoading}
+            className="flex-1 px-4 py-2.5 rounded-2xl bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-xs sm:text-sm text-navy-900 dark:text-white placeholder-navy-400 focus:outline-none focus:ring-2 focus:ring-nyala-500 focus:border-transparent transition-all"
+          />
+
+          <button
+            type="submit"
+            disabled={isLoading || !input.trim()}
+            className="p-2.5 sm:px-5 sm:py-2.5 rounded-2xl bg-nyala-600 hover:bg-nyala-700 disabled:opacity-40 text-white font-bold text-xs sm:text-sm shadow-md shadow-nyala-600/20 transition-all flex items-center justify-center gap-2 flex-shrink-0"
           >
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Tanyakan seputar MASTA, KRS, login SIKAD, atau kontak admin..."
-              disabled={isLoading}
-              className="flex-1 bg-navy-50 dark:bg-navy-800 text-navy-900 dark:text-white placeholder-navy-400 dark:placeholder-navy-500 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-nyala-500 border border-navy-200/60 dark:border-navy-700 transition-all"
-            />
-            <button
-              type="submit"
-              disabled={!input.trim() || isLoading}
-              className="p-3 sm:px-5 sm:py-3 rounded-2xl bg-nyala-500 hover:bg-nyala-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold transition-all shadow-fire flex items-center gap-2 active:scale-95"
-            >
-              <PaperPlaneRight weight="fill" className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm">Kirim</span>
-            </button>
-          </form>
-        </div>
+            <span className="hidden sm:inline">Kirim</span>
+            <PaperPlaneRight weight="bold" className="w-4 h-4" />
+          </button>
+        </form>
 
       </div>
 
-      {/* Admin Help Modal Trigger */}
-      <AdminHelpModal 
-        isOpen={isAdminModalOpen} 
-        onClose={() => setIsAdminModalOpen(false)} 
-      />
+      {/* Backlinks */}
+      <BacklinkBanner />
 
-      {/* Verified Official Links Footer in Companion */}
-      <BacklinkBanner compact />
+      {/* Official Admin Help Modal */}
+      <AdminHelpModal
+        isOpen={isAdminModalOpen}
+        onClose={() => setIsAdminModalOpen(false)}
+      />
 
     </div>
   );

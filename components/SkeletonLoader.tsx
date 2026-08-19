@@ -6,13 +6,16 @@ interface SkeletonProps {
   className?: string;
   variant?: "text" | "rect" | "circle" | "card" | "chat" | "timeline";
   lines?: number;
+  count?: number;
 }
 
 export default function SkeletonLoader({
   className = "",
   variant = "rect",
-  lines = 3,
+  lines,
+  count,
 }: SkeletonProps) {
+  const lineCount = count ?? lines ?? 3;
   // Base shimmering effect class
   const shimmer =
     "relative overflow-hidden bg-navy-200/50 dark:bg-navy-800/60 before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.8s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/30 dark:before:via-white/10 before:to-transparent";
@@ -24,11 +27,11 @@ export default function SkeletonLoader({
   if (variant === "text") {
     return (
       <div className={`space-y-2 w-full ${className}`}>
-        {Array.from({ length: lines }).map((_, i) => (
+        {Array.from({ length: lineCount }).map((_, i) => (
           <div
             key={i}
             className={`h-3.5 rounded-lg ${shimmer} ${
-              i === lines - 1 ? "w-3/4" : "w-full"
+              i === lineCount - 1 ? "w-3/4" : "w-full"
             }`}
           />
         ))}

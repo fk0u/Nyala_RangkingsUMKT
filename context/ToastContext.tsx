@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, WarningCircle, Info, Sparkle, X } from "@phosphor-icons/react";
 
-export type ToastType = "success" | "info" | "warning" | "nyala";
+export type ToastType = "success" | "info" | "warning" | "nyala" | "error";
 
 export interface ToastMessage {
   id: string;
@@ -19,6 +19,7 @@ interface ToastContextType {
   success: (message: string, title?: string) => void;
   info: (message: string, title?: string) => void;
   warning: (message: string, title?: string) => void;
+  error: (message: string, title?: string) => void;
   nyala: (message: string, title?: string) => void;
 }
 
@@ -48,6 +49,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const success = useCallback((msg: string, title?: string) => showToast(msg, "success", title), [showToast]);
   const info = useCallback((msg: string, title?: string) => showToast(msg, "info", title), [showToast]);
   const warning = useCallback((msg: string, title?: string) => showToast(msg, "warning", title), [showToast]);
+  const error = useCallback((msg: string, title?: string) => showToast(msg, "error", title), [showToast]);
   const nyala = useCallback((msg: string, title?: string) => showToast(msg, "nyala", title), [showToast]);
 
   const getIcon = (type?: ToastType) => {
@@ -56,6 +58,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         return <CheckCircle weight="fill" className="w-5 h-5 text-emerald-500" />;
       case "warning":
         return <WarningCircle weight="fill" className="w-5 h-5 text-amber-500" />;
+      case "error":
+        return <WarningCircle weight="fill" className="w-5 h-5 text-rose-500" />;
       case "nyala":
         return <Sparkle weight="fill" className="w-5 h-5 text-nyala-500 animate-pulse" />;
       default:
@@ -64,7 +68,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ToastContext.Provider value={{ showToast, success, info, warning, nyala }}>
+    <ToastContext.Provider value={{ showToast, success, info, warning, error, nyala }}>
       {children}
 
       {/* Floating Toasts Viewport */}

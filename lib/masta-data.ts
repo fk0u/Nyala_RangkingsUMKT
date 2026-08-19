@@ -75,14 +75,16 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  category: "Adaptasi & Rantau" | "Akademik & SIKAD" | "Beasiswa" | "Organisasi & UKM" | "Teknis MASTA" | "Fasilitas Kampus";
+  category: "Adaptasi & Rantau" | "Akademik & SIKAD" | "Beasiswa" | "Organisasi & UKM" | "Teknis MASTA" | "Fasilitas Kampus" | "Berita Kampus";
   readTime: string;
   author: string;
   authorRole: string;
   date: string;
+  coverImage?: string;
   tags: string[];
   content: string;
   keyTakeaways: string[];
+  sourceUrl?: string;
 }
 
 export const OFFICIAL_LINKS = {
@@ -157,6 +159,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: "Tim Kemahasiswaan & BIMA UMKT",
     authorRole: "Biro Kemahasiswaan",
     date: "18 Agustus 2026",
+    coverImage: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80",
     tags: ["Rantau", "Kost Samarinda", "Biaya Hidup", "Tips Mahasiswa"],
     content: `
 Memulai masa perkuliahan di kota baru seringkali memicu rasa cemas sekaligus antusias. Bagi kalian mahasiswa rantau yang baru pertama kali menginjakkan kaki di Samarinda untuk berkuliah di **Universitas Muhammadiyah Kalimantan Timur (UMKT)**, berikut adalah panduan praktis agar adaptasi kalian berjalan lancar dan hemat.
@@ -195,6 +198,7 @@ Perubahan cuaca di Samarinda yang cukup dinamis menuntut hidrasi yang baik. Sela
     author: "Abdul Rahim, M.Kom",
     authorRole: "Dosen Program Studi TI",
     date: "17 Agustus 2026",
+    coverImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
     tags: ["SIKAD", "KRS Online", "IPK 4.0", "Teknik Belajar"],
     content: `
 Banyak mahasiswa baru mengira semester 1 adalah waktu untuk santai. Faktanya, **nilai di semester 1 adalah fondasi psikologis dan akademis paling krusial**. Indeks Prestasi Semester (IPS) awal menentukan apakah kalian berhak mengambil beban maksimal 24 SKS di semester berikutnya untuk lulus 3,5 tahun!
@@ -237,6 +241,7 @@ Ingat, di Program Studi Teknologi Informasi UMKT:
     author: "Biro Kemahasiswaan & Alumni (BIMA)",
     authorRole: "Unit Pengelola Beasiswa",
     date: "16 Agustus 2026",
+    coverImage: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80",
     tags: ["Beasiswa", "KIP Kuliah", "BIMA UMKT", "Tahfidz"],
     content: `
 Universitas Muhammadiyah Kalimantan Timur berkomitmen memberikan akses pendidikan tinggi yang inklusif melalui berbagai skema beasiswa penuh maupun parsial bagi mahasiswa berprestasi dan berdedikasi.
@@ -273,6 +278,7 @@ Seluruh administrasi beasiswa dikoordinasikan secara terpadu di:
     author: "Presidium BEM UMKT",
     authorRole: "Lembaga Eksekutif Mahasiswa",
     date: "15 Agustus 2026",
+    coverImage: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=80",
     tags: ["UKM", "HIMATIF", "Organisasi", "Kepemimpinan"],
     content: `
 Kuliah bukan hanya soal ruang kelas dan nilai di transkrip. Dunia industri di tahun 2026 sangat mengapresiasi kandidat yang memiliki kemampuan kepemimpinan, komunikasi, dan kerja tim yang terasah nyata di organisasi kampus.
@@ -313,6 +319,7 @@ Seluruh UKM akan membuka pendaftaran anggota baru pada **Sesi UKM Expo di Tahap 
     author: "Panitia Pelaksana MASTA 2026",
     authorRole: "Divisi Teknis & Acara",
     date: "14 Agustus 2026",
+    coverImage: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=1200&q=80",
     tags: ["MASTA 2026", "Zoom Meeting", "Dresscode", "Tata Tertib"],
     content: `
 Agar partisipasi kalian di Masa Ta’aruf (MASTA) UMKT 2026 berjalan mulus tanpa teguran dari panitia pendamping gugus, ikuti panduan teknis wajib berikut ini.
@@ -352,6 +359,7 @@ Jika mengalami mati listrik atau kendala teknis mendadak, segera hubungi pendamp
     author: "Tim Humas & Protokoler UMKT",
     authorRole: "Humas Universitas",
     date: "13 Agustus 2026",
+    coverImage: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=80",
     tags: ["Fasilitas", "Perpustakaan", "Laboratorium Komputer", "Kampus Juanda"],
     content: `
 Universitas Muhammadiyah Kalimantan Timur terus berinvestasi menghadirkan fasilitas akademik dan non-akademik berstandar modern untuk menunjang kenyamanan belajar mahasiswa.

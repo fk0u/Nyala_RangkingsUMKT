@@ -209,8 +209,8 @@ export default function ChecklistPage() {
 
           <div className="sm:col-span-4 flex justify-center sm:justify-end">
             <MascotFlame 
-              size="lg" 
-              mood={progressPercent === 100 ? "cheering" : progressPercent >= 50 ? "excited" : "happy"} 
+              size="xl" 
+              mood={progressPercent === 100 ? "cheering" : "withClipboard"} 
             />
           </div>
 

@@ -37,6 +37,7 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: "nav-home", title: "Beranda Utama", desc: "Hero, countdown timer, dan ringkasan fitur Nyala", category: "Navigasi", href: "/", icon: Sparkle },
   { id: "nav-ai", title: "Tanya Nyala AI", desc: "Virtual companion cerdas seputar MASTA & perkuliahan", category: "Navigasi", href: "/companion", icon: Sparkle },
   { id: "nav-blog", title: "Blog & Artikel Panduan MABA", desc: "Kumpulan artikel tips adaptasi, beasiswa, kost, & MASTA 2026", category: "Blog & Tips", href: "/blog", icon: Newspaper },
+  { id: "nav-admin-blog", title: "Dashboard Admin & Scraper Blog", desc: "Kelola artikel blog dan tarik berita resmi dari portal UMKT", category: "Blog & Tips", href: "/admin/blog", icon: Newspaper },
   { id: "nav-sikad", title: "Panduan Portal SIKAD", desc: "Simulasi 1:1 mahasiswa.umkt.ac.id, login NIM, KRS, & tagihan", category: "SIKAD UMKT", href: "/panduan-sikad", icon: Laptop },
   { id: "nav-ti", title: "Akademik & Karir TI UMKT 2026", desc: "Kurikulum Semester 1-4, dosen tetap, standar nilai, & gaji IT", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code },
   { id: "nav-health", title: "Health Check & Mood Tracker", desc: "Pantau kesiapan tidur, nutrisi, hidrasi, & kestabilan mental", category: "Navigasi", href: "/health-check", icon: Heartbeat },

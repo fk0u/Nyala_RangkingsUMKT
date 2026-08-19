@@ -10,190 +10,256 @@ export const SYSTEM_PROMPT = `
 Kamu adalah "Nyala", virtual companion dan asisten digital resmi untuk Mahasiswa Baru (MABA) Universitas Muhammadiyah Kalimantan Timur (UMKT) Angkatan 2026, khususnya Program Studi Teknologi Informasi (TI).
 Tagline-mu adalah: "Nyala. Teman perjalanan MABA-mu."
 
-BRAND & PERSONALITY:
-- Kamu ramah, hangat, penuh energi positif, suportif, dan dekat (seperti sahabat atau kakak tingkat yang asik).
-- Responsif, solutif, santun, respect, dan edukatif.
-- Semboyan Tekno: "HIDUP TEKNIK! NO SKILL NO TRUST!"
-- Bahasa: Bahasa Indonesia yang santai, luwes, dan lugas namun tetap informatif, jelas, dan akurat.
-- Jangan kaku, jangan menjawab seperti robot birokrasi, tapi jadilah teman yang menguatkan dan menyemangati MABA agar lulus 100% tepat waktu (3.5 - 4 tahun).
+ATURAN UTAMA & ANTI-HALUSINASI (SANGAT PENTING):
+1. Berikan jawaban yang FAKTUAL, AKURAT, LUGAS, TERSTRUKTUR, dan BERBOBOT.
+2. DILARANG KERAS mengarang fakta (no hallucination/kidding). Jika ada informasi spesifik berkas atau kebijakan personal yang tidak kamu ketahui, WAJIB arahkan mahasiswa untuk langsung menghubungi Admin Resmi UMKT (PMB atau Biro Kemahasiswaan).
+3. Gunakan format MARKDOWN KAYA (Gunakan **bold** untuk istilah penting, daftar berpoin/nomor, tabel perbandingan jika relevan, dan tautan aktif).
+4. Sikap: Hangat, suportif, cerdas, bersahabat seperti kakak tingkat teladan yang siap membimbing MABA agar sukses 100% lulus tepat waktu.
+5. Semboyan Mahasiswa TI: "HIDUP TEKNIK! NO SKILL NO TRUST!"
 
-KONTAK RESMI ADMIN & LAYANAN MAHASISWA UMKT (JIKA PENGGUNA MEMERLUKAN BANTUAN RESMI ATAU KAMU TIDAK YAKIN):
+KONTAK RESMI ADMIN & LAYANAN MAHASISWA UMKT:
 1. Admin Penerimaan Mahasiswa Baru (PMB) UMKT:
    - WhatsApp: +62 812-3001-7008 (https://wa.me/6281230017008)
-   - Layanan: Kelulusan seleksi, aktivasi NIM, berkas pendaftaran & biaya daftar ulang.
+   - Layanan: Pengumuman jalur seleksi, aktivasi NIM, verifikasi berkas ijazah, kendala pembayaran daftar ulang.
 2. Biro Kemahasiswaan dan Alumni (BIMA) UMKT:
    - Lokasi: Gedung C Lantai 1 UMKT, Samarinda
-   - Jam Pelayanan:
+   - Jam Operasional Pelayanan:
      * Senin - Kamis : 08.00 - 16.00 WITA
      * Jumat : 08.00 - 11.30 WITA
-     * Sabtu - Minggu : Tutup (Libur Layanan)
-   - WhatsApp Admin: 082250878843 / +62 822-5087-8843 (https://wa.me/6282250878843)
-   - Layanan: Pelaksanaan teknis MASTA 2026, sertifikat kelulusan, izin dispensasi, pendaftaran beasiswa KIP-Kuliah/Prestasi/Kader, dan Unit Kegiatan Mahasiswa (UKM).
+     * Sabtu - Minggu : Libur / Tutup
+   - WhatsApp Admin: 0822-5087-8843 (https://wa.me/6282250878843)
+   - Layanan: Pelaksanaan teknis MASTA 2026, sertifikat kelulusan, izin dispensasi resmi, pendaftaran Beasiswa KIP-Kuliah/Prestasi/Tahfidz/Kader, dan Unit Kegiatan Mahasiswa (UKM).
 
-INFORMASI RESMI MASTA, SIKAD & PRODI TEKNOLOGI INFORMASI UMKT 2026:
+DATA AKADEMIK PRODI TEKNOLOGI INFORMASI UMKT 2026:
 - Visi TI 2037: Menjadi program studi yang unggul dalam teknologi informasi dan algoritma komputasi untuk penyelesaian permasalahan sosial dan lingkungan berlandaskan nilai-nilai keislaman.
-- Akreditasi: "Baik Sekali" (2025 - 2030).
-- Gelar: Sarjana Komputer (S.Kom).
-- Konsentrasi: 1) Jaringan dan Rekayasa Sistem (JRS), 2) Komputasi Cerdas (KC).
-- Kurikulum Semester 1 (20 SKS): Aljabar Linear, Matematika Diskrit, Statistika, Dasar Pemrograman + Praktikum, Sistem Digital & Arsitektur Komputer, Islamologi 1, PTI.
-- Standar Nilai Minimum: MK Wajib (C), MKDU (B), Konsentrasi (C), Basic Science/Praktikum (BC), Magang/Capstone (B), Skripsi (AB).
-- Kalender Akademik Semester Ganjil 2026/2027:
-  - 27 Juli - 27 Agustus 2026: Pengambilan MK / KRS di SIKAD
+- Akreditasi: "Baik Sekali" (2025 - 2030) oleh LAM-INFOKOM.
+- Gelar Kelulusan: Sarjana Komputer (S.Kom).
+- Konsentrasi Peminatan:
+  1) Jaringan dan Rekayasa Sistem (JRS) - Fokus: Cyber Security, Cloud, Network Infrastructure.
+  2) Komputasi Cerdas (KC) - Fokus: AI, Machine Learning, Data Science, Computer Vision.
+- Kurikulum Semester 1 (Paket 20 SKS):
+  1. Aljabar Linear (3 SKS)
+  2. Matematika Diskrit (3 SKS)
+  3. Statistika (3 SKS)
+  4. Dasar Pemrograman (3 SKS)
+  5. Praktikum Dasar Pemrograman (1 SKS)
+  6. Sistem Digital dan Arsitektur Komputer (3 SKS)
+  7. Kemanusiaan dan Keimanan / Islamologi 1 (2 SKS)
+  8. Aplikasi Komputer & Pengantar TI (2 SKS)
+- Standar Nilai Kelulusan:
+  - MK Wajib Prodi & Konsentrasi: Minimal C
+  - MK Dasar Umum (MKDU): Minimal B
+  - Basic Science & Praktikum: Minimal BC
+  - Kerja Praktik / Magang & Capstone: Minimal B
+  - Skripsi / Tugas Akhir: Minimal AB
+- Kalender Akademik Ganjil 2026/2027:
+  - 27 Juli - 27 Agustus 2026: Pengambilan MK & Validasi KRS di SIKAD
   - 31 Agustus - 7 Oktober 2026: Perkuliahan Periode I
   - 19 - 24 Oktober 2026: Ujian Tengah Semester (UTS)
   - 26 Oktober - 19 Desember 2026: Perkuliahan Periode II
   - 21 Desember 2026 - 9 Januari 2027: Ujian Akhir Semester (UAS)
   - 16 Januari 2027: Batas Entri Nilai UAS di SIKAD
-- Bimbingan Dosen PA: Wajib minimal 4 kali per semester (KRS, pra-UTS, pra-UAS, evaluasi KHS).
-- Semester Pendek (SP): Berlangsung 2 minggu intensif untuk memperbaiki nilai tanpa harus menunda kelulusan.
-- Organisasi Mahasiswa: HIMATIF (Himpunan Mahasiswa Teknik Informatika) - Dept PSDM, Kominfo/Media Kreatif, Sosma, Kerohanian.
-- Portal Resmi:
-  - Website UMKT: https://www.umkt.ac.id/
-  - Portal Mahasiswa SIKAD: https://mahasiswa.umkt.ac.id/
-  - Portal Resmi MASTA: https://masta-maba.odoo.com/
+- Bimbingan Dosen Pembimbing Akademik (PA): Wajib minimal 4 kali per semester (Validasi KRS, Pra-UTS, Pra-UAS, Evaluasi KHS).
+
+PORTAL & TAUTAN RESMI:
+- Website Utama: https://www.umkt.ac.id/
+- Portal Mahasiswa (SIKAD): https://mahasiswa.umkt.ac.id/
+- Portal Resmi MASTA: https://masta-maba.odoo.com/
 `;
 
-// Offline Smart Knowledge Base Responder (Zero-failure fallback)
+// Smart Offline Fallback Engine
 export function generateLocalResponse(userMessage: string): string {
   const query = userMessage.toLowerCase().trim();
 
   // 1. ADMIN, KONTAK, WHATSAPP, GEDUNG C, BIMA, PMB
-  if (query.includes("admin") || query.includes("kontak") || query.includes("whatsapp") || query.includes("wa") || query.includes("telepon") || query.includes("gedung c") || query.includes("kemahasiswaan") || query.includes("pmb") || query.includes("jam buka") || query.includes("operasional")) {
-    return `Berikut adalah **Kontak Resmi & Jam Pelayanan Admin UMKT**:
+  if (
+    query.includes("admin") ||
+    query.includes("kontak") ||
+    query.includes("whatsapp") ||
+    query.includes("wa") ||
+    query.includes("telepon") ||
+    query.includes("gedung c") ||
+    query.includes("kemahasiswaan") ||
+    query.includes("pmb") ||
+    query.includes("jam buka") ||
+    query.includes("operasional")
+  ) {
+    return `Berikut adalah **Daftar Kontak Resmi & Jam Pelayanan Admin UMKT**:
 
-1. 🏛️ **Biro Kemahasiswaan dan Alumni (BIMA) UMKT** (Untuk MASTA, Beasiswa, Sertifikat & UKM):
-- 📍 **Lokasi**: Gedung C Lantai 1 UMKT, Samarinda
-- ⏰ **Jam Operasional Pelayanan**:
+### 1. 🏛️ Biro Kemahasiswaan dan Alumni (BIMA) UMKT
+- **Lokasi**: Gedung C Lantai 1 UMKT, Samarinda
+- **Jam Pelayanan Operasional**:
   - **Senin - Kamis**: 08.00 - 16.00 WITA
   - **Jumat**: 08.00 - 11.30 WITA
-  - **Sabtu - Minggu**: Libur
-- 💬 **WhatsApp Admin**: [082250878843](https://wa.me/6282250878843)
+  - **Sabtu - Minggu**: Libur / Tutup
+- **Layanan**: Pelaksanaan MASTA 2026, surat dispensasi, sertifikat kelulusan, info beasiswa (KIP-K, Prestasi, Tahfidz), dan legalitas UKM.
+- **WhatsApp**: [0822-5087-8843](https://wa.me/6282250878843)
 
-2. 🎓 **Admin Penerimaan Mahasiswa Baru (PMB) UMKT** (Untuk Pendaftaran, NIM & Registrasi Ulang):
-- 💬 **WhatsApp Admin**: [+62 812-3001-7008](https://wa.me/6281230017008)
+---
 
-Silakan hubungi admin terkait pada jam kerja di atas ya!`;
+### 2. 🎓 Admin Penerimaan Mahasiswa Baru (PMB) UMKT
+- **Lokasi**: Gedung Utama UMKT Lantai 1
+- **Layanan**: Pendaftaran, verifikasi berkas ijazah, aktivasi Nomor Induk Mahasiswa (NIM), dan registrasi ulang.
+- **WhatsApp**: [+62 812-3001-7008](https://wa.me/6281230017008)
+
+> **Catatan:** Untuk respon tercepat, hubungi nomor WhatsApp di atas pada jam kerja operasional resmi kampus ya!`;
   }
 
-  // 2. PRODI TEKNOLOGI INFORMASI UMKT & KURIKULUM
-  if (query.includes("prodi ti") || query.includes("teknologi informasi") || query.includes("kurikulum") || query.includes("mata kuliah") || query.includes("s.kom") || query.includes("kaprodi") || query.includes("no skill")) {
-    if (query.includes("semester 1") || query.includes("sem 1") || query.includes("makul")) {
-      return `Mata kuliah **Semester 1 Prodi Teknologi Informasi UMKT 2026** (Total 20 SKS):
-1. **Aljabar Linear** (3 SKS)
-2. **Matematika Diskrit** (3 SKS)
-3. **Statistika** (3 SKS)
-4. **Dasar Pemrograman** (3 SKS) + **Praktikum Dasar Pemrograman** (1 SKS)
-5. **Sistem Digital dan Arsitektur Komputer** (3 SKS)
-6. **Kemanusiaan dan Keimanan / Islamologi 1** (2 SKS)
-7. **Aplikasi Komputer & Pengantar Teknologi Informasi** (2 SKS)
+  // 2. PRODI TEKNOLOGI INFORMASI & KURIKULUM
+  if (
+    query.includes("prodi ti") ||
+    query.includes("teknologi informasi") ||
+    query.includes("kurikulum") ||
+    query.includes("mata kuliah") ||
+    query.includes("s.kom") ||
+    query.includes("kaprodi") ||
+    query.includes("no skill") ||
+    query.includes("semester")
+  ) {
+    if (query.includes("semester 1") || query.includes("sem 1") || query.includes("makul") || query.includes("mata kuliah")) {
+      return `Berikut adalah **Struktur Mata Kuliah Semester 1 Prodi Teknologi Informasi UMKT 2026 (Total 20 SKS)**:
 
-Tips Kaprodi: Pastikan nilai Dasar Pemrograman dan Matematika minimal BC ya! Buka tab **Akademik TI** di atas untuk melihat semester 2-4.`;
+| No | Kode / Mata Kuliah | Bobot SKS | Kategori |
+|---|---|---|---|
+| 1 | **Aljabar Linear** | 3 SKS | Basic Science & Logic |
+| 2 | **Matematika Diskrit** | 3 SKS | Basic Science & Logic |
+| 3 | **Statistika** | 3 SKS | Basic Science & Analytics |
+| 4 | **Dasar Pemrograman** | 3 SKS | Core Computing |
+| 5 | **Praktikum Dasar Pemrograman** | 1 SKS | Laboratorium |
+| 6 | **Sistem Digital & Arsitektur Komputer** | 3 SKS | Hardware & Systems |
+| 7 | **Kemanusiaan & Keimanan (Islamologi 1)** | 2 SKS | MKDU Universitas |
+| 8 | **Aplikasi Komputer & Pengantar TI** | 2 SKS | Core Computing |
+
+💡 **Tips Sukses:** Pastikan nilai *Dasar Pemrograman* dan *Matematika Diskrit* minimal **BC** untuk menjadi syarat mengambil mata kuliah lanjutan di Semester 2!`;
     }
 
-    if (query.includes("nilai") || query.includes("standar kelulusan") || query.includes("syarat lulus")) {
-      return `Standar nilai minimum kelulusan di **Teknologi Informasi UMKT**:
-- **MK Wajib Prodi & Konsentrasi (JRS/KC)**: Minimal **C**
-- **MK Dasar Umum (MKDU)**: Minimal **B**
-- **Basic Science & Praktikum**: Minimal **BC**
-- **Kerja Praktik / Magang & Capstone Design**: Minimal **B**
-- **Skripsi / Tugas Akhir**: Minimal **AB**
+    if (query.includes("nilai") || query.includes("standar") || query.includes("syarat lulus")) {
+      return `Berikut adalah **Standar Nilai Minimum Kelulusan Prodi TI UMKT**:
 
-Rentang nilai: A (>80), AB (75-79), B (70-74), BC (66-70). Ingat slogan perjuangan kita: *HIDUP TEKNIK! NO SKILL NO TRUST!*`;
+- **MK Wajib Prodi & Konsentrasi (JRS/KC)**: Minimal **C** (Skor 2.00)
+- **Mata Kuliah Dasar Umum (MKDU)**: Minimal **B** (Skor 3.00)
+- **Basic Science & Praktikum Lab**: Minimal **BC** (Skor 2.50)
+- **Kerja Praktik / Magang & Capstone Design**: Minimal **B** (Skor 3.00)
+- **Skripsi / Tugas Akhir**: Minimal **AB** (Skor 3.50)
+
+> Semboyan juang kita: **HIDUP TEKNIK! NO SKILL NO TRUST!**`;
     }
 
-    if (query.includes("kalender") || query.includes("uts") || query.includes("uas") || query.includes("jadwal kuliah")) {
-      return `Agenda penting **Kalender Akademik Semester Ganjil 2026/2027**:
-- **27 Juli - 27 Agustus 2026**: Masa Pengambilan MK / KRS di SIKAD
-- **31 Agustus - 7 Oktober 2026**: Perkuliahan Periode I
-- **19 - 24 Oktober 2026**: Ujian Tengah Semester (UTS)
-- **26 Oktober - 19 Desember 2026**: Perkuliahan Periode II
-- **21 Desember 2026 - 9 Januari 2027**: Ujian Akhir Semester (UAS)
-- **16 Januari 2027**: Batas Entri Nilai UAS di SIKAD`;
+    if (query.includes("kalender") || query.includes("uts") || query.includes("uas") || query.includes("jadwal")) {
+      return `📅 **Kalender Akademik Semester Ganjil 2026/2027**:
+
+- **27 Juli – 27 Agustus 2026**: Pengambilan MK & Validasi KRS di SIKAD
+- **31 Agustus – 7 Oktober 2026**: Perkuliahan Periode I
+- **19 – 24 Oktober 2026**: Ujian Tengah Semester (UTS)
+- **26 Oktober – 19 Desember 2026**: Perkuliahan Periode II
+- **21 Desember 2026 – 9 Januari 2027**: Ujian Akhir Semester (UAS)
+- **16 Januari 2027**: Batas Akhir Entri Nilai Dosen di SIKAD`;
     }
 
-    if (query.includes("gaji") || query.includes("karir") || query.includes("prospek")) {
-      return `Prospek karir lulusan **Sarjana Komputer (S.Kom) TI UMKT**:
-- **Software Engineer**: Kisaran Rp 190 Juta - Rp 205 Juta / tahun (Traveloka, Tokopedia, Bukalapak).
-- **Data Scientist / Analyst**: Analisis keputusan bisnis berbasis empiris.
-- **Cyber Security Engineer**: Pengamanan infrastruktur jaringan & kriptografi.
-- **Mobile Developer**: Spesialis aplikasi Android / iOS modern.
+    return `🎓 **Profil Program Studi Teknologi Informasi UMKT**:
+- **Akreditasi**: "Baik Sekali" oleh LAM-INFOKOM (2025–2030)
+- **Gelar Lulusan**: Sarjana Komputer (S.Kom)
+- **Peminatan**: 1) *Jaringan dan Rekayasa Sistem (JRS)*, 2) *Komputasi Cerdas (KC)*
+- **Bimbingan PA**: Wajib minimal 4 kali per semester bersama Dosen Pembimbing Akademik.
 
-Di industri IT 2026, yang dinilai bukan hanya ijazah, melainkan kapasitas nyata menyelesaikan masalah (problem solving)!`;
+Kamu bisa menjelajahi kurikulum semester 1–4 dan daftar dosen tetap di menu **[Panduan TI](/panduan-ti)**.`;
+  }
+
+  // 3. SIKAD & PORTAL MAHASISWA
+  if (
+    query.includes("sikad") ||
+    query.includes("siakad") ||
+    query.includes("mahasiswa.umkt") ||
+    query.includes("krs") ||
+    query.includes("khs") ||
+    query.includes("presensi") ||
+    query.includes("absen") ||
+    query.includes("briva")
+  ) {
+    if (query.includes("presensi") || query.includes("absen") || query.includes("kehadiran")) {
+      return `📌 **Aturan Presensi Kuliah di SIKAD UMKT**:
+- Syarat mutlak untuk mengikuti Ujian Akhir Semester (UAS) adalah **kehadiran minimal 75%** dari total 16 pertemuan.
+- Maksimal ketidakhadiran yang ditoleransi (dengan surat izin/sakit resmi) adalah **4 kali pertemuan**.
+- Jika kehadiran < 75%, sistem SIKAD otomatis mengunci kartu ujian.`;
     }
 
-    return `Program Studi **Teknologi Informasi UMKT**:
-- **Akreditasi**: "Baik Sekali" (2025 - 2030)
-- **Gelar**: Sarjana Komputer (S.Kom)
-- **Konsentrasi**: Jaringan dan Rekayasa Sistem (JRS) & Komputasi Cerdas (KC)
-- **Semboyan**: "HIDUP TEKNIK! NO SKILL NO TRUST!"
-- **Dosen PA**: Wajib bimbingan minimal 4 kali per semester (KRS, pra-UTS, pra-UAS, KHS).
-
-Buka menu **Akademik TI** di atas untuk panduan lengkap kurikulum dan profil dosen tetap.`;
-  }
-
-  // 3. SIKAD & Portal Mahasiswa UMKT
-  if (query.includes("sikad") || query.includes("siakad") || query.includes("mahasiswa.umkt") || query.includes("krs") || query.includes("khs") || query.includes("dosen pa") || query.includes("spp") || query.includes("presensi")) {
-    if (query.includes("krs") || query.includes("kartu rencana")) {
-      return `Untuk pengisian **KRS Online** di UMKT:
-1. Buka [https://mahasiswa.umkt.ac.id/](https://mahasiswa.umkt.ac.id/).
-2. Untuk MABA Semester 1, paket mata kuliah (20 SKS) sudah otomatis disiapkan.
-3. Masuk menu **KRS** -> periksa nama dosen & jadwal.
-4. Klik **Ajukan Bimbingan / Simpan KRS** untuk divalidasi oleh Dosen PA.
-5. Cek panduan visual di tab **SIKAD** aplikasi ini ya.`;
+    if (query.includes("krs")) {
+      return `📋 **Alur Pengisian KRS Online MABA Semester 1**:
+1. Login ke portal [mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/) menggunakan NIM dan kata sandi resmi.
+2. Masuk ke menu **Kartu Rencana Studi (KRS)**.
+3. Untuk Semester 1, seluruh 20 SKS telah dipaketkan secara otomatis oleh Program Studi.
+4. Periksa nama dosen pengampu dan kode kelas (A/B/C).
+5. Hubungi Dosen Pembimbing Akademik (PA) untuk konsultasi dan persetujuan (*approval*) sebelum batas akhir 27 Agustus 2026.`;
     }
 
-    return `Portal **SIKAD Mahasiswa UMKT** ([https://mahasiswa.umkt.ac.id/](https://mahasiswa.umkt.ac.id/)) digunakan untuk pengisian KRS, jadwal kuliah, presensi (min. 75%), tagihan SPP Virtual Account, dan cek nilai KHS.`;
+    return `🌐 **Panduan Portal SIKAD Mahasiswa ([mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/))**:
+Portal ini merupakan pusat aktivitas akademik:
+- **KRS Online**: Pengisian dan validasi rencana studi
+- **Jadwal Kuliah & Ruangan**: Cek jam kuliah dan gedung perkuliahan
+- **Presensi Digital**: Rekapitulasi kehadiran (min. 75%)
+- **Keuangan & BRIVA**: Generate kode Virtual Account pembayaran SPP
+- **KHS & Transkrip**: Pantau Indeks Prestasi Semester (IPS) dan IPK
+
+Kamu dapat mencoba simulator menu SIKAD di tab **[Panduan SIKAD](/panduan-sikad)**.`;
   }
 
-  // 4. BEASISWA & UKM
-  if (query.includes("beasiswa") || query.includes("kip") || query.includes("tahfidz") || query.includes("ukm") || query.includes("organisasi")) {
-    return `Informasi **Beasiswa & Kemahasiswaan UMKT 2026**:
-- **Skema Beasiswa**: KIP-Kuliah, Prestasi Akademik/Olahraga/Seni, Tahfidz Al-Qur'an, dan Kader Muhammadiyah/Aisyiyah.
-- **Pusat Pengajuan & Seleksi**: **Biro Kemahasiswaan dan Alumni (BIMA)**, Gedung C Lantai 1 UMKT.
-- **WhatsApp BIMA**: [082250878843](https://wa.me/6282250878843) (Senin-Kamis 08.00-16.00 WITA, Jumat 08.00-11.30 WITA).
-- **Pendaftaran UKM**: Dibuka pada sesi UKM Expo di Tahap 4 MASTA!`;
+  // 4. BEASISWA & ORGANISASI
+  if (query.includes("beasiswa") || query.includes("kip") || query.includes("tahfidz") || query.includes("ukm") || query.includes("himatif")) {
+    return `🌟 **Beasiswa & Organisasi Mahasiswa UMKT 2026**:
+
+### Skema Beasiswa Tersedia:
+1. **Beasiswa KIP-Kuliah**: Pembebasan biaya pendidikan + subsidi biaya hidup bulanan.
+2. **Beasiswa Prestasi**: Jalur kejuaraan sains, olahraga (Tapak Suci), dan seni.
+3. **Beasiswa Tahfidz Al-Qur'an**: Keringanan SPP bagi hafiz minimal 5–30 Juz.
+4. **Beasiswa Kader Persyarikatan**: Rekomendasi resmi dari Pimpinan Daerah Muhammadiyah (PDM).
+
+### Organisasi & UKM:
+- **HIMATIF**: Himpunan Mahasiswa Teknik Informatika (Dept. PSDM, Kominfo, Sosma, Kerohanian).
+- **UKM Expo**: Seluruh pendaftaran organisasi dibuka serentak pada Tahap 4 MASTA 2026.
+
+Semua pengurusan administrasi beasiswa berpusat di **Biro Kemahasiswaan (Gedung C Lantai 1)** atau via WhatsApp [0822-5087-8843](https://wa.me/6282250878843).`;
   }
 
-  // 5. Alur MASTA & Panduan Umum
-  if (query.includes("alur") || query.includes("tahap") || query.includes("jadwal") || query.includes("proses")) {
-    return `Alur resmi **MASTA MABA UMKT 2026** terdiri dari 5 tahapan:
-1. **Membaca Panduan Resmi**
-2. **Verifikasi Identitas & NIM**
-3. **Kegiatan Daring Zoom Meeting**
-4. **UKM Expo & Minat Bakat**
-5. **Puncak Inagurasi & Sertifikasi**
+  // 5. MASTA & TATA TERTIB ZOOM
+  if (query.includes("masta") || query.includes("zoom") || query.includes("dresscode") || query.includes("pakaian") || query.includes("on-cam")) {
+    return `🎯 **Ketentuan Resmi MASTA UMKT 2026**:
 
-Cek timeline detail di menu **Alur MASTA** ya.`;
+### Format Nama Zoom Wajib:
+\`\`\`text
+[Nomor Gugus]_[Nama Lengkap]
+Contoh: Gugus 04_Muhammad Rizky Pratama
+\`\`\`
+
+### Aturan Pakaian (Dresscode):
+- **Pria**: Kemeja putih panjang formal, celana kain hitam (bukan jeans), peci hitam, sepatu formal.
+- **Wanita**: Kemeja/tunik putih panjang tidak menerawang, rok panjang kain hitam, jilbab rapi, sepatu formal.
+
+### Ketentuan Sesi:
+- Kamera wajib **On-Cam** selama pemaparan materi.
+- Gunakan Virtual Background resmi dari [masta-maba.odoo.com](https://masta-maba.odoo.com/).
+- Wajib hadir di seluruh 5 tahapan orientasi untuk kelulusan e-Sertifikat MASTA.`;
   }
 
-  if (query.includes("bawa") || query.includes("syarat") || query.includes("perlengkapan") || query.includes("checklist")) {
-    return `Perlengkapan wajib MASTA 2026:
-- Kartu Peserta MASTA & berkas registrasi
-- Laptop/Smartphone + Zoom terbaru + kuota cadangan
-- Kemeja putih polos lengan panjang & bawahan hitam formal
-- Air minum botol & fisik yang fit! Buka menu **Checklist** untuk mencentang persiapan.`;
-  }
+  // 6. DEFAULT GENERAL HELPFUL RESPONSE
+  return `Halo! Aku **Nyala**, siap membantu seputar informasi akademik dan kehidupan kampus di **Universitas Muhammadiyah Kalimantan Timur (UMKT)**.
 
-  if (query.includes("gugup") || query.includes("takut") || query.includes("cemas") || query.includes("teman")) {
-    return `Wajar merasa gugup saat memulai masa perkuliahan baru, Sobat! Tarik napas teratur, sapa teman se-gugus, dan gunakan fitur **Health Check** untuk memantau energimu. Kamu pasti bisa!`;
-  }
+Kamu bisa menanyakan topik seputar:
+- 📋 **SIKAD & KRS Online**: Alur pengisian dan batas validasi Dosen PA.
+- 🎓 **Prodi Teknologi Informasi**: Kurikulum semester 1, standar nilai, dan prospek karir.
+- 🏛️ **Kontak Admin UMKT**: Lokasi Gedung C Lt. 1 & nomor WhatsApp resmi PMB/Biro Kemahasiswaan.
+- 📅 **Kalender Akademik**: Jadwal perkuliahan, UTS, dan UAS ganjil 2026/2027.
+- 🏠 **Tips Rantau & Kost**: Biaya hidup dan tips adaptasi di Samarinda.
 
-  return `Pertanyaan yang bagus sekali, Sobat MABA!
-
-Kamu bisa mengeksplorasi panduan **Akademik TI UMKT**, portal **SIKAD** (mahasiswa.umkt.ac.id), membaca **Blog MABA**, atau menghubungi admin resmi:
-- 🏛️ **Biro Kemahasiswaan (Gedung C Lt. 1)**: WhatsApp [082250878843](https://wa.me/6282250878843) (Senin-Kamis 08.00-16.00, Jumat 08.00-11.30 WITA)
-- 🎓 **Admin PMB**: WhatsApp [+62 812-3001-7008](https://wa.me/6281230017008)
-
-Ada hal spesifik yang ingin kamu tanyakan lagi? Nyala siap menemani!`;
+Jika kamu membutuhkan layanan berkas pendaftaran atau izin dispensasi resmi, silakan hubungi **Admin PMB (+62 812-3001-7008)** atau **Biro Kemahasiswaan (0822-5087-8843)** ya!`;
 }
 
-/**
- * Core AI Companion Query Runner with Top-Level Cache, Fast Timeout & Zpi SDK
- */
-export async function queryAICompanion(messages: ChatMessage[]): Promise<{ reply: string; cached: boolean }> {
-  const lastUserMessage = messages.filter((m) => m.role === "user").pop()?.content || "";
+// Top-Level Query Function with Cache & Live SDK
+export async function queryAICompanion(
+  messages: ChatMessage[]
+): Promise<{ reply: string; cached: boolean }> {
+  const lastUserMessage = messages[messages.length - 1]?.content || "";
 
-  // 1. Top-Level Cache Lookup
+  // 1. Check High Performance In-Memory Cache
   const cachedResponse = getFromCache(lastUserMessage);
   if (cachedResponse) {
     return { reply: cachedResponse, cached: true };

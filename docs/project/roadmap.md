@@ -34,13 +34,12 @@
 - [x] Upgrade ke **Next.js 16.3.1 (Turbopack)** & **React 19.2.8 / React DOM 19.2.8**
 - [x] Upgrade **Framer Motion 13.1.0**
 - [x] Migrasi 100% dari `lucide-react` ke **`@phosphor-icons/react` (v2.1.10)** di seluruh komponen & halaman
-- [x] Penggantian seluruh emoji raw dengan Phosphor Icons berbobot visual presisi (`duotone`, `bold`, `fill`)
 
-## Fase 6: Blog & Tips Hub + Pusat Layanan Admin Resmi UMKT ✅
-- [x] Direktori Blog & Artikel Panduan Mahasiswa Baru (`/blog`) dengan filter 6 kategori dan live search
-- [x] Halaman Pembaca Artikel Dinamis (`/blog/[slug]`) dengan Key Takeaways, Author Card, & Social Share
-- [x] Integrasi Kontak Admin PMB (`+62 812-3001-7008`) & Biro Kemahasiswaan (`0822-5087-8843`, Gedung C Lt. 1)
-- [x] Indikator status jam operasional pelayanan kampus (Senin-Kamis 08.00-16.00, Jumat 08.00-11.30 WITA)
-- [x] Komponen `AdminContactCard` & modal global `AdminHelpModal` terintegrasi di seluruh aplikasi
-- [x] Tombol fast-escalation langsung ke WhatsApp Admin di Tanya Nyala AI (`/companion`)
-- [x] Resolusi tuntas port collision & build Next.js 16 (12 rute terkompilasi bersih)
+## Fase 6: Blog CMS, Scraper Berita UMKT, Karakter Asli & Markdown AI Chat ✅
+- [x] Redesain Maskot Karakter Nyala di `MascotFlame.tsx` 100% presisi sesuai referensi (wajah bulat putih-krem, rona pipi, lapisan mahkota lidah api, varian papan checklist dengan centang oranye)
+- [x] Dashboard Admin Blog & CMS di `/admin/blog` dengan editor Markdown, Live Preview, pemilihan preset gambar, dan tag manager
+- [x] Server-side Scraper API di `/api/scrape-umkt` untuk menarik berita dan agenda resmi dari portal `https://www.umkt.ac.id/`
+- [x] Tombol "Tarik Berita Resmi UMKT (Sync Scraper)" yang otomatis mengimpor artikel ke blog
+- [x] Penyematan cover image beresolusi tinggi pada seluruh postingan blog dan halaman pembaca `/blog/[slug]`
+- [x] Integrasi `react-markdown` + `remark-gfm` pada `/companion` untuk merender tabel, teks tebal, daftar nomor, dan blok kode
+- [x] Penguatan prompt anti-halusinasi dan basis data faktual seputar perkuliahan TI, SIKAD, jadwal kalender akademik, dan kontak WhatsApp admin resmi
