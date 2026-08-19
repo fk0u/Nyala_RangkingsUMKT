@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRight, Clock, ExternalLink, Laptop, Shield } from "lucide-react";
+import { CaretRight, Clock, ArrowSquareOut, Laptop, ShieldCheck } from "@phosphor-icons/react";
 import { OFFICIAL_LINKS } from "@/lib/masta-data";
 
 export default function TopNotificationBar({
@@ -48,7 +48,7 @@ export default function TopNotificationBar({
             className="hidden md:inline-flex items-center gap-0.5 text-nyala-400 hover:text-nyala-300 font-semibold transition-colors flex-shrink-0"
           >
             <span>Alur MASTA</span>
-            <ChevronRight className="w-3 h-3" />
+            <CaretRight weight="bold" className="w-3 h-3" />
           </Link>
         </div>
 
@@ -60,9 +60,9 @@ export default function TopNotificationBar({
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-1 text-blue-300 hover:text-blue-200 font-semibold transition-colors"
           >
-            <Laptop className="w-3 h-3" />
+            <Laptop weight="duotone" className="w-3.5 h-3.5" />
             <span>SIKAD</span>
-            <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+            <ArrowSquareOut weight="bold" className="w-2.5 h-2.5 opacity-60" />
           </a>
 
           <button
@@ -77,7 +77,7 @@ export default function TopNotificationBar({
 
           {witaTime && (
             <span className="hidden lg:inline-flex items-center gap-1 text-white/40 font-mono tabular-nums">
-              <Clock className="w-3 h-3" />
+              <Clock weight="duotone" className="w-3 h-3" />
               <span>{witaTime} WITA</span>
             </span>
           )}

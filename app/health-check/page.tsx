@@ -3,38 +3,43 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  HeartPulse, 
-  Smile, 
+  Heartbeat, 
+  Smiley, 
+  SmileyXEyes,
+  SmileyMeh,
+  SmileySad,
+  SmileyNervous,
   Moon, 
-  Utensils, 
-  Droplet, 
-  Zap, 
+  ForkKnife, 
+  Drop, 
+  Lightning, 
   Calendar, 
-  Sparkles, 
-  CheckCircle2, 
-  Flame, 
-  AlertCircle, 
-  TrendingUp, 
-  RotateCcw
-} from "lucide-react";
+  Sparkle, 
+  CheckCircle, 
+  Fire, 
+  WarningCircle, 
+  TrendUp, 
+  ArrowCounterClockwise
+} from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
 import ProgressBar from "@/components/ProgressBar";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import { useToast } from "@/context/ToastContext";
 
 interface MoodOption {
-  emoji: string;
+  id: string;
   label: string;
   color: string;
   scoreBonus: number;
+  icon: any;
 }
 
 const MOOD_OPTIONS: MoodOption[] = [
-  { emoji: "🤩", label: "Sangat Bersemangat", color: "text-amber-500", scoreBonus: 25 },
-  { emoji: "😊", label: "Senang & Siap", color: "text-emerald-500", scoreBonus: 20 },
-  { emoji: "😐", label: "Biasa Saja", color: "text-blue-500", scoreBonus: 15 },
-  { emoji: "🥱", label: "Sedikit Lelah", color: "text-purple-500", scoreBonus: 10 },
-  { emoji: "😰", label: "Gugup / Cemas", color: "text-rose-500", scoreBonus: 5 },
+  { id: "excited", label: "Sangat Bersemangat", color: "text-amber-500", scoreBonus: 25, icon: SmileyXEyes },
+  { id: "happy", label: "Senang & Siap", color: "text-emerald-500", scoreBonus: 20, icon: Smiley },
+  { id: "neutral", label: "Biasa Saja", color: "text-blue-500", scoreBonus: 15, icon: SmileyMeh },
+  { id: "tired", label: "Sedikit Lelah", color: "text-purple-500", scoreBonus: 10, icon: SmileySad },
+  { id: "nervous", label: "Gugup / Cemas", color: "text-rose-500", scoreBonus: 5, icon: SmileyNervous },
 ];
 
 interface PhysicalCheck {
@@ -47,16 +52,16 @@ interface PhysicalCheck {
 
 const PHYSICAL_CHECKS: PhysicalCheck[] = [
   { id: "sleep", title: "Tidur Cukup (6-8 Jam)", desc: "Istirahat cukup agar konsentrasi tetap tajam saat materi MASTA", icon: Moon, points: 20 },
-  { id: "food", title: "Sarapan & Nutrisi Teratur", desc: "Perut terisi dengan makanan sehat bergizi", icon: Utensils, points: 20 },
-  { id: "water", title: "Hidrasi Air Putih (Min. 2 Liter)", desc: "Menjaga cairan tubuh agar tidak cepat lemas atau dehidrasi", icon: Droplet, points: 20 },
-  { id: "mind", title: "Peregangan & Mental Rileks", desc: "Melakukan deep breathing atau peregangan ringan sebelum beraktivitas", icon: Zap, points: 15 },
+  { id: "food", title: "Sarapan & Nutrisi Teratur", desc: "Perut terisi dengan makanan sehat bergizi", icon: ForkKnife, points: 20 },
+  { id: "water", title: "Hidrasi Air Putih (Min. 2 Liter)", desc: "Menjaga cairan tubuh agar tidak cepat lemas atau dehidrasi", icon: Drop, points: 20 },
+  { id: "mind", title: "Peregangan & Mental Rileks", desc: "Melakukan deep breathing atau peregangan ringan sebelum beraktivitas", icon: Lightning, points: 15 },
 ];
 
 interface HealthLog {
   id: string;
   date: string;
   dayName: string;
-  emoji: string;
+  moodId: string;
   moodLabel: string;
   score: number;
   checks: string[];
@@ -120,7 +125,7 @@ export default function HealthCheckPage() {
       id: `log-${Date.now()}`,
       date: dateStr,
       dayName,
-      emoji: selectedMood.emoji,
+      moodId: selectedMood.id,
       moodLabel: selectedMood.label,
       score: currentScore,
       checks: [...selectedChecks],
@@ -136,13 +141,13 @@ export default function HealthCheckPage() {
     localStorage.setItem("nyala_mood_history", JSON.stringify(updated));
     setHasSavedToday(true);
     setShowCelebration(true);
-    toast.nyala(`Kesiapan harianmu (${currentScore}%) berhasil tersimpan! 🔥`, "Tersimpan");
+    toast.nyala(`Kesiapan harianmu (${currentScore}%) berhasil tersimpan!`, "Tersimpan");
     setTimeout(() => setShowCelebration(false), 4000);
   };
 
   // Get Personalized Recommendation based on score and mood
   const getRecommendation = () => {
-    if (selectedMood.emoji === "😰" || selectedMood.emoji === "🥱") {
+    if (selectedMood.id === "nervous" || selectedMood.id === "tired") {
       return {
         title: "Perhatian & Istirahat Tambahan",
         advice: "Tarik napas panjang secara perlahan dan luangkan waktu untuk rileks 10-15 menit. Pastikan kamu minum segelas air hangat dan tidur lebih awal malam ini. Semangat, kamu pasti bisa melewatinya!",
@@ -173,7 +178,7 @@ export default function HealthCheckPage() {
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold uppercase tracking-wider">
-          <HeartPulse className="w-4 h-4" />
+          <Heartbeat weight="bold" className="w-4 h-4" />
           <span>Daily Wellness & Readiness Tracker</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 dark:text-white tracking-tight">
@@ -193,7 +198,7 @@ export default function HealthCheckPage() {
           <div className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-200/60 dark:border-navy-800 space-y-4 shadow-md">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-navy-900 dark:text-white flex items-center gap-2">
-                <Smile className="w-5 h-5 text-nyala-500" />
+                <Smiley weight="bold" className="w-5 h-5 text-nyala-500" />
                 <span>1. Bagaimana Perasaan / Mood-mu Hari Ini?</span>
               </h3>
               <span className="text-xs font-bold text-nyala-600 dark:text-nyala-400">
@@ -203,7 +208,8 @@ export default function HealthCheckPage() {
 
             <div className="grid grid-cols-5 gap-2 sm:gap-3">
               {MOOD_OPTIONS.map((mood, idx) => {
-                const isSelected = selectedMood.emoji === mood.emoji;
+                const Icon = mood.icon;
+                const isSelected = selectedMood.id === mood.id;
 
                 return (
                   <button
@@ -219,7 +225,7 @@ export default function HealthCheckPage() {
                         : "bg-white dark:bg-navy-900/50 border-navy-200/60 dark:border-navy-800 hover:border-nyala-300"
                     }`}
                   >
-                    <span className="text-2xl sm:text-3xl mb-1">{mood.emoji}</span>
+                    <Icon weight={isSelected ? "fill" : "duotone"} className={`w-8 h-8 mb-1 ${mood.color}`} />
                     <span className="text-[10px] sm:text-[11px] font-semibold text-center text-navy-700 dark:text-navy-300 leading-tight">
                       {mood.label.split(" ")[0]}
                     </span>
@@ -232,7 +238,7 @@ export default function HealthCheckPage() {
           {/* Step 2: Physical Conditions Checklist */}
           <div className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-200/60 dark:border-navy-800 space-y-4 shadow-md">
             <h3 className="text-base font-bold text-navy-900 dark:text-white flex items-center gap-2">
-              <Zap className="w-5 h-5 text-amber-500" />
+              <Lightning weight="bold" className="w-5 h-5 text-amber-500" />
               <span>2. Kesiapan Fisik & Asupan Harian</span>
             </h3>
 
@@ -253,7 +259,7 @@ export default function HealthCheckPage() {
                   >
                     <div className="flex items-start gap-3">
                       <div className={`p-2 rounded-xl mt-0.5 ${isChecked ? "bg-emerald-500 text-white" : "bg-navy-100 dark:bg-navy-800 text-navy-500"}`}>
-                        <Icon className="w-4 h-4" />
+                        <Icon weight="bold" className="w-4 h-4" />
                       </div>
                       <div>
                         <h4 className="text-xs sm:text-sm font-bold text-navy-900 dark:text-white">
@@ -266,7 +272,8 @@ export default function HealthCheckPage() {
                     </div>
 
                     <div className="mt-1">
-                      <CheckCircle2
+                      <CheckCircle
+                        weight={isChecked ? "fill" : "regular"}
                         className={`w-5 h-5 transition-colors ${
                           isChecked ? "text-emerald-500" : "text-navy-300 dark:text-navy-600"
                         }`}
@@ -295,7 +302,7 @@ export default function HealthCheckPage() {
               onClick={handleSaveDailyCheck}
               className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-nyala-500 to-nyala-600 hover:from-nyala-600 hover:to-nyala-700 text-white font-bold text-sm shadow-fire hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkle weight="fill" className="w-4 h-4" />
               <span>{hasSavedToday ? "Perbarui Log Hari Ini" : "Simpan Health Check Hari Ini"}</span>
             </button>
           </div>
@@ -341,7 +348,7 @@ export default function HealthCheckPage() {
           <div className="glass-card rounded-3xl p-6 border border-navy-200/60 dark:border-navy-800 space-y-4 shadow-md">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-navy-900 dark:text-white flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-nyala-500" />
+                <Calendar weight="bold" className="w-4 h-4 text-nyala-500" />
                 <span>Riwayat 7 Hari Terakhir</span>
               </h3>
               <span className="text-[11px] text-navy-500 dark:text-navy-400 font-medium">
@@ -351,37 +358,42 @@ export default function HealthCheckPage() {
 
             {history.length === 0 ? (
               <div className="text-center py-8 space-y-2 text-navy-400">
-                <Smile className="w-8 h-8 mx-auto opacity-40" />
+                <Smiley weight="duotone" className="w-8 h-8 mx-auto opacity-40" />
                 <p className="text-xs">Belum ada riwayat tercatat. Mulai simpan health check pertamamu hari ini!</p>
               </div>
             ) : (
               <div className="space-y-2.5">
-                {history.map((log) => (
-                  <div
-                    key={log.id}
-                    className="p-3 rounded-2xl bg-white/70 dark:bg-navy-900/60 border border-navy-100 dark:border-navy-800 flex items-center justify-between gap-3 text-xs"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-xl">{log.emoji}</span>
-                      <div>
-                        <div className="font-bold text-navy-900 dark:text-white">
-                          {log.date} ({log.dayName})
-                        </div>
-                        <div className="text-[11px] text-navy-500 dark:text-navy-400">
-                          {log.moodLabel} • {log.checks.length} kebiasaan sehat
-                        </div>
-                        {log.note && (
-                          <div className="text-[10px] text-nyala-600 dark:text-nyala-400 italic mt-0.5">
-                            "{log.note}"
+                {history.map((log) => {
+                  const moodOpt = MOOD_OPTIONS.find((m) => m.id === log.moodId) || MOOD_OPTIONS[1];
+                  const MoodIcon = moodOpt.icon;
+
+                  return (
+                    <div
+                      key={log.id}
+                      className="p-3 rounded-2xl bg-white/70 dark:bg-navy-900/60 border border-navy-100 dark:border-navy-800 flex items-center justify-between gap-3 text-xs"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <MoodIcon weight="fill" className={`w-5 h-5 ${moodOpt.color}`} />
+                        <div>
+                          <div className="font-bold text-navy-900 dark:text-white">
+                            {log.date} ({log.dayName})
                           </div>
-                        )}
+                          <div className="text-[11px] text-navy-500 dark:text-navy-400">
+                            {log.moodLabel} • {log.checks.length} kebiasaan sehat
+                          </div>
+                          {log.note && (
+                            <div className="text-[10px] text-nyala-600 dark:text-nyala-400 italic mt-0.5">
+                              "{log.note}"
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="font-extrabold text-sm text-nyala-600 dark:text-nyala-400">
+                        {log.score}%
                       </div>
                     </div>
-                    <div className="font-extrabold text-sm text-nyala-600 dark:text-nyala-400">
-                      {log.score}%
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

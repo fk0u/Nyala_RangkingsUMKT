@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useTheme } from "@/context/ThemeContext";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 
 export default function ThemeToggle() {
@@ -22,9 +22,9 @@ export default function ThemeToggle() {
         transition={{ duration: 0.2 }}
       >
         {theme === "dark" ? (
-          <Sun className="w-5 h-5 text-amber-400" />
+          <Sun weight="fill" className="w-5 h-5 text-amber-400" />
         ) : (
-          <Moon className="w-5 h-5 text-navy-700" />
+          <Moon weight="fill" className="w-5 h-5 text-navy-700" />
         )}
       </motion.div>
     </button>

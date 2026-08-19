@@ -3,17 +3,17 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Send, 
-  Sparkles, 
-  Trash2, 
+  PaperPlaneRight, 
+  Sparkle, 
+  Trash, 
   User, 
-  Zap, 
+  Lightning, 
   Copy, 
   Check, 
   Laptop, 
-  Bot, 
-  Flame
-} from "lucide-react";
+  Robot, 
+  Fire
+} from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import SkeletonLoader from "@/components/SkeletonLoader";
@@ -30,14 +30,14 @@ interface Message {
 }
 
 const QUICK_PROMPTS = [
-  "Cara login di mahasiswa.umkt.ac.id? 💻",
-  "Bagaimana alur resmi MASTA UMKT 2026? 📖",
-  "Pengisian KRS Semester 1 untuk MABA? 📑",
-  "Berapa batas minimal presensi kuliah? 📊",
-  "Barang apa saja yang wajib disiapkan? 🎒",
-  "Tips mengatasi rasa gugup dan cemas? 🧘",
-  "Aturan On-Cam dan dresscode sesi Zoom? 💻",
-  "Bagaimana cara bayar tagihan SPP? 💳"
+  "Cara login di mahasiswa.umkt.ac.id?",
+  "Bagaimana alur resmi MASTA UMKT 2026?",
+  "Pengisian KRS Semester 1 untuk MABA?",
+  "Berapa batas minimal presensi kuliah?",
+  "Barang apa saja yang wajib disiapkan?",
+  "Tips mengatasi rasa gugup dan cemas?",
+  "Aturan On-Cam dan dresscode sesi Zoom?",
+  "Bagaimana cara bayar tagihan SPP?"
 ];
 
 export default function CompanionPage() {
@@ -45,7 +45,7 @@ export default function CompanionPage() {
     {
       id: "welcome-1",
       role: "assistant",
-      content: "Halo Sobat MABA UMKT 2026! 🔥 Aku **Nyala**, sahabat virtual perjalanan MABA-mu! \n\nAda hal yang ingin kamu tanyakan seputar persiapan MASTA, portal akademik SIKAD (mahasiswa.umkt.ac.id), KRS, tata tertib, atau tips perkuliahan di UMKT? Tanyakan apa saja, Nyala siap membantumu!",
+      content: "Halo Sobat MABA UMKT 2026! Aku **Nyala**, sahabat virtual perjalanan MABA-mu!\n\nAda hal yang ingin kamu tanyakan seputar persiapan MASTA, portal akademik SIKAD (mahasiswa.umkt.ac.id), KRS, tata tertib, atau tips perkuliahan di UMKT? Tanyakan apa saja, Nyala siap membantumu!",
       timestamp: "Baru saja",
       isStreaming: false,
     },
@@ -112,7 +112,7 @@ export default function CompanionPage() {
       const fallbackReply: Message = {
         id: `bot-${Date.now()}`,
         role: "assistant",
-        content: "Halo Sobat! Jika ada kendala koneksi, kamu tetap dapat membuka panduan resmi di portal [mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/) dan [masta-maba.odoo.com](https://masta-maba.odoo.com/) ya! 🔥",
+        content: "Halo Sobat! Jika ada kendala koneksi, kamu tetap dapat membuka panduan resmi di portal [mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/) dan [masta-maba.odoo.com](https://masta-maba.odoo.com/) ya!",
         timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
         isStreaming: false,
       };
@@ -137,7 +137,7 @@ export default function CompanionPage() {
       {
         id: `welcome-${Date.now()}`,
         role: "assistant",
-        content: "Percakapan baru telah dimulai! 🔥 Ada yang ingin kamu diskusikan seputar MASTA atau SIKAD UMKT 2026?",
+        content: "Percakapan baru telah dimulai! Ada yang ingin kamu diskusikan seputar MASTA atau SIKAD UMKT 2026?",
         timestamp: "Baru saja",
         isStreaming: false,
       },
@@ -173,7 +173,7 @@ export default function CompanionPage() {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-navy-600 dark:text-navy-400 hover:text-rose-600 dark:hover:text-rose-400 bg-navy-100 dark:bg-navy-800 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
             title="Reset Obrolan"
           >
-            <Trash2 className="w-3.5 h-3.5" />
+            <Trash weight="bold" className="w-3.5 h-3.5" />
             <span>Reset</span>
           </button>
         </div>
@@ -201,7 +201,7 @@ export default function CompanionPage() {
                   {/* Bot Avatar */}
                   {isBot && (
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-nyala-500/15 border border-nyala-500/30 flex items-center justify-center text-nyala-600 dark:text-nyala-400">
-                      <Sparkles className="w-4 h-4 text-nyala-500" />
+                      <Sparkle weight="fill" className="w-4 h-4 text-nyala-500" />
                     </div>
                   )}
 
@@ -248,9 +248,9 @@ export default function CompanionPage() {
                           title="Salin Pesan"
                         >
                           {copiedId === message.id ? (
-                            <Check className="w-3 h-3 text-emerald-500" />
+                            <Check weight="bold" className="w-3 h-3 text-emerald-500" />
                           ) : (
-                            <Copy className="w-3 h-3" />
+                            <Copy weight="bold" className="w-3 h-3" />
                           )}
                         </button>
                       )}
@@ -260,7 +260,7 @@ export default function CompanionPage() {
                   {/* User Avatar */}
                   {!isBot && (
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-navy-800 dark:bg-navy-700 text-white flex items-center justify-center">
-                      <User className="w-4 h-4" />
+                      <User weight="bold" className="w-4 h-4" />
                     </div>
                   )}
                 </motion.div>
@@ -286,7 +286,7 @@ export default function CompanionPage() {
         <div className="px-4 py-2 border-t border-navy-100 dark:border-navy-800 bg-white/50 dark:bg-navy-900/50">
           <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
             <span className="text-[11px] font-bold text-navy-500 dark:text-navy-400 whitespace-nowrap flex items-center gap-1">
-              <Zap className="w-3 h-3 text-nyala-500" />
+              <Lightning weight="fill" className="w-3 h-3 text-nyala-500" />
               Tanya Cepat:
             </span>
             {QUICK_PROMPTS.map((prompt, i) => (
@@ -325,7 +325,7 @@ export default function CompanionPage() {
               disabled={!input.trim() || isLoading}
               className="p-3 sm:px-5 sm:py-3 rounded-2xl bg-nyala-500 hover:bg-nyala-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold transition-all shadow-fire flex items-center gap-2 active:scale-95"
             >
-              <Send className="w-4 h-4" />
+              <PaperPlaneRight weight="fill" className="w-4 h-4" />
               <span className="hidden sm:inline text-sm">Kirim</span>
             </button>
           </form>

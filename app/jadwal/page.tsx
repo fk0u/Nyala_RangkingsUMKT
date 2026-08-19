@@ -5,18 +5,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   BookOpen, 
   ShieldCheck, 
-  Video, 
-  Sparkles, 
+  VideoCamera, 
+  Sparkle, 
   Award, 
-  CalendarDays, 
-  CheckCircle2, 
-  ChevronDown, 
-  ChevronUp, 
-  ExternalLink,
+  CalendarCheck, 
+  CheckCircle, 
+  CaretDown, 
+  CaretUp, 
+  ArrowSquareOut,
   Info,
-  Flame,
+  Fire,
   ArrowRight
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import CountdownTimer from "@/components/CountdownTimer";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import { MASTA_STAGES, OFFICIAL_LINKS, MastaStage } from "@/lib/masta-data";
@@ -28,10 +28,10 @@ export default function JadwalPage() {
     switch (iconName) {
       case "BookOpen": return BookOpen;
       case "ShieldCheck": return ShieldCheck;
-      case "Video": return Video;
-      case "Sparkles": return Sparkles;
+      case "Video": return VideoCamera;
+      case "Sparkles": return Sparkle;
       case "Award": return Award;
-      default: return Sparkles;
+      default: return Sparkle;
     }
   };
 
@@ -41,7 +41,7 @@ export default function JadwalPage() {
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-          <CalendarDays className="w-4 h-4" />
+          <CalendarCheck weight="bold" className="w-4 h-4" />
           <span>Panduan Terstruktur Resmi</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 dark:text-white tracking-tight">
@@ -83,7 +83,7 @@ export default function JadwalPage() {
                   >
                     {stage.id}
                   </div>
-                  <Icon className={`w-4 h-4 ${isSelected ? "text-white" : "text-navy-400"}`} />
+                  <Icon weight={isSelected ? "fill" : "bold"} className={`w-4 h-4 ${isSelected ? "text-white" : "text-navy-400"}`} />
                 </div>
                 <div className="text-xs sm:text-sm font-bold leading-snug line-clamp-2">
                   {stage.title.replace(/^\d+\.\s*/, "")}
@@ -108,7 +108,7 @@ export default function JadwalPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-navy-100 dark:border-navy-800">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-nyala-500 to-amber-500 text-white flex items-center justify-center shadow-fire flex-shrink-0">
-                    <Icon className="w-7 h-7" />
+                    <Icon weight="duotone" className="w-7 h-7" />
                   </div>
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-nyala-600 dark:text-nyala-400">
@@ -127,7 +127,7 @@ export default function JadwalPage() {
                   className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-navy-100 dark:bg-navy-800 hover:bg-nyala-50 dark:hover:bg-navy-700 text-xs sm:text-sm font-semibold text-navy-700 dark:text-navy-200 transition-colors self-start sm:self-auto"
                 >
                   <span>Portal Resmi MASTA</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
                 </a>
               </div>
 
@@ -150,7 +150,7 @@ export default function JadwalPage() {
                       key={idx}
                       className="p-3.5 rounded-2xl bg-white/70 dark:bg-navy-900/60 border border-navy-100 dark:border-navy-800 flex items-start gap-3 text-xs sm:text-sm text-navy-800 dark:text-navy-200"
                     >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                      <CheckCircle weight="fill" className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                       <span>{step}</span>
                     </div>
                   ))}
@@ -160,7 +160,7 @@ export default function JadwalPage() {
               {/* Pro-Tips from Nyala */}
               <div className="p-4 sm:p-5 rounded-2xl bg-cream-100 dark:bg-navy-900/90 border border-amber-200/70 dark:border-navy-700 flex items-start gap-3.5">
                 <div className="w-8 h-8 rounded-xl bg-nyala-500 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
-                  <Flame className="w-4 h-4" />
+                  <Fire weight="fill" className="w-4 h-4" />
                 </div>
                 <div>
                   <h4 className="text-xs sm:text-sm font-bold text-navy-900 dark:text-white">

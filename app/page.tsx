@@ -4,18 +4,19 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { 
-  Sparkles, 
+  Sparkle, 
   ArrowRight, 
-  CheckCircle2, 
-  HeartPulse, 
-  Calendar, 
+  CheckCircle, 
+  Heartbeat, 
+  CalendarCheck, 
   BookOpen, 
   ShieldCheck, 
   MapPin, 
-  ExternalLink, 
-  Flame,
-  Laptop
-} from "lucide-react";
+  ArrowSquareOut, 
+  Fire,
+  Laptop,
+  Smiley
+} from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
 import CountdownTimer from "@/components/CountdownTimer";
 import BacklinkBanner from "@/components/BacklinkBanner";
@@ -44,7 +45,7 @@ export default function HomePage() {
       try {
         const parsed = JSON.parse(savedMoods);
         if (parsed.length > 0) {
-          setTodayMood(parsed[0].emoji);
+          setTodayMood(parsed[0].label || "Semangat");
         }
       } catch (e) {
         console.error(e);
@@ -74,7 +75,7 @@ export default function HomePage() {
             >
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-nyala-500/10 border border-nyala-500/20 text-nyala-600 dark:text-nyala-400 text-xs sm:text-sm font-semibold">
-                <Flame className="w-4 h-4 text-nyala-500" />
+                <Fire weight="fill" className="w-4 h-4 text-nyala-500" />
                 <span>Sahabat Virtual MABA UMKT 2026</span>
               </div>
 
@@ -98,16 +99,16 @@ export default function HomePage() {
                   href="/companion"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-nyala-500 to-nyala-600 hover:from-nyala-600 hover:to-nyala-700 text-white font-bold text-base shadow-fire-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
-                  <Sparkles className="w-5 h-5" />
+                  <Sparkle weight="fill" className="w-5 h-5" />
                   <span>Tanya Nyala AI</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight weight="bold" className="w-4 h-4" />
                 </Link>
 
                 <Link
                   href="/panduan-sikad"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base shadow-soft hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
-                  <Laptop className="w-5 h-5" />
+                  <Laptop weight="bold" className="w-5 h-5" />
                   <span>Panduan SIKAD UMKT</span>
                 </Link>
 
@@ -115,7 +116,7 @@ export default function HomePage() {
                   href="/checklist"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white dark:bg-navy-800 hover:bg-navy-50 dark:hover:bg-navy-750 text-navy-800 dark:text-white font-semibold text-base border border-navy-200 dark:border-navy-700 shadow-soft hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-nyala-500" />
+                  <CheckCircle weight="bold" className="w-5 h-5 text-nyala-500" />
                   <span>Checklist</span>
                 </Link>
               </div>
@@ -127,7 +128,7 @@ export default function HomePage() {
                   <span>Rujukan Resmi masta-maba.odoo.com & mahasiswa.umkt.ac.id</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-nyala-500" />
+                  <MapPin weight="fill" className="w-3.5 h-3.5 text-nyala-500" />
                   <span>Kampus UMKT Samarinda</span>
                 </div>
               </div>
@@ -152,7 +153,7 @@ export default function HomePage() {
                   <div className="relative bg-cream-100 dark:bg-navy-800 p-4 rounded-2xl border border-amber-200/60 dark:border-navy-700 text-left max-w-sm shadow-sm">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-xs font-bold text-nyala-600 dark:text-nyala-400 flex items-center gap-1">
-                        <Sparkles className="w-3.5 h-3.5 fill-nyala-500" />
+                        <Sparkle weight="fill" className="w-3.5 h-3.5 text-nyala-500" />
                         Pesan Hangat Nyala:
                       </span>
                     </div>
@@ -179,11 +180,11 @@ export default function HomePage() {
                       className="p-3 rounded-xl bg-white/70 dark:bg-navy-900/50 border border-navy-100 dark:border-navy-800 text-left hover:border-nyala-500/50 transition-colors"
                     >
                       <div className="flex justify-between items-center">
-                        <span className="text-[11px] font-semibold text-navy-500 dark:text-navy-400">Mood Hari Ini</span>
-                        <span className="text-base">{todayMood || "😊"}</span>
+                        <span className="text-[11px] font-semibold text-navy-500 dark:text-navy-400">Status Kesiapan</span>
+                        <Smiley weight="duotone" className="w-5 h-5 text-nyala-500" />
                       </div>
                       <span className="text-[11px] text-nyala-600 dark:text-nyala-400 font-medium">
-                        {todayMood ? "Tersimpan" : "Cek Mood →"}
+                        {todayMood ? todayMood : "Cek Kesiapan →"}
                       </span>
                     </Link>
                   </div>
@@ -207,7 +208,7 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-3 mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-bold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkle weight="fill" className="w-3.5 h-3.5" />
             <span>Fitur Terpadu</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-900 dark:text-white">
@@ -224,7 +225,7 @@ export default function HomePage() {
           <div className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-100 dark:border-navy-800 space-y-4 hover:border-nyala-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-nyala-500 to-amber-500 text-white flex items-center justify-center shadow-fire">
-                <Sparkles className="w-6 h-6" />
+                <Sparkle weight="fill" className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-navy-900 dark:text-white">
                 Tanya Nyala (AI Companion)
@@ -238,7 +239,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-nyala-600 dark:text-nyala-400 group pt-2"
             >
               <span>Mulai Percakapan</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight weight="bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
@@ -246,7 +247,7 @@ export default function HomePage() {
           <div className="glass-card rounded-3xl p-6 sm:p-7 border border-blue-200/60 dark:border-blue-900/60 space-y-4 hover:border-blue-500 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between bg-gradient-to-br from-blue-500/5 to-transparent">
             <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-md">
-                <Laptop className="w-6 h-6" />
+                <Laptop weight="bold" className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-navy-900 dark:text-white">
                 Panduan Portal SIKAD UMKT
@@ -260,7 +261,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400 group pt-2"
             >
               <span>Buka Panduan SIKAD</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight weight="bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
@@ -268,10 +269,10 @@ export default function HomePage() {
           <div className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-100 dark:border-navy-800 space-y-4 hover:border-nyala-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-500 text-white flex items-center justify-center shadow-md">
-                <HeartPulse className="w-6 h-6" />
+                <Heartbeat weight="fill" className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-navy-900 dark:text-white">
-                Health Check & Mood Tracker
+                Health Check & Kesiapan
               </h3>
               <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
                 Pantau kecukupan tidur, hidrasi, asupan makan, dan kestabilan emosi sebelum rangkaian orientasi dimulai.
@@ -282,7 +283,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-nyala-600 dark:text-nyala-400 group pt-2"
             >
               <span>Periksa Kesiapan</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight weight="bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
@@ -290,7 +291,7 @@ export default function HomePage() {
           <div className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-100 dark:border-navy-800 space-y-4 hover:border-nyala-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white flex items-center justify-center shadow-md">
-                <Calendar className="w-6 h-6" />
+                <CalendarCheck weight="fill" className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-navy-900 dark:text-white">
                 Alur Resmi 5 Tahap
@@ -304,7 +305,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-nyala-600 dark:text-nyala-400 group pt-2"
             >
               <span>Buka Alur Kegiatan</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight weight="bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
@@ -312,7 +313,7 @@ export default function HomePage() {
           <div className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-100 dark:border-navy-800 space-y-4 hover:border-nyala-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white flex items-center justify-center shadow-md">
-                <CheckCircle2 className="w-6 h-6" />
+                <CheckCircle weight="fill" className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-navy-900 dark:text-white">
                 Checklist Perlengkapan
@@ -326,7 +327,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-nyala-600 dark:text-nyala-400 group pt-2"
             >
               <span>Kelola Checklist</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight weight="bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
@@ -334,7 +335,7 @@ export default function HomePage() {
           <div className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-100 dark:border-navy-800 space-y-4 hover:border-nyala-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-navy-900 dark:bg-navy-700 text-white flex items-center justify-center shadow-md">
-                <BookOpen className="w-6 h-6 text-nyala-400" />
+                <BookOpen weight="bold" className="w-6 h-6 text-nyala-400" />
               </div>
               <h3 className="text-lg font-bold text-navy-900 dark:text-white">
                 Edukasi & 4 Pilar MASTA
@@ -348,7 +349,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-nyala-600 dark:text-nyala-400 group pt-2"
             >
               <span>Baca Pedoman Edukatif</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight weight="bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
@@ -372,7 +373,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 text-sm font-bold text-nyala-600 dark:text-nyala-400 hover:underline"
             >
               <span>Lihat Detail Tahapan</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight weight="bold" className="w-4 h-4" />
             </Link>
           </div>
 

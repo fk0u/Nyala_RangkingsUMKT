@@ -12,9 +12,9 @@ Tagline-mu adalah: "Nyala. Teman perjalanan MABA-mu."
 
 BRAND & PERSONALITY:
 - Kamu ramah, hangat, penuh energi positif, suportif, dan dekat (seperti sahabat atau kakak tingkat yang asik).
-- Sedikit playful (sesekali pakai emoji api 🔥, senyum 😊, semangat ✨), namun tetap santun, respect, dan edukatif.
+- Responsif, solutif, santun, respect, dan edukatif.
 - Semboyan Tekno: "HIDUP TEKNIK! NO SKILL NO TRUST!"
-- Bahasa: Bahasa Indonesia yang santai, luwes, dan Gen-Z friendly namun tetap informatif, jelas, dan akurat.
+- Bahasa: Bahasa Indonesia yang santai, luwes, dan lugas namun tetap informatif, jelas, dan akurat.
 - Jangan kaku, jangan menjawab seperti robot birokrasi, tapi jadilah teman yang menguatkan dan menyemangati MABA agar lulus 100% tepat waktu (3.5 - 4 tahun).
 
 INFORMASI RESMI MASTA, SIKAD & PRODI TEKNOLOGI INFORMASI UMKT 2026:
@@ -48,56 +48,56 @@ export function generateLocalResponse(userMessage: string): string {
   if (query.includes("prodi ti") || query.includes("teknologi informasi") || query.includes("kurikulum") || query.includes("mata kuliah") || query.includes("s.kom") || query.includes("kaprodi") || query.includes("no skill")) {
     if (query.includes("semester 1") || query.includes("sem 1") || query.includes("makul")) {
       return `Mata kuliah **Semester 1 Prodi Teknologi Informasi UMKT 2026** (Total 20 SKS):
-1. 🔢 **Aljabar Linear** (3 SKS)
-2. 🧮 **Matematika Diskrit** (3 SKS)
-3. 📊 **Statistika** (3 SKS)
-4. 💻 **Dasar Pemrograman** (3 SKS) + **Praktikum Dasar Pemrograman** (1 SKS)
-5. ⚙️ **Sistem Digital dan Arsitektur Komputer** (3 SKS)
-6. 🕌 **Kemanusiaan dan Keimanan / Islamologi 1** (2 SKS)
-7. 🖥️ **Aplikasi Komputer & Pengantar Teknologi Informasi** (2 SKS)
+1. **Aljabar Linear** (3 SKS)
+2. **Matematika Diskrit** (3 SKS)
+3. **Statistika** (3 SKS)
+4. **Dasar Pemrograman** (3 SKS) + **Praktikum Dasar Pemrograman** (1 SKS)
+5. **Sistem Digital dan Arsitektur Komputer** (3 SKS)
+6. **Kemanusiaan dan Keimanan / Islamologi 1** (2 SKS)
+7. **Aplikasi Komputer & Pengantar Teknologi Informasi** (2 SKS)
 
-Tips Kaprodi: Pastikan nilai Dasar Pemrograman dan Matematika minimal BC ya! Buka tab **Akademik TI** di atas untuk melihat semester 2-4! 🔥`;
+Tips Kaprodi: Pastikan nilai Dasar Pemrograman dan Matematika minimal BC ya! Buka tab **Akademik TI** di atas untuk melihat semester 2-4.`;
     }
 
     if (query.includes("nilai") || query.includes("standar kelulusan") || query.includes("syarat lulus")) {
       return `Standar nilai minimum kelulusan di **Teknologi Informasi UMKT**:
-- 📚 **MK Wajib Prodi & Konsentrasi (JRS/KC)**: Minimal **C**
-- 🏛️ **MK Dasar Umum (MKDU)**: Minimal **B**
-- 🔬 **Basic Science & Praktikum**: Minimal **BC**
-- 💼 **Kerja Praktik / Magang & Capstone Design**: Minimal **B**
-- 🎓 **Skripsi / Tugas Akhir**: Minimal **AB**
+- **MK Wajib Prodi & Konsentrasi (JRS/KC)**: Minimal **C**
+- **MK Dasar Umum (MKDU)**: Minimal **B**
+- **Basic Science & Praktikum**: Minimal **BC**
+- **Kerja Praktik / Magang & Capstone Design**: Minimal **B**
+- **Skripsi / Tugas Akhir**: Minimal **AB**
 
-Rentang nilai: A (>80), AB (75-79), B (70-74), BC (66-70). Ingat slogan kita: *HIDUP TEKNIK! NO SKILL NO TRUST!* 💪`;
+Rentang nilai: A (>80), AB (75-79), B (70-74), BC (66-70). Ingat slogan perjuangan kita: *HIDUP TEKNIK! NO SKILL NO TRUST!*`;
     }
 
     if (query.includes("kalender") || query.includes("uts") || query.includes("uas") || query.includes("jadwal kuliah")) {
       return `Agenda penting **Kalender Akademik Semester Ganjil 2026/2027**:
-- 📅 **27 Juli - 27 Agustus 2026**: Masa Pengambilan MK / KRS di SIKAD
-- 📖 **31 Agustus - 7 Oktober 2026**: Perkuliahan Periode I
-- 📝 **19 - 24 Oktober 2026**: Ujian Tengah Semester (UTS)
-- 💻 **26 Oktober - 19 Desember 2026**: Perkuliahan Periode II
-- 🎯 **21 Desember 2026 - 9 Januari 2027**: Ujian Akhir Semester (UAS)
-- 🏆 **16 Januari 2027**: Batas Entri Nilai UAS di SIKAD`;
+- **27 Juli - 27 Agustus 2026**: Masa Pengambilan MK / KRS di SIKAD
+- **31 Agustus - 7 Oktober 2026**: Perkuliahan Periode I
+- **19 - 24 Oktober 2026**: Ujian Tengah Semester (UTS)
+- **26 Oktober - 19 Desember 2026**: Perkuliahan Periode II
+- **21 Desember 2026 - 9 Januari 2027**: Ujian Akhir Semester (UAS)
+- **16 Januari 2027**: Batas Entri Nilai UAS di SIKAD`;
     }
 
     if (query.includes("gaji") || query.includes("karir") || query.includes("prospek")) {
       return `Prospek karir lulusan **Sarjana Komputer (S.Kom) TI UMKT**:
-- 💻 **Software Engineer**: Kisaran Rp 190 Juta - Rp 205 Juta / tahun (Traveloka, Tokopedia, Bukalapak).
-- 📊 **Data Scientist / Analyst**: Analisis keputusan bisnis berbasis empiris.
-- 🛡️ **Cyber Security Engineer**: Pengamanan infrastruktur jaringan & kriptografi.
-- 📱 **Mobile Developer**: Spesialis aplikasi Android / iOS modern.
+- **Software Engineer**: Kisaran Rp 190 Juta - Rp 205 Juta / tahun (Traveloka, Tokopedia, Bukalapak).
+- **Data Scientist / Analyst**: Analisis keputusan bisnis berbasis empiris.
+- **Cyber Security Engineer**: Pengamanan infrastruktur jaringan & kriptografi.
+- **Mobile Developer**: Spesialis aplikasi Android / iOS modern.
 
-Di industri IT 2026, yang dinilai bukan hanya ijazah, melainkan kapasitas nyata menyelesaikan masalah (problem solving)! 🔥`;
+Di industri IT 2026, yang dinilai bukan hanya ijazah, melainkan kapasitas nyata menyelesaikan masalah (problem solving)!`;
     }
 
     return `Program Studi **Teknologi Informasi UMKT**:
-- 🏆 **Akreditasi**: "Baik Sekali" (2025 - 2030)
-- 🎓 **Gelar**: Sarjana Komputer (S.Kom)
-- 🎯 **Konsentrasi**: Jaringan dan Rekayasa Sistem (JRS) & Komputasi Cerdas (KC)
-- 🚩 **Semboyan**: "HIDUP TEKNIK! NO SKILL NO TRUST!"
-- 👨‍🏫 **Dosen PA**: Wajib bimbingan minimal 4 kali per semester (KRS, pra-UTS, pra-UAS, KHS).
+- **Akreditasi**: "Baik Sekali" (2025 - 2030)
+- **Gelar**: Sarjana Komputer (S.Kom)
+- **Konsentrasi**: Jaringan dan Rekayasa Sistem (JRS) & Komputasi Cerdas (KC)
+- **Semboyan**: "HIDUP TEKNIK! NO SKILL NO TRUST!"
+- **Dosen PA**: Wajib bimbingan minimal 4 kali per semester (KRS, pra-UTS, pra-UAS, KHS).
 
-Yuk buka menu **Akademik TI** di atas untuk panduan lengkap kurikulum dan profil dosen tetap! ✨`;
+Buka menu **Akademik TI** di atas untuk panduan lengkap kurikulum dan profil dosen tetap.`;
   }
 
   // 2. SIKAD & Portal Mahasiswa UMKT
@@ -108,7 +108,7 @@ Yuk buka menu **Akademik TI** di atas untuk panduan lengkap kurikulum dan profil
 2. Untuk MABA Semester 1, paket mata kuliah (20 SKS) sudah otomatis disiapkan.
 3. Masuk menu **KRS** -> periksa nama dosen & jadwal.
 4. Klik **Ajukan Bimbingan / Simpan KRS** untuk divalidasi oleh Dosen PA.
-5. Cek panduan visual di tab **SIKAD** aplikasi ini ya! ✨`;
+5. Cek panduan visual di tab **SIKAD** aplikasi ini ya.`;
     }
 
     return `Portal **SIKAD Mahasiswa UMKT** ([https://mahasiswa.umkt.ac.id/](https://mahasiswa.umkt.ac.id/)) digunakan untuk pengisian KRS, jadwal kuliah, presensi (min. 75%), tagihan SPP Virtual Account, dan cek nilai KHS.`;
@@ -117,32 +117,32 @@ Yuk buka menu **Akademik TI** di atas untuk panduan lengkap kurikulum dan profil
   // 3. Alur MASTA & Panduan Umum
   if (query.includes("alur") || query.includes("tahap") || query.includes("jadwal") || query.includes("proses")) {
     return `Alur resmi **MASTA MABA UMKT 2026** terdiri dari 5 tahapan:
-1. 📖 **Membaca Panduan Resmi**
-2. 🆔 **Verifikasi Identitas & NIM**
-3. 💻 **Kegiatan Daring Zoom Meeting**
-4. 🎪 **UKM Expo & Minat Bakat**
-5. 🏆 **Puncak Inagurasi & Sertifikasi**
+1. **Membaca Panduan Resmi**
+2. **Verifikasi Identitas & NIM**
+3. **Kegiatan Daring Zoom Meeting**
+4. **UKM Expo & Minat Bakat**
+5. **Puncak Inagurasi & Sertifikasi**
 
-Cek timeline detail di menu **Alur MASTA** ya! ✨`;
+Cek timeline detail di menu **Alur MASTA** ya.`;
   }
 
   if (query.includes("bawa") || query.includes("syarat") || query.includes("perlengkapan") || query.includes("checklist")) {
     return `Perlengkapan wajib MASTA 2026:
-- 📄 Kartu Peserta MASTA & berkas registrasi
-- 💻 Laptop/Smartphone + Zoom terbaru + kuota cadangan
-- 👔 Kemeja putih polos lengan panjang & bawahan hitam formal
-- 💧 Air minum botol & fisik yang fit! Buka menu **Checklist** untuk mencentang ya! 🔥`;
+- Kartu Peserta MASTA & berkas registrasi
+- Laptop/Smartphone + Zoom terbaru + kuota cadangan
+- Kemeja putih polos lengan panjang & bawahan hitam formal
+- Air minum botol & fisik yang fit! Buka menu **Checklist** untuk mencentang persiapan.`;
   }
 
   if (query.includes("gugup") || query.includes("takut") || query.includes("cemas") || query.includes("teman")) {
-    return `Wajar merasa nervous saat memulai masa perkuliahan baru, Sobat! Tarik napas teratur, sapa teman se-gugus, dan gunakan fitur **Health Check** untuk memantau energimu. Kamu pasti bisa! 🔥💪`;
+    return `Wajar merasa gugup saat memulai masa perkuliahan baru, Sobat! Tarik napas teratur, sapa teman se-gugus, dan gunakan fitur **Health Check** untuk memantau energimu. Kamu pasti bisa!`;
   }
 
-  return `Pertanyaan yang bagus sekali, Sobat MABA! 🔥
+  return `Pertanyaan yang bagus sekali, Sobat MABA!
 
 Kamu bisa mengeksplorasi panduan **Akademik TI UMKT**, portal **SIKAD** (mahasiswa.umkt.ac.id), atau materi resmi di [masta-maba.odoo.com](https://masta-maba.odoo.com/) dan [umkt.ac.id](https://www.umkt.ac.id/).
 
-Ada yang ingin kamu tanyakan lebih lanjut seputar mata kuliah, dosen, atau persiapan orientasi? Nyala siap bantu! ✨`;
+Ada yang ingin kamu tanyakan lebih lanjut seputar mata kuliah, dosen, atau persiapan orientasi? Nyala siap bantu!`;
 }
 
 /**

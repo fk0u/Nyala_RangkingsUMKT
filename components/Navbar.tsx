@@ -5,18 +5,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Sparkles,
-  HeartPulse,
-  CalendarDays,
+  Sparkle,
+  Heartbeat,
+  CalendarCheck,
   CheckSquare,
   BookOpenText,
   Laptop,
-  Code2,
-  Search,
-  ChevronDown,
-  Menu,
+  Code,
+  MagnifyingGlass,
+  CaretDown,
+  List,
   X,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import ThemeToggle from "./ThemeToggle";
 import MascotFlame from "./MascotFlame";
 
@@ -63,7 +63,7 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
           >
             <DropdownItem
               href="/panduan-ti"
-              icon={<Code2 className="w-4 h-4" />}
+              icon={<Code weight="bold" className="w-4 h-4" />}
               color="nyala"
               title="Prodi Teknologi Informasi"
               desc="Kurikulum 2026, Dosen, Standar Nilai & Karir"
@@ -71,7 +71,7 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
             />
             <DropdownItem
               href="/panduan-sikad"
-              icon={<Laptop className="w-4 h-4" />}
+              icon={<Laptop weight="bold" className="w-4 h-4" />}
               color="blue"
               title="Portal SIKAD UMKT"
               desc="Simulator KRS, Jadwal, Tagihan & Presensi"
@@ -79,7 +79,7 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
             />
             <DropdownItem
               href="/tentang-masta"
-              icon={<BookOpenText className="w-4 h-4" />}
+              icon={<BookOpenText weight="bold" className="w-4 h-4" />}
               color="purple"
               title="Edukasi & Pilar MASTA"
               desc="Fokus pembinaan, tata nilai & FAQ"
@@ -95,21 +95,21 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
           >
             <DropdownItem
               href="/jadwal"
-              icon={<CalendarDays className="w-4 h-4" />}
+              icon={<CalendarCheck weight="bold" className="w-4 h-4" />}
               color="amber"
               title="Alur 5 Tahap MASTA"
               desc="Timeline interaktif & pro-tips"
             />
             <DropdownItem
               href="/checklist"
-              icon={<CheckSquare className="w-4 h-4" />}
+              icon={<CheckSquare weight="bold" className="w-4 h-4" />}
               color="emerald"
               title="Checklist Perlengkapan"
               desc="Berkas, pakaian & task kustom"
             />
             <DropdownItem
               href="/health-check"
-              icon={<HeartPulse className="w-4 h-4" />}
+              icon={<Heartbeat weight="bold" className="w-4 h-4" />}
               color="rose"
               title="Health Check & Mood"
               desc="Asesmen kesiapan fisik & mental"
@@ -132,7 +132,7 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
               className="p-2 rounded-xl text-navy-500 dark:text-navy-400 hover:text-navy-900 dark:hover:text-white hover:bg-navy-100 dark:hover:bg-navy-800 transition-colors"
               title="Pencarian (Ctrl+K)"
             >
-              <Search className="w-4 h-4" />
+              <MagnifyingGlass weight="bold" className="w-4 h-4" />
             </button>
           )}
 
@@ -142,7 +142,7 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
             href="/companion"
             className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nyala-500 hover:bg-nyala-600 text-white text-xs font-bold shadow-sm hover:shadow-md transition-all active:scale-[0.97]"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkle weight="fill" className="w-3.5 h-3.5" />
             <span>Chat AI</span>
           </Link>
 
@@ -150,7 +150,7 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
             onClick={() => setMobileOpen((v) => !v)}
             className="lg:hidden p-2 rounded-xl text-navy-600 dark:text-navy-300 hover:bg-navy-100 dark:hover:bg-navy-800"
           >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileOpen ? <X weight="bold" className="w-5 h-5" /> : <List weight="bold" className="w-5 h-5" />}
           </button>
         </div>
       </div>
@@ -166,12 +166,12 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
           >
             <div className="grid grid-cols-2 gap-2">
               {[
-                { href: "/panduan-ti", label: "Akademik TI", icon: Code2, color: "text-nyala-500" },
+                { href: "/panduan-ti", label: "Akademik TI", icon: Code, color: "text-nyala-500" },
                 { href: "/panduan-sikad", label: "SIKAD UMKT", icon: Laptop, color: "text-blue-500" },
-                { href: "/jadwal", label: "Alur MASTA", icon: CalendarDays, color: "text-amber-500" },
+                { href: "/jadwal", label: "Alur MASTA", icon: CalendarCheck, color: "text-amber-500" },
                 { href: "/checklist", label: "Checklist", icon: CheckSquare, color: "text-emerald-500" },
-                { href: "/health-check", label: "Health Check", icon: HeartPulse, color: "text-rose-500" },
-                { href: "/companion", label: "Tanya AI", icon: Sparkles, color: "text-nyala-500" },
+                { href: "/health-check", label: "Health Check", icon: Heartbeat, color: "text-rose-500" },
+                { href: "/companion", label: "Tanya AI", icon: Sparkle, color: "text-nyala-500" },
               ].map((item) => {
                 const Icon = item.icon;
                 return (
@@ -180,7 +180,7 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
                     href={item.href}
                     className="p-3 rounded-xl bg-navy-50 dark:bg-navy-900 border border-navy-100 dark:border-navy-800 flex items-center gap-2.5"
                   >
-                    <Icon className={`w-4 h-4 ${item.color}`} />
+                    <Icon weight="bold" className={`w-4 h-4 ${item.color}`} />
                     <span className="text-xs font-bold text-navy-900 dark:text-white">{item.label}</span>
                   </Link>
                 );
@@ -215,7 +215,7 @@ function NavLink({
           : "text-navy-600 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white hover:bg-navy-100/50 dark:hover:bg-navy-800/50"
       } ${accent ? "flex items-center gap-1.5" : ""}`}
     >
-      {accent && <Sparkles className="w-3.5 h-3.5 text-nyala-500" />}
+      {accent && <Sparkle weight="fill" className="w-3.5 h-3.5 text-nyala-500" />}
       {label}
       {accent && (
         <span className="text-[8px] font-extrabold px-1.5 py-0.5 rounded-full bg-nyala-500 text-white leading-none">
@@ -253,7 +253,7 @@ function Dropdown({
         }`}
       >
         {label}
-        <ChevronDown className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} />
+        <CaretDown weight="bold" className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>

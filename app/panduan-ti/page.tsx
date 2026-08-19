@@ -4,28 +4,28 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   GraduationCap, 
-  Code2, 
+  Code, 
   Terminal, 
   Cpu, 
   BookOpen, 
   Calendar, 
-  DollarSign, 
+  CurrencyDollar, 
   Users, 
   ShieldCheck, 
   Award, 
-  Search, 
-  CheckCircle2, 
-  Flame, 
-  Sparkles, 
-  ChevronRight, 
-  AlertTriangle, 
+  MagnifyingGlass, 
+  CheckCircle, 
+  Fire, 
+  Sparkle, 
+  CaretRight, 
+  Warning, 
   Compass, 
   Laptop,
   Briefcase,
-  TrendingUp,
+  TrendUp,
   FileCheck,
   Lightbulb
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { PRODI_TI_DATA, OFFICIAL_LINKS, Course, Lecturer } from "@/lib/masta-data";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import MascotFlame from "@/components/MascotFlame";
@@ -59,7 +59,7 @@ export default function PanduanTiPage() {
           <div className="lg:col-span-8 space-y-5">
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-3 py-1 rounded-full bg-nyala-500/20 text-nyala-400 text-xs font-extrabold uppercase tracking-wider border border-nyala-500/30 flex items-center gap-1.5">
-                <Code2 className="w-3.5 h-3.5" />
+                <Code weight="bold" className="w-3.5 h-3.5" />
                 <span>Teknologi Informasi UMKT 2026</span>
               </span>
               <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
@@ -79,7 +79,7 @@ export default function PanduanTiPage() {
             {/* Slogan Banner */}
             <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-4 max-w-xl">
               <div className="flex items-center gap-3">
-                <Terminal className="w-6 h-6 text-nyala-400 flex-shrink-0" />
+                <Terminal weight="bold" className="w-6 h-6 text-nyala-400 flex-shrink-0" />
                 <div>
                   <span className="text-[11px] uppercase tracking-wider text-navy-400 font-bold block">
                     Semboyan Perjuangan TI:
@@ -131,7 +131,7 @@ export default function PanduanTiPage() {
               className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden"
             >
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-nyala-500 to-amber-500 text-white flex items-center justify-center shadow-fire">
-                {idx === 0 ? <Cpu className="w-6 h-6" /> : idx === 1 ? <Lightbulb className="w-6 h-6" /> : <Award className="w-6 h-6" />}
+                {idx === 0 ? <Cpu weight="duotone" className="w-6 h-6" /> : idx === 1 ? <Lightbulb weight="duotone" className="w-6 h-6" /> : <Award weight="duotone" className="w-6 h-6" />}
               </div>
               <h3 className="text-lg font-bold text-navy-900 dark:text-white">
                 {pilar.title}
@@ -232,7 +232,7 @@ export default function PanduanTiPage() {
           {/* Strategic Kaprodi Advice */}
           <div className="p-4 sm:p-5 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-900/50 space-y-2">
             <h4 className="text-xs sm:text-sm font-bold text-amber-900 dark:text-amber-300 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+              <Sparkle weight="fill" className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span>Saran Strategis Kaprodi TI:</span>
             </h4>
             <ul className="text-xs text-amber-800 dark:text-amber-200 space-y-1 list-disc list-inside leading-relaxed">
@@ -264,7 +264,7 @@ export default function PanduanTiPage() {
               className="p-4 rounded-2xl glass-card border border-navy-200/60 dark:border-navy-800 flex items-center justify-between gap-3"
             >
               <div className="flex items-center gap-2.5">
-                <FileCheck className="w-4 h-4 text-nyala-500" />
+                <FileCheck weight="bold" className="w-4 h-4 text-nyala-500" />
                 <span className="text-xs font-bold text-navy-800 dark:text-navy-200">{grade.category}</span>
               </div>
               <span className={`px-2.5 py-1 rounded-xl text-xs font-black ${
@@ -305,7 +305,7 @@ export default function PanduanTiPage() {
           {/* Search & Filter */}
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-navy-400" />
+              <MagnifyingGlass weight="bold" className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-navy-400" />
               <input
                 type="text"
                 value={searchLecturer}

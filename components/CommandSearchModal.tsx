@@ -4,19 +4,19 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Search, 
-  Sparkles, 
+  MagnifyingGlass, 
+  Sparkle, 
   Laptop, 
-  Code2, 
-  CalendarDays, 
+  Code, 
+  CalendarCheck, 
   CheckSquare, 
-  HeartPulse, 
+  Heartbeat, 
   BookOpenText, 
   ArrowRight, 
-  ExternalLink,
+  ArrowSquareOut,
   Command,
   X
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { OFFICIAL_LINKS } from "@/lib/masta-data";
 
 interface SearchItem {
@@ -31,12 +31,12 @@ interface SearchItem {
 
 const SEARCH_ITEMS: SearchItem[] = [
   // Navigasi Utama
-  { id: "nav-home", title: "Beranda Utama", desc: "Hero, countdown timer, dan ringkasan fitur Nyala", category: "Navigasi", href: "/", icon: Sparkles },
-  { id: "nav-ai", title: "Tanya Nyala AI", desc: "Virtual companion cerdas seputar MASTA & perkuliahan", category: "Navigasi", href: "/companion", icon: Sparkles },
+  { id: "nav-home", title: "Beranda Utama", desc: "Hero, countdown timer, dan ringkasan fitur Nyala", category: "Navigasi", href: "/", icon: Sparkle },
+  { id: "nav-ai", title: "Tanya Nyala AI", desc: "Virtual companion cerdas seputar MASTA & perkuliahan", category: "Navigasi", href: "/companion", icon: Sparkle },
   { id: "nav-sikad", title: "Panduan Portal SIKAD", desc: "Simulasi 1:1 mahasiswa.umkt.ac.id, login NIM, KRS, & tagihan", category: "SIKAD UMKT", href: "/panduan-sikad", icon: Laptop },
-  { id: "nav-ti", title: "Akademik & Karir TI UMKT 2026", desc: "Kurikulum Semester 1-4, dosen tetap, standar nilai, & gaji IT", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code2 },
-  { id: "nav-health", title: "Health Check & Mood Tracker", desc: "Pantau kesiapan tidur, nutrisi, hidrasi, & kestabilan mental", category: "Navigasi", href: "/health-check", icon: HeartPulse },
-  { id: "nav-jadwal", title: "Alur 5 Tahap MASTA 2026", desc: "Timeline interaktif dari Membaca Panduan hingga Inaugurasi", category: "Panduan MASTA", href: "/jadwal", icon: CalendarDays },
+  { id: "nav-ti", title: "Akademik & Karir TI UMKT 2026", desc: "Kurikulum Semester 1-4, dosen tetap, standar nilai, & gaji IT", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code },
+  { id: "nav-health", title: "Health Check & Mood Tracker", desc: "Pantau kesiapan tidur, nutrisi, hidrasi, & kestabilan mental", category: "Navigasi", href: "/health-check", icon: Heartbeat },
+  { id: "nav-jadwal", title: "Alur 5 Tahap MASTA 2026", desc: "Timeline interaktif dari Membaca Panduan hingga Inaugurasi", category: "Panduan MASTA", href: "/jadwal", icon: CalendarCheck },
   { id: "nav-check", title: "Checklist Persiapan MABA", desc: "Daftar perlengkapan, berkas wajib, dan pakaian resmi", category: "Panduan MASTA", href: "/checklist", icon: CheckSquare },
   { id: "nav-masta", title: "Edukasi & 4 Pilar MASTA", desc: "3 fokus pembinaan dan FAQ resmi orientasi kampus", category: "Panduan MASTA", href: "/tentang-masta", icon: BookOpenText },
 
@@ -46,14 +46,14 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: "sikad-tagihan", title: "Cek Tagihan SPP & BRIVA", desc: "Pembayaran Virtual Account dan verifikasi otomatis", category: "SIKAD UMKT", href: "/panduan-sikad", icon: Laptop },
 
   // Prodi TI Shortcuts
-  { id: "ti-kurikulum", title: "Mata Kuliah Semester 1 TI", desc: "Aljabar Linear, Matdis, Statistika, Dasar Pemrograman (20 SKS)", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code2 },
-  { id: "ti-dosen", title: "Profil 11 Dosen Tetap TI", desc: "Daftar dosen aktif dan tugas belajar S3 bidang AI/ML/IoT", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code2 },
-  { id: "ti-gaji", title: "Estimasi Gaji Karir IT 2026", desc: "Benchmark Software Engineer Traveloka, Tokopedia, Jakarta/Bandung", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code2 },
+  { id: "ti-kurikulum", title: "Mata Kuliah Semester 1 TI", desc: "Aljabar Linear, Matdis, Statistika, Dasar Pemrograman (20 SKS)", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code },
+  { id: "ti-dosen", title: "Profil 11 Dosen Tetap TI", desc: "Daftar dosen aktif dan tugas belajar S3 bidang AI/ML/IoT", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code },
+  { id: "ti-gaji", title: "Estimasi Gaji Karir IT 2026", desc: "Benchmark Software Engineer Traveloka, Tokopedia, Jakarta/Bandung", category: "Prodi TI 2026", href: "/panduan-ti", icon: Code },
 
   // Tautan Resmi
-  { id: "ext-sikad", title: "Buka Portal SIKAD Asli", desc: "mahasiswa.umkt.ac.id", category: "Tautan Resmi", href: OFFICIAL_LINKS.sikadMahasiswa, icon: ExternalLink, isExternal: true },
-  { id: "ext-umkt", title: "Website Resmi UMKT", desc: "www.umkt.ac.id", category: "Tautan Resmi", href: OFFICIAL_LINKS.umktMain, icon: ExternalLink, isExternal: true },
-  { id: "ext-masta", title: "Portal Resmi MASTA UMKT", desc: "masta-maba.odoo.com", category: "Tautan Resmi", href: OFFICIAL_LINKS.mastaOdoo, icon: ExternalLink, isExternal: true },
+  { id: "ext-sikad", title: "Buka Portal SIKAD Asli", desc: "mahasiswa.umkt.ac.id", category: "Tautan Resmi", href: OFFICIAL_LINKS.sikadMahasiswa, icon: ArrowSquareOut, isExternal: true },
+  { id: "ext-umkt", title: "Website Resmi UMKT", desc: "www.umkt.ac.id", category: "Tautan Resmi", href: OFFICIAL_LINKS.umktMain, icon: ArrowSquareOut, isExternal: true },
+  { id: "ext-masta", title: "Portal Resmi MASTA UMKT", desc: "masta-maba.odoo.com", category: "Tautan Resmi", href: OFFICIAL_LINKS.mastaOdoo, icon: ArrowSquareOut, isExternal: true },
 ];
 
 export default function CommandSearchModal({
@@ -138,7 +138,7 @@ export default function CommandSearchModal({
         >
           {/* Search Input Bar */}
           <div className="flex items-center gap-3 px-5 py-4 border-b border-navy-100 dark:border-navy-800">
-            <Search className="w-5 h-5 text-nyala-500 flex-shrink-0" />
+            <MagnifyingGlass weight="bold" className="w-5 h-5 text-nyala-500 flex-shrink-0" />
             <input
               type="text"
               value={query}
@@ -152,7 +152,7 @@ export default function CommandSearchModal({
                 onClick={() => setQuery("")}
                 className="p-1 rounded-md text-navy-400 hover:text-navy-700 dark:hover:text-white"
               >
-                <X className="w-4 h-4" />
+                <X weight="bold" className="w-4 h-4" />
               </button>
             )}
             <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-navy-100 dark:bg-navy-800 text-[10px] font-mono font-bold text-navy-500 dark:text-navy-400 border border-navy-200 dark:border-navy-700">
@@ -186,7 +186,7 @@ export default function CommandSearchModal({
                       <div className={`p-2 rounded-xl flex-shrink-0 ${
                         isSelected ? "bg-nyala-500 text-white shadow-xs" : "bg-navy-100 dark:bg-navy-800 text-navy-500"
                       }`}>
-                        <Icon className="w-4 h-4" />
+                        <Icon weight="bold" className="w-4 h-4" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -201,7 +201,7 @@ export default function CommandSearchModal({
                       </div>
                     </div>
 
-                    <ArrowRight className={`w-4 h-4 text-navy-400 transition-transform ${
+                    <ArrowRight weight="bold" className={`w-4 h-4 text-navy-400 transition-transform ${
                       isSelected ? "translate-x-1 text-nyala-500" : "opacity-0"
                     }`} />
                   </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Clock, Sparkles } from "lucide-react";
+import { Clock, Sparkle } from "@phosphor-icons/react";
 
 export default function CountdownTimer() {
   // Target MASTA UMKT 2026 (Orientasi MABA perkiraan Agustus/September 2026)
@@ -41,11 +41,11 @@ export default function CountdownTimer() {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2.5">
           <div className="w-10 h-10 rounded-xl bg-nyala-500 text-white flex items-center justify-center shadow-fire">
-            <Clock className="w-5 h-5" />
+            <Clock weight="duotone" className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-nyala-600 dark:text-nyala-400">
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkle weight="fill" className="w-3.5 h-3.5" />
               <span>Hitung Mundur Menuju</span>
             </div>
             <h4 className="text-sm sm:text-base font-bold text-navy-900 dark:text-white">

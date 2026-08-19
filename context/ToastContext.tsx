@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, AlertCircle, Info, Sparkles, X } from "lucide-react";
+import { CheckCircle, WarningCircle, Info, Sparkle, X } from "@phosphor-icons/react";
 
 export type ToastType = "success" | "info" | "warning" | "nyala";
 
@@ -53,13 +53,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const getIcon = (type?: ToastType) => {
     switch (type) {
       case "success":
-        return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+        return <CheckCircle weight="fill" className="w-5 h-5 text-emerald-500" />;
       case "warning":
-        return <AlertCircle className="w-5 h-5 text-amber-500" />;
+        return <WarningCircle weight="fill" className="w-5 h-5 text-amber-500" />;
       case "nyala":
-        return <Sparkles className="w-5 h-5 text-nyala-500 animate-pulse" />;
+        return <Sparkle weight="fill" className="w-5 h-5 text-nyala-500 animate-pulse" />;
       default:
-        return <Info className="w-5 h-5 text-blue-500" />;
+        return <Info weight="fill" className="w-5 h-5 text-blue-500" />;
     }
   };
 
@@ -88,7 +88,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 onClick={() => removeToast(toast.id)}
                 className="flex-shrink-0 p-1 text-navy-400 hover:text-navy-700 dark:hover:text-white rounded-lg transition-colors"
               >
-                <X className="w-3.5 h-3.5" />
+                <X weight="bold" className="w-3.5 h-3.5" />
               </button>
             </motion.div>
           ))}

@@ -4,16 +4,16 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   BookOpenText, 
-  Sparkles, 
+  Sparkle, 
   Target, 
   Compass, 
-  HeartHandshake, 
+  Handshake, 
   GraduationCap, 
-  ChevronDown, 
+  CaretDown, 
   Users, 
-  Flame,
+  Fire,
   Award
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import MascotFlame from "@/components/MascotFlame";
 import { MASTA_FAQS, OFFICIAL_LINKS } from "@/lib/masta-data";
@@ -31,7 +31,7 @@ export default function TentangMastaPage() {
       {/* 1. Header & Hero Intro */}
       <div className="text-center space-y-4 max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-bold uppercase tracking-wider">
-          <BookOpenText className="w-4 h-4" />
+          <BookOpenText weight="bold" className="w-4 h-4" />
           <span>Informasi Resmi & Edukatif</span>
         </div>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy-900 dark:text-white tracking-tight leading-tight">
@@ -48,7 +48,7 @@ export default function TentangMastaPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-nyala-600 dark:text-nyala-400 uppercase tracking-wider">
-              <Sparkles className="w-4 h-4" />
+              <Sparkle weight="fill" className="w-4 h-4" />
               <span>Esensi Kegiatan MASTA</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-navy-900 dark:text-white">
@@ -83,7 +83,7 @@ export default function TentangMastaPage() {
           {/* Fokus 1 */}
           <div className="p-6 sm:p-7 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden">
             <div className="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center shadow-md">
-              <Compass className="w-6 h-6" />
+              <Compass weight="duotone" className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-navy-900 dark:text-white">
               1. Adaptasi Kehidupan Kampus
@@ -96,7 +96,7 @@ export default function TentangMastaPage() {
           {/* Fokus 2 */}
           <div className="p-6 sm:p-7 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden">
             <div className="w-12 h-12 rounded-2xl bg-nyala-500 text-white flex items-center justify-center shadow-fire">
-              <Flame className="w-6 h-6" />
+              <Fire weight="fill" className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-navy-900 dark:text-white">
               2. Pembentukan Karakter
@@ -109,7 +109,7 @@ export default function TentangMastaPage() {
           {/* Fokus 3 */}
           <div className="p-6 sm:p-7 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md">
-              <Award className="w-6 h-6" />
+              <Award weight="duotone" className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-navy-900 dark:text-white">
               3. Pengenalan Peluang Mahasiswa
@@ -153,7 +153,7 @@ export default function TentangMastaPage() {
             {
               title: "Karakter",
               desc: "Menerapkan sikap santun, integritas ilmiah, dan tanggung jawab sosial.",
-              icon: HeartHandshake,
+              icon: Handshake,
             },
           ].map((pillar, i) => {
             const Icon = pillar.icon;
@@ -162,7 +162,7 @@ export default function TentangMastaPage() {
                 key={i}
                 className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2.5 hover:border-nyala-500/50 transition-colors"
               >
-                <Icon className="w-6 h-6 text-nyala-400" />
+                <Icon weight="duotone" className="w-6 h-6 text-nyala-400" />
                 <h4 className="text-base font-bold text-white">{pillar.title}</h4>
                 <p className="text-xs text-navy-300 leading-relaxed">{pillar.desc}</p>
               </div>
@@ -199,7 +199,8 @@ export default function TentangMastaPage() {
                     <span className="text-nyala-500 font-extrabold">Q:</span>
                     <span>{faq.question}</span>
                   </span>
-                  <ChevronDown
+                  <CaretDown
+                    weight="bold"
                     className={`w-5 h-5 text-navy-400 transition-transform ${
                       isOpen ? "rotate-180 text-nyala-500" : ""
                     }`}

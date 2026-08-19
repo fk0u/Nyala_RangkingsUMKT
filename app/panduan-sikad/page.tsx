@@ -4,41 +4,39 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Globe, 
-  ExternalLink, 
-  KeyRound, 
-  FileSpreadsheet, 
-  CalendarClock, 
+  ArrowSquareOut, 
+  Key, 
+  Table, 
+  Calendar, 
   UserCheck, 
   CreditCard, 
   GraduationCap, 
-  CheckCircle2, 
+  CheckCircle, 
   Copy, 
   Check, 
-  Sparkles, 
-  AlertCircle, 
-  HelpCircle, 
-  Flame, 
+  Sparkle, 
+  WarningCircle, 
+  Question, 
+  Fire, 
   ShieldCheck, 
   Laptop, 
-  Search,
+  MagnifyingGlass,
   BookOpen,
   Bell,
   Info,
   User,
   Star,
-  DollarSign,
   FolderOpen,
-  ChevronDown,
+  CaretDown,
   FileText,
-  MessageSquare,
+  ChatCenteredText,
   Award,
-  Layers,
-  FileBadge,
-  LogOut,
+  Stack,
+  Certificate,
+  SignOut,
   Folder,
-  Calendar as CalendarIcon,
-  BookMarked
-} from "lucide-react";
+  BookmarkSimple
+} from "@phosphor-icons/react";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import MascotFlame from "@/components/MascotFlame";
 import { SIKAD_GUIDES, OFFICIAL_LINKS } from "@/lib/masta-data";
@@ -62,18 +60,18 @@ export default function PanduanSikadPage() {
   const SIKAD_SIDEBAR_ITEMS = [
     { name: "Dashboard", icon: Globe },
     { name: "Biodata", icon: User },
-    { name: "KRS", icon: FileSpreadsheet, hasSub: true },
+    { name: "KRS", icon: Table, hasSub: true },
     { name: "Biaya Kuliah", icon: CreditCard },
     { name: "Bahan & Tugas", icon: BookOpen },
-    { name: "Jadwal & Presensi", icon: CalendarClock },
-    { name: "PA Online", icon: MessageSquare },
-    { name: "Kuesioner", icon: CheckCircle2 },
+    { name: "Jadwal & Presensi", icon: Calendar },
+    { name: "PA Online", icon: ChatCenteredText },
+    { name: "Kuesioner", icon: CheckCircle },
     { name: "Nilai", icon: Star },
-    { name: "Kegiatan", icon: Layers, hasSub: true },
+    { name: "Kegiatan", icon: Stack, hasSub: true },
     { name: "Pengajuan", icon: FileText, hasSub: true },
-    { name: "SKPI", icon: FileBadge },
+    { name: "SKPI", icon: Certificate },
     { name: "Tracer Study", icon: Award },
-    { name: "Panduan", icon: HelpCircle },
+    { name: "Panduan", icon: Question },
     { name: "Akun Lain", icon: User },
   ];
 
@@ -83,7 +81,7 @@ export default function PanduanSikadPage() {
       {/* 1. Header Hero */}
       <div className="text-center space-y-4 max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-          <Laptop className="w-4 h-4 text-blue-500" />
+          <Laptop weight="bold" className="w-4 h-4 text-blue-500" />
           <span>Sistem Informasi Akademik Mahasiswa (SIKAD UMKT)</span>
         </div>
 
@@ -103,9 +101,9 @@ export default function PanduanSikadPage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm shadow-soft hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            <Laptop className="w-4 h-4" />
+            <Laptop weight="bold" className="w-4 h-4" />
             <span>Kunjungi mahasiswa.umkt.ac.id Langsung</span>
-            <ExternalLink className="w-4 h-4" />
+            <ArrowSquareOut weight="bold" className="w-4 h-4" />
           </a>
         </div>
       </div>
@@ -122,17 +120,17 @@ export default function PanduanSikadPage() {
               <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
             </div>
             <div className="hidden sm:flex items-center gap-2 bg-white dark:bg-navy-950 px-3 py-1 rounded-xl text-xs font-mono border border-navy-200 dark:border-navy-800 text-navy-600 dark:text-navy-300">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+              <ShieldCheck weight="fill" className="w-3.5 h-3.5 text-emerald-500" />
               <span>https://mahasiswa.umkt.ac.id/</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <button className="p-1.5 rounded-full bg-blue-50 dark:bg-navy-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100">
-              <Bell className="w-4 h-4" />
+              <Bell weight="bold" className="w-4 h-4" />
             </button>
             <button className="p-1.5 rounded-full bg-blue-50 dark:bg-navy-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100">
-              <Info className="w-4 h-4" />
+              <Info weight="bold" className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-2 pl-2 border-l border-navy-200 dark:border-navy-800 text-xs">
               <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 to-nyala-500 text-white font-bold flex items-center justify-center text-[10px]">
@@ -155,7 +153,7 @@ export default function PanduanSikadPage() {
             {/* UMKT Brand in Sidebar */}
             <div className="flex flex-col items-center text-center pb-3 border-b border-navy-200/80 dark:border-navy-800">
               <div className="w-12 h-12 rounded-full bg-navy-900 border-2 border-amber-400 flex items-center justify-center text-amber-400 mb-1.5 shadow-sm">
-                <GraduationCap className="w-6 h-6" />
+                <GraduationCap weight="fill" className="w-6 h-6" />
               </div>
               <span className="text-[10px] font-black uppercase tracking-wider text-navy-800 dark:text-navy-200">
                 UNIVERSITAS MUHAMMADIYAH
@@ -185,11 +183,11 @@ export default function PanduanSikadPage() {
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon className={`w-3.5 h-3.5 ${isSelected ? "text-white" : "text-navy-500"}`} />
+                      <Icon weight="bold" className={`w-3.5 h-3.5 ${isSelected ? "text-white" : "text-navy-500"}`} />
                       <span>{item.name}</span>
                     </div>
                     {item.hasSub && (
-                      <ChevronDown className={`w-3 h-3 ${isSelected ? "text-white" : "text-navy-400"}`} />
+                      <CaretDown weight="bold" className={`w-3 h-3 ${isSelected ? "text-white" : "text-navy-400"}`} />
                     )}
                   </button>
                 );
@@ -216,7 +214,7 @@ export default function PanduanSikadPage() {
                   <div className="p-4 rounded-2xl bg-gradient-to-br from-[#7C69EF] to-[#6351D8] text-white shadow-md space-y-3 relative overflow-hidden">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold flex items-center gap-1 opacity-90">
-                        <Star className="w-3.5 h-3.5 fill-white" />
+                        <Star weight="fill" className="w-3.5 h-3.5 text-white" />
                         IPK
                       </span>
                     </div>
@@ -234,7 +232,7 @@ export default function PanduanSikadPage() {
                   <div className="p-4 rounded-2xl bg-gradient-to-br from-[#38BDF8] to-[#0284C7] text-white shadow-md space-y-2 relative overflow-hidden">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold flex items-center gap-1 opacity-90">
-                        <CreditCard className="w-3.5 h-3.5" />
+                        <CreditCard weight="bold" className="w-3.5 h-3.5" />
                         Tagihan
                       </span>
                     </div>
@@ -248,7 +246,7 @@ export default function PanduanSikadPage() {
                   <div className="p-4 rounded-2xl bg-gradient-to-br from-[#F87171] to-[#DC2626] text-white shadow-md space-y-3 relative overflow-hidden">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold flex items-center gap-1 opacity-90">
-                        <Award className="w-3.5 h-3.5" />
+                        <Award weight="bold" className="w-3.5 h-3.5" />
                         Semester
                       </span>
                     </div>
@@ -259,7 +257,7 @@ export default function PanduanSikadPage() {
                   <div className="p-4 rounded-2xl bg-gradient-to-br from-[#C084FC] to-[#9333EA] text-white shadow-md space-y-2 relative overflow-hidden">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold flex items-center gap-1 opacity-90">
-                        <FileSpreadsheet className="w-3.5 h-3.5" />
+                        <Table weight="bold" className="w-3.5 h-3.5" />
                         Jumlah SKS
                       </span>
                     </div>
@@ -277,7 +275,7 @@ export default function PanduanSikadPage() {
                 <div className="p-5 rounded-2xl bg-white dark:bg-navy-900 border border-slate-200/80 dark:border-navy-800 shadow-sm space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-navy-800">
                     <div className="flex items-center gap-2">
-                      <CalendarIcon className="w-4 h-4 text-blue-600" />
+                      <Calendar weight="bold" className="w-4 h-4 text-blue-600" />
                       <h4 className="text-sm font-bold text-navy-900 dark:text-white">
                         Jadwal Pertemuan Kuliah
                       </h4>
@@ -300,7 +298,7 @@ export default function PanduanSikadPage() {
                   </div>
 
                   <div className="text-center py-10 space-y-2 text-slate-400">
-                    <Folder className="w-10 h-10 mx-auto text-slate-300 dark:text-slate-600" />
+                    <Folder weight="duotone" className="w-10 h-10 mx-auto text-slate-300 dark:text-slate-600" />
                     <p className="text-xs font-medium">Tidak ada jadwal pertemuan kuliah</p>
                   </div>
                 </div>
@@ -308,7 +306,7 @@ export default function PanduanSikadPage() {
                 {/* Grafik Masa Studi Section */}
                 <div className="p-5 rounded-2xl bg-white dark:bg-navy-900 border border-slate-200/80 dark:border-navy-800 shadow-sm space-y-4">
                   <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-navy-800">
-                    <BookMarked className="w-4 h-4 text-blue-600" />
+                    <BookmarkSimple weight="bold" className="w-4 h-4 text-blue-600" />
                     <h4 className="text-sm font-bold text-navy-900 dark:text-white">
                       Grafik Masa Studi
                     </h4>
@@ -386,7 +384,7 @@ export default function PanduanSikadPage() {
             {/* Screen: Other menus fallback */}
             {simulatedMenu !== "Dashboard" && simulatedMenu !== "KRS" && simulatedMenu !== "Biaya Kuliah" && (
               <div className="text-center py-16 space-y-3">
-                <FolderOpen className="w-12 h-12 text-blue-500 mx-auto" />
+                <FolderOpen weight="duotone" className="w-12 h-12 text-blue-500 mx-auto" />
                 <h3 className="text-base font-bold text-navy-900 dark:text-white">
                   Menu: {simulatedMenu}
                 </h3>
@@ -482,7 +480,7 @@ Wassalamu’alaikum Warahmatullahi Wabarakatuh.`}
             }
             className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-nyala-500 hover:bg-nyala-600 text-white font-sans text-xs font-bold transition-all shadow-xs"
           >
-            {copiedKey === "pa-sikad" ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+            {copiedKey === "pa-sikad" ? <Check weight="bold" className="w-3.5 h-3.5" /> : <Copy weight="bold" className="w-3.5 h-3.5" />}
             <span>{copiedKey === "pa-sikad" ? "Tersalin!" : "Salin Template Chat"}</span>
           </button>
         </div>

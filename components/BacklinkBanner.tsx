@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ExternalLink, GraduationCap, ShieldCheck, Globe, Laptop, Flame } from "lucide-react";
+import { ArrowSquareOut, GraduationCap, ShieldCheck, Globe, Laptop, Fire } from "@phosphor-icons/react";
 import { OFFICIAL_LINKS } from "@/lib/masta-data";
 
 export default function BacklinkBanner({ compact = false }: { compact?: boolean }) {
@@ -10,7 +10,7 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
     return (
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-navy-50 dark:bg-navy-800/60 border border-navy-200/60 dark:border-navy-700/60 text-xs">
         <div className="flex items-center gap-2 text-navy-700 dark:text-navy-300">
-          <GraduationCap className="w-4 h-4 text-nyala-500" />
+          <GraduationCap weight="duotone" className="w-4 h-4 text-nyala-500" />
           <span className="font-semibold">Portal Resmi Terverifikasi:</span>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -20,9 +20,9 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 font-bold text-nyala-600 dark:text-nyala-400 hover:underline"
           >
-            <Globe className="w-3.5 h-3.5" />
+            <Globe weight="bold" className="w-3.5 h-3.5" />
             <span>umkt.ac.id</span>
-            <ExternalLink className="w-3 h-3" />
+            <ArrowSquareOut weight="bold" className="w-3 h-3" />
           </a>
           <span className="text-navy-300 dark:text-navy-600">•</span>
           <a
@@ -31,9 +31,9 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 font-bold text-blue-600 dark:text-blue-400 hover:underline"
           >
-            <Laptop className="w-3.5 h-3.5" />
+            <Laptop weight="bold" className="w-3.5 h-3.5" />
             <span>mahasiswa.umkt.ac.id</span>
-            <ExternalLink className="w-3 h-3" />
+            <ArrowSquareOut weight="bold" className="w-3 h-3" />
           </a>
           <span className="text-navy-300 dark:text-navy-600">•</span>
           <a
@@ -42,9 +42,9 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 font-bold text-nyala-600 dark:text-nyala-400 hover:underline"
           >
-            <Flame className="w-3.5 h-3.5" />
+            <Fire weight="bold" className="w-3.5 h-3.5" />
             <span>masta-maba.odoo.com</span>
-            <ExternalLink className="w-3 h-3" />
+            <ArrowSquareOut weight="bold" className="w-3 h-3" />
           </a>
         </div>
       </div>
@@ -60,7 +60,7 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
       <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-nyala-500/20 text-nyala-300 text-xs font-semibold border border-nyala-500/30">
-            <ShieldCheck className="w-3.5 h-3.5" />
+            <ShieldCheck weight="fill" className="w-3.5 h-3.5" />
             <span>Situs Resmi & Terpercaya</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
@@ -78,9 +78,9 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-nyala-500 hover:bg-nyala-600 text-white font-semibold text-xs sm:text-sm transition-all shadow-fire hover:scale-[1.02] active:scale-95"
           >
-            <Globe className="w-4 h-4" />
+            <Globe weight="duotone" className="w-4 h-4" />
             <span>Website UMKT</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
           </a>
           <a
             href={OFFICIAL_LINKS.sikadMahasiswa}
@@ -88,9 +88,9 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm transition-all shadow-sm hover:scale-[1.02] active:scale-95"
           >
-            <Laptop className="w-4 h-4" />
+            <Laptop weight="duotone" className="w-4 h-4" />
             <span>SIKAD UMKT</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
           </a>
           <a
             href={OFFICIAL_LINKS.umktKemahasiswaan}
@@ -98,9 +98,9 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs sm:text-sm transition-all border border-white/15 hover:scale-[1.02] active:scale-95"
           >
-            <GraduationCap className="w-4 h-4" />
+            <GraduationCap weight="duotone" className="w-4 h-4" />
             <span>Kemahasiswaan</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
           </a>
           <a
             href={OFFICIAL_LINKS.mastaOdoo}
@@ -108,9 +108,9 @@ export default function BacklinkBanner({ compact = false }: { compact?: boolean 
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs sm:text-sm transition-all border border-white/15 hover:scale-[1.02] active:scale-95"
           >
-            <Flame className="w-4 h-4 text-nyala-400" />
+            <Fire weight="duotone" className="w-4 h-4 text-nyala-400" />
             <span>Portal MASTA</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
           </a>
         </div>
       </div>

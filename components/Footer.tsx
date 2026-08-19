@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ExternalLink, Heart, Sparkles, Globe, GraduationCap, Flame, Laptop } from "lucide-react";
+import { ArrowSquareOut, Heart, Sparkle, Globe, GraduationCap, Fire, Laptop } from "@phosphor-icons/react";
 import { OFFICIAL_LINKS } from "@/lib/masta-data";
 import MascotFlame from "./MascotFlame";
 
@@ -36,13 +36,13 @@ export default function Footer() {
             <ul className="space-y-2 text-xs sm:text-sm text-navy-600 dark:text-navy-400">
               <li>
                 <Link href="/companion" className="hover:text-nyala-500 transition-colors flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-nyala-500" />
+                  <Sparkle weight="fill" className="w-3.5 h-3.5 text-nyala-500" />
                   <span>AI Companion Nyala</span>
                 </Link>
               </li>
               <li>
                 <Link href="/panduan-sikad" className="hover:text-nyala-500 transition-colors flex items-center gap-1.5 font-semibold text-nyala-600 dark:text-nyala-400">
-                  <Laptop className="w-3.5 h-3.5 text-blue-500" />
+                  <Laptop weight="bold" className="w-3.5 h-3.5 text-blue-500" />
                   <span>Panduan SIKAD UMKT</span>
                 </Link>
               </li>
@@ -83,10 +83,10 @@ export default function Footer() {
                   className="group flex items-center justify-between p-2 rounded-xl bg-navy-50 dark:bg-navy-900/60 border border-navy-200/50 dark:border-navy-800 text-navy-700 dark:text-navy-300 hover:text-nyala-600 dark:hover:text-nyala-400 hover:border-nyala-500/40 transition-all"
                 >
                   <span className="flex items-center gap-2 font-medium">
-                    <Globe className="w-4 h-4 text-nyala-500" />
+                    <Globe weight="duotone" className="w-4 h-4 text-nyala-500" />
                     <span>Website Utama UMKT</span>
                   </span>
-                  <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowSquareOut weight="bold" className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                 </a>
               </li>
               <li>
@@ -97,10 +97,10 @@ export default function Footer() {
                   className="group flex items-center justify-between p-2 rounded-xl bg-blue-50 dark:bg-navy-900/80 border border-blue-200/50 dark:border-navy-700 text-navy-800 dark:text-navy-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-500/40 transition-all"
                 >
                   <span className="flex items-center gap-2 font-semibold">
-                    <Laptop className="w-4 h-4 text-blue-500" />
+                    <Laptop weight="duotone" className="w-4 h-4 text-blue-500" />
                     <span>Portal Mahasiswa SIKAD</span>
                   </span>
-                  <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowSquareOut weight="bold" className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                 </a>
               </li>
               <li>
@@ -111,10 +111,10 @@ export default function Footer() {
                   className="group flex items-center justify-between p-2 rounded-xl bg-navy-50 dark:bg-navy-900/60 border border-navy-200/50 dark:border-navy-800 text-navy-700 dark:text-navy-300 hover:text-nyala-600 dark:hover:text-nyala-400 hover:border-nyala-500/40 transition-all"
                 >
                   <span className="flex items-center gap-2 font-medium">
-                    <GraduationCap className="w-4 h-4 text-nyala-500" />
+                    <GraduationCap weight="duotone" className="w-4 h-4 text-nyala-500" />
                     <span>Biro Kemahasiswaan</span>
                   </span>
-                  <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowSquareOut weight="bold" className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                 </a>
               </li>
               <li>
@@ -125,10 +125,10 @@ export default function Footer() {
                   className="group flex items-center justify-between p-2 rounded-xl bg-navy-50 dark:bg-navy-900/60 border border-navy-200/50 dark:border-navy-800 text-navy-700 dark:text-navy-300 hover:text-nyala-600 dark:hover:text-nyala-400 hover:border-nyala-500/40 transition-all"
                 >
                   <span className="flex items-center gap-2 font-medium">
-                    <Flame className="w-4 h-4 text-nyala-500" />
+                    <Fire weight="duotone" className="w-4 h-4 text-nyala-500" />
                     <span>Portal Resmi MASTA</span>
                   </span>
-                  <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowSquareOut weight="bold" className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                 </a>
               </li>
             </ul>
@@ -141,7 +141,7 @@ export default function Footer() {
           <p>© 2026 Nyala • Karya Inovasi MABA Universitas Muhammadiyah Kalimantan Timur.</p>
           <div className="flex items-center gap-1">
             <span>Dibuat dengan</span>
-            <Heart className="w-3.5 h-3.5 text-nyala-500 fill-nyala-500" />
+            <Heart weight="fill" className="w-3.5 h-3.5 text-nyala-500" />
             <span>untuk menyalakan semangat MABA UMKT</span>
           </div>
         </div>

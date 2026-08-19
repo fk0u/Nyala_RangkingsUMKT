@@ -4,23 +4,23 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
-  Flame, 
-  Sparkles, 
-  Code2, 
+  Fire, 
+  Sparkle, 
+  Code, 
   Laptop, 
-  HeartPulse, 
-  CalendarDays, 
+  Heartbeat, 
+  CalendarCheck, 
   CheckSquare, 
   BookOpenText 
-} from "lucide-react";
+} from "@phosphor-icons/react";
 
 export const MOBILE_NAV_ITEMS = [
-  { href: "/", label: "Beranda", icon: Flame },
-  { href: "/companion", label: "Tanya AI", icon: Sparkles, badge: "AI" },
-  { href: "/panduan-ti", label: "Prodi TI", icon: Code2, badge: "2026" },
+  { href: "/", label: "Beranda", icon: Fire },
+  { href: "/companion", label: "Tanya AI", icon: Sparkle, badge: "AI" },
+  { href: "/panduan-ti", label: "Prodi TI", icon: Code, badge: "2026" },
   { href: "/panduan-sikad", label: "SIKAD", icon: Laptop },
-  { href: "/health-check", label: "Health", icon: HeartPulse },
-  { href: "/jadwal", label: "Alur", icon: CalendarDays },
+  { href: "/health-check", label: "Health", icon: Heartbeat },
+  { href: "/jadwal", label: "Alur", icon: CalendarCheck },
   { href: "/checklist", label: "Checklist", icon: CheckSquare },
   { href: "/tentang-masta", label: "Edukasi", icon: BookOpenText },
 ];
@@ -46,7 +46,7 @@ export default function MobileNav() {
               }`}
             >
               <div className="relative">
-                <Icon className={`w-4 h-4 ${isActive ? "text-nyala-500" : ""}`} />
+                <Icon weight={isActive ? "fill" : "bold"} className={`w-4 h-4 ${isActive ? "text-nyala-500" : ""}`} />
                 {item.badge && (
                   <span className={`absolute -top-1 -right-2 text-[7px] font-bold px-1 rounded-full text-white ${
                     item.badge === "AI" ? "bg-nyala-500" : "bg-emerald-600"

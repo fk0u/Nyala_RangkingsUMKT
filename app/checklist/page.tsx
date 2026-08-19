@@ -5,20 +5,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { 
   CheckSquare, 
-  CheckCircle2, 
+  CheckCircle, 
   Circle, 
-  Sparkles, 
+  Sparkle, 
   Plus, 
-  RotateCcw, 
-  Filter, 
+  ArrowCounterClockwise, 
+  Funnel, 
   FileText, 
   Laptop, 
-  Shirt, 
+  TShirt, 
   Heart, 
-  Trash2,
-  Flame,
-  AlertCircle
-} from "lucide-react";
+  Trash,
+  Fire,
+  WarningCircle
+} from "@phosphor-icons/react";
 import ProgressBar from "@/components/ProgressBar";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import MascotFlame from "@/components/MascotFlame";
@@ -72,7 +72,7 @@ export default function ChecklistPage() {
         origin: { y: 0.6 },
         colors: ["#FF5A1F", "#FFA885", "#FDBA74", "#0F172A", "#10B981"],
       });
-      toast.nyala("Selamat! Seluruh persiapan MASTA-mu telah lengkap 100%! 🔥🎉", "Luar Biasa!");
+      toast.nyala("Selamat! Seluruh persiapan MASTA-mu telah lengkap 100%! 🎉", "Luar Biasa!");
     } else if (progressPercent < 100) {
       setCelebrated(false);
     }
@@ -154,7 +154,7 @@ export default function ChecklistPage() {
     switch (cat) {
       case "Dokumen & Identitas": return FileText;
       case "Perangkat & Jaringan": return Laptop;
-      case "Pakaian & Atribut": return Shirt;
+      case "Pakaian & Atribut": return TShirt;
       case "Kesehatan & Mental": return Heart;
       default: return CheckSquare;
     }
@@ -166,7 +166,7 @@ export default function ChecklistPage() {
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
-          <CheckSquare className="w-4 h-4" />
+          <CheckSquare weight="bold" className="w-4 h-4" />
           <span>Interactive Readiness Tracker</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 dark:text-white tracking-tight">
@@ -246,7 +246,7 @@ export default function ChecklistPage() {
             onClick={() => setShowAddForm(!showAddForm)}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-navy-900 dark:bg-navy-800 hover:bg-nyala-500 text-white text-xs font-bold transition-all shadow-xs active:scale-95"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus weight="bold" className="w-3.5 h-3.5" />
             <span>Tambah Catatan</span>
           </button>
 
@@ -255,7 +255,7 @@ export default function ChecklistPage() {
             className="p-2 rounded-xl bg-white dark:bg-navy-800 border border-navy-200/60 dark:border-navy-700 text-navy-500 hover:text-rose-500 hover:border-rose-300 transition-colors"
             title="Reset Centang"
           >
-            <RotateCcw className="w-4 h-4" />
+            <ArrowCounterClockwise weight="bold" className="w-4 h-4" />
           </button>
         </div>
 
@@ -273,7 +273,7 @@ export default function ChecklistPage() {
           >
             <div className="flex items-center justify-between">
               <h4 className="text-sm font-bold text-navy-900 dark:text-white flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-nyala-500" />
+                <Sparkle weight="fill" className="w-4 h-4 text-nyala-500" />
                 <span>Tambah Perlengkapan Khusus</span>
               </h4>
               <button
@@ -342,9 +342,9 @@ export default function ChecklistPage() {
                 <div className="flex items-start gap-3.5">
                   <div className="mt-0.5 flex-shrink-0">
                     {isChecked ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-100 dark:fill-emerald-950" />
+                      <CheckCircle weight="fill" className="w-5 h-5 text-emerald-500" />
                     ) : (
-                      <Circle className="w-5 h-5 text-navy-300 dark:text-navy-600 group-hover:text-nyala-500 transition-colors" />
+                      <Circle weight="regular" className="w-5 h-5 text-navy-300 dark:text-navy-600 group-hover:text-nyala-500 transition-colors" />
                     )}
                   </div>
 
@@ -365,7 +365,7 @@ export default function ChecklistPage() {
                         </span>
                       )}
                       <span className="text-[10px] font-semibold text-navy-400 dark:text-navy-500 flex items-center gap-1">
-                        <Icon className="w-3 h-3" />
+                        <Icon weight="bold" className="w-3 h-3" />
                         <span>{item.category}</span>
                       </span>
                     </div>
@@ -391,7 +391,7 @@ export default function ChecklistPage() {
                     className="opacity-40 hover:opacity-100 p-1.5 text-navy-400 hover:text-rose-500 transition-opacity"
                     title="Hapus Catatan Kustom"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash weight="bold" className="w-4 h-4" />
                   </button>
                 )}
               </motion.div>
