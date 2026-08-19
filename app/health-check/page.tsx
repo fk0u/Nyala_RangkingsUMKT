@@ -147,19 +147,27 @@ export default function HealthCheckPage() {
 
   // Get Personalized Recommendation based on score and mood
   const getRecommendation = () => {
-    if (selectedMood.id === "nervous" || selectedMood.id === "tired") {
+    if (selectedMood.id === "nervous") {
+      return {
+        title: "Tarik Napas Dalam, Kamu Pasti Bisa!",
+        advice: "Wajar banget merasa gugup menjelang masa orientasi. Minum air putih hangat, lakukan relaksasi 5 menit, dan ingat bahwa seluruh panitia dan teman-teman gugus siap saling menyemangati!",
+        mascotMood: "nervous" as const,
+      };
+    }
+
+    if (selectedMood.id === "tired") {
       return {
         title: "Perhatian & Istirahat Tambahan",
-        advice: "Tarik napas panjang secara perlahan dan luangkan waktu untuk rileks 10-15 menit. Pastikan kamu minum segelas air hangat dan tidur lebih awal malam ini. Semangat, kamu pasti bisa melewatinya!",
-        mascotMood: "calm" as const,
+        advice: "Tubuhmu butuh recovery! Hindari begadang berlebihan malam ini, luangkan waktu tidur minimal 7 jam agar besok bangun dengan energi yang pulih.",
+        mascotMood: "sleepy" as const,
       };
     }
 
     if (currentScore >= 80) {
       return {
         title: "Kondisi Prima & Siap Menginspirasi!",
-        advice: "Stamina dan pikiranmu dalam keadaan sangat baik! Pertahankan pola tidur teratur dan jangan lupa sarapan sebelum mengikuti rangkaian MASTA.",
-        mascotMood: "excited" as const,
+        advice: "Stamina dan pikiranmu dalam keadaan sangat optimal! Pertahankan pola tidur teratur dan jangan lupa sarapan sebelum sesi MASTA dimulai!",
+        mascotMood: "cheering" as const,
       };
     }
 

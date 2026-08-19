@@ -442,7 +442,7 @@ export default function PanduanSikadPage() {
 
       {/* 4. TEMPLATE CHAT KE DOSEN PA */}
       <div className="glass-card rounded-3xl p-6 sm:p-8 border border-navy-200/70 dark:border-navy-800 space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <div className="space-y-1">
             <span className="text-xs font-bold text-nyala-600 dark:text-nyala-400 uppercase tracking-wider">
               Template Chat PA Online
@@ -451,6 +451,7 @@ export default function PanduanSikadPage() {
               Format Etika Bimbingan & Validasi KRS ke Dosen PA
             </h3>
           </div>
+          <MascotFlame size="md" mood="salim" />
         </div>
 
         <div className="p-4 rounded-2xl bg-navy-50 dark:bg-navy-900/80 border border-navy-200/60 dark:border-navy-800 text-xs sm:text-sm font-mono text-navy-800 dark:text-navy-200 relative">

@@ -11,11 +11,36 @@ Kamu adalah "Nyala", virtual companion dan asisten digital resmi untuk Mahasiswa
 Tagline-mu adalah: "Nyala. Teman perjalanan MABA-mu."
 
 ATURAN UTAMA & ANTI-HALUSINASI (SANGAT PENTING):
-1. Berikan jawaban yang FAKTUAL, AKURAT, LUGAS, TERSTRUKTUR, dan BERBOBOT.
+1. Berikan jawaban yang FAKTUAL, AKURAT, LUGAS, TERSTRUKTUR, dan BERBOBOT berdasarkan dokumen resmi MASTA UMKT 2026.
 2. DILARANG KERAS mengarang fakta (no hallucination/kidding). Jika ada informasi spesifik berkas atau kebijakan personal yang tidak kamu ketahui, WAJIB arahkan mahasiswa untuk langsung menghubungi Admin Resmi UMKT (PMB atau Biro Kemahasiswaan).
 3. Gunakan format MARKDOWN KAYA (Gunakan **bold** untuk istilah penting, daftar berpoin/nomor, tabel perbandingan jika relevan, dan tautan aktif).
 4. Sikap: Hangat, suportif, cerdas, bersahabat seperti kakak tingkat teladan yang siap membimbing MABA agar sukses 100% lulus tepat waktu.
 5. Semboyan Mahasiswa TI: "HIDUP TEKNIK! NO SKILL NO TRUST!"
+
+AGENDA RESMI & RANGKAIAN MASTA UMKT 2026 (BERDASARKAN EDARAN RESMI 12 SHAFAR 1447 H / 06 AGUSTUS 2026):
+1. Kamis, 06 Agustus 2026: Pembekalan
+2. Selasa, 11 Agustus 2026: Masta FEBP
+3. Rabu, 12 Agustus 2026: Masta Teknik (FST / TI)
+4. Selasa, 18 Agustus 2026: Masta Hukum dan Kesmas; Masta IMM
+5. Rabu, 19 Agustus 2026: Masta Psikologi dan KIP; Masta IMM
+6. Kamis, 20 Agustus 2026: Masta Farmasi dan Keperawatan; Masta IMM
+7. Senin, 24 Agustus 2026: Pembukaan dan Materi Universitas Hari 1 (Daring Zoom, 08.00 - 17.00 WITA)
+8. Rabu, 26 Agustus 2026: Materi Universitas Hari 2 dan Kemahasiswaan (Daring Zoom, 08.00 - 17.00 WITA)
+9. Jumat, 28 Agustus 2026: Kegiatan Luring di Lingkungan Kampus UMKT:
+   - Sesi Pagi (06.30 – 11.30 WITA): UKM EXPO
+   - Sesi Malam (17.00 – 22.00 WITA): PUNCAK MILAD DAN PENUTUPAN
+
+KETENTUAN DRESSCODE & TATA TERTIB RESMI:
+- Kegiatan Daring (24 & 26 Agustus): Zoom Meeting, On-Cam, format nama: [Nomor Gugus]_[Nama Lengkap].
+- Kegiatan Luring (28 Agustus):
+  * Sesi Pagi (UKM Expo): Kaos UMKT (bila tidak ada, kaos olahraga), celana training, sepatu olahraga. Mahasiswi perempuan mengenakan jilbab hitam.
+  * Sesi Malam (Puncak Milad):
+    - Pria: Kemeja putih, celana panjang hitam formal, songkok hitam, jas almamater.
+    - Wanita: Kemeja putih, rok panjang hitam formal, jilbab hitam, jas almamater.
+- Kerapian: Rambut laki-laki tidak gondrong, dipotong rapi, dan berwarna hitam alami.
+- Barang Terlarang: Dilarang keras membawa senjata tajam (sajam), narkoba, minuman keras, rokok, atau vape.
+- SANKSI PELANGGARAN: Peserta yang tidak mengikuti aturan dapat dikenakan sanksi hingga DIKELUARKAN sebagai peserta Masa Ta'aruf Mahasiswa Baru dan WAJIB MENGULANG PADA TAHUN DEPAN (berlaku sesi daring maupun luring).
+- Sekretaris Panitia: SUHARDIANSYAH, NIDN 1129058501.
 
 KONTAK RESMI ADMIN & LAYANAN MAHASISWA UMKT:
 1. Admin Penerimaan Mahasiswa Baru (PMB) UMKT:
@@ -37,29 +62,7 @@ DATA AKADEMIK PRODI TEKNOLOGI INFORMASI UMKT 2026:
 - Konsentrasi Peminatan:
   1) Jaringan dan Rekayasa Sistem (JRS) - Fokus: Cyber Security, Cloud, Network Infrastructure.
   2) Komputasi Cerdas (KC) - Fokus: AI, Machine Learning, Data Science, Computer Vision.
-- Kurikulum Semester 1 (Paket 20 SKS):
-  1. Aljabar Linear (3 SKS)
-  2. Matematika Diskrit (3 SKS)
-  3. Statistika (3 SKS)
-  4. Dasar Pemrograman (3 SKS)
-  5. Praktikum Dasar Pemrograman (1 SKS)
-  6. Sistem Digital dan Arsitektur Komputer (3 SKS)
-  7. Kemanusiaan dan Keimanan / Islamologi 1 (2 SKS)
-  8. Aplikasi Komputer & Pengantar TI (2 SKS)
-- Standar Nilai Kelulusan:
-  - MK Wajib Prodi & Konsentrasi: Minimal C
-  - MK Dasar Umum (MKDU): Minimal B
-  - Basic Science & Praktikum: Minimal BC
-  - Kerja Praktik / Magang & Capstone: Minimal B
-  - Skripsi / Tugas Akhir: Minimal AB
-- Kalender Akademik Ganjil 2026/2027:
-  - 27 Juli - 27 Agustus 2026: Pengambilan MK & Validasi KRS di SIKAD
-  - 31 Agustus - 7 Oktober 2026: Perkuliahan Periode I
-  - 19 - 24 Oktober 2026: Ujian Tengah Semester (UTS)
-  - 26 Oktober - 19 Desember 2026: Perkuliahan Periode II
-  - 21 Desember 2026 - 9 Januari 2027: Ujian Akhir Semester (UAS)
-  - 16 Januari 2027: Batas Entri Nilai UAS di SIKAD
-- Bimbingan Dosen Pembimbing Akademik (PA): Wajib minimal 4 kali per semester (Validasi KRS, Pra-UTS, Pra-UAS, Evaluasi KHS).
+- Kurikulum Semester 1 (Paket 20 SKS): Aljabar Linear (3), Matematika Diskrit (3), Statistika (3), Dasar Pemrograman (3), Praktikum Daspro (1), Sisdig & Arsitektur Komputer (3), Islamologi 1 (2), Aplikasi Komputer & Pengantar TI (2).
 
 PORTAL & TAUTAN RESMI:
 - Website Utama: https://www.umkt.ac.id/
@@ -103,6 +106,51 @@ export function generateLocalResponse(userMessage: string): string {
 - **WhatsApp**: [+62 812-3001-7008](https://wa.me/6281230017008)
 
 > **Catatan:** Untuk respon tercepat, hubungi nomor WhatsApp di atas pada jam kerja operasional resmi kampus ya!`;
+  }
+
+  // 2. JADWAL, MASTA, TANGGAL, SANKSI, DRESSCODE, LURING, DARING
+  if (
+    query.includes("jadwal") ||
+    query.includes("tanggal") ||
+    query.includes("masta") ||
+    query.includes("luring") ||
+    query.includes("daring") ||
+    query.includes("dresscode") ||
+    query.includes("pakaian") ||
+    query.includes("sanksi") ||
+    query.includes("rambut") ||
+    query.includes("ukm expo") ||
+    query.includes("milad")
+  ) {
+    return `📅 **Rangkaian Jadwal & Ketetapan Resmi MASTA UMKT 2026**:
+
+### Rangkaian Jadwal Utama:
+| Tanggal | Kegiatan | Media / Lokasi | Waktu |
+|---|---|---|---|
+| **Kamis, 06 Agt 2026** | Pembekalan MASTA | Daring (Zoom) | Selesai |
+| **11 – 20 Agt 2026** | MASTA Fakultas & IMM (Teknik: 12 Agt) | Fakultas & IMM | Selesai / Berjalan |
+| **Senin, 24 Agt 2026** | **Pembukaan & Materi Universitas Hari 1** | **Zoom Meeting** | **08.00 – 17.00 WITA** |
+| **Rabu, 26 Agt 2026** | **Materi Universitas Hari 2 & Kemahasiswaan** | **Zoom Meeting** | **08.00 – 17.00 WITA** |
+| **Jumat, 28 Agt 2026** | **UKM Expo (Sesi 1)** | **Kampus UMKT (Luring)** | **06.30 – 11.30 WITA** |
+| **Jumat, 28 Agt 2026** | **Puncak Milad UMKT & Penutupan (Sesi 2)** | **Kampus UMKT (Luring)** | **17.00 – 22.00 WITA** |
+
+---
+
+### 👔 Ketentuan Dresscode Luring (28 Agustus 2026):
+1. **Sesi Pagi (06.30 – 11.30 WITA - UKM Expo)**:
+   - Kaos UMKT (bila tidak ada, gunakan kaos olahraga), celana training, sepatu olahraga. Mahasiswi mengenakan **jilbab hitam**.
+2. **Sesi Malam (17.00 – 22.00 WITA - Puncak Milad & Penutupan)**:
+   - **Pria**: Kemeja putih, celana panjang hitam formal, **songkok/peci hitam**, jas almamater.
+   - **Wanita**: Kemeja putih, rok panjang hitam formal, **jilbab hitam**, jas almamater.
+
+---
+
+### ⚠️ Tata Tertib & Sanksi Tegas:
+- **Rambut Pria**: Wajib rapi, tidak gondrong, dan berwarna hitam.
+- **Barang Terlarang**: Dilarang keras membawa senjata tajam, narkoba, miras, rokok, atau vape.
+- **Sanksi Pelanggaran**: Peserta yang melanggar dapat dikenakan sanksi hingga **dikeluarkan dari MASTA dan WAJIB MENGULANG TAHUN DEPAN**.
+
+*Pengesahan resmi: Sekretaris Panitia Bapak SUHARDIANSYAH, NIDN 1129058501.*`;
   }
 
   // 2. PRODI TEKNOLOGI INFORMASI & KURIKULUM

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, TargetAndTransition } from "framer-motion";
 
 export type MascotMood =
   | "happy"
@@ -104,31 +104,31 @@ export default function MascotFlame({
   };
 
   // Body animation configs based on mood
-  const getBodyAnimation = () => {
+  const getBodyAnimation = (): TargetAndTransition => {
     switch (mood) {
       case "coding":
         return {
           y: [0, -2, 0, -1, 0],
           rotate: [-0.5, 0.5, -0.5],
-          transition: { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
+          transition: { duration: 1.8, repeat: Infinity, ease: "easeInOut" as const }
         };
       case "sleepy":
         return {
           y: [0, 4, 0],
           rotate: [-2, 1, -2],
-          transition: { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
+          transition: { duration: 4.5, repeat: Infinity, ease: "easeInOut" as const }
         };
       case "confused":
         return {
           rotate: [-4, 6, -4],
           y: [0, -3, 0],
-          transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" }
+          transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" as const }
         };
       case "nervous":
         return {
           x: [-1.2, 1.2, -1.2, 1, -1],
           y: [0, -2, 0],
-          transition: { duration: 0.25, repeat: Infinity, ease: "linear" }
+          transition: { duration: 0.25, repeat: Infinity, ease: "linear" as const }
         };
       case "cheering":
       case "excited":
@@ -136,26 +136,26 @@ export default function MascotFlame({
           y: [0, -10, 0],
           rotate: [-3, 3, -3],
           scale: [1, 1.05, 1],
-          transition: { duration: 1.4, repeat: Infinity, ease: "easeInOut" }
+          transition: { duration: 1.4, repeat: Infinity, ease: "easeInOut" as const }
         };
       case "salim":
         return {
           y: [0, 3, 0],
           rotate: [0, 2, 0],
-          transition: { duration: 3.5, repeat: Infinity, ease: "easeInOut" }
+          transition: { duration: 3.5, repeat: Infinity, ease: "easeInOut" as const }
         };
       case "withClipboard":
       case "studying":
         return {
           y: [0, -4, 0],
           rotate: [0, 0.8, 0],
-          transition: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+          transition: { duration: 3, repeat: Infinity, ease: "easeInOut" as const }
         };
       default:
         return {
           y: [0, -5, 0],
           rotate: [-0.8, 0.8, -0.8],
-          transition: { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
+          transition: { duration: 3.2, repeat: Infinity, ease: "easeInOut" as const }
         };
     }
   };

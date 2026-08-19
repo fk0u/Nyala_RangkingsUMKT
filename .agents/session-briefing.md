@@ -3,23 +3,34 @@
 ## Project Overview
 - **Project Name:** Nyala (Sahabat Perjalanan MABA UMKT 2026)
 - **Tagline:** "Nyala. Teman perjalanan MABA-mu."
-- **Status:** Full Blog CMS + Scraper Berita UMKT + Markdown AI Chat Engine + Official Mascot Character Implemented (Production Ready)
+- **Status:** Integrated 5 Official UMKT Presentation Slides (Exact Schedule, Dresscode, Rules, Sanctions & Signatories) + Rigged 12-Mood Animated Mascot + CMS & Scraper + Markdown AI Companion
 
 ## Key Updates
-1. **Maskot Karakter Asli Nyala Sesuai Desain Referensi**:
-   - Kepala/tubuh bulat putih-krem menggemaskan (*kawaii proportions*) dengan rona pipi bulat oranye lembut (`#F47244`).
-   - Lapisan lidah api di sekeliling kepala (*layered flame mane*) bergradasi warna coral-red, warm orange, golden amber, serta bara api melayang (*floating embers*).
-   - Pose khusus **With Clipboard Checklist** (sesuai gambar ke-2 referensi) dengan papan checklist kayu, centang tugas oranye, dan kaki mungil di halaman `/checklist`.
-2. **Dashboard Admin Blog & Scraper Berita Resmi UMKT (`/admin/blog` & `/api/scrape-umkt`)**:
-   - Endpoint `/api/scrape-umkt` untuk menarik dan mengonversi berita terbaru dari portal resmi UMKT (`https://www.umkt.ac.id/`) secara dinamis.
-   - Tombol **"Tarik Berita Resmi UMKT (Sync Scraper)"** untuk mengimpor berita kampus ke blog dalam 1-klik.
-   - Formulir pembuatan & pengeditan artikel Markdown lengkap dengan *Live Preview*, pemilihan cover image preset kampus beresolusi tinggi, tag, dan ringkasan poin utama (*Key Takeaways*).
-   - Sinkronisasi store `lib/blog-store.ts` berbasis `localStorage` yang terhubung langsung ke `/blog` dan `/blog/[slug]`.
-3. **Penyematan Cover Image & Visual Blog**:
-   - Seluruh artikel blog bawaan kini dilengkapi foto cover bertema perkuliahan, laboratorium komputer, dan gedung kampus UMKT.
-   - Halaman baca dinamis menampilkan banner cover beresolusi tinggi, badge sumber resmi UMKT, author card, dan tombol konsultasi WhatsApp ke Biro Kemahasiswaan.
-4. **Peningkatan AI Chat (ReactMarkdown + remarkGfm + Anti-Ngawur)**:
-   - Integrasi `react-markdown` dan `remark-gfm` untuk rendering tabel Markdown, daftar berpoin/nomor, teks tebal, blok kode bersintaks bersih, blockquote, dan link aktif.
-   - Pengetatan *system prompt* dan basis pengetahuan offline agar seluruh jawaban faktual, akurat, dan tidak mengada-ada terkait kurikulum TI 2026, 11 dosen tetap, kalender akademik ganjil 2026/2027, SIKAD, dan eskalasi ke WhatsApp Admin resmi.
-5. **Kompilasi & Kualitas Kode**:
-   - Kompilasi `npm run build` sukses 100% pada 13 rute di Next.js 16.3.1 (Turbopack) dan React 19.
+1. **Integrasi 5 Slide Presentasi Resmi MASTA UMKT 2026**:
+   - **Tabel 9 Rangkaian Kegiatan Lengkap**:
+     1. *06 Agustus 2026*: Pembekalan (Samarinda, 12 Shafar 1447 H / Sekretaris: Suhardiansyah, NIDN 1129058501).
+     2. *11 Agustus 2026*: Masta FEBP.
+     3. *12 Agustus 2026*: Masta Teknik (Fakultas Sains & Teknologi / TI).
+     4. *18 Agustus 2026*: Masta Hukum dan Kesmas; Masta IMM.
+     5. *19 Agustus 2026*: Masta Psikologi dan KIP; Masta IMM.
+     6. *20 Agustus 2026*: Masta Farmasi dan Keperawatan; Masta IMM.
+     7. *24 Agustus 2026*: **Pembukaan dan Materi Universitas Hari 1 (Daring Zoom, 08.00 – 17.00 WITA)**.
+     8. *26 Agustus 2026*: **Materi Universitas Hari 2 dan Kemahasiswaan (Daring Zoom, 08.00 – 17.00 WITA)**.
+     9. *28 Agustus 2026*: **UKM Expo (06.30 – 11.30 WITA) & Puncak Milad / Penutupan MASTA (17.00 – 22.00 WITA Luring Kampus UMKT)**.
+   - **Ketentuan Dresscode Luring (28 Agustus 2026)**:
+     * *Sesi Pagi (06.30 - 11.30 WITA - UKM Expo)*: Kaos UMKT (bila tidak ada, kaos olahraga sopan), celana training, sepatu olahraga. Mahasiswi mengenakan jilbab hitam.
+     * *Sesi Malam (17.00 - 22.00 WITA - Puncak Milad)*: Pria mengenakan kemeja putih, celana panjang hitam formal, songkok/peci hitam, dan jas almamater. Wanita mengenakan kemeja putih, rok panjang hitam formal, jilbab hitam, dan jas almamater.
+   - **Tata Tertib & Sanksi Tegas**:
+     * Rambut pria wajib rapi, tidak gondrong, dan berwarna hitam.
+     * Dilarang keras membawa sajam, narkoba, miras, rokok, maupun vape.
+     * Sanksi: Peserta yang melanggar dapat dikeluarkan dan **WAJIB MENGULANG MASTA TAHUN DEPAN**.
+   - **Informasi Lanjutan & Pengesahan**:
+     * Kegiatan fakultas, prodi, dan himpunan diumumkan oleh pihak masing-masing.
+     * Surat bertanggal: Samarinda, 12 Shafar 1447 H / 06 Agustus 2026 oleh Sekretaris Panitia Suhardiansyah, NIDN 1129058501.
+2. **Upgrade Halaman & Komponen**:
+   - **Halaman Jadwal ([app/jadwal/page.tsx](file:///d:/Project/Nyala_RangkingsUMKT/app/jadwal/page.tsx))**: Redesain lengkap dengan 4 Tab (Tabel Jadwal Rangkaian, Daring vs Luring, Dresscode & Aturan Luring, Peringatan Sanksi).
+   - **Countdown Timer ([components/CountdownTimer.tsx](file:///d:/Project/Nyala_RangkingsUMKT/components/CountdownTimer.tsx))**: Dilengkapi toggle milestone (24 Agt Daring vs 28 Agt Luring).
+   - **Checklist MASTA ([lib/masta-data.ts](file:///d:/Project/Nyala_RangkingsUMKT/lib/masta-data.ts))**: Diperbarui dengan seluruh atribut seragam resmi, kerapian rambut, dan larangan barang terlarang.
+   - **Knowledge AI Companion ([lib/ai-engine.ts](file:///d:/Project/Nyala_RangkingsUMKT/lib/ai-engine.ts))**: Injeksi pengetahuan faktual lengkap dari 5 slide sehingga jawaban AI 100% presisi.
+3. **Status Kompilasi Produksi**:
+   - `npm run build` sukses 100% (13 rute ter-generate sempurna) di Next.js 16.3.1 (Turbopack) & React 19.

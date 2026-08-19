@@ -94,7 +94,7 @@ export default function PanduanTiPage() {
           </div>
 
           <div className="lg:col-span-4 flex flex-col items-center justify-center text-center space-y-4">
-            <MascotFlame size="xl" mood="excited" />
+            <MascotFlame size="xl" mood="coding" />
             <div className="p-4 rounded-2xl bg-white/10 border border-white/15 w-full space-y-2">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-navy-300">Target Lulus Tepat Waktu</span>

@@ -607,82 +607,220 @@ export const SIKAD_GUIDES: SikadGuideSection[] = [
   }
 ];
 
+export interface MastaScheduleItem {
+  no: number;
+  dayDate: string;
+  activity: string;
+  category: "Pembekalan" | "Fakultas" | "Universitas Daring" | "Puncak Luring";
+  locationType: "Daring (Zoom)" | "Luring (Kampus UMKT)" | "Internal Fakultas/IMM";
+  time?: string;
+  description?: string;
+  isUpcomingOrActive?: boolean;
+}
+
+export const OFFICIAL_MASTA_SCHEDULE_2026: MastaScheduleItem[] = [
+  {
+    no: 1,
+    dayDate: "Kamis, 06 Agustus 2026",
+    activity: "Pembekalan",
+    category: "Pembekalan",
+    locationType: "Daring (Zoom)",
+    description: "Pengarahan umum dan orientasi awal tata tertib peserta MASTA 2026."
+  },
+  {
+    no: 2,
+    dayDate: "Selasa, 11 Agustus 2026",
+    activity: "Masta FEBP",
+    category: "Fakultas",
+    locationType: "Internal Fakultas/IMM",
+    description: "Masa Ta'aruf Fakultas Ekonomi, Bisnis, dan Politik."
+  },
+  {
+    no: 3,
+    dayDate: "Rabu, 12 Agustus 2026",
+    activity: "Masta Teknik",
+    category: "Fakultas",
+    locationType: "Internal Fakultas/IMM",
+    description: "Masa Ta'aruf Fakultas Sains dan Teknologi / Teknik (termasuk Prodi Teknologi Informasi)."
+  },
+  {
+    no: 4,
+    dayDate: "Selasa, 18 Agustus 2026",
+    activity: "Masta Hukum dan Kesmas; Masta IMM",
+    category: "Fakultas",
+    locationType: "Internal Fakultas/IMM",
+    description: "Masa Ta'aruf Fakultas Hukum, Fakultas Kesehatan Masyarakat, serta IMM."
+  },
+  {
+    no: 5,
+    dayDate: "Rabu, 19 Agustus 2026",
+    activity: "Masta Psikologi dan KIP; Masta IMM",
+    category: "Fakultas",
+    locationType: "Internal Fakultas/IMM",
+    description: "Masa Ta'aruf Fakultas Psikologi, Keguruan dan Ilmu Pendidikan, serta IMM."
+  },
+  {
+    no: 6,
+    dayDate: "Kamis, 20 Agustus 2026",
+    activity: "Masta Farmasi dan Keperawatan; Masta IMM",
+    category: "Fakultas",
+    locationType: "Internal Fakultas/IMM",
+    description: "Masa Ta'aruf Fakultas Farmasi, Ilmu Keperawatan, serta IMM."
+  },
+  {
+    no: 7,
+    dayDate: "Senin, 24 Agustus 2026",
+    activity: "Pembukaan dan materi universitas hari 1",
+    category: "Universitas Daring",
+    locationType: "Daring (Zoom)",
+    time: "08.00 – 17.00 WITA",
+    description: "Pembukaan resmi MASTA Universitas & materi universitas hari ke-1 via Zoom Meeting. Wajib bagi seluruh MABA.",
+    isUpcomingOrActive: true
+  },
+  {
+    no: 8,
+    dayDate: "Rabu, 26 Agustus 2026",
+    activity: "Materi universitas hari 2 dan kemahasiswaan",
+    category: "Universitas Daring",
+    locationType: "Daring (Zoom)",
+    time: "08.00 – 17.00 WITA",
+    description: "Materi universitas hari ke-2, pengenalan sistem kemahasiswaan & organisasi kampus via Zoom Meeting.",
+    isUpcomingOrActive: true
+  },
+  {
+    no: 9,
+    dayDate: "Jumat, 28 Agustus 2026",
+    activity: "UKM Expo (06.00 s.d 11.00); Malam Puncak (17.00 s.d 22.00)",
+    category: "Puncak Luring",
+    locationType: "Luring (Kampus UMKT)",
+    time: "Sesi Pagi: 06.30 – 11.30 WITA | Sesi Malam: 17.00 – 22.00 WITA",
+    description: "Kegiatan tatap muka di lingkungan kampus UMKT. Sesi 1: UKM Expo (Kaos UMKT/olahraga). Sesi 2: Puncak Milad UMKT & Penutupan MASTA (Formal Hitam-Putih + Almamater).",
+    isUpcomingOrActive: true
+  }
+];
+
+export const MASTA_OFFICIAL_RULES = {
+  sanctions: {
+    title: "Sanksi Pelanggaran (Peringatan Tegas)",
+    warning: "Peserta yang tidak mengikuti aturan dapat dikenakan sanksi, hingga dikeluarkan sebagai peserta Masa Ta'aruf Mahasiswa Baru dan WAJIB MENGULANG PADA TAHUN DEPAN.",
+    daring: "Kegiatan Daring: Peserta yang tidak mengikuti aturan dapat dikenakan sanksi dan mengulang Masa Ta'aruf Maba pada tahun depan.",
+    luring: "Kegiatan Luring: Sanksi dapat berupa dikeluarkan sebagai peserta Masa Ta'aruf dan wajib mengulang pada tahun depan."
+  },
+  luringProvisions: {
+    scheduleSummary: "Jumat, 28 Agustus 2026 • 06.30 – 11.30 & 17.00 – 22.00 WITA (Tatap Muka Kampus UMKT)",
+    grooming: {
+      title: "Rambut Rapi",
+      rule: "Rambut tidak gondrong, dipotong rapi, dan berwarna hitam (khusus laki-laki)."
+    },
+    prohibitedItems: {
+      title: "Barang Terlarang",
+      rule: "Dilarang keras membawa benda tajam, narkoba, minuman keras, rokok, atau vape."
+    },
+    dresscode: {
+      session1: {
+        title: "Sesi Pagi (06.30 – 11.30 WITA) - UKM EXPO",
+        details: "Kaos UMKT (bila tidak ada, gunakan kaos olahraga sopan), celana training, dan sepatu olahraga. Mahasiswi perempuan wajib mengenakan jilbab hitam."
+      },
+      session2: {
+        title: "Sesi Malam (17.00 – 22.00 WITA) - PUNCAK MILAD & PENUTUPAN",
+        detailsMale: "Pria menggunakan atasan kemeja putih, celana panjang hitam formal, songkok/peci hitam, dan jas almamater.",
+        detailsFemale: "Wanita menggunakan atasan kemeja putih, rok panjang hitam formal, jilbab hitam, dan jas almamater."
+      }
+    }
+  },
+  nextInfo: {
+    fakultasProdi: "Kegiatan luring bersama fakultas, program studi, dan himpunan mahasiswa akan diinformasikan berikutnya oleh masing-masing pihak.",
+    mastaImm: "Rangkaian kegiatan MASTA IMM akan diinformasikan berikutnya.",
+    officialChannels: "Seluruh pembaruan jadwal dan teknis disampaikan melalui kanal resmi panitia, fakultas, program studi, dan himpunan mahasiswa."
+  },
+  endorsement: {
+    location: "Samarinda",
+    hijriDate: "12 Shafar 1447 H",
+    masehiDate: "06 Agustus 2026",
+    signatoryRole: "Sekretaris Panitia Masta Maba UMKT",
+    signatoryName: "SUHARDIANSYAH",
+    nidn: "1129058501"
+  }
+};
+
 export const MASTA_STAGES: MastaStage[] = [
   {
     id: 1,
-    title: "1. Membaca Panduan Resmi",
+    title: "1. Pembekalan & Panduan Resmi",
     subtitle: "Pahami Aturan & Petunjuk Pelaksanaan",
-    description: "Langkah pertama yang wajib dilakukan setiap MABA adalah membaca dan memahami seluruh buku panduan, tata tertib, serta pedoman teknis MASTA UMKT 2026.",
+    description: "Pengarahan tata tertib resmi yang disahkan Sekretaris Panitia Suhardiansyah, NIDN 1129058501 pada 06 Agustus 2026.",
     iconName: "BookOpen",
-    status: "active",
-    dates: "Tahap Awal",
+    status: "completed",
+    dates: "Kamis, 06 Agustus 2026",
     steps: [
-      "Mengunduh buku pedoman resmi MASTA 2026 di portal resmi",
-      "Memahami tata tertib, pakaian, dan jadwal tiap sesi",
-      "Mencatat kontak darurat dan grup panitia/pendamping gugus"
+      "Mengunduh surat edaran dan jadwal resmi MASTA UMKT 2026",
+      "Memahami aturan rambut rapi, larangan rokok/vape/sajam, dan dresscode",
+      "Mengetahui sanksi tegas: Pelanggaran berakibat wajib mengulang MASTA tahun depan"
     ],
-    tips: "Baca bagian tata tertib pakaian dan perlengkapan secara teliti agar tidak keliru saat sesi verifikasi!"
+    tips: "Patuhi seluruh tata tertib agar tidak terkena sanksi pengeluaran dari MASTA!"
   },
   {
     id: 2,
-    title: "2. Verifikasi Identitas",
-    subtitle: "Validasi Data Mahasiswa Baru",
-    description: "Proses verifikasi berkas dan identitas calon peserta MASTA untuk memastikan keabsahan data kemahasiswaan di sistem pangkalan data kampus UMKT.",
+    title: "2. MASTA Fakultas & IMM",
+    subtitle: "Orientasi Fakultas Sains & Teknologi (Teknik)",
+    description: "Kegiatan pengenalan prodi dan fakultas masing-masing. MASTA Teknik telah terselenggara pada 12 Agustus 2026.",
     iconName: "ShieldCheck",
-    status: "upcoming",
-    dates: "Pra-Kegiatan",
+    status: "active",
+    dates: "11 – 20 Agustus 2026",
     steps: [
-      "Memastikan NIM / Nomor Registrasi sudah aktif",
-      "Mengunggah bukti registrasi dan foto kartu identitas",
-      "Mendapatkan ID Gugus atau Kelompok pendampingan"
+      "Mengikuti pengenalan Program Studi Teknologi Informasi & Kurikulum TI 2026",
+      "Mengenal 11 Dosen Pengampu dan Dosen Pembimbing Akademik (PA)",
+      "Mempelajari semboyan kebanggaan TI: 'HIDUP TEKNIK! NO SKILL NO TRUST!'"
     ],
-    tips: "Siapkan file scan KTP/Kartu Pelajar dan bukti pembayaran registrasi dalam format JPG/PDF yang jelas."
+    tips: "Gunakan kesempatan ini untuk berjejaring dengan teman seangkatan dan kating HIMATIF!"
   },
   {
     id: 3,
-    title: "3. Kegiatan Daring (Zoom Meeting)",
-    subtitle: "Materi Pengenalan & Sidang Terbuka",
-    description: "Pelaksanaan materi orientasi kampus, kuliah umum kebangsaan, pengenalan sistem akademik (SIAKAD), serta nilai-nilai Al-Islam dan Kemuhammadiyahan secara daring.",
+    title: "3. Kegiatan Daring Universitas (Zoom)",
+    subtitle: "Materi Universitas & Kemahasiswaan",
+    description: "Pemaparan materi universitas hari 1 & 2 via Zoom Meeting (Pukul 08.00 – 17.00 WITA). Wajib On-Cam!",
     iconName: "Video",
     status: "upcoming",
-    dates: "Sesi Utama Daring",
+    dates: "Senin 24 & Rabu 26 Agustus 2026",
     steps: [
-      "Bergabung ke ruang Zoom 15 menit sebelum acara dimulai",
-      "Menggunakan format nama akun: [Nomor Gugus]_[Nama Lengkap]",
-      "Wajib menyalakan kamera (On-Cam) dan mengenakan pakaian resmi yang ditentukan",
-      "Mengisi presensi kehadiran pada link yang dibagikan panitia"
+      "Senin 24 Agustus (08.00 - 17.00 WITA): Pembukaan dan materi universitas hari 1",
+      "Rabu 26 Agustus (08.00 - 17.00 WITA): Materi universitas hari 2 dan kemahasiswaan",
+      "Format nama akun Zoom: [Nomor Gugus]_[Nama Lengkap]",
+      "Wajib menyalakan kamera (On-Cam) dan mengisi presensi resmi"
     ],
-    tips: "Pastikan koneksi internet stabil dan cari tempat yang tenang serta memiliki pencahayaan baik."
+    tips: "Pastikan kuota cadangan minimal 5GB dan login 15 menit sebelum acara dimulai."
   },
   {
     id: 4,
-    title: "4. UKM Expo",
+    title: "4. UKM Expo (Luring di Kampus)",
     subtitle: "Eksplorasi Minat, Bakat, & Organisasi",
-    description: "Ajang pameran dan demonstrasi seluruh Unit Kegiatan Mahasiswa (UKM), Lembaga Eksekutif/Legislatif Mahasiswa, dan Komunitas di UMKT.",
+    description: "Kegiatan tatap muka di Kampus UMKT sesi pagi (06.30 – 11.30 WITA) dengan dresscode kaos UMKT / olahraga.",
     iconName: "Sparkles",
     status: "upcoming",
-    dates: "Sesi Expo & Minat Bakat",
+    dates: "Jumat, 28 Agustus 2026 (06.30 - 11.30 WITA)",
     steps: [
-      "Menyaksikan parade dan presentasi karya tiap UKM",
-      "Mengikuti sesi tanya jawab langsung dengan pengurus organisasi",
-      "Mendaftarkan diri pada UKM yang sesuai dengan minat dan passion-mu"
+      "Dresscode Pagi: Kaos UMKT/olahraga, celana training, sepatu olahraga (wanita jilbab hitam)",
+      "Menyaksikan parade dan demo seluruh UKM (Tapak Suci, HIMATIF, Futsal, PSM, dll.)",
+      "Mendaftar ke UKM pilihan untuk mengasah soft skill & pengisian portofolio SKPI"
     ],
-    tips: "Manfaatkan sesi ini untuk memilih minimal 1 UKM demi mengasah soft skill, relasi, dan portofolio prestasimu!"
+    tips: "Pilih minimal 1 UKM untuk memperluas koneksi dan pengalaman kepemimpinan!"
   },
   {
     id: 5,
-    title: "5. Puncak dan Evaluasi",
-    subtitle: "Inagurasi, Refleksi, & Sertifikasi",
-    description: "Acara puncak penutupan MASTA MABA UMKT 2026, inaugurasi resmi sebagai Mahasiswa Baru, pengisian kuesioner evaluasi, dan penerbitan sertifikat kelulusan MASTA.",
+    title: "5. Puncak Milad UMKT & Penutupan MASTA",
+    subtitle: "Malam Inaugurasi & Penutupan Resmi",
+    description: "Kegiatan tatap muka di Kampus UMKT sesi malam (17.00 – 22.00 WITA) dengan dresscode formal hitam-putih + almamater.",
     iconName: "Award",
     status: "upcoming",
-    dates: "Puncak Acara",
+    dates: "Jumat, 28 Agustus 2026 (17.00 - 22.00 WITA)",
     steps: [
-      "Mengikuti prosesi inaugurasi dan pelantikan MABA",
-      "Mengisi formulir evaluasi kegiatan kepanitiaan",
-      "Mendapatkan sertifikat resmi MASTA (syarat akademik/kemahasiswaan ke depan)"
+      "Dresscode Malam Pria: Kemeja putih, celana panjang hitam, songkok hitam, jas almamater",
+      "Dresscode Malam Wanita: Kemeja putih, rok panjang hitam, jilbab hitam, jas almamater",
+      "Rambut pria wajib rapi, tidak gondrong, dan berwarna hitam",
+      "Dilarang membawa rokok/vape/miras/sajam di area kampus",
+      "Menerima e-Sertifikat kelulusan MASTA UMKT 2026"
     ],
-    tips: "Sertifikat MASTA sangat penting untuk kelengkapan administrasi SKPI (Surat Keterangan Pendamping Ijazah) saat wisuda nanti."
+    tips: "Sertifikat MASTA menjadi syarat mutlak wisuda dan verifikasi SKPI di semester akhir."
   }
 ];
 
@@ -698,79 +836,94 @@ export const INITIAL_CHECKLIST: ChecklistItem[] = [
     id: "chk-2",
     category: "Dokumen & Identitas",
     title: "Scan KTP / Kartu Identitas & Pas Foto Resmi",
-    description: "Format pas foto dengan latar belakang resmi untuk verifikasi data SIAKAD.",
+    description: "Format pas foto resmi latar belakang merah/biru untuk verifikasi pangkalan data kampus.",
     required: true,
   },
   {
     id: "chk-3",
     category: "Perangkat & Jaringan",
-    title: "Laptop / Smartphone Siap Pakai",
-    description: "Pastikan baterai terisi penuh, kamera & mikrofon berfungsi dengan jernih.",
+    title: "Laptop / Smartphone & Zoom Meeting Terbaru",
+    description: "Wajib untuk sesi daring 24 & 26 Agustus 2026 (08.00 - 17.00 WITA). Format nama: [Nomor Gugus]_[Nama Lengkap].",
     required: true,
   },
   {
     id: "chk-4",
     category: "Perangkat & Jaringan",
-    title: "Aplikasi Zoom Meeting Terbaru",
-    description: "Update aplikasi Zoom ke versi paling baru untuk kestabilan fitur breakout room dan virtual background.",
+    title: "Koneksi Internet & Kuota Cadangan Minimal 5GB",
+    description: "Sediakan tethering cadangan untuk antisipasi jika WiFi drop saat sesi pemaparan materi daring.",
     required: true,
   },
   {
     id: "chk-5",
-    category: "Perangkat & Jaringan",
-    title: "Koneksi Internet / Kuota Cadangan Minimal 5GB",
-    description: "Sediakan tethering cadangan untuk antisipasi jika WiFi mengalami kendala saat sesi langsung.",
+    category: "Pakaian & Atribut",
+    title: "Pakaian Daring (24 & 26 Agustus): Kemeja Putih & Bawahan Hitam",
+    description: "Kemeja putih polos lengan panjang berkerah, celana/rok kain hitam formal, dan jilbab rapi. Wajib On-Cam.",
     required: true,
   },
   {
     id: "chk-6",
     category: "Pakaian & Atribut",
-    title: "Kemeja Putih Polos Lengan Panjang Berkerah",
-    description: "Pakaian wajib sesi pembukaan dan pelaksanaan resmi MASTA.",
+    title: "Pakaian Luring Pagi (28 Agustus - UKM Expo): Kaos UMKT & Training",
+    description: "Kaos UMKT (bila tidak ada, kaos olahraga sopan), celana training, sepatu olahraga. Mahasiswi wajib jilbab hitam.",
     required: true,
   },
   {
     id: "chk-7",
     category: "Pakaian & Atribut",
-    title: "Bawahan Celana / Rok Kain Hitam Formal",
-    description: "Bukan berbahan jeans atau ketat, rapi dan sopan sesuai tata tertib islami.",
+    title: "Pakaian Luring Malam (28 Agustus - Puncak Milad): Formal + Almamater",
+    description: "Pria: Kemeja putih, celana panjang hitam, songkok/peci hitam, jas almamater. Wanita: Kemeja putih, rok panjang hitam, jilbab hitam, jas almamater.",
     required: true,
   },
   {
     id: "chk-8",
     category: "Pakaian & Atribut",
-    title: "Jilbab / Dasi Sesuai Ketentuan Gugus",
-    description: "Jilbab putih/hitam untuk mahasiswi muslimah dan dasi formal untuk mahasiswa.",
-    required: false,
+    title: "Kerapian Rambut (Khusus Mahasiswa Laki-laki)",
+    description: "Rambut tidak gondrong, dipotong rapi, dan berwarna hitam alami.",
+    required: true,
   },
   {
     id: "chk-9",
     category: "Kesehatan & Mental",
-    title: "Air Minum (Tumbler) & Makanan Ringan",
-    description: "Tetap terhidrasi dan siapkan cemilan sehat saat jeda istirahat materi.",
+    title: "Kepatuhan Tata Tertib (Bebas Sajam, Narkoba, Miras, Rokok, Vape)",
+    description: "Dilarang keras membawa barang terlarang. Pelanggaran berakibat sanksi dikeluarkan dan WAJIB MENGULANG TAHUN DEPAN.",
     required: true,
   },
   {
     id: "chk-10",
     category: "Kesehatan & Mental",
-    title: "Tidur Cukup Minimal 7 Jam Malam Sebelumnya",
-    description: "Fisik yang segar membuat daya fokus dan penyerapan materi jauh lebih maksimal.",
+    title: "Tumbler Air Minum & Obat Pribadi",
+    description: "Jaga stamina dan hidrasi saat mengikuti rangkaian kegiatan tatap muka di kampus UMKT.",
     required: true,
   },
   {
     id: "chk-11",
     category: "Kesehatan & Mental",
     title: "Mindset Positif & Semangat Kolaboratif",
-    description: "Buka diri untuk berkenalan dengan teman baru lintas jurusan dan fakultas.",
+    description: "Siap menjalin pertemanan baru dan menghayati semboyan kebanggaan: 'HIDUP TEKNIK! NO SKILL NO TRUST!'.",
     required: true,
   }
 ];
 
 export const MASTA_FAQS: FAQItem[] = [
   {
-    question: "Apa itu MASTA MABA UMKT?",
-    answer: "MASTA (Masa Ta’aruf) MABA UMKT adalah kegiatan orientasi resmi bagi seluruh mahasiswa baru Universitas Muhammadiyah Kalimantan Timur untuk mengenal lingkungan kampus, sistem akademik, nilai-nilai Kemuhammadiyahan, dan organisasi kemahasiswaan.",
-    category: "Umum"
+    question: "Kapan jadwal resmi pelaksanaan MASTA UMKT 2026?",
+    answer: "Rangkaian resmi: 06 Agustus (Pembekalan), 11-20 Agustus (Masta Fakultas/IMM), 24 & 26 Agustus (Materi Universitas Daring via Zoom 08.00-17.00 WITA), dan 28 Agustus (Luring di Kampus: 06.30-11.30 WITA UKM Expo & 17.00-22.00 WITA Puncak Milad/Penutupan).",
+    category: "Jadwal Resmi"
+  },
+  {
+    question: "Apa sanksi jika peserta melanggar tata tertib MASTA 2026?",
+    answer: "Peserta yang tidak mengikuti aturan dapat dikenakan sanksi tegas hingga dikeluarkan sebagai peserta Masa Ta'aruf Mahasiswa Baru dan WAJIB MENGULANG PADA TAHUN DEPAN (berlaku untuk sesi daring maupun luring).",
+    category: "Tata Tertib & Sanksi"
+  },
+  {
+    question: "Bagaimana ketentuan pakaian (dresscode) untuk kegiatan Luring 28 Agustus 2026?",
+    answer: "Sesi Pagi (06.30-11.30 WITA - UKM Expo): Kaos UMKT/olahraga, celana training, sepatu olahraga, wanita jilbab hitam. Sesi Malam (17.00-22.00 WITA - Puncak Milad): Pria memakai kemeja putih, celana panjang hitam, songkok hitam, dan jas almamater. Wanita memakai kemeja putih, rok panjang hitam, jilbab hitam, dan jas almamater.",
+    category: "Dresscode"
+  },
+  {
+    question: "Apa saja barang yang dilarang dibawa ke kampus saat MASTA Luring?",
+    answer: "Dilarang keras membawa benda tajam (sajam), narkoba, minuman keras, rokok, maupun rokok elektrik (vape). Rambut laki-laki wajib rapi, tidak gondrong, dan berwarna hitam.",
+    category: "Tata Tertib & Sanksi"
   },
   {
     question: "Bagaimana cara menghubungi Admin Resmi UMKT jika ada kendala pendaftaran atau MASTA?",
@@ -783,28 +936,13 @@ export const MASTA_FAQS: FAQItem[] = [
     category: "SIKAD"
   },
   {
-    question: "Apa saja peminatan / konsentrasi di Program Studi TI UMKT?",
-    answer: "Prodi TI UMKT memiliki 2 konsentrasi utama: 1) Jaringan dan Rekayasa Sistem (JRS) dan 2) Komputasi Cerdas (KC) / Algoritma Komputasi.",
-    category: "Prodi TI"
-  },
-  {
-    question: "Berapa standar nilai minimum kelulusan mata kuliah di TI UMKT?",
-    answer: "MK Wajib Prodi minimal C, MKDU minimal B, Basic Science & Praktikum minimal BC, Capstone Design & Magang minimal B, dan Skripsi minimal AB.",
-    category: "Prodi TI"
-  },
-  {
-    question: "Berapa kali mahasiswa wajib bimbingan dengan Dosen PA per semester?",
-    answer: "Minimal 4 kali bimbingan per semester: saat pengisian KRS awal, sebelum UTS, sebelum UAS, dan saat evaluasi hasil KHS semester.",
-    category: "Akademik"
+    question: "Siapa penanggung jawab dan sekretaris panitia MASTA MABA UMKT 2026?",
+    answer: "Berdasarkan surat keputusan resmi bertanggal Samarinda, 12 Shafar 1447 H / 06 Agustus 2026, Sekretaris Panitia Masta Maba UMKT adalah Bapak SUHARDIANSYAH, NIDN 1129058501.",
+    category: "Informasi Resmi"
   },
   {
     question: "Apakah MASTA wajib diikuti oleh seluruh Mahasiswa Baru?",
     answer: "Ya, MASTA bersifat WAJIB bagi seluruh mahasiswa baru angkatan 2026 serta mahasiswa angkatan sebelumnya yang belum lulus atau belum mengikuti MASTA. Keikutsertaan ini menjadi syarat kelengkapan administrasi akademik dan SKPI.",
     category: "Kewajiban"
-  },
-  {
-    question: "Di mana saya bisa mengakses informasi resmi terbaru UMKT?",
-    answer: "Kamu dapat mengunjungi website resmi universitas di https://www.umkt.ac.id/, portal mahasiswa di https://mahasiswa.umkt.ac.id/, dan portal resmi MASTA di https://masta-maba.odoo.com/.",
-    category: "Informasi"
   }
 ];

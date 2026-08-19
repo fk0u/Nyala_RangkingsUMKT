@@ -22,6 +22,7 @@ import {
   Clock
 } from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
+import MascotPlayground from "@/components/MascotPlayground";
 import CountdownTimer from "@/components/CountdownTimer";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import ProgressBar from "@/components/ProgressBar";
@@ -209,6 +210,11 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <CountdownTimer />
         <BacklinkBanner compact />
+      </section>
+
+      {/* 2.5 INTERACTIVE RIGGED MASCOT PLAYGROUND */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <MascotPlayground />
       </section>
 
       {/* 3. BLOG & TIPS MABA SPOTLIGHT */}
