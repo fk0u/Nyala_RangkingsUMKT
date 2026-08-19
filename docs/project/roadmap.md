@@ -35,4 +35,12 @@
 - [x] Upgrade **Framer Motion 13.1.0**
 - [x] Migrasi 100% dari `lucide-react` ke **`@phosphor-icons/react` (v2.1.10)** di seluruh komponen & halaman
 - [x] Penggantian seluruh emoji raw dengan Phosphor Icons berbobot visual presisi (`duotone`, `bold`, `fill`)
-- [x] Verifikasi build produksi (`npm run build`) berhasil 100% dengan Turbopack
+
+## Fase 6: Blog & Tips Hub + Pusat Layanan Admin Resmi UMKT ✅
+- [x] Direktori Blog & Artikel Panduan Mahasiswa Baru (`/blog`) dengan filter 6 kategori dan live search
+- [x] Halaman Pembaca Artikel Dinamis (`/blog/[slug]`) dengan Key Takeaways, Author Card, & Social Share
+- [x] Integrasi Kontak Admin PMB (`+62 812-3001-7008`) & Biro Kemahasiswaan (`0822-5087-8843`, Gedung C Lt. 1)
+- [x] Indikator status jam operasional pelayanan kampus (Senin-Kamis 08.00-16.00, Jumat 08.00-11.30 WITA)
+- [x] Komponen `AdminContactCard` & modal global `AdminHelpModal` terintegrasi di seluruh aplikasi
+- [x] Tombol fast-escalation langsung ke WhatsApp Admin di Tanya Nyala AI (`/companion`)
+- [x] Resolusi tuntas port collision & build Next.js 16 (12 rute terkompilasi bersih)
