@@ -24,7 +24,8 @@ import {
   Briefcase,
   TrendUp,
   Checks,
-  Lightbulb
+  Lightbulb,
+  ArrowSquareOut
 } from "@phosphor-icons/react";
 import { PRODI_TI_DATA, OFFICIAL_LINKS, Course, Lecturer } from "@/lib/masta-data";
 import BacklinkBanner from "@/components/BacklinkBanner";
@@ -124,11 +125,18 @@ export default function PanduanTiPage() {
             <video 
               controls 
               controlsList="nodownload" 
-              src="https://file.garden/aoXG-IHDqFuT7RDT/Mindset_MABA_Informatika.mp4"
+              playsInline
+              crossOrigin="anonymous"
               className="w-full aspect-video object-contain bg-black"
-              preload="metadata"
+              preload="auto"
             >
-              Browser Anda tidak mendukung tag video HTML5.
+              <source src="https://file.garden/aoXG-IHDqFuT7RDT/Mindset_MABA_Informatika.mp4" type="video/mp4" />
+              <p className="text-white text-xs p-6 text-center">
+                Browser Anda tidak mendukung pemutar video HTML5. 
+                <a href="https://file.garden/aoXG-IHDqFuT7RDT/Mindset_MABA_Informatika.mp4" target="_blank" rel="noopener noreferrer" className="text-nyala-400 underline font-bold ml-1">
+                  Klik di sini untuk menonton video secara langsung
+                </a>.
+              </p>
             </video>
             
             <div className="p-4 sm:p-5 bg-navy-900/90 border-t border-navy-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-white">
@@ -146,8 +154,19 @@ export default function PanduanTiPage() {
                 </div>
               </div>
               
-              <div className="text-[11px] font-mono text-navy-400 bg-navy-950 px-3 py-1 rounded-xl border border-navy-800">
-                Format: MP4 Video
+              <div className="flex items-center gap-2">
+                <a
+                  href="https://file.garden/aoXG-IHDqFuT7RDT/Mindset_MABA_Informatika.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-nyala-600 text-white text-xs font-bold transition-colors"
+                >
+                  <span>Buka Tab Baru</span>
+                  <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
+                </a>
+                <span className="text-[11px] font-mono text-navy-400 bg-navy-950 px-2.5 py-1 rounded-xl border border-navy-800">
+                  MP4 Full HD
+                </span>
               </div>
             </div>
           </div>
