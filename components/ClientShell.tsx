@@ -7,6 +7,7 @@ import MobileNav from "./MobileNav";
 import Footer from "./Footer";
 import CommandSearchModal from "./CommandSearchModal";
 import WelcomingPreloader from "./WelcomingPreloader";
+import MascotPageTransition from "./MascotPageTransition";
 
 export default function ClientShell({
   children,
@@ -34,7 +35,9 @@ export default function ClientShell({
         <TopNotificationBar onOpenSearch={() => setSearchOpen(true)} />
         <Navbar onOpenSearch={() => setSearchOpen(true)} />
         <main className="flex-grow">
-          {children}
+          <MascotPageTransition>
+            {children}
+          </MascotPageTransition>
         </main>
         <Footer />
         <MobileNav />

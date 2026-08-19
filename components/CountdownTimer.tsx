@@ -13,6 +13,13 @@ interface Milestone {
 
 const MILESTONES: Milestone[] = [
   {
+    id: "imm-fst",
+    name: "MASTA IMM - FST Teknik & Informatika (Luring Kampus)",
+    targetISO: "2026-08-20T06:00:00+08:00",
+    badge: "20 Agustus 2026",
+    timeWITA: "06.00 WITA"
+  },
+  {
     id: "daring-univ",
     name: "Pembukaan & Materi Universitas (Daring Zoom)",
     targetISO: "2026-08-24T08:00:00+08:00",

@@ -30,16 +30,23 @@ import MascotFlame from "@/components/MascotFlame";
 import { 
   MASTA_STAGES, 
   OFFICIAL_MASTA_SCHEDULE_2026, 
+  MASTA_IMM_SCHEDULE_2026,
+  MASTA_WAVES_RUNDOWN_2026,
   MASTA_OFFICIAL_RULES, 
+  getScheduleStatus,
   MastaStage,
-  MastaScheduleItem 
+  MastaScheduleItem,
+  MastaImmSession,
+  MastaWave
 } from "@/lib/masta-data";
 
 export default function JadwalPage() {
-  const [activeTab, setActiveTab] = useState<"jadwal" | "agenda-utama" | "tata-tertib" | "sanksi">("jadwal");
+  const [activeTab, setActiveTab] = useState<"jadwal" | "masta-imm" | "agenda-utama" | "tata-tertib" | "sanksi">("jadwal");
   const [scheduleFilter, setScheduleFilter] = useState<string>("Semua");
+  const [prodiSearch, setProdiSearch] = useState<string>("");
+  const [selectedWave, setSelectedWave] = useState<number>(1);
 
-  const filterOptions = ["Semua", "Universitas Daring", "Puncak Luring", "Fakultas", "Pembekalan"];
+  const filterOptions = ["Semua", "Masta IMM", "Universitas Daring", "Puncak Luring", "Fakultas", "Pembekalan"];
 
   const filteredSchedule = OFFICIAL_MASTA_SCHEDULE_2026.filter((item) => {
     if (scheduleFilter === "Semua") return true;
@@ -72,9 +79,10 @@ export default function JadwalPage() {
       {/* Navigation Tabs */}
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 border-b border-navy-200/80 dark:border-navy-800 pb-4">
         {[
-          { id: "jadwal", label: "Tabel Jadwal Rangkaian", icon: Calendar },
+          { id: "jadwal", label: "Tabel Rangkaian", icon: Calendar },
+          { id: "masta-imm", label: "Jadwal MASTA IMM (18-20 Agt)", icon: Users, badge: "Fakultas & Prodi" },
           { id: "agenda-utama", label: "Daring vs Luring", icon: VideoCamera },
-          { id: "tata-tertib", label: "Dresscode & Aturan Luring", icon: TShirt },
+          { id: "tata-tertib", label: "Dresscode & Aturan", icon: TShirt },
           { id: "sanksi", label: "Peringatan Sanksi", icon: WarningOctagon },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -84,7 +92,7 @@ export default function JadwalPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all ${
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all relative ${
                 isActive
                   ? "bg-navy-900 text-white dark:bg-white dark:text-navy-950 shadow-md scale-105"
                   : "bg-white/70 dark:bg-navy-900 text-navy-600 dark:text-navy-300 hover:bg-navy-100 dark:hover:bg-navy-800 border border-navy-200/60 dark:border-navy-800"
@@ -92,6 +100,11 @@ export default function JadwalPage() {
             >
               <Icon weight={isActive ? "fill" : "bold"} className="w-4 h-4" />
               <span>{tab.label}</span>
+              {tab.badge && !isActive && (
+                <span className="hidden sm:inline px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-nyala-500/15 text-nyala-600 dark:text-nyala-400">
+                  {tab.badge}
+                </span>
+              )}
             </button>
           );
         })}
@@ -185,6 +198,8 @@ export default function JadwalPage() {
                               ? "bg-blue-500/15 text-blue-600 dark:text-blue-400"
                               : row.category === "Puncak Luring"
                               ? "bg-nyala-500/15 text-nyala-600 dark:text-nyala-400"
+                              : row.category === "Masta IMM"
+                              ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20"
                               : row.category === "Fakultas"
                               ? "bg-purple-500/15 text-purple-600 dark:text-purple-400"
                               : "bg-slate-500/15 text-slate-600 dark:text-slate-400"
@@ -197,23 +212,348 @@ export default function JadwalPage() {
                         </div>
                       </td>
                       <td className="py-4 px-4 sm:px-6">
-                        {row.no === 7 || row.no === 8 || row.no === 9 ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            <span>Mendatang</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-200 dark:bg-navy-800 text-slate-600 dark:text-slate-400 text-xs font-bold">
-                            <CheckCircle weight="fill" className="w-3.5 h-3.5 text-slate-400" />
-                            <span>Selesai</span>
-                          </span>
-                        )}
+                        {(() => {
+                          const status = getScheduleStatus(row.startISO, row.endISO);
+                          if (status === "Sedang Berlangsung") {
+                            return (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-xs font-extrabold border border-emerald-500/30">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                                <span>Berlangsung</span>
+                              </span>
+                            );
+                          } else if (status === "Mendatang") {
+                            return (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 text-xs font-bold border border-blue-500/20">
+                                <Clock weight="bold" className="w-3.5 h-3.5" />
+                                <span>Mendatang</span>
+                              </span>
+                            );
+                          } else {
+                            return (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-navy-800 text-slate-500 dark:text-slate-400 text-xs font-medium">
+                                <CheckCircle weight="fill" className="w-3.5 h-3.5 text-slate-400" />
+                                <span>Selesai</span>
+                              </span>
+                            );
+                          }
+                        })()}
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB: JADWAL & PEMBAGIAN SESI MASTA IMM 2026 */}
+      {/* ========================================================================= */}
+      {activeTab === "masta-imm" && (
+        <div className="space-y-8">
+          
+          {/* Official Slide Header Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="glass-card rounded-3xl p-5 border border-navy-200/80 dark:border-navy-800 text-center space-y-1 bg-gradient-to-br from-blue-500/10 to-transparent">
+              <span className="text-3xl sm:text-4xl font-black text-blue-600 dark:text-blue-400">9</span>
+              <p className="text-xs font-bold text-navy-600 dark:text-navy-300 uppercase tracking-wider">Fakultas</p>
+            </div>
+            <div className="glass-card rounded-3xl p-5 border border-navy-200/80 dark:border-navy-800 text-center space-y-1 bg-gradient-to-br from-amber-500/10 to-transparent">
+              <span className="text-3xl sm:text-4xl font-black text-amber-600 dark:text-amber-400">3</span>
+              <p className="text-xs font-bold text-navy-600 dark:text-navy-300 uppercase tracking-wider">Gelombang</p>
+            </div>
+            <div className="glass-card rounded-3xl p-5 border border-navy-200/80 dark:border-navy-800 text-center space-y-1 bg-gradient-to-br from-emerald-500/10 to-transparent">
+              <span className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono">11 – 20/AGT</span>
+              <p className="text-xs font-bold text-navy-600 dark:text-navy-300 uppercase tracking-wider">Fakultas & IMM</p>
+            </div>
+            <div className="glass-card rounded-3xl p-5 border border-navy-200/80 dark:border-navy-800 text-center space-y-1 bg-gradient-to-br from-nyala-500/10 to-transparent">
+              <span className="text-3xl sm:text-4xl font-black text-nyala-600 dark:text-nyala-400">3.755</span>
+              <p className="text-xs font-bold text-navy-600 dark:text-navy-300 uppercase tracking-wider">Total Mahasiswa</p>
+            </div>
+          </div>
+
+          {/* Section 1: Rundown Jam per Gelombang (Slide Resmi) */}
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg sm:text-xl font-extrabold text-navy-900 dark:text-white">
+                  Rundown Pelaksanaan per Gelombang
+                </h3>
+                <p className="text-xs text-navy-600 dark:text-navy-400">
+                  Rincian jam registrasi, pelaksanaan kegiatan, ISHOMA, dan kuota resmi per tanggal.
+                </p>
+              </div>
+
+              {/* Wave Selector */}
+              <div className="flex flex-wrap gap-2">
+                {MASTA_WAVES_RUNDOWN_2026.map((w) => (
+                  <button
+                    key={w.waveNumber}
+                    onClick={() => setSelectedWave(w.waveNumber)}
+                    className={`px-3.5 py-1.5 rounded-2xl text-xs font-bold transition-all ${
+                      selectedWave === w.waveNumber
+                        ? "bg-navy-900 text-white dark:bg-white dark:text-navy-950 shadow-md scale-105"
+                        : "bg-white/80 dark:bg-navy-900 text-navy-700 dark:text-navy-300 border border-navy-200 dark:border-navy-800 hover:bg-navy-100"
+                    }`}
+                  >
+                    <span>{w.waveName} ({w.date.split(" ")[0]} Agt)</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Selected Wave Table */}
+            {(() => {
+              const currentWave = MASTA_WAVES_RUNDOWN_2026.find(w => w.waveNumber === selectedWave) || MASTA_WAVES_RUNDOWN_2026[0];
+              const waveStatus = getScheduleStatus(currentWave.startISO, currentWave.endISO);
+
+              return (
+                <motion.div
+                  key={currentWave.waveNumber}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="glass-card rounded-3xl border border-navy-200/80 dark:border-navy-800 overflow-hidden shadow-xl"
+                >
+                  <div className="p-4 sm:p-6 bg-navy-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase bg-amber-500 text-navy-950">
+                          {currentWave.waveName}
+                        </span>
+                        <h4 className="text-base sm:text-lg font-black">
+                          Tanggal {currentWave.date} ({currentWave.dayName})
+                        </h4>
+                      </div>
+                      <p className="text-xs text-navy-300">
+                        {currentWave.subTotalNotes}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <span className="text-[10px] text-navy-400 uppercase tracking-wider block font-bold">Total Kuota</span>
+                        <span className="text-base font-black text-amber-400 font-mono">
+                          {currentWave.totalKuota.toLocaleString("id-ID")} Mahasiswa
+                        </span>
+                      </div>
+
+                      {waveStatus === "Sedang Berlangsung" ? (
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white animate-pulse">
+                          Live Hari Ini
+                        </span>
+                      ) : waveStatus === "Mendatang" ? (
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                          Mendatang
+                        </span>
+                      ) : (
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-400">
+                          Selesai
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                      <thead>
+                        <tr className="bg-navy-900/50 dark:bg-navy-900 border-b border-navy-200/80 dark:border-navy-800 text-navy-600 dark:text-navy-300 uppercase tracking-wider text-[11px]">
+                          <th className="py-3 px-4 sm:px-6 font-bold w-36">Waktu</th>
+                          <th className="py-3 px-4 sm:px-6 font-bold min-w-[200px]">Kegiatan</th>
+                          <th className="py-3 px-4 sm:px-6 font-bold min-w-[280px]">Keterangan & Kuota</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-navy-100 dark:divide-navy-800/80 text-navy-800 dark:text-navy-200">
+                        {currentWave.rundown.map((item, rIdx) => (
+                          <tr key={rIdx} className="hover:bg-navy-50/50 dark:hover:bg-navy-800/30">
+                            <td className="py-3 px-4 sm:px-6 font-bold font-mono text-nyala-600 dark:text-nyala-400">
+                              {item.time}
+                            </td>
+                            <td className="py-3 px-4 sm:px-6 font-semibold text-navy-900 dark:text-white">
+                              {item.activity}
+                            </td>
+                            <td className="py-3 px-4 sm:px-6">
+                              <div className="space-y-1">
+                                <span className="block text-xs text-navy-700 dark:text-navy-300 leading-relaxed font-medium">
+                                  {item.notes}
+                                </span>
+                                {item.kuota && (
+                                  <span className="inline-block px-2 py-0.5 rounded-md text-[10px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/20 font-mono">
+                                    {item.kuota}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </motion.div>
+              );
+            })()}
+          </div>
+
+          {/* Section 2: Interactive Session & Prodi Finder */}
+          <div className="space-y-6 pt-4 border-t border-navy-200/80 dark:border-navy-800">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div className="space-y-2">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-navy-900 dark:text-white">
+                  Pembagian Sesi & Pencarian Program Studi
+                </h3>
+                <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-400 max-w-2xl">
+                  Ketik nama program studi kamu untuk melihat jadwal sesi pagi/siang dan kuota kelas.
+                </p>
+              </div>
+
+              {/* Live Prodi Quick Search */}
+              <div className="w-full md:w-80">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={prodiSearch}
+                    onChange={(e) => setProdiSearch(e.target.value)}
+                    placeholder="Cari prodi (contoh: Informatika, Akuntansi)..."
+                    className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-nyala-500 text-navy-900 dark:text-white placeholder:text-navy-400 shadow-sm"
+                  />
+                  <Users weight="bold" className="w-4 h-4 absolute left-3 top-3 text-navy-400" />
+                  {prodiSearch && (
+                    <button
+                      onClick={() => setProdiSearch("")}
+                      className="absolute right-3 top-3 text-[11px] font-bold text-navy-400 hover:text-navy-600 dark:hover:text-white"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Grid of IMM Sessions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {MASTA_IMM_SCHEDULE_2026.map((session, idx) => {
+                const matchesSearch = prodiSearch
+                  ? session.prodiList.some((p) => p.toLowerCase().includes(prodiSearch.toLowerCase())) ||
+                    session.faculties.some((f) => f.toLowerCase().includes(prodiSearch.toLowerCase()))
+                  : true;
+
+                const isHighlighted = Boolean(prodiSearch && matchesSearch);
+                const sessionStatus = getScheduleStatus(session.startISO, session.endISO);
+
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: idx * 0.05 }}
+                    className={`rounded-3xl p-6 transition-all relative overflow-hidden flex flex-col justify-between ${
+                      isHighlighted
+                        ? "glass-card border-2 border-nyala-500 shadow-2xl shadow-nyala-500/20 ring-4 ring-nyala-500/10 scale-[1.02]"
+                        : matchesSearch
+                        ? "glass-card border border-navy-200/80 dark:border-navy-800 hover:border-nyala-500/40 hover:shadow-xl"
+                        : "opacity-40 grayscale bg-navy-100/50 dark:bg-navy-900/30 border border-transparent"
+                    }`}
+                  >
+                    <div className="space-y-4">
+                      {/* Header Badges */}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-navy-900 text-white dark:bg-white dark:text-navy-950 text-xs font-black">
+                          <Calendar weight="bold" className="w-3.5 h-3.5" />
+                          <span>{session.dayName}, {session.date}</span>
+                        </div>
+
+                        <div className="flex items-center gap-1.5">
+                          <span className={`px-2.5 py-1 rounded-xl text-[11px] font-black uppercase tracking-wider ${
+                            session.sessionType === "Pagi"
+                              ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                              : "bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20"
+                          }`}>
+                            Sesi {session.sessionType}
+                          </span>
+
+                          {sessionStatus === "Sedang Berlangsung" ? (
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" title="Sedang Berlangsung" />
+                          ) : null}
+                        </div>
+                      </div>
+
+                      {/* Time Window & Kuota */}
+                      <div className="flex items-center justify-between gap-2 p-3 rounded-2xl bg-navy-50 dark:bg-navy-900/60 border border-navy-100 dark:border-navy-800">
+                        <div className="flex items-center gap-2">
+                          <Clock weight="fill" className="w-4 h-4 text-nyala-500 flex-shrink-0" />
+                          <span className="text-xs sm:text-sm font-black font-mono text-navy-900 dark:text-white">
+                            {session.sessionTime}
+                          </span>
+                        </div>
+                        {session.kuota && (
+                          <span className="text-[11px] font-black text-amber-600 dark:text-amber-400 font-mono">
+                            {session.kuota}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Faculties */}
+                      <div className="space-y-1.5">
+                        <span className="text-[10px] font-bold text-navy-500 dark:text-navy-400 uppercase tracking-wider block">
+                          Fakultas Terdaftar
+                        </span>
+                        <div className="space-y-1">
+                          {session.faculties.map((fac, fIdx) => (
+                            <div key={fIdx} className="flex items-start gap-2 text-xs font-bold text-navy-900 dark:text-white leading-snug">
+                              <Building weight="bold" className="w-3.5 h-3.5 text-nyala-500 mt-0.5 flex-shrink-0" />
+                              <span>{fac}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Program Studi List */}
+                      <div className="space-y-2 pt-2 border-t border-navy-100 dark:border-navy-800">
+                        <span className="text-[10px] font-bold text-navy-500 dark:text-navy-400 uppercase tracking-wider block">
+                          Program Studi ({session.prodiList.length} Jurusan)
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {session.prodiList.map((prodi, pIdx) => {
+                            const isProdiMatch = prodiSearch && prodi.toLowerCase().includes(prodiSearch.toLowerCase());
+                            return (
+                              <span
+                                key={pIdx}
+                                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                                  isProdiMatch
+                                    ? "bg-nyala-600 text-white font-bold shadow-sm ring-2 ring-nyala-300 scale-105"
+                                    : "bg-white dark:bg-navy-800 text-navy-700 dark:text-navy-300 border border-navy-200/60 dark:border-navy-700"
+                                }`}
+                              >
+                                {prodi}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Notes Footer */}
+                    {session.notes && (
+                      <div className="mt-4 pt-3 border-t border-navy-100 dark:border-navy-800 flex items-start gap-1.5 text-[11px] text-navy-500 dark:text-navy-400 italic">
+                        <MapPin weight="fill" className="w-3.5 h-3.5 text-nyala-500 flex-shrink-0 mt-0.5" />
+                        <span>{session.notes}</span>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Announcement Banner for IMM */}
+          <div className="p-6 rounded-3xl bg-gradient-to-r from-amber-500/10 via-nyala-500/10 to-transparent border border-amber-500/20 space-y-3">
+            <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
+              <MegaphoneSimple weight="bold" className="w-5 h-5" />
+              <span>Petunjuk Khusus MASTA IMM 2026:</span>
+            </div>
+            <p className="text-xs sm:text-sm text-navy-700 dark:text-navy-300 leading-relaxed">
+              Mahasiswa Baru dimohon untuk hadir <strong>06.00 WITA (Sesi Pagi)</strong> atau <strong>13.00 WITA (Sesi Siang)</strong> untuk registrasi presensi. Pastikan mengenakan pakaian rapi berkerah, bawahan hitam/gelap sopan, serta mematuhi arahan kakak instruktur IMM.
+            </p>
           </div>
         </div>
       )}

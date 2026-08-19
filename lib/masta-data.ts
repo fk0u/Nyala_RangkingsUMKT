@@ -611,12 +611,232 @@ export interface MastaScheduleItem {
   no: number;
   dayDate: string;
   activity: string;
-  category: "Pembekalan" | "Fakultas" | "Universitas Daring" | "Puncak Luring";
-  locationType: "Daring (Zoom)" | "Luring (Kampus UMKT)" | "Internal Fakultas/IMM";
+  category: "Pembekalan" | "Fakultas" | "Universitas Daring" | "Puncak Luring" | "Masta IMM";
+  locationType: "Daring (Zoom)" | "Luring (Kampus UMKT)" | "Internal Fakultas/IMM" | "Internal Kampus UMKT / IMM";
   time?: string;
+  startISO: string;
+  endISO: string;
   description?: string;
-  isUpcomingOrActive?: boolean;
+  kuota?: string;
+  waveNumber?: number;
 }
+
+export type MastaStatus = "Selesai" | "Sedang Berlangsung" | "Mendatang";
+
+export function getScheduleStatus(startISO: string, endISO: string, overrideDate?: Date): MastaStatus {
+  const now = overrideDate ? overrideDate.getTime() : new Date().getTime();
+  const start = new Date(startISO).getTime();
+  const end = new Date(endISO).getTime();
+
+  if (now > end) {
+    return "Selesai";
+  } else if (now >= start && now <= end) {
+    return "Sedang Berlangsung";
+  } else {
+    return "Mendatang";
+  }
+}
+
+export interface MastaRundownEntry {
+  time: string;
+  activity: string;
+  notes: string;
+  kuota?: string;
+}
+
+export interface MastaWave {
+  waveNumber: number;
+  waveName: string;
+  date: string;
+  dayName: string;
+  startISO: string;
+  endISO: string;
+  totalKuota: number;
+  subTotalNotes: string;
+  rundown: MastaRundownEntry[];
+}
+
+export const MASTA_WAVES_RUNDOWN_2026: MastaWave[] = [
+  {
+    waveNumber: 1,
+    waveName: "Gelombang 1",
+    date: "18 Agustus 2026",
+    dayName: "Selasa",
+    startISO: "2026-08-18T06:00:00+08:00",
+    endISO: "2026-08-18T17:00:00+08:00",
+    totalKuota: 1400,
+    subTotalNotes: "FEBP (935 Mhs) + PSIKOLOGI & FKIP (465 Mhs)",
+    rundown: [
+      { time: "06.00 – 07.00 WITA", activity: "Registrasi Peserta", notes: "Sesi Pagi" },
+      { time: "08.00 – 12.00 WITA", activity: "Pelaksanaan Kegiatan", notes: "FEBP (HI, Akuntansi, MNJ, MLM Inter, dan MM)", kuota: "Kuota 935 Mahasiswa" },
+      { time: "12.00 – 13.00 WITA", activity: "ISHOMA", notes: "Panitia dan Peserta" },
+      { time: "13.00 – 13.30 WITA", activity: "Registrasi Peserta", notes: "Sesi Siang" },
+      { time: "13.30 – 17.00 WITA", activity: "Pelaksanaan Kegiatan", notes: "PSIKOLOGI dan FKIP", kuota: "Total 465 Mahasiswa" }
+    ]
+  },
+  {
+    waveNumber: 2,
+    waveName: "Gelombang 2",
+    date: "19 Agustus 2026",
+    dayName: "Rabu",
+    startISO: "2026-08-19T06:00:00+08:00",
+    endISO: "2026-08-19T17:00:00+08:00",
+    totalKuota: 1435,
+    subTotalNotes: "FKM & HUKUM (710 Mhs) + FARMASI, FIK & FK (725 Mhs)",
+    rundown: [
+      { time: "06.00 – 07.00 WITA", activity: "Registrasi Peserta", notes: "Sesi Pagi" },
+      { time: "08.00 – 12.00 WITA", activity: "Pelaksanaan Kegiatan", notes: "FKM (Kesling dan Kesmas) dan Hukum (S1 & S2)", kuota: "Total 710 Mahasiswa" },
+      { time: "12.00 – 13.00 WITA", activity: "ISHOMA", notes: "Panitia dan Peserta" },
+      { time: "13.00 – 13.30 WITA", activity: "Registrasi Peserta", notes: "Sesi Siang" },
+      { time: "13.30 – 17.00 WITA", activity: "Pelaksanaan Kegiatan", notes: "Farmasi, FIK (D3, S1, RPL, Ners, dan FK)", kuota: "Kuota 725 Mahasiswa" }
+    ]
+  },
+  {
+    waveNumber: 3,
+    waveName: "Gelombang 3",
+    date: "20 Agustus 2026",
+    dayName: "Kamis",
+    startISO: "2026-08-20T06:00:00+08:00",
+    endISO: "2026-08-20T12:00:00+08:00",
+    totalKuota: 920,
+    subTotalNotes: "Fakultas Sains dan Teknologi / Saintek (920 Mhs)",
+    rundown: [
+      { time: "06.00 – 07.00 WITA", activity: "Registrasi Peserta", notes: "Sesi Pagi" },
+      { time: "08.00 – 12.00 WITA", activity: "Pelaksanaan Kegiatan", notes: "Saintek (TI, TI MLM, TI Inter, Sipil, Sipil MLM, Mesin, dan Geo)", kuota: "Kuota 920 Mahasiswa" },
+      { time: "12.00 WITA", activity: "Penutupan Kegiatan Gelombang 3", notes: "Selesai" }
+    ]
+  }
+];
+
+export interface MastaImmSession {
+  date: string;
+  dayName: string;
+  sessionTime: string;
+  sessionType: "Pagi" | "Siang";
+  timeRange: string;
+  startISO: string;
+  endISO: string;
+  faculties: string[];
+  prodiList: string[];
+  kuota?: string;
+  notes?: string;
+}
+
+export const MASTA_IMM_SCHEDULE_2026: MastaImmSession[] = [
+  {
+    date: "18 Agustus 2026",
+    dayName: "Selasa",
+    sessionType: "Pagi",
+    sessionTime: "06:00 - 12:00 WITA",
+    timeRange: "06:00 - 12:00 WITA",
+    startISO: "2026-08-18T06:00:00+08:00",
+    endISO: "2026-08-18T12:00:00+08:00",
+    kuota: "935 Mahasiswa",
+    faculties: [
+      "Fakultas Ekonomi Bisnis dan Politik (FEBP)",
+      "Fakultas Psikologi"
+    ],
+    prodiList: [
+      "S1 Akuntansi",
+      "S1 Manajemen (MNJ)",
+      "S1 Manajemen Kelas Malam (MLM)",
+      "S1 Manajemen Kelas Internasional (Inter)",
+      "S1 Hubungan Internasional (HI)",
+      "Magister Manajemen (MM)"
+    ],
+    notes: "06.00-07.00 Registrasi Pagi. 08.00-12.00 Pelaksanaan Kegiatan."
+  },
+  {
+    date: "18 Agustus 2026",
+    dayName: "Selasa",
+    sessionType: "Siang",
+    sessionTime: "13:00 - 17:00 WITA",
+    timeRange: "13:00 - 17:00 WITA",
+    startISO: "2026-08-18T13:00:00+08:00",
+    endISO: "2026-08-18T17:00:00+08:00",
+    kuota: "465 Mahasiswa",
+    faculties: [
+      "Fakultas Psikologi",
+      "Fakultas Keguruan dan Ilmu Pendidikan (FKIP)"
+    ],
+    prodiList: [
+      "S1 Psikologi",
+      "S1 Pendidikan Bahasa Inggris",
+      "S1 Pendidikan Olahraga"
+    ],
+    notes: "12.00-13.00 ISHOMA. 13.00-13.30 Registrasi Siang. 13.30-17.00 Pelaksanaan Kegiatan."
+  },
+  {
+    date: "19 Agustus 2026",
+    dayName: "Rabu",
+    sessionType: "Pagi",
+    sessionTime: "06:00 - 12:00 WITA",
+    timeRange: "06:00 - 12:00 WITA",
+    startISO: "2026-08-19T06:00:00+08:00",
+    endISO: "2026-08-19T12:00:00+08:00",
+    kuota: "710 Mahasiswa",
+    faculties: [
+      "Fakultas Kesehatan Lingkungan (Kesling)",
+      "Fakultas Kesehatan Masyarakat (Kesmas / FKM)",
+      "Fakultas Hukum (FH)"
+    ],
+    prodiList: [
+      "S1 Kesehatan Lingkungan (Kesling)",
+      "S1 Kesehatan Masyarakat (Kesmas)",
+      "S1 Ilmu Hukum",
+      "Magister Hukum (S2 Hukum)"
+    ],
+    notes: "06.00-07.00 Registrasi Pagi. 08.00-12.00 Pelaksanaan Kegiatan."
+  },
+  {
+    date: "19 Agustus 2026",
+    dayName: "Rabu",
+    sessionType: "Siang",
+    sessionTime: "13:00 - 17:00 WITA",
+    timeRange: "13:00 - 17:00 WITA",
+    startISO: "2026-08-19T13:00:00+08:00",
+    endISO: "2026-08-19T17:00:00+08:00",
+    kuota: "725 Mahasiswa",
+    faculties: [
+      "Fakultas Farmasi",
+      "Fakultas Ilmu Keperawatan (FIK)",
+      "Fakultas Kedokteran (FK)"
+    ],
+    prodiList: [
+      "S1 Farmasi",
+      "D3 Farmasi",
+      "S1 Ilmu Keperawatan",
+      "RPL Keperawatan",
+      "Profesi Ners",
+      "S1 Kedokteran",
+      "Profesi Dokter"
+    ],
+    notes: "12.00-13.00 ISHOMA. 13.00-13.30 Registrasi Siang. 13.30-17.00 Pelaksanaan Kegiatan."
+  },
+  {
+    date: "20 Agustus 2026",
+    dayName: "Kamis",
+    sessionType: "Pagi",
+    sessionTime: "06:00 - 12:00 WITA",
+    timeRange: "06:00 - 12:00 WITA",
+    startISO: "2026-08-20T06:00:00+08:00",
+    endISO: "2026-08-20T12:00:00+08:00",
+    kuota: "920 Mahasiswa",
+    faculties: [
+      "Fakultas Sains dan Teknologi (FST / Saintek / Teknik)"
+    ],
+    prodiList: [
+      "S1 Teknik Informatika (TI Reguler)",
+      "S1 Teknik Informatika Kelas Malam (TI MLM)",
+      "S1 Teknik Informatika Kelas Internasional (TI Inter)",
+      "S1 Teknik Sipil (Sipil Reguler)",
+      "S1 Teknik Sipil Kelas Malam (Sipil MLM)",
+      "S1 Teknik Mesin",
+      "S1 Teknik Geologi (Geo)"
+    ],
+    notes: "06.00-07.00 Registrasi Pagi. 08.00-12.00 Pelaksanaan Kegiatan. 12.00 Penutupan Kegiatan Gelombang 3."
+  }
+];
 
 export const OFFICIAL_MASTA_SCHEDULE_2026: MastaScheduleItem[] = [
   {
@@ -625,6 +845,9 @@ export const OFFICIAL_MASTA_SCHEDULE_2026: MastaScheduleItem[] = [
     activity: "Pembekalan",
     category: "Pembekalan",
     locationType: "Daring (Zoom)",
+    time: "08.00 – 12.00 WITA",
+    startISO: "2026-08-06T08:00:00+08:00",
+    endISO: "2026-08-06T17:00:00+08:00",
     description: "Pengarahan umum dan orientasi awal tata tertib peserta MASTA 2026."
   },
   {
@@ -633,6 +856,9 @@ export const OFFICIAL_MASTA_SCHEDULE_2026: MastaScheduleItem[] = [
     activity: "Masta FEBP",
     category: "Fakultas",
     locationType: "Internal Fakultas/IMM",
+    time: "08.00 – 17.00 WITA",
+    startISO: "2026-08-11T08:00:00+08:00",
+    endISO: "2026-08-11T17:00:00+08:00",
     description: "Masa Ta'aruf Fakultas Ekonomi, Bisnis, dan Politik."
   },
   {
@@ -641,31 +867,49 @@ export const OFFICIAL_MASTA_SCHEDULE_2026: MastaScheduleItem[] = [
     activity: "Masta Teknik",
     category: "Fakultas",
     locationType: "Internal Fakultas/IMM",
+    time: "08.00 – 17.00 WITA",
+    startISO: "2026-08-12T08:00:00+08:00",
+    endISO: "2026-08-12T17:00:00+08:00",
     description: "Masa Ta'aruf Fakultas Sains dan Teknologi / Teknik (termasuk Prodi Teknologi Informasi)."
   },
   {
     no: 4,
     dayDate: "Selasa, 18 Agustus 2026",
-    activity: "Masta Hukum dan Kesmas; Masta IMM",
-    category: "Fakultas",
-    locationType: "Internal Fakultas/IMM",
-    description: "Masa Ta'aruf Fakultas Hukum, Fakultas Kesehatan Masyarakat, serta IMM."
+    activity: "MASTA IMM Gelombang 1 - FEBP, Psikologi, & FKIP",
+    category: "Masta IMM",
+    locationType: "Internal Kampus UMKT / IMM",
+    time: "Pagi (06:00 - 12:00 WITA) & Siang (13:00 - 17:00 WITA)",
+    startISO: "2026-08-18T06:00:00+08:00",
+    endISO: "2026-08-18T17:00:00+08:00",
+    kuota: "1.400 Mahasiswa",
+    waveNumber: 1,
+    description: "Gelombang 1: Pagi (FEBP: HI, Akuntansi, MNJ, MLM Inter, MM - 935 Mhs). Siang (Psikologi & FKIP - 465 Mhs)."
   },
   {
     no: 5,
     dayDate: "Rabu, 19 Agustus 2026",
-    activity: "Masta Psikologi dan KIP; Masta IMM",
-    category: "Fakultas",
-    locationType: "Internal Fakultas/IMM",
-    description: "Masa Ta'aruf Fakultas Psikologi, Keguruan dan Ilmu Pendidikan, serta IMM."
+    activity: "MASTA IMM Gelombang 2 - FKM, Hukum, Farmasi, FIK, & FK",
+    category: "Masta IMM",
+    locationType: "Internal Kampus UMKT / IMM",
+    time: "Pagi (06:00 - 12:00 WITA) & Siang (13:00 - 17:00 WITA)",
+    startISO: "2026-08-19T06:00:00+08:00",
+    endISO: "2026-08-19T17:00:00+08:00",
+    kuota: "1.435 Mahasiswa",
+    waveNumber: 2,
+    description: "Gelombang 2: Pagi (FKM Kesling & Kesmas, Hukum S1/S2 - 710 Mhs). Siang (Farmasi, FIK D3/S1/RPL/Ners, FK - 725 Mhs)."
   },
   {
     no: 6,
     dayDate: "Kamis, 20 Agustus 2026",
-    activity: "Masta Farmasi dan Keperawatan; Masta IMM",
-    category: "Fakultas",
-    locationType: "Internal Fakultas/IMM",
-    description: "Masa Ta'aruf Fakultas Farmasi, Ilmu Keperawatan, serta IMM."
+    activity: "MASTA IMM Gelombang 3 - Saintek (FST / Teknik)",
+    category: "Masta IMM",
+    locationType: "Internal Kampus UMKT / IMM",
+    time: "Pagi (06:00 - 12:00 WITA)",
+    startISO: "2026-08-20T06:00:00+08:00",
+    endISO: "2026-08-20T12:00:00+08:00",
+    kuota: "920 Mahasiswa",
+    waveNumber: 3,
+    description: "Gelombang 3: Pagi (Saintek: TI, TI MLM, TI Inter, Sipil, Sipil MLM, Mesin, Geo - 920 Mhs). Penutupan Gelombang 3 pukul 12.00 WITA."
   },
   {
     no: 7,
@@ -674,8 +918,10 @@ export const OFFICIAL_MASTA_SCHEDULE_2026: MastaScheduleItem[] = [
     category: "Universitas Daring",
     locationType: "Daring (Zoom)",
     time: "08.00 – 17.00 WITA",
-    description: "Pembukaan resmi MASTA Universitas & materi universitas hari ke-1 via Zoom Meeting. Wajib bagi seluruh MABA.",
-    isUpcomingOrActive: true
+    startISO: "2026-08-24T08:00:00+08:00",
+    endISO: "2026-08-24T17:00:00+08:00",
+    kuota: "3.755 Mahasiswa",
+    description: "Pembukaan resmi MASTA Universitas & materi universitas hari ke-1 via Zoom Meeting. Wajib bagi seluruh MABA."
   },
   {
     no: 8,
@@ -684,8 +930,10 @@ export const OFFICIAL_MASTA_SCHEDULE_2026: MastaScheduleItem[] = [
     category: "Universitas Daring",
     locationType: "Daring (Zoom)",
     time: "08.00 – 17.00 WITA",
-    description: "Materi universitas hari ke-2, pengenalan sistem kemahasiswaan & organisasi kampus via Zoom Meeting.",
-    isUpcomingOrActive: true
+    startISO: "2026-08-26T08:00:00+08:00",
+    endISO: "2026-08-26T17:00:00+08:00",
+    kuota: "3.755 Mahasiswa",
+    description: "Materi universitas hari ke-2, pengenalan sistem kemahasiswaan & organisasi kampus via Zoom Meeting."
   },
   {
     no: 9,
@@ -694,8 +942,10 @@ export const OFFICIAL_MASTA_SCHEDULE_2026: MastaScheduleItem[] = [
     category: "Puncak Luring",
     locationType: "Luring (Kampus UMKT)",
     time: "Sesi Pagi: 06.30 – 11.30 WITA | Sesi Malam: 17.00 – 22.00 WITA",
-    description: "Kegiatan tatap muka di lingkungan kampus UMKT. Sesi 1: UKM Expo (Kaos UMKT/olahraga). Sesi 2: Puncak Milad UMKT & Penutupan MASTA (Formal Hitam-Putih + Almamater).",
-    isUpcomingOrActive: true
+    startISO: "2026-08-28T06:30:00+08:00",
+    endISO: "2026-08-28T22:00:00+08:00",
+    kuota: "3.755 Mahasiswa",
+    description: "Kegiatan tatap muka di lingkungan kampus UMKT. Sesi 1: UKM Expo (Kaos UMKT/olahraga). Sesi 2: Puncak Milad UMKT & Penutupan MASTA (Formal Hitam-Putih + Almamater)."
   }
 ];
 
@@ -906,8 +1156,13 @@ export const INITIAL_CHECKLIST: ChecklistItem[] = [
 
 export const MASTA_FAQS: FAQItem[] = [
   {
+    question: "Bagaimana pembagian sesi dan jadwal MASTA IMM (18 – 20 Agustus 2026)?",
+    answer: "18 Agustus Pagi (06.00-12.00 WITA): FEBP (S1 Akuntansi, S1 Manajemen Reguler/Malam/Internasional, S1 Hubungan Internasional) & Fak. Psikologi. 18 Agustus Siang (13.00-17.00 WITA): Fak. Psikologi & FKIP (S1 Pend. Bahasa Inggris, S1 Pend. Olahraga). 19 Agustus Pagi (06.00-12.00 WITA): Fakultas Kesling, Kesmas, dan Hukum. 19 Agustus Siang (13.00-17.00 WITA): Fakultas Farmasi, Keperawatan (FIK), dan Kedokteran. 20 Agustus Pagi (06.00-12.00 WITA): Fakultas Sains dan Teknologi (FST - Teknik Informatika Reguler/Malam/Internasional, Teknik Sipil Reguler/Malam, Mesin, Geologi).",
+    category: "Jadwal Resmi"
+  },
+  {
     question: "Kapan jadwal resmi pelaksanaan MASTA UMKT 2026?",
-    answer: "Rangkaian resmi: 06 Agustus (Pembekalan), 11-20 Agustus (Masta Fakultas/IMM), 24 & 26 Agustus (Materi Universitas Daring via Zoom 08.00-17.00 WITA), dan 28 Agustus (Luring di Kampus: 06.30-11.30 WITA UKM Expo & 17.00-22.00 WITA Puncak Milad/Penutupan).",
+    answer: "Rangkaian resmi: 06 Agustus (Pembekalan), 18-20 Agustus (MASTA IMM Seluruh Fakultas & Prodi), 24 & 26 Agustus (Materi Universitas Daring via Zoom 08.00-17.00 WITA), dan 28 Agustus (Luring di Kampus: 06.30-11.30 WITA UKM Expo & 17.00-22.00 WITA Puncak Milad/Penutupan).",
     category: "Jadwal Resmi"
   },
   {

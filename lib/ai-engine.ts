@@ -18,17 +18,31 @@ ATURAN UTAMA & ANTI-HALUSINASI (SANGAT PENTING):
 5. Semboyan Mahasiswa TI: "HIDUP TEKNIK! NO SKILL NO TRUST!"
 
 AGENDA RESMI & RANGKAIAN MASTA UMKT 2026 (BERDASARKAN EDARAN RESMI 12 SHAFAR 1447 H / 06 AGUSTUS 2026):
-1. Kamis, 06 Agustus 2026: Pembekalan
+1. Kamis, 06 Agustus 2026: Pembekalan MASTA (Daring via Zoom)
 2. Selasa, 11 Agustus 2026: Masta FEBP
 3. Rabu, 12 Agustus 2026: Masta Teknik (FST / TI)
-4. Selasa, 18 Agustus 2026: Masta Hukum dan Kesmas; Masta IMM
-5. Rabu, 19 Agustus 2026: Masta Psikologi dan KIP; Masta IMM
-6. Kamis, 20 Agustus 2026: Masta Farmasi dan Keperawatan; Masta IMM
-7. Senin, 24 Agustus 2026: Pembukaan dan Materi Universitas Hari 1 (Daring Zoom, 08.00 - 17.00 WITA)
-8. Rabu, 26 Agustus 2026: Materi Universitas Hari 2 dan Kemahasiswaan (Daring Zoom, 08.00 - 17.00 WITA)
-9. Jumat, 28 Agustus 2026: Kegiatan Luring di Lingkungan Kampus UMKT:
+4. JADWAL & RUNDOWN MASTA IMM (18 - 20 AGUSTUS 2026) — 9 FAKULTAS, 3 GELOMBANG, 3.755 TOTAL MAHASISWA:
+   - Gelombang 1: Selasa, 18 Agustus 2026 (Total Kuota: 1.400 Mahasiswa):
+     * 06.00 – 07.00 WITA: Registrasi Peserta Sesi Pagi
+     * 08.00 – 12.00 WITA: Pelaksanaan Kegiatan FEBP (HI, Akuntansi, MNJ, MLM Inter, MM) — Kuota 935 Mahasiswa
+     * 12.00 – 13.00 WITA: ISHOMA (Panitia dan Peserta)
+     * 13.00 – 13.30 WITA: Registrasi Peserta Sesi Siang
+     * 13.30 – 17.00 WITA: Pelaksanaan Kegiatan PSIKOLOGI dan FKIP (Pend. Bahasa Inggris, Pend. Olahraga) — Total 465 Mahasiswa
+   - Gelombang 2: Rabu, 19 Agustus 2026 (Total Kuota: 1.435 Mahasiswa):
+     * 06.00 – 07.00 WITA: Registrasi Peserta Sesi Pagi
+     * 08.00 – 12.00 WITA: Pelaksanaan Kegiatan FKM (Kesling dan Kesmas) dan Hukum (S1 & S2) — Total 710 Mahasiswa
+     * 12.00 – 13.00 WITA: ISHOMA (Panitia dan Peserta)
+     * 13.00 – 13.30 WITA: Registrasi Peserta Sesi Siang
+     * 13.30 – 17.00 WITA: Pelaksanaan Kegiatan Farmasi, FIK (D3, S1, RPL, Ners) dan Kedokteran (FK) — Kuota 725 Mahasiswa
+   - Gelombang 3: Kamis, 20 Agustus 2026 (Total Kuota: 920 Mahasiswa):
+     * 06.00 – 07.00 WITA: Registrasi Peserta Sesi Pagi
+     * 08.00 – 12.00 WITA: Pelaksanaan Kegiatan Saintek / FST (TI, TI MLM, TI Inter, Sipil, Sipil MLM, Mesin, Geo) — Kuota 920 Mahasiswa
+     * 12.00 WITA: Penutupan Kegiatan Gelombang 3 (Selesai)
+5. Senin, 24 Agustus 2026: Pembukaan dan Materi Universitas Hari 1 (Daring Zoom, 08.00 - 17.00 WITA, 3.755 Mhs)
+6. Rabu, 26 Agustus 2026: Materi Universitas Hari 2 dan Kemahasiswaan (Daring Zoom, 08.00 - 17.00 WITA, 3.755 Mhs)
+7. Jumat, 28 Agustus 2026: Kegiatan Luring di Lingkungan Kampus UMKT (3.755 Mhs):
    - Sesi Pagi (06.30 – 11.30 WITA): UKM EXPO
-   - Sesi Malam (17.00 – 22.00 WITA): PUNCAK MILAD DAN PENUTUPAN
+   - Sesi Malam (17.00 – 22.00 WITA): PUNCAK MILAD DAN PENUTUPAN MASTA
 
 KETENTUAN DRESSCODE & TATA TERTIB RESMI:
 - Kegiatan Daring (24 & 26 Agustus): Zoom Meeting, On-Cam, format nama: [Nomor Gugus]_[Nama Lengkap].
@@ -121,7 +135,57 @@ export function generateLocalResponse(userMessage: string): string {
 > **Catatan:** Untuk respon tercepat, hubungi nomor WhatsApp di atas pada jam kerja operasional resmi kampus ya!`;
   }
 
-  // 2. JADWAL, MASTA, TANGGAL, SANKSI, DRESSCODE, LURING, DARING
+  // 2. JADWAL MASTA IMM (18 - 20 AGUSTUS 2026)
+  if (
+    query.includes("imm") ||
+    query.includes("sesi") ||
+    query.includes("gelombang") ||
+    query.includes("kuota") ||
+    query.includes("pagi") ||
+    query.includes("siang") ||
+    (query.includes("jadwal") && (query.includes("febp") || query.includes("psikologi") || query.includes("fst") || query.includes("hukum") || query.includes("kesmas") || query.includes("farmasi") || query.includes("keperawatan") || query.includes("fkip") || query.includes("teknik")))
+  ) {
+    return `🏛️ **Jadwal & Rundown Resmi MASTA IMM UMKT 2026 (18 – 20 Agustus 2026)**:
+*Rangkaian 9 Fakultas • 3 Gelombang • Total 3.755 Mahasiswa Baru*
+
+Berikut adalah pembagian sesi, rundown jam, dan kuota resmi pelaksanaan di kampus UMKT:
+
+### 1️⃣ **Gelombang 1: Selasa, 18 Agustus 2026 (1.400 Mahasiswa)**:
+* **Sesi Pagi (FEBP — Kuota 935 Mahasiswa)**:
+  - 06.00 – 07.00 WITA: Registrasi Peserta Sesi Pagi
+  - 08.00 – 12.00 WITA: Pelaksanaan Kegiatan (HI, Akuntansi, MNJ, MLM Inter, MM)
+* **12.00 – 13.00 WITA**: ISHOMA (Panitia & Peserta)
+* **Sesi Siang (PSIKOLOGI & FKIP — Total 465 Mahasiswa)**:
+  - 13.00 – 13.30 WITA: Registrasi Peserta Sesi Siang
+  - 13.30 – 17.00 WITA: Pelaksanaan Kegiatan (S1 Psikologi, Pend. Bahasa Inggris, Pend. Olahraga)
+
+---
+
+### 2️⃣ **Gelombang 2: Rabu, 19 Agustus 2026 (1.435 Mahasiswa)**:
+* **Sesi Pagi (FKM & HUKUM — Total 710 Mahasiswa)**:
+  - 06.00 – 07.00 WITA: Registrasi Peserta Sesi Pagi
+  - 08.00 – 12.00 WITA: Pelaksanaan Kegiatan (Kesling, Kesmas, Hukum S1 & S2)
+* **12.00 – 13.00 WITA**: ISHOMA (Panitia & Peserta)
+* **Sesi Siang (FARMASI, FIK & FK — Kuota 725 Mahasiswa)**:
+  - 13.00 – 13.30 WITA: Registrasi Peserta Sesi Siang
+  - 13.30 – 17.00 WITA: Pelaksanaan Kegiatan (Farmasi, FIK D3/S1/RPL/Ners, dan Kedokteran FK)
+
+---
+
+### 3️⃣ **Gelombang 3: Kamis, 20 Agustus 2026 (920 Mahasiswa)**:
+* **Sesi Pagi (SAINTEK / FST — Kuota 920 Mahasiswa)**:
+  - 06.00 – 07.00 WITA: Registrasi Peserta Sesi Pagi
+  - 08.00 – 12.00 WITA: Pelaksanaan Kegiatan (TI Reguler, TI MLM, TI Inter, Sipil, Sipil MLM, Mesin, Geo)
+  - 12.00 WITA: Penutupan Kegiatan Gelombang 3 (Selesai)
+
+---
+
+💡 **Petunjuk Kehadiran:**
+- Seluruh peserta **wajib hadir pada jam registrasi (06.00 WITA untuk Sesi Pagi / 13.00 WITA untuk Sesi Siang)** di kampus UMKT Samarinda.
+- Kenakan pakaian rapi berkerah, bawahan hitam/gelap sopan, dan atribut resmi IMM.`;
+  }
+
+  // 3. JADWAL, MASTA, TANGGAL, SANKSI, DRESSCODE, LURING, DARING
   if (
     query.includes("jadwal") ||
     query.includes("tanggal") ||
@@ -141,7 +205,7 @@ export function generateLocalResponse(userMessage: string): string {
 | Tanggal | Kegiatan | Media / Lokasi | Waktu |
 |---|---|---|---|
 | **Kamis, 06 Agt 2026** | Pembekalan MASTA | Daring (Zoom) | Selesai |
-| **11 – 20 Agt 2026** | MASTA Fakultas & IMM (Teknik: 12 Agt) | Fakultas & IMM | Selesai / Berjalan |
+| **18 – 20 Agt 2026** | **MASTA IMM (FEBP, Psikologi, FKIP, Kesmas, Hukum, Farmasi, FIK, FK, FST Teknik)** | **Kampus UMKT** | **06.00-12.00 & 13.00-17.00 WITA** |
 | **Senin, 24 Agt 2026** | **Pembukaan & Materi Universitas Hari 1** | **Zoom Meeting** | **08.00 – 17.00 WITA** |
 | **Rabu, 26 Agt 2026** | **Materi Universitas Hari 2 & Kemahasiswaan** | **Zoom Meeting** | **08.00 – 17.00 WITA** |
 | **Jumat, 28 Agt 2026** | **UKM Expo (Sesi 1)** | **Kampus UMKT (Luring)** | **06.30 – 11.30 WITA** |
