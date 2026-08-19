@@ -28,45 +28,29 @@ export default function Error({
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 relative overflow-hidden">
-      {/* Ambient Glows */}
-      <div className="absolute w-96 h-96 rounded-full bg-red-500/10 blur-[120px] pointer-events-none -top-20 -left-20" />
-      <div className="absolute w-96 h-96 rounded-full bg-amber-500/10 blur-[120px] pointer-events-none -bottom-20 -right-20" />
-
       <div className="max-w-2xl w-full text-center space-y-8 relative z-10">
         
         {/* Animated Mascot in Nervous Mood */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0, y: 20 }}
+          initial={{ scale: 0.85, opacity: 0, y: 16 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col items-center justify-center space-y-4"
         >
-          <div className="relative">
-            {/* Warning Ring */}
-            <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-red-500/20 via-amber-500/20 to-orange-500/20 blur-xl animate-pulse" />
-            
-            {/* Mascot */}
-            <motion.div
-              animate={{
-                y: [0, -6, 0, -4, 0],
-                rotate: [0, -2, 2, -1, 0]
-              }}
-              transition={{
-                duration: 2,
-                ease: "easeInOut",
-                repeat: Infinity
-              }}
-              className="relative z-10 w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center"
-            >
-              <MascotFlame size="xl" mood="nervous" />
-            </motion.div>
-          </div>
-
-          {/* 500 Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 text-xs font-black uppercase tracking-widest border border-red-500/20 shadow-sm">
-            <WarningCircle weight="bold" className="w-4 h-4 text-red-500" />
-            <span>Galat Sistem • Terjadi Kesalahan Teknis</span>
-          </div>
+          <motion.div
+            animate={{
+              y: [0, -6, 0, -4, 0],
+              rotate: [0, -2, 2, -1, 0]
+            }}
+            transition={{
+              duration: 2,
+              ease: "easeInOut",
+              repeat: Infinity
+            }}
+            className="w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center"
+          >
+            <MascotFlame size="xl" mood="nervous" />
+          </motion.div>
         </motion.div>
 
         {/* Heading & Explanation */}

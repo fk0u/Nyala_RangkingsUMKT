@@ -80,18 +80,13 @@ export default function PanduanSikadPage() {
       
       {/* 1. Header Hero */}
       <div className="text-center space-y-4 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-          <Laptop weight="bold" className="w-4 h-4 text-blue-500" />
-          <span>Sistem Informasi Akademik Mahasiswa (SIKAD UMKT)</span>
-        </div>
-
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy-900 dark:text-white tracking-tight leading-tight">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-navy-950 dark:text-white tracking-tight leading-tight">
           Simulator & Panduan Lengkap <br className="hidden sm:inline" />
           <span className="fire-text-gradient">Portal Mahasiswa UMKT</span>
         </h1>
 
         <p className="text-sm sm:text-base text-navy-600 dark:text-navy-300 leading-relaxed">
-          Eksplorasi antarmuka resmi SIKAD UMKT (<code className="text-xs font-mono font-bold bg-navy-100 dark:bg-navy-800 px-2 py-0.5 rounded text-blue-600 dark:text-blue-400">mahasiswa.umkt.ac.id</code>) untuk memahami KRS, jadwal kuliah, presensi, PA Online, hingga rekapitulasi nilai.
+          Eksplorasi antarmuka resmi SIKAD UMKT (<code className="text-xs font-mono font-bold bg-navy-100 dark:bg-navy-800 px-2 py-0.5 rounded text-nyala-600 dark:text-nyala-400">mahasiswa.umkt.ac.id</code>) untuk memahami KRS, jadwal kuliah, presensi, PA Online, hingga rekapitulasi nilai.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -99,7 +94,7 @@ export default function PanduanSikadPage() {
             href={OFFICIAL_LINKS.sikadMahasiswa}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm shadow-soft hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-nyala-600 hover:bg-nyala-500 text-white font-extrabold text-sm shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
             <Laptop weight="bold" className="w-4 h-4" />
             <span>Kunjungi mahasiswa.umkt.ac.id Langsung</span>

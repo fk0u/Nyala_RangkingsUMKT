@@ -162,7 +162,7 @@ Tanyakan apa saja, Nyala siap memberikan jawaban akurat & terverifikasi!`,
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6">
       
       {/* Header Info */}
-      <div className="glass-card rounded-3xl p-6 border border-navy-200/60 dark:border-navy-800 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="rounded-3xl p-6 bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="relative">
             <MascotFlame size="md" mood={isLoading ? "thinking" : "happy"} />

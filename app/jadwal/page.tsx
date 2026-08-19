@@ -58,12 +58,7 @@ export default function JadwalPage() {
       
       {/* 1. Header Hero */}
       <div className="text-center space-y-4 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-          <CalendarCheck weight="bold" className="w-4 h-4 text-blue-500" />
-          <span>Agenda & Ketetapan Resmi MASTA UMKT 2026</span>
-        </div>
-
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy-900 dark:text-white tracking-tight leading-tight">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-navy-950 dark:text-white tracking-tight leading-tight">
           Jadwal Lengkap & Tata Tertib <br className="hidden sm:inline" />
           <span className="fire-text-gradient">Masa Ta’aruf Mahasiswa Baru 2026</span>
         </h1>

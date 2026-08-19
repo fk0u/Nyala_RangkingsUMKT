@@ -12,8 +12,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Nyala — Teman Perjalanan MABA-mu | MASTA UMKT 2026",
-  description: "Companion digital pintar & suportif untuk Mahasiswa Baru Universitas Muhammadiyah Kalimantan Timur (UMKT) 2026. Lengkap dengan panduan alur resmi MASTA, Health Check, Checklist Persiapan, Panduan SIKAD, Kurikulum TI 2026, dan AI Companion.",
+  title: "Nyala . Teman Perjalanan MABA UMKT 2026",
+  description: "Companion digital pintar dan suportif untuk Mahasiswa Baru Universitas Muhammadiyah Kalimantan Timur (UMKT) 2026. Lengkap dengan panduan alur resmi MASTA, Health Check, Checklist Persiapan, Panduan SIKAD, Kurikulum TI 2026, dan AI Companion.",
   keywords: [
     "Nyala",
     "MASTA UMKT 2026",
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     "MABA UMKT",
     "Companion Mahasiswa"
   ],
-  authors: [{ name: "Tim Pengembang Nyala UMKT" }],
+  authors: [{ name: "Kou Sozo (@kou.sozo)" }],
   openGraph: {
-    title: "Nyala — Teman Perjalanan MABA-mu | MASTA UMKT 2026",
+    title: "Nyala . Teman Perjalanan MABA UMKT 2026",
     description: "Digital companion resmi dan interaktif bagi Mahasiswa Baru UMKT 2026. Navigasi alur MASTA, periksa kesiapan mental & fisik, panduan SIKAD 1:1, kurikulum TI 2026, dan ngobrol dengan Nyala AI!",
     url: "https://nyala.umkt.ac.id",
     siteName: "Nyala UMKT",

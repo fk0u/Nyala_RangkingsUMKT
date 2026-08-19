@@ -371,12 +371,11 @@ function DropdownItem({
   badge?: string;
 }) {
   const colorMap: Record<string, string> = {
-    nyala: "bg-nyala-500/10 text-nyala-500 group-hover:bg-nyala-500 group-hover:text-white",
-    blue: "bg-blue-500/10 text-blue-500 group-hover:bg-blue-600 group-hover:text-white",
-    purple: "bg-purple-500/10 text-purple-500 group-hover:bg-purple-600 group-hover:text-white",
-    amber: "bg-amber-500/10 text-amber-600 group-hover:bg-amber-500 group-hover:text-white",
-    emerald: "bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-600 group-hover:text-white",
-    rose: "bg-rose-500/10 text-rose-500 group-hover:bg-rose-500 group-hover:text-white",
+    nyala: "bg-nyala-500/10 text-nyala-600 group-hover:bg-nyala-600 group-hover:text-white",
+    amber: "bg-amber-500/10 text-amber-600 group-hover:bg-amber-600 group-hover:text-white",
+    emerald: "bg-emerald-500/10 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white",
+    rose: "bg-rose-500/10 text-rose-600 group-hover:bg-rose-600 group-hover:text-white",
+    slate: "bg-slate-500/10 text-slate-700 dark:text-slate-300 group-hover:bg-slate-700 group-hover:text-white",
   };
 
   return (

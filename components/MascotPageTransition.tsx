@@ -18,72 +18,72 @@ const ROUTE_CONFIGS: Record<string, RouteTransitionConfig> = {
   "/": {
     mood: "happy",
     title: "Meluncur ke Beranda!",
-    subtitle: "Mempersiapkan ringkasan & countdown...",
+    subtitle: "Mempersiapkan ringkasan dan countdown...",
     badge: "Beranda Utama",
-    color: "from-nyala-500 to-amber-500"
+    color: "from-nyala-600 to-amber-500"
   },
   "/hub-umkt": {
     mood: "waving",
     title: "Menghubungkan Portal Kampus",
-    subtitle: "Sinkronisasi warta resmi 10 Fakultas & Biro...",
+    subtitle: "Sinkronisasi warta resmi 10 Fakultas dan Biro...",
     badge: "Hub UMKT Live",
-    color: "from-blue-600 to-cyan-500"
+    color: "from-navy-800 to-slate-900"
   },
   "/blog": {
     mood: "studying",
     title: "Membuka Majalah Edukasi",
-    subtitle: "Memuat tips survival, beasiswa & KRS...",
+    subtitle: "Memuat tips survival, beasiswa, dan KRS...",
     badge: "Panduan MABA",
-    color: "from-indigo-600 to-purple-500"
+    color: "from-amber-600 to-orange-600"
   },
   "/panduan-sikad": {
     mood: "confused",
     title: "Simulasi Portal SIKAD",
-    subtitle: "Siapkan NIM & Password login mahasiswa...",
+    subtitle: "Siapkan NIM dan Password login mahasiswa...",
     badge: "SIKAD 1:1",
-    color: "from-amber-600 to-orange-500"
+    color: "from-orange-600 to-amber-500"
   },
   "/panduan-ti": {
     mood: "coding",
     title: "Mode Ngoding Diaktifkan!",
     subtitle: "HIDUP TEKNIK! NO SKILL NO TRUST!",
     badge: "Akademik TI 2026",
-    color: "from-nyala-600 to-red-500"
+    color: "from-nyala-600 to-red-600"
   },
   "/jadwal": {
     mood: "excited",
-    title: "Membuka Agenda & Rundown",
-    subtitle: "Menyesuaikan jadwal 9 Fakultas & 3 Gelombang...",
+    title: "Membuka Agenda dan Rundown",
+    subtitle: "Menyesuaikan jadwal 9 Fakultas dan 3 Gelombang...",
     badge: "Jadwal MASTA 2026",
-    color: "from-emerald-600 to-teal-500"
+    color: "from-emerald-700 to-teal-700"
   },
   "/checklist": {
     mood: "withClipboard",
     title: "Mengecek Daftar Perlengkapan",
-    subtitle: "Pastikan berkas wajib & dresscode siap!",
+    subtitle: "Pastikan berkas wajib dan dresscode siap!",
     badge: "Checklist MABA",
-    color: "from-sky-600 to-blue-500"
+    color: "from-slate-700 to-navy-900"
   },
   "/health-check": {
     mood: "calm",
-    title: "Pemeriksaan Stamina & Mood",
+    title: "Pemeriksaan Stamina dan Mood",
     subtitle: "Tarik nafas dalam... Siap hadapi hari baru!",
     badge: "Health & Mindset",
-    color: "from-rose-500 to-pink-500"
+    color: "from-rose-600 to-amber-500"
   },
   "/companion": {
     mood: "cheering",
     title: "Nyala AI Siap Membantu!",
-    subtitle: "Tanyakan apapun seputar MASTA & perkuliahan...",
+    subtitle: "Tanyakan apapun seputar MASTA dan perkuliahan...",
     badge: "Tanya Nyala AI",
-    color: "from-nyala-500 to-amber-400"
+    color: "from-nyala-500 to-amber-500"
   },
   "/adminuse": {
     mood: "thinking",
     title: "Mengakses Ruang Kontrol",
     subtitle: "Verifikasi otentikasi kunci sandi admin...",
     badge: "Secure Admin CMS",
-    color: "from-slate-700 to-navy-900"
+    color: "from-slate-800 to-navy-950"
   }
 };
 

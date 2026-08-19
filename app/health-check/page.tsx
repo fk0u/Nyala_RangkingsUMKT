@@ -185,11 +185,7 @@ export default function HealthCheckPage() {
       
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold uppercase tracking-wider">
-          <Heartbeat weight="bold" className="w-4 h-4" />
-          <span>Daily Wellness & Readiness Tracker</span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 dark:text-white tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-black text-navy-950 dark:text-white tracking-tight">
           Health Check & Mood Tracker MABA
         </h1>
         <p className="text-sm sm:text-base text-navy-600 dark:text-navy-300">
@@ -203,7 +199,7 @@ export default function HealthCheckPage() {
         <div className="lg:col-span-7 space-y-6">
           
           {/* Step 1: Mood Selector */}
-          <div className="glass-card rounded-3xl p-6 sm:p-7 border border-navy-200/60 dark:border-navy-800 space-y-4 shadow-md">
+          <div className="rounded-3xl p-6 sm:p-7 bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-navy-900 dark:text-white flex items-center gap-2">
                 <Smiley weight="bold" className="w-5 h-5 text-nyala-500" />

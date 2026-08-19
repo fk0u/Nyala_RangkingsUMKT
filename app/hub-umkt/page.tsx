@@ -131,19 +131,8 @@ export default function HubUMKTPage() {
     <div className="space-y-12 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
       
       {/* ── 1. EDITORIAL HERO HEADER ── */}
-      <section className="relative p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-white overflow-hidden shadow-2xl border border-white/10">
-        {/* Ambient Glows */}
-        <div className="absolute w-96 h-96 rounded-full bg-nyala-500/20 blur-[100px] pointer-events-none -top-20 -left-20" />
-        <div className="absolute w-80 h-80 rounded-full bg-cyan-500/15 blur-[100px] pointer-events-none -bottom-20 -right-20" />
-
-        <div className="relative z-10 max-w-3xl space-y-5">
-          {/* Live Status Pill */}
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-mono text-emerald-400">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-            <span className="font-bold text-white">Live Data REST API</span>
-            <span className="text-navy-300">• web.umkt.ac.id</span>
-          </div>
-
+      <section className="relative p-8 sm:p-12 rounded-[36px] bg-navy-950 text-white overflow-hidden shadow-xl border border-navy-800">
+        <div className="relative z-10 max-w-3xl space-y-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
             Hub Warta, Pengumuman & <br />
             <span className="fire-text-gradient">Direktori Resmi Kampus</span>
@@ -153,7 +142,7 @@ export default function HubUMKTPage() {
             Pusat informasi terpadu Universitas Muhammadiyah Kalimantan Timur. Terhubung langsung ke 2.100+ artikel berita, rilis kegiatan IKN & FEBP, edaran beasiswa MABA, serta 10 fakultas resmi.
           </p>
 
-          {/* Quick Refresh & Last Sync Badge */}
+          {/* Quick Refresh & Last Sync Button */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
               onClick={loadData}

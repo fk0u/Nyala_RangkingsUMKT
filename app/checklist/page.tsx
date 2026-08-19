@@ -165,11 +165,7 @@ export default function ChecklistPage() {
       
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
-          <CheckSquare weight="bold" className="w-4 h-4" />
-          <span>Interactive Readiness Tracker</span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 dark:text-white tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-black text-navy-950 dark:text-white tracking-tight">
           Checklist Persiapan MASTA UMKT 2026
         </h1>
         <p className="text-sm sm:text-base text-navy-600 dark:text-navy-300">
@@ -178,7 +174,7 @@ export default function ChecklistPage() {
       </div>
 
       {/* Progress Card with Mascot */}
-      <div className="glass-card rounded-3xl p-6 sm:p-8 border border-navy-200/60 dark:border-navy-800 shadow-xl space-y-6">
+      <div className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 shadow-sm space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
           
           <div className="sm:col-span-8 space-y-4">

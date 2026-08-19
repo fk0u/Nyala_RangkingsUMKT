@@ -88,7 +88,7 @@ export default function AdminContactCard({ compact = false, filterId, contact }:
               <span className="text-[11px] text-navy-400 font-mono">({currentWitaTime})</span>
             </div>
             <p className="text-xs text-navy-600 dark:text-navy-300">
-              Senin–Kamis (08.00–16.00 WITA) • Jumat (08.00–11.30 WITA)
+              Senin - Kamis (08.00 - 16.00 WITA) / Jumat (08.00 - 11.30 WITA)
             </p>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function AdminContactCard({ compact = false, filterId, contact }:
           return (
             <div
               key={contact.id}
-              className="glass-card rounded-3xl p-5 sm:p-6 border border-navy-200/70 dark:border-navy-800 space-y-4 relative overflow-hidden shadow-lg hover:border-nyala-500/50 transition-all flex flex-col justify-between"
+              className="rounded-3xl p-5 sm:p-6 bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 space-y-4 relative overflow-hidden shadow-sm hover:border-nyala-500 transition-all flex flex-col justify-between"
             >
               <div className="space-y-3">
                 

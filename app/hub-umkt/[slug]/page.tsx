@@ -164,7 +164,7 @@ export default function HubArticleDetailPage() {
     <>
       {/* ── TOP READING PROGRESS BAR ── */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-nyala-500 via-amber-400 to-cyan-400 z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-nyala-600 to-amber-500 z-50 origin-left"
         style={{ scaleX }}
       />
 
@@ -174,7 +174,7 @@ export default function HubArticleDetailPage() {
         <div className="flex items-center justify-between">
           <Link
             href="/hub-umkt"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300 hover:text-nyala-500 text-xs font-bold transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300 hover:text-nyala-600 text-xs font-bold transition-colors"
           >
             <ArrowLeft weight="bold" className="w-4 h-4" />
             <span>Kembali ke Hub Warta UMKT</span>
@@ -187,36 +187,19 @@ export default function HubArticleDetailPage() {
 
         {/* ── HEADER EDITORIAL ── */}
         <header className="space-y-6">
-          {/* Metadata Badges */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-extrabold uppercase tracking-wider border border-nyala-500/20">
-              {article.tags || "Warta Resmi UMKT"}
-            </span>
-
-            {Array.isArray(article.sdgs) && article.sdgs.map((sdg) => (
-              <span
-                key={sdg.id}
-                className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm"
-                style={{ backgroundColor: sdg.color || "#FF5A1F" }}
-              >
-                {sdg.sdgs}
-              </span>
-            ))}
-          </div>
-
           {/* Headline */}
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-900 dark:text-white tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-950 dark:text-white tracking-tight leading-tight">
             {article.judul}
           </h1>
 
           {/* Byline & Read Metrics */}
-          <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-navy-200/60 dark:border-navy-800 text-xs text-navy-500 dark:text-navy-400">
+          <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-navy-200 dark:border-navy-800 text-xs text-navy-500 dark:text-navy-400">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 flex items-center justify-center font-black text-sm border border-nyala-500/20">
+              <div className="w-10 h-10 rounded-2xl bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 flex items-center justify-center font-black text-sm border border-nyala-500/20">
                 UMKT
               </div>
               <div>
-                <p className="font-bold text-navy-900 dark:text-white">
+                <p className="font-bold text-navy-950 dark:text-white">
                   Humas & Biro Kemahasiswaan
                 </p>
                 <p className="text-[11px] text-navy-400">
@@ -231,7 +214,7 @@ export default function HubArticleDetailPage() {
                 onClick={handleToggleTTS}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all ${
                   isSpeaking
-                    ? "bg-nyala-500 text-white border-nyala-500 shadow-md animate-pulse"
+                    ? "bg-nyala-600 text-white border-nyala-600 shadow-md animate-pulse"
                     : "bg-navy-50 dark:bg-navy-900 border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:border-nyala-500"
                 }`}
                 title="Dengarkan pembacaan naskah"
@@ -242,7 +225,7 @@ export default function HubArticleDetailPage() {
 
               <button
                 onClick={() => setFontSize(fontSize === "normal" ? "large" : fontSize === "large" ? "xl" : "normal")}
-                className="p-2 rounded-xl bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:text-nyala-500"
+                className="p-2 rounded-xl bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:text-nyala-600"
                 title="Ubah Ukuran Teks"
               >
                 <TextAa weight="bold" className="w-4 h-4" />
@@ -258,7 +241,7 @@ export default function HubArticleDetailPage() {
 
               <button
                 onClick={() => handleShare("copy")}
-                className="p-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300 hover:text-nyala-500"
+                className="p-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300 hover:text-nyala-600"
                 title="Salin Tautan"
               >
                 <LinkIcon weight="bold" className="w-4 h-4" />
@@ -268,13 +251,13 @@ export default function HubArticleDetailPage() {
         </header>
 
         {/* ── HIGH-RES HERO IMAGE ── */}
-        <div className="relative rounded-3xl overflow-hidden aspect-video bg-navy-950 shadow-2xl border border-navy-200/60 dark:border-navy-800">
+        <div className="relative rounded-3xl overflow-hidden aspect-video bg-navy-950 shadow-xl border border-navy-200 dark:border-navy-800">
           <img
             src={coverImage}
             alt={article.judul}
             className="w-full h-full object-cover"
           />
-          <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono text-white/90">
+          <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/70 text-[10px] font-mono text-white/90">
             Dokumentasi Humas UMKT
           </div>
         </div>
@@ -287,19 +270,19 @@ export default function HubArticleDetailPage() {
         >
           {/* Render raw HTML safely with enhanced styling */}
           <div
-            className="prose prose-navy dark:prose-invert max-w-none prose-img:rounded-3xl prose-img:shadow-lg prose-a:text-nyala-500 prose-headings:font-black prose-p:leading-relaxed"
+            className="prose prose-navy dark:prose-invert max-w-none prose-img:rounded-3xl prose-img:shadow-md prose-a:text-nyala-600 prose-headings:font-black prose-p:leading-relaxed"
             dangerouslySetInnerHTML={{ __html: article.isi }}
           />
         </div>
 
         {/* ── OFFICIAL VERIFICATION BADGE & SOURCE ── */}
-        <div className="p-6 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-4">
+        <div className="p-6 rounded-3xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 space-y-4 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
               <CheckCircle weight="fill" className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-black text-navy-900 dark:text-white">
+              <h4 className="text-sm font-black text-navy-950 dark:text-white">
                 Rilis Resmi Terverifikasi Universitas Muhammadiyah Kalimantan Timur
               </h4>
               <p className="text-xs text-navy-500 dark:text-navy-400">
@@ -317,7 +300,7 @@ export default function HubArticleDetailPage() {
               href="https://web.umkt.ac.id"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 hover:bg-nyala-500 hover:text-white text-xs font-bold transition-all text-navy-700 dark:text-navy-300"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 hover:bg-nyala-600 hover:text-white text-xs font-bold transition-all text-navy-700 dark:text-navy-300"
             >
               <span>Kunjungi Portal Resmi UMKT</span>
               <ArrowSquareOut weight="bold" className="w-4 h-4" />
@@ -327,10 +310,10 @@ export default function HubArticleDetailPage() {
 
         {/* ── RELATED ARTICLES CAROUSEL ── */}
         {relatedArticles.length > 0 && (
-          <div className="space-y-6 pt-8 border-t border-navy-200/60 dark:border-navy-800">
+          <div className="space-y-6 pt-8 border-t border-navy-200 dark:border-navy-800">
             <div className="flex items-center gap-2">
               <Sparkle weight="fill" className="w-5 h-5 text-nyala-500" />
-              <h3 className="text-lg font-black text-navy-900 dark:text-white tracking-tight">
+              <h3 className="text-lg font-black text-navy-950 dark:text-white tracking-tight">
                 Warta Terkait Lainnya
               </h3>
             </div>
@@ -344,7 +327,7 @@ export default function HubArticleDetailPage() {
                   <Link
                     key={`rel-${rel.id}`}
                     href={`/hub-umkt/${relSlug}`}
-                    className="group rounded-2xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500/40 transition-all flex flex-col justify-between"
+                    className="group rounded-2xl overflow-hidden bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 hover:border-nyala-500 transition-all flex flex-col justify-between shadow-sm"
                   >
                     <div className="aspect-video overflow-hidden bg-navy-950">
                       <img src={relCover} alt={rel.judul} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
@@ -353,7 +336,7 @@ export default function HubArticleDetailPage() {
                       <span className="text-[10px] font-bold text-nyala-600 dark:text-nyala-400">
                         {formatDateIndo(rel.tgl_upload)}
                       </span>
-                      <h4 className="text-xs font-bold text-navy-900 dark:text-white line-clamp-2 group-hover:text-nyala-500 transition-colors">
+                      <h4 className="text-xs font-bold text-navy-950 dark:text-white line-clamp-2 group-hover:text-nyala-600 transition-colors">
                         {rel.judul}
                       </h4>
                     </div>

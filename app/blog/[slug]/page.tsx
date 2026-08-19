@@ -31,6 +31,8 @@ import { BlogPost, BLOG_POSTS } from "@/lib/masta-data";
 import { getAllBlogPosts } from "@/lib/blog-store";
 import { useToast } from "@/context/ToastContext";
 import MascotFlame from "@/components/MascotFlame";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function BlogGuideDetailPage() {
   const params = useParams();
@@ -143,7 +145,7 @@ export default function BlogGuideDetailPage() {
     <>
       {/* Top Reading Progress Bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-nyala-500 via-amber-400 to-cyan-400 z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-nyala-600 to-amber-500 z-50 origin-left"
         style={{ scaleX }}
       />
 
@@ -153,7 +155,7 @@ export default function BlogGuideDetailPage() {
         <div className="flex items-center justify-between">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300 hover:text-nyala-500 text-xs font-bold transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300 hover:text-nyala-600 text-xs font-bold transition-colors"
           >
             <ArrowLeft weight="bold" className="w-4 h-4" />
             <span>Kembali ke Majalah Panduan MABA</span>
@@ -166,16 +168,7 @@ export default function BlogGuideDetailPage() {
 
         {/* ── HEADER EDITORIAL ── */}
         <header className="space-y-6">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3.5 py-1 rounded-full bg-nyala-500/15 text-nyala-600 dark:text-nyala-400 text-xs font-extrabold uppercase tracking-wider border border-nyala-500/25 shadow-sm">
-              {post.category}
-            </span>
-            <span className="text-xs text-navy-400">
-              {post.date}
-            </span>
-          </div>
-
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-900 dark:text-white tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-950 dark:text-white tracking-tight leading-tight">
             {post.title}
           </h1>
 
@@ -184,13 +177,13 @@ export default function BlogGuideDetailPage() {
           </p>
 
           {/* Author & Action Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-navy-200/60 dark:border-navy-800 text-xs text-navy-500 dark:text-navy-400">
+          <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-navy-200 dark:border-navy-800 text-xs text-navy-500 dark:text-navy-400">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-nyala-500 to-amber-400 text-white flex items-center justify-center font-black text-base shadow-sm">
+              <div className="w-11 h-11 rounded-2xl bg-nyala-600 text-white flex items-center justify-center font-black text-base shadow-sm">
                 {post.author[0]}
               </div>
               <div>
-                <p className="font-bold text-navy-900 dark:text-white">
+                <p className="font-bold text-navy-950 dark:text-white">
                   {post.author}
                 </p>
                 <p className="text-[11px] text-navy-400">
@@ -204,7 +197,7 @@ export default function BlogGuideDetailPage() {
                 onClick={handleToggleTTS}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all ${
                   isSpeaking
-                    ? "bg-nyala-500 text-white border-nyala-500 shadow-md animate-pulse"
+                    ? "bg-nyala-600 text-white border-nyala-600 shadow-md animate-pulse"
                     : "bg-navy-50 dark:bg-navy-900 border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:border-nyala-500"
                 }`}
                 title="Dengarkan pembacaan naskah"
@@ -215,7 +208,7 @@ export default function BlogGuideDetailPage() {
 
               <button
                 onClick={() => setFontSize(fontSize === "normal" ? "large" : fontSize === "large" ? "xl" : "normal")}
-                className="p-2 rounded-xl bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:text-nyala-500"
+                className="p-2 rounded-xl bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:text-nyala-600"
                 title="Ubah Ukuran Teks"
               >
                 <TextAa weight="bold" className="w-4 h-4" />
@@ -231,7 +224,7 @@ export default function BlogGuideDetailPage() {
 
               <button
                 onClick={() => handleShare("copy")}
-                className="p-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300 hover:text-nyala-500"
+                className="p-2 rounded-xl bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300 hover:text-nyala-600"
                 title="Salin Tautan"
               >
                 <LinkIcon weight="bold" className="w-4 h-4" />
@@ -242,7 +235,7 @@ export default function BlogGuideDetailPage() {
 
         {/* ── KEY TAKEAWAYS BOX ── */}
         {post.keyTakeaways && post.keyTakeaways.length > 0 && (
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-nyala-500/10 via-amber-500/5 to-transparent border border-nyala-500/25 space-y-3 shadow-sm">
+          <div className="p-6 rounded-3xl bg-amber-500/10 dark:bg-navy-900 border border-amber-500/20 space-y-3 shadow-sm">
             <div className="flex items-center gap-2 text-nyala-600 dark:text-nyala-400">
               <Sparkle weight="fill" className="w-5 h-5 text-nyala-500" />
               <h3 className="text-sm font-black uppercase tracking-wider">
@@ -261,7 +254,7 @@ export default function BlogGuideDetailPage() {
         )}
 
         {/* ── HIGH-RES COVER IMAGE ── */}
-        <div className="relative rounded-3xl overflow-hidden aspect-video bg-navy-950 shadow-2xl border border-navy-200/60 dark:border-navy-800">
+        <div className="relative rounded-3xl overflow-hidden aspect-video bg-navy-950 shadow-xl border border-navy-200 dark:border-navy-800">
           <img
             src={post.coverImage}
             alt={post.title}
@@ -269,15 +262,96 @@ export default function BlogGuideDetailPage() {
           />
         </div>
 
-        {/* ── ARTICLE PROSE CONTENT ── */}
+        {/* ── ARTICLE PROSE CONTENT (RICH MARKDOWN ENGINE) ── */}
         <div
-          className={`space-y-6 leading-relaxed font-sans text-navy-800 dark:text-navy-100 ${
+          className={`leading-relaxed font-sans text-navy-800 dark:text-navy-100 ${
             fontSize === "large" ? "text-lg" : fontSize === "xl" ? "text-xl" : "text-base"
           }`}
         >
-          <div className="prose prose-navy dark:prose-invert max-w-none prose-img:rounded-3xl prose-headings:font-black prose-headings:tracking-tight prose-a:text-nyala-500 whitespace-pre-wrap">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              h1: ({ children }) => (
+                <h1 className="text-2xl sm:text-3xl font-black text-navy-950 dark:text-white mt-8 mb-4 tracking-tight">
+                  {children}
+                </h1>
+              ),
+              h2: ({ children }) => (
+                <h2 className="text-xl sm:text-2xl font-extrabold text-navy-950 dark:text-white mt-7 mb-3.5 tracking-tight border-b border-navy-100 dark:border-navy-800 pb-2">
+                  {children}
+                </h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="text-lg sm:text-xl font-bold text-navy-950 dark:text-white mt-6 mb-2.5">
+                  {children}
+                </h3>
+              ),
+              p: ({ children }) => (
+                <p className="text-base sm:text-lg leading-relaxed text-navy-800 dark:text-navy-200 mb-5">
+                  {children}
+                </p>
+              ),
+              ul: ({ children }) => (
+                <ul className="space-y-2 mb-5 list-disc list-inside text-navy-800 dark:text-navy-200">
+                  {children}
+                </ul>
+              ),
+              ol: ({ children }) => (
+                <ol className="space-y-2 mb-5 list-decimal list-inside text-navy-800 dark:text-navy-200">
+                  {children}
+                </ol>
+              ),
+              li: ({ children }) => (
+                <li className="leading-relaxed text-navy-800 dark:text-navy-200">
+                  {children}
+                </li>
+              ),
+              table: ({ children }) => (
+                <div className="overflow-x-auto my-6 rounded-2xl border border-navy-200 dark:border-navy-800 shadow-sm">
+                  <table className="w-full text-sm text-left border-collapse bg-white dark:bg-navy-900">{children}</table>
+                </div>
+              ),
+              thead: ({ children }) => (
+                <thead className="bg-navy-50 dark:bg-navy-950 text-navy-950 dark:text-white font-extrabold border-b border-navy-200 dark:border-navy-800">
+                  {children}
+                </thead>
+              ),
+              th: ({ children }) => (
+                <th className="px-4 py-3 font-extrabold text-xs uppercase tracking-wider">{children}</th>
+              ),
+              td: ({ children }) => (
+                <td className="px-4 py-3 border-b border-navy-100 dark:border-navy-800/60 text-navy-800 dark:text-navy-200">{children}</td>
+              ),
+              code: ({ children }) => (
+                <code className="px-2 py-0.5 rounded-lg bg-navy-100 dark:bg-navy-800 font-mono text-xs text-nyala-600 dark:text-nyala-400 font-bold">
+                  {children}
+                </code>
+              ),
+              pre: ({ children }) => (
+                <pre className="p-4 rounded-2xl bg-navy-950 text-white font-mono text-xs overflow-x-auto my-5 border border-navy-800">
+                  {children}
+                </pre>
+              ),
+              blockquote: ({ children }) => (
+                <blockquote className="border-l-4 border-nyala-500 pl-4 py-2 my-5 text-base italic text-navy-700 dark:text-navy-300 bg-nyala-500/5 dark:bg-navy-900/50 rounded-r-2xl">
+                  {children}
+                </blockquote>
+              ),
+              a: ({ href, children }) => (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-nyala-600 dark:text-nyala-400 font-bold underline hover:text-nyala-700 transition-colors"
+                >
+                  {children}
+                </a>
+              ),
+              hr: () => <hr className="my-8 border-navy-200 dark:border-navy-800" />,
+            }}
+          >
             {post.content}
-          </div>
+          </ReactMarkdown>
         </div>
 
         {/* ── TAGS CHIPS ── */}
@@ -298,9 +372,9 @@ export default function BlogGuideDetailPage() {
         )}
 
         {/* ── FEEDBACK & HELPFUL RATING ── */}
-        <div className="p-6 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <div className="p-6 rounded-3xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-sm">
           <div className="space-y-1">
-            <h4 className="text-sm font-bold text-navy-900 dark:text-white">
+            <h4 className="text-sm font-bold text-navy-950 dark:text-white">
               Apakah panduan ini bermanfaat untuk masa orientasimu?
             </h4>
             <p className="text-xs text-navy-500">
@@ -313,7 +387,7 @@ export default function BlogGuideDetailPage() {
               onClick={handleLike}
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 hasLiked
-                  ? "bg-nyala-500 text-white shadow-md"
+                  ? "bg-nyala-600 text-white shadow-md"
                   : "bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300 hover:bg-navy-200"
               }`}
             >
@@ -333,10 +407,10 @@ export default function BlogGuideDetailPage() {
 
         {/* ── RELATED GUIDES CAROUSEL ── */}
         {relatedPosts.length > 0 && (
-          <div className="space-y-6 pt-8 border-t border-navy-200/60 dark:border-navy-800">
+          <div className="space-y-6 pt-8 border-t border-navy-200 dark:border-navy-800">
             <div className="flex items-center gap-2">
               <Sparkle weight="fill" className="w-5 h-5 text-nyala-500" />
-              <h3 className="text-lg font-black text-navy-900 dark:text-white tracking-tight">
+              <h3 className="text-lg font-black text-navy-950 dark:text-white tracking-tight">
                 Panduan Edukasi Lainnya
               </h3>
             </div>
@@ -346,7 +420,7 @@ export default function BlogGuideDetailPage() {
                 <Link
                   key={rel.slug}
                   href={`/blog/${rel.slug}`}
-                  className="group rounded-2xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500/40 transition-all flex flex-col justify-between"
+                  className="group rounded-2xl overflow-hidden bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 hover:border-nyala-500 transition-all flex flex-col justify-between shadow-sm"
                 >
                   <div className="aspect-video overflow-hidden bg-navy-950">
                     <img src={rel.coverImage} alt={rel.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
@@ -355,7 +429,7 @@ export default function BlogGuideDetailPage() {
                     <span className="text-[10px] font-bold text-nyala-600 dark:text-nyala-400">
                       {rel.category}
                     </span>
-                    <h4 className="text-xs font-bold text-navy-900 dark:text-white line-clamp-2 group-hover:text-nyala-500 transition-colors">
+                    <h4 className="text-xs font-bold text-navy-950 dark:text-white line-clamp-2 group-hover:text-nyala-600 transition-colors">
                       {rel.title}
                     </h4>
                   </div>

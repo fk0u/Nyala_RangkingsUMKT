@@ -65,17 +65,8 @@ export default function BlogPage() {
     <div className="space-y-12 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
       
       {/* ── 1. EDITORIAL HEADER ── */}
-      <section className="relative p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-white overflow-hidden shadow-2xl border border-white/10">
-        {/* Ambient Warm Atmosphere */}
-        <div className="absolute w-96 h-96 rounded-full bg-nyala-500/20 blur-[110px] pointer-events-none -top-24 -left-24" />
-        <div className="absolute w-80 h-80 rounded-full bg-amber-500/15 blur-[100px] pointer-events-none -bottom-24 -right-24" />
-
-        <div className="relative z-10 max-w-3xl space-y-5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-nyala-500/20 border border-nyala-500/30 text-xs font-extrabold uppercase tracking-wider text-nyala-400">
-            <Sparkle weight="fill" className="w-3.5 h-3.5" />
-            <span>Pusat Edukasi & Strategi Kuliah MABA 2026</span>
-          </div>
-
+      <section className="relative p-8 sm:p-12 rounded-[36px] bg-navy-950 text-white overflow-hidden shadow-xl border border-navy-800">
+        <div className="relative z-10 max-w-3xl space-y-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
             Majalah Panduan & <br />
             <span className="fire-text-gradient">Edukasi Akademik MABA</span>
@@ -91,13 +82,12 @@ export default function BlogPage() {
       {featuredPost && !searchQuery && selectedCategory === "Semua Kategori" && (
         <section className="space-y-4">
           <div className="flex items-center gap-2">
-            <Sparkle weight="fill" className="w-5 h-5 text-nyala-500" />
-            <h2 className="text-lg font-black text-navy-900 dark:text-white tracking-tight uppercase">
+            <h2 className="text-lg font-black text-navy-950 dark:text-white tracking-tight uppercase">
               Panduan Unggulan Minggu Ini
             </h2>
           </div>
 
-          <div className="group relative rounded-3xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 shadow-xl hover:border-nyala-500/40 transition-all">
+          <div className="group relative rounded-3xl overflow-hidden bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 shadow-sm hover:border-nyala-500 transition-all">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
               
               <div className="lg:col-span-7 relative aspect-video lg:aspect-auto overflow-hidden bg-navy-950 min-h-[300px]">

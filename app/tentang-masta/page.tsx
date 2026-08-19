@@ -30,11 +30,7 @@ export default function TentangMastaPage() {
       
       {/* 1. Header & Hero Intro */}
       <div className="text-center space-y-4 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-bold uppercase tracking-wider">
-          <BookOpenText weight="bold" className="w-4 h-4" />
-          <span>Informasi Resmi & Edukatif</span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy-900 dark:text-white tracking-tight leading-tight">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-navy-950 dark:text-white tracking-tight leading-tight">
           Masa Ta’aruf (MASTA) <br className="hidden sm:inline" />
           <span className="fire-text-gradient">UMKT Angkatan 2026</span>
         </h1>
@@ -44,14 +40,10 @@ export default function TentangMastaPage() {
       </div>
 
       {/* 2. Definisi & Esensi MASTA Card */}
-      <div className="glass-card rounded-3xl p-6 sm:p-10 border border-navy-200/60 dark:border-navy-800 space-y-6 shadow-xl relative overflow-hidden">
+      <div className="rounded-3xl p-6 sm:p-10 bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 space-y-6 shadow-sm relative overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-nyala-600 dark:text-nyala-400 uppercase tracking-wider">
-              <Sparkle weight="fill" className="w-4 h-4" />
-              <span>Esensi Kegiatan MASTA</span>
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-navy-900 dark:text-white">
+            <h2 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white">
               Pengenalan Nilai, Budaya Akademik, dan Layanan Mahasiswa
             </h2>
             <p className="text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
@@ -81,11 +73,11 @@ export default function TentangMastaPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           {/* Fokus 1 */}
-          <div className="p-6 sm:p-7 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden">
-            <div className="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center shadow-md">
+          <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 space-y-3 relative overflow-hidden shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-nyala-600 text-white flex items-center justify-center shadow-md">
               <Compass weight="duotone" className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-navy-900 dark:text-white">
+            <h3 className="text-lg font-bold text-navy-950 dark:text-white">
               1. Adaptasi Kehidupan Kampus
             </h3>
             <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
@@ -94,11 +86,11 @@ export default function TentangMastaPage() {
           </div>
 
           {/* Fokus 2 */}
-          <div className="p-6 sm:p-7 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden">
-            <div className="w-12 h-12 rounded-2xl bg-nyala-500 text-white flex items-center justify-center shadow-fire">
+          <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 space-y-3 relative overflow-hidden shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center shadow-md">
               <Fire weight="fill" className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-navy-900 dark:text-white">
+            <h3 className="text-lg font-bold text-navy-950 dark:text-white">
               2. Pembentukan Karakter
             </h3>
             <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
@@ -107,11 +99,11 @@ export default function TentangMastaPage() {
           </div>
 
           {/* Fokus 3 */}
-          <div className="p-6 sm:p-7 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 space-y-3 relative overflow-hidden">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md">
+          <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 space-y-3 relative overflow-hidden shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-700 text-white flex items-center justify-center shadow-md">
               <Trophy weight="duotone" className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-navy-900 dark:text-white">
+            <h3 className="text-lg font-bold text-navy-950 dark:text-white">
               3. Pengenalan Peluang Mahasiswa
             </h3>
             <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
@@ -123,7 +115,7 @@ export default function TentangMastaPage() {
       </div>
 
       {/* 4. 4 Pilar Tujuan MASTA */}
-      <div className="rounded-3xl bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-white p-6 sm:p-10 border border-navy-800 space-y-8 shadow-2xl">
+      <div className="rounded-3xl bg-navy-950 text-white p-6 sm:p-10 border border-navy-800 space-y-8 shadow-xl">
         <div className="space-y-2 text-center max-w-xl mx-auto">
           <span className="text-xs font-bold uppercase tracking-wider text-nyala-400">
             Pilar Capaian
@@ -174,7 +166,7 @@ export default function TentangMastaPage() {
       {/* 5. FAQ Accordion */}
       <div className="space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-900 dark:text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-950 dark:text-white">
             Pertanyaan yang Sering Diajukan (FAQ)
           </h2>
           <p className="text-xs sm:text-sm text-navy-500 dark:text-navy-400">
@@ -189,7 +181,7 @@ export default function TentangMastaPage() {
             return (
               <div
                 key={idx}
-                className="glass-card rounded-2xl border border-navy-200/60 dark:border-navy-800 overflow-hidden transition-all"
+                className="rounded-2xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 overflow-hidden transition-all shadow-sm"
               >
                 <button
                   onClick={() => toggleFaq(idx)}

@@ -37,14 +37,14 @@ export default function MobileNav() {
   ];
 
   const QUICK_APPS = [
-    { href: "/hub-umkt", label: "Hub Portal UMKT", desc: "Live API 2.100+ berita, pengumuman & fakultas", icon: Globe, color: "text-nyala-500 bg-nyala-500/10" },
-    { href: "/blog", label: "Majalah Panduan MABA", desc: "Tips KRS, adaptasi Samarinda, beasiswa", icon: BookOpenText, color: "text-purple-500 bg-purple-500/10" },
-    { href: "/panduan-ti", label: "Kurikulum TI 2026", desc: "Dosen, standar nilai S.Kom & karir", icon: Code, color: "text-blue-500 bg-blue-500/10" },
-    { href: "/panduan-sikad", label: "Simulator SIKAD", desc: "KRS, presensi 75%, tagihan SPP", icon: Laptop, color: "text-cyan-500 bg-cyan-500/10" },
-    { href: "/jadwal", label: "Alur 5 Tahap MASTA", desc: "Daring (24/26) & Luring (28 Agt)", icon: CalendarCheck, color: "text-amber-500 bg-amber-500/10" },
-    { href: "/checklist", label: "Checklist Berkas", desc: "Kelengkapan & pakaian resmi", icon: CheckSquare, color: "text-emerald-500 bg-emerald-500/10" },
-    { href: "/health-check", label: "Health & Mood Check", desc: "Kesiapan fisik & mental MABA", icon: Heartbeat, color: "text-rose-500 bg-rose-500/10" },
-    { href: "/tentang-masta", label: "Edukasi & 4 Pilar", desc: "Nilai AIK & pedoman orientasi", icon: Sparkle, color: "text-indigo-500 bg-indigo-500/10" },
+    { href: "/hub-umkt", label: "Hub Portal UMKT", desc: "Live API 2.100+ berita, pengumuman dan fakultas", icon: Globe, color: "text-nyala-600 bg-nyala-500/10" },
+    { href: "/blog", label: "Majalah Panduan MABA", desc: "Tips KRS, adaptasi Samarinda, beasiswa", icon: BookOpenText, color: "text-amber-600 bg-amber-500/10" },
+    { href: "/panduan-ti", label: "Kurikulum TI 2026", desc: "Dosen, standar nilai S.Kom dan karir", icon: Code, color: "text-nyala-600 bg-nyala-500/10" },
+    { href: "/panduan-sikad", label: "Simulator SIKAD", desc: "KRS, presensi 75%, tagihan SPP", icon: Laptop, color: "text-orange-600 bg-orange-500/10" },
+    { href: "/jadwal", label: "Alur 5 Tahap MASTA", desc: "Daring (24/26) dan Luring (28 Agt)", icon: CalendarCheck, color: "text-emerald-700 bg-emerald-500/10" },
+    { href: "/checklist", label: "Checklist Berkas", desc: "Kelengkapan dan pakaian resmi", icon: CheckSquare, color: "text-amber-600 bg-amber-500/10" },
+    { href: "/health-check", label: "Health & Mood Check", desc: "Kesiapan fisik dan mental MABA", icon: Heartbeat, color: "text-rose-600 bg-rose-500/10" },
+    { href: "/tentang-masta", label: "Edukasi & 4 Pilar", desc: "Nilai AIK dan pedoman orientasi", icon: Sparkle, color: "text-slate-700 bg-slate-500/10" },
   ];
 
   return (

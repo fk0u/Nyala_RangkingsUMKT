@@ -155,7 +155,17 @@ export default function Footer() {
 
           {/* Bottom Credits */}
           <div className="pt-6 border-t border-navy-200/60 dark:border-navy-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-navy-500 dark:text-navy-400">
-            <p>© 2026 Nyala • Karya Inovasi MABA Universitas Muhammadiyah Kalimantan Timur.</p>
+            <p>
+              © 2026 Nyala. Karya inovasi{" "}
+              <a
+                href="https://instagram.com/kou.sozo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-nyala-600 dark:text-nyala-400 hover:underline inline-flex items-center gap-0.5"
+              >
+                @kou.sozo
+              </a>
+            </p>
             
             <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <button
@@ -163,17 +173,11 @@ export default function Footer() {
                   sessionStorage.removeItem("nyala_splash_seen");
                   window.dispatchEvent(new Event("replay-nyala-intro"));
                 }}
-                className="hover:text-nyala-600 dark:hover:text-nyala-400 font-bold transition-colors flex items-center gap-1 cursor-pointer"
+                className="hover:text-nyala-600 dark:hover:text-nyala-400 font-bold transition-colors flex items-center gap-1.5 cursor-pointer text-navy-600 dark:text-navy-300"
               >
                 <Sparkle weight="bold" className="w-3.5 h-3.5 text-nyala-500" />
                 <span>Putar Ulang Welcoming Intro</span>
               </button>
-
-              <div className="flex items-center gap-1">
-                <span>Dibuat dengan</span>
-                <Heart weight="fill" className="w-3.5 h-3.5 text-nyala-500" />
-                <span>untuk MABA UMKT 2026</span>
-              </div>
             </div>
           </div>
         </div>
