@@ -15,7 +15,7 @@ export default function MobileBlogPage() {
   const [activeCategory, setActiveCategory] = useState<string>("Semua");
   const [search, setSearch] = useState("");
 
-  const categories = ["Semua", "Akademik", "Tips MABA", "Kampus", "Beasiswa"];
+  const categories = ["Semua", "Akademik & SIKAD", "Adaptasi & Rantau", "Beasiswa", "Teknis MASTA", "Fasilitas Kampus"];
 
   const filteredPosts = BLOG_POSTS.filter((p) => {
     const matchCat = activeCategory === "Semua" || p.category === activeCategory;
@@ -29,8 +29,8 @@ export default function MobileBlogPage() {
       
       {/* Header */}
       <div className="space-y-1">
-        <h1 className="text-xl font-black text-white">Majalah Panduan MABA</h1>
-        <p className="text-xs text-navy-300">Artikel esensial adaptasi perkuliahan, kos, beasiswa, dan KRS.</p>
+        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white">Majalah Panduan MABA</h1>
+        <p className="text-xs text-navy-600 dark:text-navy-300">Artikel esensial adaptasi perkuliahan, kos, beasiswa, dan KRS.</p>
       </div>
 
       {/* Search Input */}
@@ -41,7 +41,7 @@ export default function MobileBlogPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari artikel tips..."
-          className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-[#0E1635] border border-navy-800 text-xs text-white placeholder:text-navy-400 outline-none"
+          className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 text-xs text-navy-950 dark:text-white placeholder:text-navy-400 outline-none focus:border-nyala-500"
         />
       </div>
 
@@ -54,7 +54,7 @@ export default function MobileBlogPage() {
             className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeCategory === cat
                 ? "bg-nyala-600 text-white shadow-sm"
-                : "bg-[#0E1635] border border-navy-800 text-navy-300 hover:text-white"
+                : "bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 text-navy-700 dark:text-navy-300 hover:border-nyala-500"
             }`}
           >
             {cat}
@@ -63,31 +63,31 @@ export default function MobileBlogPage() {
       </div>
 
       {/* Article Cards Stream */}
-      <div className="space-y-3.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
         {filteredPosts.map((post) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="block p-4 rounded-3xl bg-[#0E1635] border border-navy-800 space-y-3 active:scale-98 transition-transform group"
+            className="block p-4 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 space-y-3 active:scale-98 transition-transform group shadow-sm"
           >
-            <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-navy-950">
+            <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-navy-100 dark:bg-navy-950">
               <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[10px] font-mono text-navy-400">
-                <span className="text-nyala-400 font-bold">{post.category}</span>
+              <div className="flex items-center justify-between text-[10px] font-mono text-navy-500 dark:text-navy-400">
+                <span className="text-nyala-600 dark:text-nyala-400 font-bold">{post.category}</span>
                 <div className="flex items-center gap-1">
                   <Clock weight="bold" className="w-3 h-3" />
                   <span>{post.readTime}</span>
                 </div>
               </div>
 
-              <h3 className="text-sm font-bold text-white leading-snug group-hover:text-nyala-400 transition-colors">
+              <h3 className="text-sm font-bold text-navy-950 dark:text-white leading-snug group-hover:text-nyala-600 dark:group-hover:text-nyala-400 transition-colors">
                 {post.title}
               </h3>
 
-              <p className="text-xs text-navy-300 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-navy-600 dark:text-navy-300 line-clamp-2 leading-relaxed">
                 {post.excerpt}
               </p>
             </div>

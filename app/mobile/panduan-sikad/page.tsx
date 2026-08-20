@@ -50,9 +50,9 @@ export default function MobilePanduanSikadPage() {
       
       {/* Header */}
       <div className="space-y-1">
-        <h1 className="text-xl font-black text-white">Simulator Portal SIKAD</h1>
-        <p className="text-xs text-navy-300">
-          Panduan langkah demi langkah mengoperasikan portal <code className="font-mono text-nyala-400">mahasiswa.umkt.ac.id</code>.
+        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white">Simulator Portal SIKAD</h1>
+        <p className="text-xs text-navy-600 dark:text-navy-300">
+          Panduan langkah demi langkah mengoperasikan portal <code className="font-mono text-nyala-600 dark:text-nyala-400">mahasiswa.umkt.ac.id</code>.
         </p>
       </div>
 
@@ -61,11 +61,11 @@ export default function MobilePanduanSikadPage() {
         href={OFFICIAL_LINKS.sikadMahasiswa}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-3.5 rounded-2xl bg-nyala-600 hover:bg-nyala-500 text-white flex items-center justify-between text-xs font-bold shadow-md active:scale-98 transition-transform"
+        className="p-4 rounded-2xl bg-nyala-600 hover:bg-nyala-500 text-white flex items-center justify-between text-xs font-bold shadow-md active:scale-98 transition-transform"
       >
-        <div className="flex items-center gap-2">
-          <Laptop weight="bold" className="w-4 h-4" />
-          <span>Buka mahasiswa.umkt.ac.id</span>
+        <div className="flex items-center gap-2.5">
+          <Laptop weight="bold" className="w-5 h-5" />
+          <span>Kunjungi mahasiswa.umkt.ac.id Resmi</span>
         </div>
         <ArrowSquareOut weight="bold" className="w-4 h-4" />
       </a>
@@ -73,30 +73,30 @@ export default function MobilePanduanSikadPage() {
       {/* Interactive Step Card Deck */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-black text-white uppercase tracking-wider">
+          <h3 className="text-sm font-black text-navy-950 dark:text-white uppercase tracking-wider">
             5 Langkah Alur Akademik SIKAD
           </h3>
-          <span className="text-[11px] font-mono text-navy-400">Step {activeStep + 1}/5</span>
+          <span className="text-[11px] font-mono text-navy-500 dark:text-navy-400 font-bold">Langkah {activeStep + 1}/5</span>
         </div>
 
-        <div className="p-5 rounded-3xl bg-[#0E1635] border border-navy-800 space-y-4">
-          <div className="space-y-1">
-            <span className="text-[10px] font-mono text-nyala-400 font-bold uppercase block">Langkah Ke-{activeStep + 1}</span>
-            <h4 className="text-base font-black text-white">{SIKAD_STEPS[activeStep].title}</h4>
-            <p className="text-xs text-navy-300 leading-relaxed pt-1">{SIKAD_STEPS[activeStep].desc}</p>
+        <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-4">
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono text-nyala-600 dark:text-nyala-400 font-bold uppercase block">Langkah Ke-{activeStep + 1}</span>
+            <h4 className="text-base sm:text-lg font-black text-navy-950 dark:text-white">{SIKAD_STEPS[activeStep].title}</h4>
+            <p className="text-xs text-navy-600 dark:text-navy-300 leading-relaxed pt-1">{SIKAD_STEPS[activeStep].desc}</p>
           </div>
 
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-navy-800 text-xs text-amber-300 space-y-0.5">
+          <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-navy-950/80 border border-amber-200 dark:border-navy-800 text-xs text-amber-800 dark:text-amber-300 space-y-0.5">
             <span className="font-bold text-[11px] block">Tips Penting:</span>
-            <p className="text-[11px] text-navy-300 leading-snug">{SIKAD_STEPS[activeStep].tips}</p>
+            <p className="text-[11px] text-amber-900 dark:text-navy-300 leading-snug">{SIKAD_STEPS[activeStep].tips}</p>
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center justify-between pt-2 border-t border-navy-800">
+          <div className="flex items-center justify-between pt-2 border-t border-navy-100 dark:border-navy-800">
             <button
               disabled={activeStep === 0}
               onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
-              className="px-3.5 py-1.5 rounded-xl bg-navy-900 border border-navy-800 text-xs font-bold text-navy-300 disabled:opacity-30 cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-navy-100 dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-xs font-bold text-navy-700 dark:text-navy-300 disabled:opacity-30 cursor-pointer hover:bg-navy-200 dark:hover:bg-navy-800 transition-colors"
             >
               ← Sebelumnya
             </button>
@@ -106,8 +106,8 @@ export default function MobilePanduanSikadPage() {
                 <button
                   key={i}
                   onClick={() => setActiveStep(i)}
-                  className={`h-1.5 rounded-full transition-all ${
-                    activeStep === i ? "w-5 bg-nyala-500" : "w-1.5 bg-navy-700"
+                  className={`h-2 rounded-full transition-all cursor-pointer ${
+                    activeStep === i ? "w-6 bg-nyala-600" : "w-2 bg-navy-200 dark:bg-navy-700"
                   }`}
                 />
               ))}
@@ -116,7 +116,7 @@ export default function MobilePanduanSikadPage() {
             <button
               disabled={activeStep === SIKAD_STEPS.length - 1}
               onClick={() => setActiveStep((prev) => Math.min(SIKAD_STEPS.length - 1, prev + 1))}
-              className="px-3.5 py-1.5 rounded-xl bg-nyala-600 text-xs font-bold text-white disabled:opacity-30 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-nyala-600 hover:bg-nyala-500 text-xs font-bold text-white disabled:opacity-30 cursor-pointer transition-colors shadow-sm"
             >
               Lanjut →
             </button>

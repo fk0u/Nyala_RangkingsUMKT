@@ -29,28 +29,28 @@ export default function MobilePanduanTiPage() {
       
       {/* Header */}
       <div className="space-y-1">
-        <span className="text-[10px] font-mono font-bold text-nyala-400 uppercase tracking-wider block">
+        <span className="text-[10px] font-mono font-bold text-nyala-600 dark:text-nyala-400 uppercase tracking-wider block">
           Program Studi S1 Teknologi Informasi
         </span>
-        <h1 className="text-xl font-black text-white leading-tight">
+        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white leading-tight">
           Kurikulum & Karir Sarjana Komputer
         </h1>
-        <p className="text-xs text-navy-300">
+        <p className="text-xs text-navy-600 dark:text-navy-300">
           Panduan paket 20 SKS Semester 1, standar nilai kelulusan, dan profil dosen tetap.
         </p>
       </div>
 
       {/* Slogan Pill */}
-      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-red-500/15 to-amber-500/15 border border-red-500/30 flex items-center gap-3">
-        <Terminal weight="bold" className="w-5 h-5 text-nyala-400 flex-shrink-0" />
+      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-red-500/10 to-amber-500/10 dark:from-red-500/15 dark:to-amber-500/15 border border-red-500/25 flex items-center gap-3 shadow-sm">
+        <Terminal weight="bold" className="w-5 h-5 text-red-600 dark:text-nyala-400 flex-shrink-0" />
         <div>
-          <span className="text-[9px] uppercase tracking-wider text-navy-400 font-bold block">Semboyan Mahasiswa:</span>
-          <span className="text-xs font-black text-nyala-400">HIDUP TEKNIK! NO SKILL NO TRUST!</span>
+          <span className="text-[9px] uppercase tracking-wider text-navy-500 dark:text-navy-400 font-bold block">Semboyan Mahasiswa:</span>
+          <span className="text-xs font-black text-red-600 dark:text-nyala-400">HIDUP TEKNIK! NO SKILL NO TRUST!</span>
         </div>
       </div>
 
       {/* ── VIDEO PLAYER CARD ── */}
-      <div className="rounded-2xl overflow-hidden bg-black border border-navy-800 shadow-xl space-y-2">
+      <div className="rounded-3xl overflow-hidden bg-black border border-navy-200 dark:border-navy-800 shadow-md space-y-2">
         <video 
           controls 
           playsInline
@@ -60,16 +60,16 @@ export default function MobilePanduanTiPage() {
         >
           <source src="https://file.garden/aoXG-IHDqFuT7RDT/Mindset_MABA_Informatika.mp4" type="video/mp4" />
         </video>
-        <div className="p-3 bg-[#0E1635] flex items-center justify-between text-xs">
+        <div className="p-3 bg-white dark:bg-[#0E1635] flex items-center justify-between text-xs border-t border-navy-100 dark:border-navy-800">
           <div>
-            <h4 className="font-bold text-white text-xs">Video Mindset MABA TI</h4>
-            <p className="text-[10px] text-navy-400">Logika algoritma & etos praktikum</p>
+            <h4 className="font-bold text-navy-950 dark:text-white text-xs">Video Mindset MABA TI</h4>
+            <p className="text-[10px] text-navy-500 dark:text-navy-400">Logika algoritma & etos praktikum</p>
           </div>
           <a
             href="https://file.garden/aoXG-IHDqFuT7RDT/Mindset_MABA_Informatika.mp4"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-1.5 rounded-lg bg-navy-900 border border-navy-800 text-navy-300 hover:text-white"
+            className="p-1.5 rounded-lg bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-navy-600 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white"
           >
             <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
           </a>
@@ -79,14 +79,14 @@ export default function MobilePanduanTiPage() {
       {/* ── KURIKULUM SEMESTER 1 - 4 ── */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-black text-white uppercase tracking-wider">
+          <h3 className="text-sm font-black text-navy-950 dark:text-white uppercase tracking-wider">
             Mata Kuliah TI 2026
           </h3>
-          <span className="text-xs font-mono font-bold text-nyala-400">{totalSks} SKS</span>
+          <span className="text-xs font-mono font-bold text-nyala-600 dark:text-nyala-400">{totalSks} SKS</span>
         </div>
 
         {/* Semester Horizontal Tabs */}
-        <div className="grid grid-cols-4 gap-1.5 p-1 rounded-2xl bg-[#0E1635] border border-navy-800">
+        <div className="grid grid-cols-4 gap-1.5 p-1 rounded-2xl bg-navy-100/80 dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800">
           {[1, 2, 3, 4].map((sem) => (
             <button
               key={sem}
@@ -94,7 +94,7 @@ export default function MobilePanduanTiPage() {
               className={`py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 selectedSemester === sem
                   ? "bg-nyala-600 text-white shadow-sm"
-                  : "text-navy-400 hover:text-white"
+                  : "text-navy-600 dark:text-navy-400 hover:text-navy-950 dark:hover:text-white"
               }`}
             >
               Sem {sem}
@@ -105,15 +105,15 @@ export default function MobilePanduanTiPage() {
         {/* Course List */}
         <div className="space-y-2">
           {semesterCourses.map((c, i) => (
-            <div key={i} className="p-3 rounded-2xl bg-[#0E1635] border border-navy-800 flex items-center justify-between gap-3 text-xs">
+            <div key={i} className="p-3.5 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 flex items-center justify-between gap-3 text-xs shadow-sm">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-mono font-bold text-nyala-400">{c.code}</span>
-                  <span className="text-[10px] text-navy-400">• {c.category}</span>
+                  <span className="font-mono font-bold text-nyala-600 dark:text-nyala-400">{c.code}</span>
+                  <span className="text-[10px] text-navy-500 dark:text-navy-400">• {c.category}</span>
                 </div>
-                <h4 className="font-bold text-white text-xs">{c.name}</h4>
+                <h4 className="font-bold text-navy-950 dark:text-white text-xs">{c.name}</h4>
               </div>
-              <span className="font-mono font-bold text-xs px-2 py-1 rounded-lg bg-navy-950 border border-navy-800 text-navy-200">
+              <span className="font-mono font-bold text-xs px-2.5 py-1 rounded-lg bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-navy-700 dark:text-navy-200">
                 {c.sks} SKS
               </span>
             </div>
@@ -124,10 +124,10 @@ export default function MobilePanduanTiPage() {
       {/* ── DOSEN DIREKTORI ── */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-black text-white uppercase tracking-wider">
+          <h3 className="text-sm font-black text-navy-950 dark:text-white uppercase tracking-wider">
             Dosen Tetap TI
           </h3>
-          <span className="text-[11px] font-mono text-navy-400">{filteredLecturers.length} Dosen</span>
+          <span className="text-[11px] font-mono text-navy-500 dark:text-navy-400">{filteredLecturers.length} Dosen</span>
         </div>
 
         <div className="relative">
@@ -137,18 +137,18 @@ export default function MobilePanduanTiPage() {
             value={searchLecturer}
             onChange={(e) => setSearchLecturer(e.target.value)}
             placeholder="Cari dosen / bidang riset..."
-            className="w-full pl-8 pr-3 py-2 rounded-xl bg-[#0E1635] border border-navy-800 text-xs text-white placeholder:text-navy-400 outline-none"
+            className="w-full pl-8 pr-3 py-2.5 rounded-xl bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 text-xs text-navy-950 dark:text-white placeholder:text-navy-400 outline-none focus:border-nyala-500"
           />
         </div>
 
         <div className="space-y-2">
-          {filteredLecturers.slice(0, 5).map((lec, i) => (
-            <div key={i} className="p-3 rounded-2xl bg-[#0E1635] border border-navy-800 flex items-center justify-between gap-2 text-xs">
+          {filteredLecturers.slice(0, 6).map((lec, i) => (
+            <div key={i} className="p-3.5 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 flex items-center justify-between gap-2 text-xs shadow-sm">
               <div>
-                <h4 className="font-bold text-white text-xs">{lec.name}</h4>
-                <p className="text-[10px] text-navy-400">Bidang: {lec.expertise}</p>
+                <h4 className="font-bold text-navy-950 dark:text-white text-xs">{lec.name}</h4>
+                <p className="text-[10px] text-navy-500 dark:text-navy-400">Bidang: {lec.expertise}</p>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-navy-950 border border-navy-800 text-navy-300">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-navy-600 dark:text-navy-300">
                 {lec.status}
               </span>
             </div>

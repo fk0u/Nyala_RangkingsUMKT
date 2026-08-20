@@ -19,11 +19,11 @@ import MascotFlame from "@/components/MascotFlame";
 import { useToast } from "@/context/ToastContext";
 
 const MOODS = [
-  { id: "excited", label: "Semangat", bonus: 25, icon: SmileyXEyes, color: "text-amber-400" },
-  { id: "happy", label: "Senang", bonus: 20, icon: Smiley, color: "text-emerald-400" },
-  { id: "neutral", label: "Biasa", bonus: 15, icon: SmileyMeh, color: "text-blue-400" },
-  { id: "tired", label: "Lelah", bonus: 10, icon: SmileySad, color: "text-purple-400" },
-  { id: "nervous", label: "Cemas", bonus: 5, icon: SmileyNervous, color: "text-rose-400" },
+  { id: "excited", label: "Semangat", bonus: 25, icon: SmileyXEyes, color: "text-amber-500" },
+  { id: "happy", label: "Senang", bonus: 20, icon: Smiley, color: "text-emerald-500" },
+  { id: "neutral", label: "Biasa", bonus: 15, icon: SmileyMeh, color: "text-blue-500" },
+  { id: "tired", label: "Lelah", bonus: 10, icon: SmileySad, color: "text-purple-500" },
+  { id: "nervous", label: "Cemas", bonus: 5, icon: SmileyNervous, color: "text-rose-500" },
 ];
 
 const CHECKS = [
@@ -73,22 +73,22 @@ export default function MobileHealthCheckPage() {
       
       {/* Header */}
       <div className="space-y-1">
-        <h1 className="text-xl font-black text-white">Health Check & Mood MABA</h1>
-        <p className="text-xs text-navy-300">Pantau stamina fisik dan kesiapan mental setiap hari.</p>
+        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white">Health Check & Mood MABA</h1>
+        <p className="text-xs text-navy-600 dark:text-navy-300">Pantau stamina fisik dan kesiapan mental setiap hari.</p>
       </div>
 
       {/* Readiness Gauge Card */}
-      <div className="p-5 rounded-3xl bg-[#0E1635] border border-navy-800 space-y-3 text-center">
-        <span className="text-[10px] font-mono uppercase tracking-wider text-navy-400 font-bold">Skor Kesiapan Harian</span>
-        <div className="text-4xl font-black font-mono text-nyala-400">{totalScore}%</div>
-        <p className="text-xs text-navy-300">
-          {totalScore >= 80 ? "Kondisi fisik dan mentalmu sangat prima!" : "Pastikan minum air cukup dan istirahat teratur."}
+      <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-3 text-center">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-navy-500 dark:text-navy-400 font-bold">Skor Kesiapan Harian</span>
+        <div className="text-4xl sm:text-5xl font-black font-mono text-nyala-600 dark:text-nyala-400">{totalScore}%</div>
+        <p className="text-xs text-navy-600 dark:text-navy-300 max-w-sm mx-auto">
+          {totalScore >= 80 ? "Kondisi fisik dan mentalmu sangat prima untuk menyerap materi orientasi!" : "Pastikan minum air cukup dan istirahat teratur malam ini."}
         </p>
       </div>
 
       {/* Mood Selector */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-navy-400 uppercase tracking-wider block">Bagaimana Perasaanmu Hari Ini?</label>
+        <label className="text-xs font-bold text-navy-700 dark:text-navy-300 uppercase tracking-wider block">Bagaimana Perasaanmu Hari Ini?</label>
         <div className="grid grid-cols-5 gap-1.5">
           {MOODS.map((m) => {
             const Icon = m.icon;
@@ -97,10 +97,10 @@ export default function MobileHealthCheckPage() {
               <button
                 key={m.id}
                 onClick={() => setSelectedMood(m)}
-                className={`p-2.5 rounded-2xl border flex flex-col items-center gap-1 transition-all cursor-pointer ${
+                className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer shadow-sm ${
                   isSelected
-                    ? "bg-nyala-600/20 border-nyala-500 text-white"
-                    : "bg-[#0E1635] border-navy-800 text-navy-400"
+                    ? "bg-nyala-600/15 border-nyala-500 text-navy-950 dark:text-white font-bold"
+                    : "bg-white dark:bg-[#0E1635] border-navy-200 dark:border-navy-800 text-navy-600 dark:text-navy-400"
                 }`}
               >
                 <Icon weight="bold" className={`w-5 h-5 ${m.color}`} />
@@ -113,7 +113,7 @@ export default function MobileHealthCheckPage() {
 
       {/* Physical Checklist */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-navy-400 uppercase tracking-wider block">Checklist Fisik & Nutrisi:</label>
+        <label className="text-xs font-bold text-navy-700 dark:text-navy-300 uppercase tracking-wider block">Checklist Fisik & Nutrisi:</label>
         <div className="space-y-2">
           {CHECKS.map((c) => {
             const Icon = c.icon;
@@ -122,20 +122,20 @@ export default function MobileHealthCheckPage() {
               <div
                 key={c.id}
                 onClick={() => handleToggleCheck(c.id)}
-                className={`p-3 rounded-2xl border flex items-center justify-between cursor-pointer select-none active:scale-98 transition-all ${
+                className={`p-3.5 rounded-2xl border flex items-center justify-between cursor-pointer select-none active:scale-98 transition-all shadow-sm ${
                   isChecked
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-white"
-                    : "bg-[#0E1635] border-navy-800 text-navy-400"
+                    ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30 text-navy-950 dark:text-white"
+                    : "bg-white dark:bg-[#0E1635] border-navy-200/80 dark:border-navy-800 text-navy-600 dark:text-navy-400"
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Icon weight="bold" className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-bold">{c.label}</span>
+                  <Icon weight="bold" className="w-4 h-4 text-emerald-500" />
+                  <span className="text-xs sm:text-sm font-bold">{c.label}</span>
                 </div>
-                <div className={`w-4 h-4 rounded border flex items-center justify-center ${
-                  isChecked ? "bg-emerald-500 border-emerald-500 text-white" : "border-navy-600 bg-navy-900"
+                <div className={`w-5 h-5 rounded-lg border flex items-center justify-center ${
+                  isChecked ? "bg-emerald-500 border-emerald-500 text-white" : "border-navy-300 dark:border-navy-600 bg-navy-50 dark:bg-navy-900"
                 }`}>
-                  {isChecked && <Check weight="bold" className="w-3 h-3" />}
+                  {isChecked && <Check weight="bold" className="w-3.5 h-3.5" />}
                 </div>
               </div>
             );
@@ -146,7 +146,7 @@ export default function MobileHealthCheckPage() {
       {/* Save Button */}
       <button
         onClick={handleSave}
-        className="w-full py-3.5 rounded-2xl bg-nyala-600 hover:bg-nyala-500 text-white text-xs font-black shadow-lg shadow-nyala-600/30 active:scale-98 transition-all cursor-pointer"
+        className="w-full py-3.5 rounded-2xl bg-nyala-600 hover:bg-nyala-500 text-white text-xs font-black shadow-md shadow-nyala-600/20 active:scale-98 transition-all cursor-pointer"
       >
         Simpan Evaluasi Hari Ini
       </button>

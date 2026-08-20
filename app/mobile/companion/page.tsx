@@ -6,8 +6,6 @@ import {
   Sparkle, 
   Trash, 
   User, 
-  SpeakerHigh, 
-  SpeakerSlash, 
   Copy, 
   Check, 
   Headset,
@@ -108,7 +106,7 @@ Ada yang ingin kamu tanyakan seputar **Jadwal MASTA**, **KRS SIKAD**, **Kurikulu
         
         {/* Quick Suggestion Chips */}
         <div className="space-y-1.5 pb-2">
-          <span className="text-[10px] font-bold text-navy-400 uppercase tracking-wider block">
+          <span className="text-[10px] font-bold text-navy-500 dark:text-navy-400 uppercase tracking-wider block">
             Pertanyaan Cepat:
           </span>
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
@@ -116,7 +114,7 @@ Ada yang ingin kamu tanyakan seputar **Jadwal MASTA**, **KRS SIKAD**, **Kurikulu
               <button
                 key={i}
                 onClick={() => handleSendMessage(q)}
-                className="px-3 py-1.5 rounded-xl bg-[#0E1635] border border-navy-800 text-[11px] font-semibold text-navy-300 hover:text-white whitespace-nowrap active:scale-95 transition-transform cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 text-[11px] font-semibold text-navy-700 dark:text-navy-300 hover:border-nyala-500 whitespace-nowrap active:scale-95 transition-transform cursor-pointer shadow-sm"
               >
                 {q}
               </button>
@@ -142,10 +140,10 @@ Ada yang ingin kamu tanyakan seputar **Jadwal MASTA**, **KRS SIKAD**, **Kurikulu
                 className={`max-w-[85%] rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed space-y-1 shadow-sm ${
                   isUser
                     ? "bg-nyala-600 text-white rounded-br-none"
-                    : "bg-[#0E1635] border border-navy-800 text-navy-100 rounded-bl-none"
+                    : "bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 text-navy-900 dark:text-navy-100 rounded-bl-none"
                 }`}
               >
-                <div className="prose prose-invert prose-xs max-w-none prose-p:leading-relaxed prose-a:text-nyala-400">
+                <div className="prose dark:prose-invert prose-xs max-w-none prose-p:leading-relaxed prose-a:text-nyala-600 dark:prose-a:text-nyala-400">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {m.content}
                   </ReactMarkdown>
@@ -158,10 +156,10 @@ Ada yang ingin kamu tanyakan seputar **Jadwal MASTA**, **KRS SIKAD**, **Kurikulu
                   {!isUser && (
                     <button
                       onClick={() => handleCopy(m.id, m.content)}
-                      className="hover:text-white transition-colors"
+                      className="hover:text-navy-950 dark:hover:text-white transition-colors"
                       title="Salin Pesan"
                     >
-                      {copiedId === m.id ? <Check weight="bold" className="w-3 h-3 text-emerald-400" /> : <Copy weight="bold" className="w-3 h-3" />}
+                      {copiedId === m.id ? <Check weight="bold" className="w-3 h-3 text-emerald-500" /> : <Copy weight="bold" className="w-3 h-3" />}
                     </button>
                   )}
                 </div>
@@ -171,7 +169,7 @@ Ada yang ingin kamu tanyakan seputar **Jadwal MASTA**, **KRS SIKAD**, **Kurikulu
         })}
 
         {isLoading && (
-          <div className="flex items-center gap-2 text-xs text-navy-400 font-mono py-2">
+          <div className="flex items-center gap-2 text-xs text-navy-500 dark:text-navy-400 font-mono py-2">
             <span className="w-2 h-2 rounded-full bg-nyala-500 animate-ping" />
             <span>Nyala sedang meracik jawaban terverifikasi...</span>
           </div>
@@ -186,20 +184,20 @@ Ada yang ingin kamu tanyakan seputar **Jadwal MASTA**, **KRS SIKAD**, **Kurikulu
           e.preventDefault();
           handleSendMessage();
         }}
-        className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#0E1635] border border-navy-800 shadow-lg"
+        className="flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 shadow-md"
       >
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Tanyakan hal seputar MASTA, SIKAD & TI..."
-          className="flex-1 px-3 py-2 bg-transparent text-xs text-white placeholder:text-navy-400 outline-none"
+          className="flex-1 px-3 py-2 bg-transparent text-xs text-navy-950 dark:text-white placeholder:text-navy-400 outline-none"
         />
 
         <button
           type="submit"
           disabled={!input.trim() || isLoading}
-          className="p-2.5 rounded-xl bg-nyala-600 hover:bg-nyala-500 disabled:opacity-40 text-white active:scale-90 transition-transform cursor-pointer"
+          className="p-2.5 rounded-xl bg-nyala-600 hover:bg-nyala-500 disabled:opacity-40 text-white active:scale-90 transition-transform cursor-pointer shadow-sm"
         >
           <PaperPlaneRight weight="fill" className="w-4 h-4" />
         </button>
