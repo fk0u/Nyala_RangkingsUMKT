@@ -18,6 +18,7 @@ import {
   X,
   Newspaper,
   Headset,
+  DeviceMobile,
 } from "@phosphor-icons/react";
 import ThemeToggle from "./ThemeToggle";
 import MascotFlame from "./MascotFlame";
@@ -199,6 +200,15 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
             )}
 
             <ThemeToggle />
+
+            <Link
+              href="/mobile"
+              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-navy-600 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white bg-navy-100 dark:bg-navy-900 border border-navy-200 dark:border-navy-800 transition-colors"
+              title="Buka Versi Mobile App (App Store Mode)"
+            >
+              <DeviceMobile weight="bold" className="w-3.5 h-3.5 text-nyala-500" />
+              <span>Mobile App</span>
+            </Link>
 
             <Link
               href="/companion"

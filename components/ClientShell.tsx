@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import TopNotificationBar from "./TopNotificationBar";
 import Navbar from "./Navbar";
 import MobileNav from "./MobileNav";
@@ -8,13 +9,16 @@ import Footer from "./Footer";
 import CommandSearchModal from "./CommandSearchModal";
 import MascotPageTransition from "./MascotPageTransition";
 import RegisterServiceWorker from "./RegisterServiceWorker";
+import MobileOnboarding from "./MobileOnboarding";
 
 export default function ClientShell({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
+  const isMobileRoute = pathname?.startsWith("/mobile");
 
   // Global Ctrl+K / Cmd+K listener
   useEffect(() => {
@@ -29,6 +33,22 @@ export default function ClientShell({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // When on dedicated /mobile routes, render only the native mobile experience without root web shell
+  if (isMobileRoute) {
+    return (
+      <>
+        <RegisterServiceWorker />
+        <MascotPageTransition>
+          {children}
+        </MascotPageTransition>
+        <CommandSearchModal
+          isOpen={searchOpen}
+          onClose={() => setSearchOpen(false)}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <RegisterServiceWorker />
@@ -42,6 +62,7 @@ export default function ClientShell({
         </main>
         <Footer />
         <MobileNav />
+        <MobileOnboarding />
         <CommandSearchModal
           isOpen={searchOpen}
           onClose={() => setSearchOpen(false)}

@@ -1,0 +1,164 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { 
+  Globe, 
+  Newspaper, 
+  Megaphone, 
+  CalendarCheck, 
+  Buildings, 
+  ArrowClockwise, 
+  MagnifyingGlass,
+  ArrowRight
+} from "@phosphor-icons/react";
+import { 
+  UMKTBerita, 
+  UMKTPengumuman, 
+  UMKTEvent, 
+  UMKTFakultas, 
+  cleanHTML, 
+  formatDateIndo 
+} from "@/lib/umkt-api";
+
+export default function MobileHubUMKTPage() {
+  const [activeTab, setActiveTab] = useState<"berita" | "pengumuman" | "event" | "fakultas">("berita");
+  const [search, setSearch] = useState("");
+  const [beritaList, setBeritaList] = useState<UMKTBerita[]>([]);
+  const [pengumumanList, setPengumumanList] = useState<UMKTPengumuman[]>([]);
+  const [eventList, setEventList] = useState<UMKTEvent[]>([]);
+  const [fakultasList, setFakultasList] = useState<UMKTFakultas[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/umkt-portal?type=all-hub");
+      const data = await res.json();
+      const payload = data.data || data.hub || {};
+      if (payload) {
+        setBeritaList(payload.berita || []);
+        setPengumumanList(payload.pengumuman || []);
+        setEventList(payload.event || []);
+        setFakultasList(payload.fakultas || []);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const filteredBerita = beritaList.filter((b) =>
+    b.judul.toLowerCase().includes(search.toLowerCase()) || cleanHTML(b.isi).toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="space-y-4">
+      
+      {/* Header */}
+      <div className="space-y-1">
+        <h1 className="text-xl font-black text-white">Hub Warta & 10 Fakultas</h1>
+        <p className="text-xs text-navy-300">Live feed berita terverifikasi humas dan pengumuman kampus.</p>
+      </div>
+
+      {/* Search Input */}
+      <div className="relative">
+        <MagnifyingGlass weight="bold" className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-400" />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Cari berita atau pengumuman..."
+          className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-[#0E1635] border border-navy-800 text-xs text-white placeholder:text-navy-400 outline-none"
+        />
+      </div>
+
+      {/* Horizontal Tabs */}
+      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#0E1635] border border-navy-800 overflow-x-auto scrollbar-none">
+        {[
+          { id: "berita", label: "Berita", count: beritaList.length, icon: Newspaper },
+          { id: "pengumuman", label: "Pengumuman", count: pengumumanList.length, icon: Megaphone },
+          { id: "event", label: "Event", count: eventList.length, icon: CalendarCheck },
+          { id: "fakultas", label: "10 Fakultas", count: fakultasList.length, icon: Buildings },
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                isActive
+                  ? "bg-nyala-600 text-white shadow-sm"
+                  : "text-navy-400 hover:text-white"
+              }`}
+            >
+              <Icon weight={isActive ? "fill" : "bold"} className="w-3.5 h-3.5" />
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Content Stream */}
+      {loading ? (
+        <div className="py-12 text-center text-xs text-navy-400 font-mono">
+          Menyinkronkan feed API kampus...
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {activeTab === "berita" && (
+            filteredBerita.slice(0, 10).map((b) => (
+              <div key={b.id} className="p-3.5 rounded-2xl bg-[#0E1635] border border-navy-800 space-y-2">
+                {b.foto && (
+                  <div className="w-full aspect-[16/9] rounded-xl overflow-hidden bg-navy-950">
+                    <img src={b.foto} alt={b.judul} className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <span className="text-[10px] text-navy-400 font-mono block">{formatDateIndo(b.tgl_upload)}</span>
+                <h4 className="text-xs font-bold text-white leading-snug">{b.judul}</h4>
+                <p className="text-[11px] text-navy-300 line-clamp-2 leading-relaxed">{cleanHTML(b.isi)}</p>
+              </div>
+            ))
+          )}
+
+          {activeTab === "pengumuman" && (
+            pengumumanList.map((p) => (
+              <div key={p.id} className="p-3.5 rounded-2xl bg-[#0E1635] border border-navy-800 space-y-1.5">
+                <span className="text-[10px] text-nyala-400 font-mono">{formatDateIndo(p.tgl_upload)}</span>
+                <h4 className="text-xs font-bold text-white">{p.judul}</h4>
+                <p className="text-[11px] text-navy-300 line-clamp-2">{cleanHTML(p.isi)}</p>
+              </div>
+            ))
+          )}
+
+          {activeTab === "event" && (
+            eventList.map((e) => (
+              <div key={e.id} className="p-3.5 rounded-2xl bg-[#0E1635] border border-navy-800 space-y-1.5">
+                <span className="text-[10px] text-emerald-400 font-mono">{formatDateIndo(e.tgl_upload)}</span>
+                <h4 className="text-xs font-bold text-white">{e.judul}</h4>
+                <p className="text-[11px] text-navy-300 line-clamp-2">{cleanHTML(e.isi)}</p>
+              </div>
+            ))
+          )}
+
+          {activeTab === "fakultas" && (
+            <div className="grid grid-cols-2 gap-2.5">
+              {fakultasList.map((f) => (
+                <div key={f.id} className="p-3 rounded-2xl bg-[#0E1635] border border-navy-800 space-y-1">
+                  <span className="text-[10px] text-nyala-400 font-bold block">{f.singkatan || "FAKULTAS"}</span>
+                  <h4 className="text-xs font-bold text-white leading-tight">{f.nama}</h4>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+    </div>
+  );
+}

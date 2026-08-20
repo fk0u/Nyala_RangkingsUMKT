@@ -12,14 +12,13 @@ import {
   CalendarCheck, 
   CheckSquare, 
   Heartbeat, 
-  Newspaper, 
   Headset, 
   BookOpenText, 
   X,
   CaretUp,
-  Fire,
   GridFour,
-  Globe
+  Globe,
+  Compass
 } from "@phosphor-icons/react";
 import AdminHelpModal from "./AdminHelpModal";
 import MascotFlame from "./MascotFlame";
@@ -31,13 +30,13 @@ export default function MobileNav() {
 
   const PRIMARY_TABS = [
     { href: "/", label: "Beranda", icon: House },
-    { href: "/hub-umkt", label: "Hub UMKT", icon: Globe, badge: "Live" },
+    { href: "/hub-umkt", label: "Hub UMKT", icon: Globe },
     { href: "/companion", label: "Tanya AI", icon: Sparkle, isCenter: true },
-    { href: "/blog", label: "Panduan", icon: BookOpenText, badge: "MABA" },
+    { href: "/blog", label: "Panduan", icon: BookOpenText },
   ];
 
   const QUICK_APPS = [
-    { href: "/hub-umkt", label: "Hub Portal UMKT", desc: "Live API 2.100+ berita, pengumuman dan fakultas", icon: Globe, color: "text-nyala-600 bg-nyala-500/10" },
+    { href: "/hub-umkt", label: "Hub Portal UMKT", desc: "Live API 2.100+ berita, pengumuman & fakultas", icon: Globe, color: "text-nyala-600 bg-nyala-500/10" },
     { href: "/blog", label: "Majalah Panduan MABA", desc: "Tips KRS, adaptasi Samarinda, beasiswa", icon: BookOpenText, color: "text-amber-600 bg-amber-500/10" },
     { href: "/panduan-ti", label: "Kurikulum TI 2026", desc: "Dosen, standar nilai S.Kom dan karir", icon: Code, color: "text-nyala-600 bg-nyala-500/10" },
     { href: "/panduan-sikad", label: "Simulator SIKAD", desc: "KRS, presensi 75%, tagihan SPP", icon: Laptop, color: "text-orange-600 bg-orange-500/10" },
@@ -47,13 +46,20 @@ export default function MobileNav() {
     { href: "/tentang-masta", label: "Edukasi & 4 Pilar", desc: "Nilai AIK dan pedoman orientasi", icon: Sparkle, color: "text-slate-700 bg-slate-500/10" },
   ];
 
+  const handleReplayOnboarding = () => {
+    setDrawerOpen(false);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("open-nyala-onboarding"));
+    }
+  };
+
   return (
     <>
       {/* ── NATIVE APP BOTTOM TAB BAR (iOS & Android Style) ── */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 select-none">
         
-        {/* Native Frosted Bar Container */}
-        <nav className="w-full bg-white/92 dark:bg-navy-950/92 backdrop-blur-2xl border-t border-navy-200/60 dark:border-navy-800/80 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] px-2 pt-1 pb-safe max-w-2xl mx-auto flex items-center justify-around">
+        {/* Frosted Bar Container */}
+        <nav className="w-full bg-white/92 dark:bg-navy-950/92 backdrop-blur-2xl border-t border-navy-200/60 dark:border-navy-800/80 shadow-[0_-4px_25px_rgba(0,0,0,0.06)] px-2 pt-1.5 pb-safe max-w-2xl mx-auto flex items-center justify-around">
           
           {PRIMARY_TABS.map((tab) => {
             const isActive = pathname === tab.href || (tab.href !== "/" && pathname.startsWith(tab.href));
@@ -65,11 +71,11 @@ export default function MobileNav() {
                 <Link
                   key={tab.href}
                   href={tab.href}
-                  className="relative -top-3 flex flex-col items-center group active:scale-90 transition-transform"
+                  className="relative -top-3.5 flex flex-col items-center group active:scale-90 transition-transform"
                 >
-                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-tr from-nyala-600 via-nyala-500 to-amber-400 text-white flex items-center justify-center shadow-lg shadow-nyala-500/40 border-2 border-white dark:border-navy-900 relative">
+                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-tr from-nyala-600 via-nyala-500 to-amber-400 text-white flex items-center justify-center shadow-lg shadow-nyala-500/30 border-2 border-white dark:border-navy-900 relative">
                     <Sparkle weight="fill" className="w-6 h-6 animate-pulse" />
-                    <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-white dark:border-navy-900" />
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white dark:border-navy-900" />
                   </div>
                   <span className="text-[10px] font-black text-nyala-600 dark:text-nyala-400 mt-1">
                     {tab.label}
@@ -91,22 +97,15 @@ export default function MobileNav() {
                 {isActive && (
                   <motion.div
                     layoutId="native-tab-indicator"
-                    className="absolute inset-0 bg-nyala-500/12 dark:bg-nyala-500/20 rounded-2xl -z-10"
+                    className="absolute inset-0 bg-nyala-500/10 dark:bg-nyala-500/15 rounded-2xl -z-10"
                     transition={{ type: "spring", stiffness: 450, damping: 32 }}
                   />
                 )}
                 
-                <div className="relative">
-                  <Icon 
-                    weight={isActive ? "fill" : "bold"} 
-                    className={`w-5 h-5 transition-transform ${isActive ? "scale-110 text-nyala-500" : ""}`} 
-                  />
-                  {tab.badge && !isActive && (
-                    <span className="absolute -top-1.5 -right-2 px-1 py-0.2 rounded-full bg-navy-200 dark:bg-navy-800 text-[8px] font-bold text-navy-600 dark:text-navy-300">
-                      {tab.badge}
-                    </span>
-                  )}
-                </div>
+                <Icon 
+                  weight={isActive ? "fill" : "bold"} 
+                  className={`w-5 h-5 transition-transform ${isActive ? "scale-110 text-nyala-500" : ""}`} 
+                />
 
                 <span className="text-[10px] tracking-tight mt-1">
                   {tab.label}
@@ -118,7 +117,7 @@ export default function MobileNav() {
           {/* More Apps Drawer Trigger Button */}
           <button
             onClick={() => setDrawerOpen(true)}
-            className="flex flex-col items-center justify-center py-1.5 px-2.5 rounded-2xl text-navy-500 dark:text-navy-400 hover:text-navy-800 dark:hover:text-navy-200 font-medium active:scale-90 transition-transform min-w-[50px]"
+            className="flex flex-col items-center justify-center py-1.5 px-2.5 rounded-2xl text-navy-500 dark:text-navy-400 hover:text-navy-800 dark:hover:text-navy-200 font-medium active:scale-90 transition-transform min-w-[50px] cursor-pointer"
           >
             <GridFour weight="bold" className="w-5 h-5" />
             <span className="text-[10px] tracking-tight mt-1">
@@ -134,10 +133,8 @@ export default function MobileNav() {
         {drawerOpen && (
           <div className="lg:hidden fixed inset-0 z-50 flex flex-col justify-end bg-navy-950/70 backdrop-blur-md">
             
-            {/* Backdrop click to dismiss */}
             <div className="flex-1" onClick={() => setDrawerOpen(false)} />
 
-            {/* Bottom Sheet Card */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
@@ -145,7 +142,7 @@ export default function MobileNav() {
               transition={{ type: "spring", stiffness: 350, damping: 35 }}
               className="bg-white dark:bg-navy-900 rounded-t-[32px] p-6 pb-safe border-t border-navy-200 dark:border-navy-800 shadow-2xl space-y-6 max-h-[85vh] overflow-y-auto"
             >
-              {/* Native iOS Grabber Handle */}
+              {/* Native Handle */}
               <div className="flex justify-center -mt-2">
                 <div className="w-12 h-1.5 rounded-full bg-navy-300 dark:bg-navy-700" />
               </div>
@@ -166,7 +163,7 @@ export default function MobileNav() {
 
                 <button
                   onClick={() => setDrawerOpen(false)}
-                  className="p-2 rounded-full bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300"
+                  className="p-2 rounded-full bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-300 cursor-pointer"
                 >
                   <X weight="bold" className="w-4 h-4" />
                 </button>
@@ -199,14 +196,28 @@ export default function MobileNav() {
                 })}
               </div>
 
-              {/* Direct Official Admin Help Callout in Drawer */}
-              <div className="pt-2 border-t border-navy-100 dark:border-navy-800">
+              {/* Action Buttons: Onboarding Replay & Official Admin */}
+              <div className="pt-2 border-t border-navy-100 dark:border-navy-800 space-y-2.5">
+                <button
+                  onClick={handleReplayOnboarding}
+                  className="w-full p-3 rounded-2xl bg-navy-50 dark:bg-navy-950 border border-navy-100 dark:border-navy-800 text-navy-800 dark:text-navy-200 flex items-center justify-between active:scale-95 transition-all cursor-pointer"
+                >
+                  <div className="flex items-center gap-3 text-left">
+                    <Compass weight="bold" className="w-5 h-5 text-nyala-500" />
+                    <div>
+                      <h4 className="text-xs font-bold">Panduan Pengantar Aplikasi</h4>
+                      <p className="text-[10px] text-navy-400">Putar ulang pengenalan fitur dan prodi</p>
+                    </div>
+                  </div>
+                  <CaretUp weight="bold" className="w-4 h-4 rotate-90 text-navy-400" />
+                </button>
+
                 <button
                   onClick={() => {
                     setDrawerOpen(false);
                     setAdminModalOpen(true);
                   }}
-                  className="w-full p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 flex items-center justify-between active:scale-95 transition-all"
+                  className="w-full p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 flex items-center justify-between active:scale-95 transition-all cursor-pointer"
                 >
                   <div className="flex items-center gap-3 text-left">
                     <div className="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-sm">
