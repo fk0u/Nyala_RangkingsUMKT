@@ -6,8 +6,8 @@ import Navbar from "./Navbar";
 import MobileNav from "./MobileNav";
 import Footer from "./Footer";
 import CommandSearchModal from "./CommandSearchModal";
-import WelcomingPreloader from "./WelcomingPreloader";
 import MascotPageTransition from "./MascotPageTransition";
+import RegisterServiceWorker from "./RegisterServiceWorker";
 
 export default function ClientShell({
   children,
@@ -30,7 +30,8 @@ export default function ClientShell({
   }, []);
 
   return (
-    <WelcomingPreloader>
+    <>
+      <RegisterServiceWorker />
       <div className="flex flex-col min-h-screen">
         <TopNotificationBar onOpenSearch={() => setSearchOpen(true)} />
         <Navbar onOpenSearch={() => setSearchOpen(true)} />
@@ -46,6 +47,6 @@ export default function ClientShell({
           onClose={() => setSearchOpen(false)}
         />
       </div>
-    </WelcomingPreloader>
+    </>
   );
 }

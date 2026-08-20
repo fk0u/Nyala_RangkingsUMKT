@@ -1,14 +1,13 @@
+import crypto from "crypto";
+
 /**
- * Top-Level Security: Rate Limiter, Anti-DDoS Burst Guard, Input Sanitizer,
- * Prompt Injection Detector, and IP Quarantine System for Nyala AI API.
- *
- * Layers:
- *  1. IP Quarantine — blocked IPs are fully locked out for a cooldown period.
- *  2. Burst Guard   — max 5 requests per 5 seconds before quarantine triggers.
- *  3. Window Limiter — max 20 requests per 60 seconds (sliding window).
- *  4. Input Sanitizer — length limit, control character stripping, XSS blocking.
- *  5. Prompt Injection Detector — blocks known LLM exploitation patterns.
- *  6. IP Cleanup     — stale records are pruned every 10 minutes.
+ * Top-Level Enterprise Security for Nyala App:
+ *  1. Sliding Window & Burst Guard Rate Limiter (General API)
+ *  2. Anti-Brute Force Quarantine Limiter (Admin Auth)
+ *  3. Constant-Time Timing Attack Defense (Safe Passphrase Comparison)
+ *  4. Advanced Input Sanitizer & Prompt Injection Detector
+ *  5. Prototype Pollution & Malicious Payload Guard
+ *  6. Multi-Proxy IP Extraction Engine
  */
 
 interface RateLimitRecord {
@@ -17,35 +16,50 @@ interface RateLimitRecord {
   violationCount: number;
 }
 
-// In-Memory IP Store (sliding window)
-const ipStore = new Map<string, RateLimitRecord>();
+// In-Memory IP Stores
+const generalIpStore = new Map<string, RateLimitRecord>();
+const adminIpStore = new Map<string, RateLimitRecord>();
 
-// Tuning constants
+// General API Tuning constants
 const WINDOW_MS = 60 * 1000;
-const MAX_REQUESTS_PER_WINDOW = 20;
+const MAX_REQUESTS_PER_WINDOW = 30;
 const BURST_WINDOW_MS = 5 * 1000;
-const MAX_BURST_REQUESTS = 5;
+const MAX_BURST_REQUESTS = 7;
 const BLOCK_DURATION_MS = 2 * 60 * 1000;
 const ESCALATION_FACTOR = 2;
-const MAX_MESSAGE_LENGTH = 1200;
+const MAX_MESSAGE_LENGTH = 1500;
 const CLEANUP_INTERVAL_MS = 10 * 60 * 1000;
 
-// Periodic cleanup of stale IP records (runs once, idempotent)
+// Admin Auth Anti-Bruteforce Tuning constants
+const ADMIN_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+const ADMIN_MAX_FAILURES = 5;
+const ADMIN_BLOCK_DURATION_MS = 15 * 60 * 1000; // 15 minutes lock
+
+// Periodic cleanup of stale IP records
 let cleanupScheduled = false;
 function scheduleCleanup() {
   if (cleanupScheduled) return;
   cleanupScheduled = true;
   setInterval(() => {
     const now = Date.now();
-    const staleIps: string[] = [];
-    ipStore.forEach((record, ip) => {
-      const hasRecentActivity = record.timestamps.some((ts) => now - ts < WINDOW_MS * 5);
+    
+    // Prune general store
+    generalIpStore.forEach((record, ip) => {
+      const hasRecent = record.timestamps.some((ts) => now - ts < WINDOW_MS * 5);
       const isBlocked = record.blockedUntil && now < record.blockedUntil;
-      if (!hasRecentActivity && !isBlocked) {
-        staleIps.push(ip);
+      if (!hasRecent && !isBlocked) {
+        generalIpStore.delete(ip);
       }
     });
-    staleIps.forEach((ip) => ipStore.delete(ip));
+
+    // Prune admin store
+    adminIpStore.forEach((record, ip) => {
+      const hasRecent = record.timestamps.some((ts) => now - ts < ADMIN_WINDOW_MS);
+      const isBlocked = record.blockedUntil && now < record.blockedUntil;
+      if (!hasRecent && !isBlocked) {
+        adminIpStore.delete(ip);
+      }
+    });
   }, CLEANUP_INTERVAL_MS);
 }
 
@@ -57,16 +71,16 @@ export interface RateLimitResult {
 }
 
 /**
- * Rate Limit + Burst Flood + IP Quarantine (escalating block duration)
+ * General API Rate Limit + Burst Flood + IP Quarantine
  */
 export function checkRateLimit(clientIp: string): RateLimitResult {
   scheduleCleanup();
   const now = Date.now();
-  let record = ipStore.get(clientIp);
+  let record = generalIpStore.get(clientIp);
 
   if (!record) {
     record = { timestamps: [now], violationCount: 0 };
-    ipStore.set(clientIp, record);
+    generalIpStore.set(clientIp, record);
     return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - 1 };
   }
 
@@ -77,7 +91,7 @@ export function checkRateLimit(clientIp: string): RateLimitResult {
       allowed: false,
       remaining: 0,
       retryAfterSeconds: retryAfter,
-      reason: "Terdeteksi aktivitas mencurigakan. Akses ditangguhkan sementara.",
+      reason: "Aktivitas mencurigakan terdeteksi. Akses ditangguhkan sementara demi keamanan.",
     };
   }
 
@@ -94,7 +108,7 @@ export function checkRateLimit(clientIp: string): RateLimitResult {
       allowed: false,
       remaining: 0,
       retryAfterSeconds: Math.ceil(duration / 1000),
-      reason: "Terlalu banyak permintaan dalam waktu singkat (Burst Flood). Silakan tunggu.",
+      reason: "Terlalu banyak permintaan serentak (Burst Flood). Harap beri jeda sejenak.",
     };
   }
 
@@ -107,7 +121,7 @@ export function checkRateLimit(clientIp: string): RateLimitResult {
       allowed: false,
       remaining: 0,
       retryAfterSeconds: retryAfter,
-      reason: "Batas permintaan per menit tercapai. Harap tunggu sebelum mengirim pesan lagi.",
+      reason: "Batas permintaan per menit tercapai. Harap tunggu sebelum mengirim permintaan baru.",
     };
   }
 
@@ -116,6 +130,84 @@ export function checkRateLimit(clientIp: string): RateLimitResult {
     allowed: true,
     remaining: MAX_REQUESTS_PER_WINDOW - record.timestamps.length,
   };
+}
+
+/**
+ * Admin Anti-Brute Force Checker
+ */
+export function checkAdminRateLimit(clientIp: string): RateLimitResult {
+  scheduleCleanup();
+  const now = Date.now();
+  let record = adminIpStore.get(clientIp);
+
+  if (!record) {
+    return { allowed: true, remaining: ADMIN_MAX_FAILURES };
+  }
+
+  if (record.blockedUntil && now < record.blockedUntil) {
+    const retryAfter = Math.ceil((record.blockedUntil - now) / 1000);
+    return {
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: retryAfter,
+      reason: `Terlalu banyak percobaan sandi gagal. Panel dikunci selama ${Math.ceil(retryAfter / 60)} menit.`,
+    };
+  }
+
+  // Prune old failures
+  record.timestamps = record.timestamps.filter((ts) => now - ts < ADMIN_WINDOW_MS);
+
+  if (record.timestamps.length >= ADMIN_MAX_FAILURES) {
+    record.blockedUntil = now + ADMIN_BLOCK_DURATION_MS;
+    return {
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: Math.ceil(ADMIN_BLOCK_DURATION_MS / 1000),
+      reason: "Batas percobaan login tercapai. Akses dibekukan sementara demi keamanan.",
+    };
+  }
+
+  return {
+    allowed: true,
+    remaining: ADMIN_MAX_FAILURES - record.timestamps.length,
+  };
+}
+
+export function recordAdminFailure(clientIp: string): void {
+  const now = Date.now();
+  let record = adminIpStore.get(clientIp);
+  if (!record) {
+    record = { timestamps: [now], violationCount: 1 };
+    adminIpStore.set(clientIp, record);
+  } else {
+    record.timestamps.push(now);
+    record.violationCount++;
+    if (record.timestamps.length >= ADMIN_MAX_FAILURES) {
+      record.blockedUntil = now + ADMIN_BLOCK_DURATION_MS;
+    }
+  }
+}
+
+export function recordAdminSuccess(clientIp: string): void {
+  adminIpStore.delete(clientIp);
+}
+
+/**
+ * Timing-Safe String Comparison to eliminate Timing Attacks
+ */
+export function timingSafeCompare(a: string, b: string): boolean {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  
+  const bufA = Buffer.from(a, "utf-8");
+  const bufB = Buffer.from(b, "utf-8");
+
+  if (bufA.length !== bufB.length) {
+    // Perform dummy timing to avoid length leak
+    crypto.timingSafeEqual(bufA, bufA);
+    return false;
+  }
+
+  return crypto.timingSafeEqual(bufA, bufB);
 }
 
 /**
@@ -140,16 +232,27 @@ export function sanitizeInput(text: string): { valid: boolean; sanitized: string
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, "")
     .trim();
 
+  // Prototype pollution keys check
+  if (/\b(__proto__|constructor|prototype)\b/i.test(sanitized)) {
+    return {
+      valid: false,
+      sanitized: "",
+      error: "Input mengandung struktur berbahaya yang tidak diizinkan.",
+    };
+  }
+
   // XSS payloads
   const xssPatterns = [
     /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
     /javascript:/gi,
     /data:text\/html/gi,
+    /vbscript:/gi,
     /on\w+\s*=/gi,
     /<iframe\b/gi,
     /<object\b/gi,
     /<embed\b/gi,
     /<svg\b[^>]*\bon\w+/gi,
+    /<base\b/gi,
   ];
 
   for (const pattern of xssPatterns) {
@@ -157,7 +260,7 @@ export function sanitizeInput(text: string): { valid: boolean; sanitized: string
       return {
         valid: false,
         sanitized: "",
-        error: "Konten pesan mengandung format yang tidak diizinkan.",
+        error: "Konten pesan mengandung tag atau skrip yang tidak diizinkan.",
       };
     }
   }
@@ -182,7 +285,7 @@ export function sanitizeInput(text: string): { valid: boolean; sanitized: string
       return {
         valid: false,
         sanitized: "",
-        error: "Pesan terdeteksi mengandung pola yang tidak diperbolehkan.",
+        error: "Pesan terdeteksi mengandung pola manipulasi instruksi sistem.",
       };
     }
   }
@@ -191,14 +294,14 @@ export function sanitizeInput(text: string): { valid: boolean; sanitized: string
 }
 
 /**
- * Client IP extraction (supports Vercel, Cloudflare, Nginx proxy headers)
+ * Client IP extraction with Cloudflare, Vercel, and proxy header prioritization
  */
 export function getClientIp(headers: Headers): string {
   const candidates = [
-    headers.get("x-forwarded-for"),
-    headers.get("x-real-ip"),
     headers.get("cf-connecting-ip"),
+    headers.get("x-real-ip"),
     headers.get("x-vercel-forwarded-for"),
+    headers.get("x-forwarded-for"),
   ];
 
   for (const header of candidates) {

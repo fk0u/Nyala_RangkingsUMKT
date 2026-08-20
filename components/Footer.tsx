@@ -168,15 +168,17 @@ export default function Footer() {
             </p>
             
             <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-mono font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Semua Sistem Nyala Optimal</span>
+              </span>
               <button
                 onClick={() => {
-                  sessionStorage.removeItem("nyala_splash_seen");
-                  window.dispatchEvent(new Event("replay-nyala-intro"));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="hover:text-nyala-600 dark:hover:text-nyala-400 font-bold transition-colors flex items-center gap-1.5 cursor-pointer text-navy-600 dark:text-navy-300"
+                className="hover:text-nyala-600 dark:hover:text-nyala-400 font-bold transition-colors flex items-center gap-1.5 cursor-pointer text-navy-600 dark:text-navy-300 text-xs px-3 py-1 rounded-lg bg-navy-100 dark:bg-navy-900/80 hover:bg-nyala-500/10 border border-navy-200 dark:border-navy-800"
               >
-                <Sparkle weight="bold" className="w-3.5 h-3.5 text-nyala-500" />
-                <span>Putar Ulang Welcoming Intro</span>
+                <span>↑ Kembali ke Atas</span>
               </button>
             </div>
           </div>

@@ -9,10 +9,27 @@ import {
   UMKTLastUpdateItem, 
   UMKTListResponse 
 } from "@/lib/umkt-api";
+import { checkRateLimit, getClientIp } from "@/lib/security";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
+  const clientIp = getClientIp(request.headers);
+  const rateLimit = checkRateLimit(clientIp);
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { status: "error", message: rateLimit.reason || "Terlalu banyak permintaan." },
+      { 
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.retryAfterSeconds || 30),
+          "Cache-Control": "no-store, max-age=0",
+        }
+      }
+    );
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const type = searchParams.get("type") || "berita";
   const page = searchParams.get("page") || "1";
@@ -29,21 +46,29 @@ export async function GET(request: NextRequest) {
         fetchUMKTApi<UMKTLastUpdateItem[]>("last-update/"),
       ]);
 
-      return NextResponse.json({
-        status: "success",
-        source: "https://web.umkt.ac.id/api/",
-        timestamp: new Date().toISOString(),
-        data: {
-          berita: berita?.results || [],
-          beritaTotal: berita?.count || 0,
-          event: event?.results || [],
-          eventTotal: event?.count || 0,
-          pengumuman: pengumuman?.results || [],
-          pengumumanTotal: pengumuman?.count || 0,
-          fakultas: fakultas?.results || fakultas || [],
-          lastUpdate: lastUpdate || [],
+      return NextResponse.json(
+        {
+          status: "success",
+          source: "https://web.umkt.ac.id/api/",
+          timestamp: new Date().toISOString(),
+          data: {
+            berita: berita?.results || [],
+            beritaTotal: berita?.count || 0,
+            event: event?.results || [],
+            eventTotal: event?.count || 0,
+            pengumuman: pengumuman?.results || [],
+            pengumumanTotal: pengumuman?.count || 0,
+            fakultas: fakultas?.results || fakultas || [],
+            lastUpdate: lastUpdate || [],
+          },
+        },
+        {
+          headers: {
+            "Cache-Control": "public, s-maxage=180, stale-while-revalidate=600",
+            "X-RateLimit-Remaining": String(rateLimit.remaining),
+          },
         }
-      });
+      );
     }
 
     // 2. Specific Endpoint Queries
@@ -59,20 +84,28 @@ export async function GET(request: NextRequest) {
     if (page) params.page = page;
     if (search) params.search = search;
 
-    const data = await fetchUMKTApi<any>(endpoint, params, 60);
+    const data = await fetchUMKTApi<any>(endpoint, params, 120);
 
     if (!data) {
       return NextResponse.json(
-        { status: "error", message: `Failed to fetch data from UMKT API endpoint: ${endpoint}` },
+        { status: "error", message: `Gagal memuat data dari endpoint API resmi UMKT: ${endpoint}` },
         { status: 502 }
       );
     }
 
-    return NextResponse.json({
-      status: "success",
-      endpoint,
-      data,
-    });
+    return NextResponse.json(
+      {
+        status: "success",
+        endpoint,
+        data,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=180, stale-while-revalidate=600",
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
+        },
+      }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { status: "error", message: error.message },

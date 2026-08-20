@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { BlogPost } from "@/lib/masta-data";
 import { 
   fetchUMKTApi, 
@@ -7,18 +7,35 @@ import {
   stripHtml, 
   formatIndonesianDate 
 } from "@/lib/umkt-api";
+import { checkRateLimit, getClientIp } from "@/lib/security";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const clientIp = getClientIp(request.headers);
+  const rateLimit = checkRateLimit(clientIp);
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { success: false, error: rateLimit.reason || "Terlalu banyak permintaan." },
+      { 
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.retryAfterSeconds || 30),
+          "Cache-Control": "no-store, max-age=0",
+        }
+      }
+    );
+  }
+
   try {
     let scrapedArticles: BlogPost[] = [];
     let sourceStatus = "live_api_umkt";
 
-    // Fetch live directly from official Django REST API
+    // Fetch live directly from official Django REST API with 180s ISR revalidate
     const response = await fetchUMKTApi<UMKTListResponse<UMKTBeritaItem>>("berita/", {
       page_size: 12,
-    }, 60);
+    }, 180);
 
     if (response && response.results && response.results.length > 0) {
       scrapedArticles = response.results.map((item) => {
@@ -55,21 +72,29 @@ export async function GET() {
           date: formatIndonesianDate(item.tanggal),
           coverImage: item.thumbnail || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80",
           tags: parsedTags,
-          content: item.isi, // Full official HTML content
+          content: item.isi,
           keyTakeaways: sdgsList.slice(0, 3),
           sourceUrl: item.url || `https://www.umkt.ac.id/`,
         };
       });
     }
 
-    return NextResponse.json({
-      success: true,
-      status: sourceStatus,
-      source: "https://web.umkt.ac.id/api/berita/",
-      timestamp: new Date().toISOString(),
-      count: scrapedArticles.length,
-      articles: scrapedArticles,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        status: sourceStatus,
+        source: "https://web.umkt.ac.id/api/berita/",
+        timestamp: new Date().toISOString(),
+        count: scrapedArticles.length,
+        articles: scrapedArticles,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=1200",
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
+        },
+      }
+    );
   } catch (error: any) {
     console.error("Error in scrape-umkt API:", error);
     return NextResponse.json(
