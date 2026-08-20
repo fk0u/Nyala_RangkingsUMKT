@@ -72,7 +72,7 @@ export default function ChecklistPage() {
         origin: { y: 0.6 },
         colors: ["#FF5A1F", "#FFA885", "#FDBA74", "#0F172A", "#10B981"],
       });
-      toast.nyala("Selamat! Seluruh persiapan MASTA-mu telah lengkap 100%! 🎉", "Luar Biasa!");
+      toast.nyala("Selamat! Seluruh persiapan MASTA Anda telah lengkap 100%!", "Persiapan Lengkap");
     } else if (progressPercent < 100) {
       setCelebrated(false);
     }

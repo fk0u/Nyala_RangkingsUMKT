@@ -72,13 +72,13 @@ export default function JadwalPage() {
       <CountdownTimer />
 
       {/* Navigation Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 border-b border-navy-200/80 dark:border-navy-800 pb-4">
+      <div className="flex flex-wrap items-center justify-center gap-2 border-b border-navy-200/80 dark:border-navy-800 pb-4">
         {[
           { id: "jadwal", label: "Tabel Rangkaian", icon: Calendar },
-          { id: "masta-imm", label: "Jadwal MASTA IMM (18-20 Agt)", icon: Users, badge: "Fakultas & Prodi" },
+          { id: "masta-imm", label: "Jadwal MASTA IMM", icon: Users },
           { id: "agenda-utama", label: "Daring vs Luring", icon: VideoCamera },
-          { id: "tata-tertib", label: "Dresscode & Aturan", icon: TShirt },
-          { id: "sanksi", label: "Peringatan Sanksi", icon: WarningOctagon },
+          { id: "tata-tertib", label: "Pakaian & Aturan", icon: TShirt },
+          { id: "sanksi", label: "Sanksi Kedisiplinan", icon: WarningOctagon },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -87,19 +87,14 @@ export default function JadwalPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all relative ${
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 isActive
-                  ? "bg-navy-900 text-white dark:bg-white dark:text-navy-950 shadow-md scale-105"
-                  : "bg-white/70 dark:bg-navy-900 text-navy-600 dark:text-navy-300 hover:bg-navy-100 dark:hover:bg-navy-800 border border-navy-200/60 dark:border-navy-800"
+                  ? "bg-navy-950 text-white dark:bg-white dark:text-navy-950 shadow-sm"
+                  : "bg-navy-50 dark:bg-navy-900 text-navy-600 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white"
               }`}
             >
               <Icon weight={isActive ? "fill" : "bold"} className="w-4 h-4" />
               <span>{tab.label}</span>
-              {tab.badge && !isActive && (
-                <span className="hidden sm:inline px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-nyala-500/15 text-nyala-600 dark:text-nyala-400">
-                  {tab.badge}
-                </span>
-              )}
             </button>
           );
         })}

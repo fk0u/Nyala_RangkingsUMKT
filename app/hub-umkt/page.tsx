@@ -258,13 +258,13 @@ export default function HubUMKTPage() {
         </div>
 
         {/* Tab Pills */}
-        <div className="flex items-center justify-center gap-2 overflow-x-auto no-scrollbar py-2">
+        <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           {[
             { id: "all", label: "Semua Warta", count: beritaList.length + pengumumanList.length + eventList.length, icon: Globe },
             { id: "berita", label: "Berita Kampus", count: beritaList.length, icon: Newspaper },
-            { id: "pengumuman", label: "Pengumuman Resmi", count: pengumumanList.length, icon: Megaphone },
-            { id: "event", label: "Agenda & Event", count: eventList.length, icon: CalendarCheck },
-            { id: "fakultas", label: "10 Fakultas Resmi", count: fakultasList.length, icon: Buildings },
+            { id: "pengumuman", label: "Pengumuman", count: pengumumanList.length, icon: Megaphone },
+            { id: "event", label: "Agenda Event", count: eventList.length, icon: CalendarCheck },
+            { id: "fakultas", label: "10 Fakultas", count: fakultasList.length, icon: Buildings },
             { id: "unit", label: "Biro & Layanan", count: informasiList.length, icon: Student },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -273,17 +273,15 @@ export default function HubUMKTPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all active:scale-95 ${
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? "bg-nyala-500 text-white shadow-md shadow-nyala-500/25"
-                    : "bg-navy-100 dark:bg-navy-800/80 text-navy-600 dark:text-navy-300 hover:bg-navy-200"
+                    ? "bg-navy-950 text-white dark:bg-white dark:text-navy-950 shadow-sm"
+                    : "bg-navy-50 dark:bg-navy-900 text-navy-600 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white"
                 }`}
               >
-                <Icon weight={isActive ? "fill" : "bold"} className="w-4 h-4" />
+                <Icon weight={isActive ? "fill" : "bold"} className="w-3.5 h-3.5" />
                 <span>{tab.label}</span>
-                <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                  isActive ? "bg-white/20 text-white" : "bg-navy-200 dark:bg-navy-700 text-navy-600 dark:text-navy-400"
-                }`}>
+                <span className="font-mono text-[10px] opacity-70">
                   {tab.count}
                 </span>
               </button>

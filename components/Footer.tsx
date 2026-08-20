@@ -168,17 +168,17 @@ export default function Footer() {
             </p>
             
             <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-mono font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Semua Sistem Nyala Optimal</span>
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-navy-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Sistem Operasional Optimal</span>
               </span>
               <button
                 onClick={() => {
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="hover:text-nyala-600 dark:hover:text-nyala-400 font-bold transition-colors flex items-center gap-1.5 cursor-pointer text-navy-600 dark:text-navy-300 text-xs px-3 py-1 rounded-lg bg-navy-100 dark:bg-navy-900/80 hover:bg-nyala-500/10 border border-navy-200 dark:border-navy-800"
+                className="text-xs font-medium text-navy-500 hover:text-nyala-600 dark:hover:text-nyala-400 transition-colors cursor-pointer"
               >
-                <span>↑ Kembali ke Atas</span>
+                Kembali ke Atas ↑
               </button>
             </div>
           </div>

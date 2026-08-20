@@ -50,15 +50,15 @@ export default function CompanionPage() {
     {
       id: "welcome-1",
       role: "assistant",
-      content: `Halo Sobat MABA UMKT 2026! Aku **Nyala**, sahabat virtual perjalanan MABA-mu! 🔥
+      content: `Halo! Saya **Nyala**, asisten virtual pendamping Mahasiswa Baru UMKT 2026.
 
-Ada yang ingin kamu tanyakan seputar:
-- 📋 **KRS & SIKAD** ([mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/))
-- 🎓 **Kurikulum & Perkuliahan TI 2026**
-- 🏛️ **Kontak Admin PMB & Biro Kemahasiswaan (Gedung C Lt. 1)**
-- 🌟 **Beasiswa & Rangkaian MASTA 2026**
+Silakan ajukan pertanyaan seputar:
+- **KRS & Portal SIKAD** ([mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/))
+- **Kurikulum & Perkuliahan Prodi TI 2026**
+- **Kontak Layanan Biro Kemahasiswaan & Admin PMB**
+- **Jadwal 3 Gelombang MASTA & Panduan Beasiswa**
 
-Tanyakan apa saja, Nyala siap memberikan jawaban akurat & terverifikasi!`,
+Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.`,
       timestamp: "Baru saja",
     },
   ]);
