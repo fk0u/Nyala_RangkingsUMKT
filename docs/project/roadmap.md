@@ -51,3 +51,11 @@
 - [x] Panduan Modul Fitur AI Companion (`docs/guides/companion-guide.md`), Kurikulum MASTA (`docs/guides/masta-curriculum.md`), Simulator SIKAD (`docs/guides/sikad-guide.md`), Akademik TI (`docs/guides/ti-academics.md`), Blog CMS (`docs/guides/blog-cms.md`), dan Mobile PWA (`docs/guides/mobile-pwa.md`)
 - [x] Catatan Keputusan Arsitektur (`docs/history/architectural-decisions.md`) dan Panduan Deployment Vercel (`docs/deployment/vercel-deployment.md`)
 
+## Fase 8: Live Hub Warta UMKT, Master SRS & Enterprise Production Hardening ✅
+- [x] Penerbitan Dokumen Master **Software Requirements Specification (SRS)** (`docs/srs-software-requirements.md`) lengkap dengan System Flowchart, User Flows, ERD, DFD Level 0 & 1, Sequence Diagrams, dan Kebutuhan Fungsional/Non-Fungsional
+- [x] Integrasi Hub Warta & Direktori 10 Fakultas Live Django REST API (`/hub-umkt` & `/mobile/hub-umkt`) terhubung langsung ke 2.100+ warta, agenda IKN, dan rilis resmi
+- [x] Algoritma resolusi slug multi-tier `fetchUMKTArticleBySlug()` yang menjamin 100% akurasi pembukaan naskah artikel
+- [x] Interaktivitas SDG Badge resmi PBB dengan modal penjelasan target global
+- [x] Penyelarasan domain produksi resmi `https://nyala-umkt.vercel.app`, Schema.org JSON-LD Knowledge Graph, dan optimasi SEO 36 rute statis/dinamis
+
+

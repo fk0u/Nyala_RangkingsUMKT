@@ -77,3 +77,19 @@ Kedua variasi di atas menghasilkan cache key yang identik, sehingga tidak terjad
 - **Eviction Strategy:** *Least Frequently Used (LFU) + LRU Hybrid* saat kapasitas penuh.
 - **Auto-Pruning:** Pembersihan latar belakang berkala setiap `15 menit`.
 - **Statistik Metrik:** Melacak rasio *Hit vs Miss* secara realtime untuk monitoring efisiensi.
+
+---
+
+## 4. HTTP Security Headers (`next.config.mjs`)
+
+Aplikasi mengaktifkan proteksi HTTP level edge pada seluruh rute produksi:
+
+| Header | Konfigurasi | Manfaat Keamanan |
+|---|---|---|
+| **Content-Security-Policy (CSP)** | `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' ...` | Mencegah injeksi skrip berbahaya (*Cross-Site Scripting*) dan penyusupan resource tak dikenal. |
+| **Strict-Transport-Security (HSTS)** | `max-age=31536000; includeSubDomains; preload` | Memaksa koneksi HTTPS terenkripsi penuh selama 1 tahun (31.536.000 detik). |
+| **X-Frame-Options** | `DENY` | Mencegah serangan *Clickjacking* dan embedding iframe tak berizin. |
+| **X-Content-Type-Options** | `nosniff` | Mencegah MIME-type sniffing eksploitatif oleh browser. |
+| **Cross-Origin-Opener-Policy** | `same-origin` | Mengisolasi konteks browsing untuk proteksi memori Spectra/Meltdown. |
+| **Permissions-Policy** | `camera=(), microphone=(), geolocation=()` | Menonaktifkan sensor perangkat sensitif yang tidak dibutuhkan aplikasi. |
+

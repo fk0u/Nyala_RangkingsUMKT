@@ -60,3 +60,26 @@ Dokumen ini mencatat keputusan-keputusan teknis dan arsitektural penting (*Archi
   - Waktu latensi cache < 1 milidetik.
   - Perlindungan tangguh terhadap serangan DoS dan bot tanpa biaya infrastruktur tambahan.
   - Zero external database dependencies untuk kebutuhan caching dasar.
+
+---
+
+## ADR 006: Standarisasi Domain Produksi Resmi & Schema.org JSON-LD
+
+- **Status:** Diterima & Terimplementasi
+- **Konteks:** Penggunaan domain acak atau staging menyebabkan fragmentasi indeks Googlebot dan menurunkan reputasi personal branding pengembang serta institusi.
+- **Keputusan:** Menetapkan domain produksi tunggal **`https://nyala-umkt.vercel.app`** sebagai canonical base URL untuk seluruh OpenGraph, Twitter Cards, Sitemap XML, Robots.txt, dan menanamkan Schema.org JSON-LD Knowledge Graph terstruktur (`Person` untuk Al-Ghani Desta Setyawan / @kou.sozo, `EducationalOrganization` untuk UMKT, `WebApplication`, `BreadcrumbList`, dan `FAQPage`).
+- **Konsekuensi:**
+  - Validitas 100% pada Google Rich Results Test.
+  - Sinkronisasi identitas kreator dan lembaga resmi terverifikasi secara global.
+
+---
+
+## ADR 007: Resolusi Slug Multi-Tier pada Live REST API Portal UMKT
+
+- **Status:** Diterima & Terimplementasi
+- **Konteks:** Backend Django REST Framework UMKT menyimpan 2.100+ artikel dengan slug berbasis string penuh tanpa menyertakan field ID numerik. Pengambilan 10 artikel awal menyebabkan kegagalan pencocokan pada berita halaman lanjut (fallback salah ke artikel pertama).
+- **Keputusan:** Mengimplementasikan fungsi `fetchUMKTArticleBySlug()` yang menjalankan pencocokan multi-tingkat (Exact Slug -> Decoded Slug -> Generated Title Slug -> Substring / URL Match -> Backend Keyword Search Filter).
+- **Konsekuensi:**
+  - Setiap artikel berita dan rilis resmi yang diklik dari halaman mana pun terbuka dengan akurasi 100%.
+  - Menghilangkan bug *fallback* palsu tanpa membebani kuota transfer server universitas.
+

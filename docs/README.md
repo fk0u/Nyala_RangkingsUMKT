@@ -8,7 +8,8 @@ Selamat datang di pusat dokumentasi teknis dan panduan operasional aplikasi **Ny
 
 Dokumentasi proyek ini distrukturkan ke dalam beberapa direktori tematik untuk memudahkan penelusuran arsitektur, panduan modul, dan prosedur operasional:
 
-### 1. Fondasi & Desain
+### 1. Fondasi, Spesifikasi & Desain
+- 📑 [**`docs/srs-software-requirements.md`**](file:///d:/Project/Nyala_RangkingsUMKT/docs/srs-software-requirements.md) — **Master Software Requirements Specification (SRS)**: Flowchart Sistem, User Flows, ERD, DFD Level 0 & 1, Sequence Diagrams, dan Matriks Kebutuhan Fungsional/Non-Fungsional.
 - 🎨 [**`DESIGN.md` (Root)**](file:///d:/Project/Nyala_RangkingsUMKT/DESIGN.md) — *Single Source of Truth* sistem desain antarmuka, token warna resmi, tipografi, haptic micro-interactions, dan anti-patterns.
 - 🖼️ [**`docs/visual-style.md`**](file:///d:/Project/Nyala_RangkingsUMKT/docs/visual-style.md) — Konsep visual asli *"Warm Fire, Soft Companion"*, palet warna, dan filosofi maskot Nyala.
 - 📋 [**`docs/project/roadmap.md`**](file:///d:/Project/Nyala_RangkingsUMKT/docs/project/roadmap.md) — Rekam jejak pengembangan, status fase rilis (Fase 1 s.d. 6), dan target penyempurnaan.

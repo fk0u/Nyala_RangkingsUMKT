@@ -31,5 +31,8 @@
 9. **Penyelesaian Bug Slug Detail Warta ([`lib/umkt-api.ts`](file:///d:/Project/Nyala_RangkingsUMKT/lib/umkt-api.ts), [`app/hub-umkt/[slug]/page.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/hub-umkt/[slug]/page.tsx), [`app/mobile/hub-umkt/[slug]/page.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/mobile/hub-umkt/[slug]/page.tsx))**:
    - Memperbaiki algoritma pencarian artikel warta di halaman detail. Sebelumnya, ketiadaan pencocokan langsung `b.slug === rawSlug` serta fallback `list[0]` menyebabkan semua artikel membuka berita pertama ("si A").
    - Menghadirkan fungsi `fetchUMKTArticleBySlug()` dengan multi-tier matching (exact slug, decoded slug, generated slug, substring, dan dynamic search query across 2.100+ berita UMKT).
-10. **Verifikasi Kompilasi Produksi**:
-   - `npm run build` sukses 100% (**36 rute statis & dinamis + Proxy Middleware**, kompilasi 2.9s, 0 error, Exit Code 0).
+10. **Penerbitan Master Software Requirements Specification (SRS) & Dokumentasi Total ([`docs/srs-software-requirements.md`](file:///d:/Project/Nyala_RangkingsUMKT/docs/srs-software-requirements.md))**:
+   - Menyusun dokumen SRS komprehensif berstandar enterprise yang mencakup **System Flowchart, User Flows (AI, Hub Warta, SIKAD), Entity Relationship Diagram (ERD), Data Flow Diagram (DFD Level 0 & 1), Sequence Diagrams, serta Matriks Kebutuhan Fungsional (FR-001 s.d. FR-010) & Non-Fungsional**.
+   - Menyinkronkan seluruh dokumen pada direktori `docs/` (`docs/README.md`, `docs/architecture/*`, `docs/guides/*`, `docs/history/*`, dan `docs/project/roadmap.md`).
+11. **Verifikasi Kompilasi Produksi**:
+   - `npm run build` sukses 100% (**36 rute statis & dinamis + Proxy Middleware**, kompilasi 1.6s, 0 error, Exit Code 0).

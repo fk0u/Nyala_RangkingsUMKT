@@ -1,6 +1,6 @@
-# Arsitektur Mobile Native & PWA (/mobile/*)
+# Arsitektur Mobile Native, Duolingo Tactile UI & PWA (/mobile/*)
 
-Dokumen ini menjelaskan rancang bangun antarmuka **True Fluid Responsive Native App** (`/mobile/*`) dan kapabilitas **Progressive Web App (PWA)** pada aplikasi Nyala.
+Dokumen ini menjelaskan rancang bangun antarmuka **True Fluid Responsive Native App** (`/mobile/*`), sistem komponen taktil **Duolingo 3D Design**, dan kapabilitas **Progressive Web App (PWA)** pada aplikasi Nyala.
 
 ---
 
@@ -9,8 +9,9 @@ Dokumen ini menjelaskan rancang bangun antarmuka **True Fluid Responsive Native 
 Berbeda dari situs web responsif biasa yang hanya mengecilkan ukuran kontainer desktop, Nyala menyediakan arsitektur khusus untuk perangkat seluler:
 
 - **Isolasi Layout Total:** Rute `/mobile/*` memiliki `MobileAppLayout` tersendiri yang sepenuhnya memisahkan navigasi desktop (mencegah *double navbar* atau *double dock*).
+- **Duolingo 3D Tactile Design System:** Komponen tombol (`DuolingoButton`), kartu (`DuolingoCard`), dan bilah aksi (`DuolingoActionMenuDock`) menggunakan batas bawah timbul 3D (*thick bottom border* `border-b-4`) dengan animasi tekanan fisik (`active:translate-y-0.5 active:border-b-2`).
+- **Flutter-Inspired Bottom Sheet (`FlutterBottomSheet`):** Membaca naskah pengumuman resmi dan rincian agenda event menggunakan panel geser bawah yang halus dengan kontrol sentuh intuitif.
 - **True Fluid Native Touch Feel:** Tidak menggunakan bingkai/mockup buatan (*no artificial phone mockup frame*) yang membatasi layar. Seluruh lebar dan tinggi viewport dimanfaatkan secara optimal.
-- **Haptic Visual Feedback:** Tombol dan kartu merespons sentuhan dengan efek pegas `scale(0.97)` saat ditekan.
 - **Safe Area Insets:** Penyesuaian jarak otomatis terhadap lekukan layar iPhone (*notch* / *Dynamic Island*) dan bar navigasi bawah Android (`pb-safe`, `pt-safe`).
 
 ---
@@ -21,11 +22,11 @@ Navigasi utama mobile diletakkan pada bilah terapung di bagian bawah layar yang 
 
 | Tab Navigasi | Rute | Ikon | Keterangan |
 | :--- | :--- | :--- | :--- |
-| **Beranda** | `/mobile` | `House` | Ringkasan countdown, kartu prodi, dan jadwal terdekat |
+| **Beranda** | `/mobile` | `House` | Ringkasan countdown, kartu prodi, quick actions, dan jadwal terdekat |
 | **Jadwal** | `/mobile/jadwal` | `CalendarCheck` | Alur 5 tahapan MASTA dan linimasa tanggal resmi |
-| **Tanya AI** | `/mobile/companion` | `Sparkle` | Asisten virtual Nyala (tombol aksi sentral menonjol) |
-| **Hub UMKT** | `/mobile/hub-umkt` | `Globe` | Berita resmi, agenda kampus, dan artikel blog |
-| **Profil** | `/mobile/profile` | `User` | Pengaturan biodata MABA, gugus, tema, dan preferensi |
+| **Tanya AI** | `/mobile/companion` | `Sparkle` | Asisten virtual Nyala (tombol aksi sentral bergradasi) |
+| **Hub UMKT** | `/mobile/hub-umkt` | `Globe` | Feed 2.100+ berita resmi, filter kategori, event, & 10 fakultas |
+| **Profil** | `/mobile/profile` | `User` | Pengaturan biodata MABA, gugus, tema, dan Eco-Impact SDGs |
 
 Selain 5 tab utama, menu laci (*Drawer Menu*) dapat dibuka melalui tombol menu atas untuk mengakses:
 - Panduan SIKAD (`/mobile/panduan-sikad`)
@@ -36,9 +37,9 @@ Selain 5 tab utama, menu laci (*Drawer Menu*) dapat dibuka melalui tombol menu a
 
 ---
 
-## 3. Sistem Profil & Penyimpanan Data Lokal
+## 3. Sistem Profil & Eco-Impact Tracker SDGs
 
-Modul `/mobile/profile` memberikan kontrol penuh kepada mahasiswa baru untuk menyesuaikan identitasnya:
+Modul `/mobile/profile` memberikan kontrol penuh kepada mahasiswa baru untuk menyesuaikan identitasnya dan melacak kontribusi lingkungan:
 
 ```mermaid
 graph LR
@@ -47,10 +48,12 @@ graph LR
     LocalStorage --> NIM[Nomor Induk Mahasiswa]
     LocalStorage --> Prodi[Pilihan Program Studi]
     LocalStorage --> Gugus[Pilihan Gugus MASTA 01 - 20]
+    LocalStorage --> EcoImpact[Pelacak Kertas & CO2 Dihemat]
     LocalStorage --> AvatarMood[Ekspresi Maskot Pilihan]
     LocalStorage --> Consent[Persetujuan Cookie & Storage]
 ```
 
+- **Eco-Impact Paperless Tracker:** Menghitung jumlah lembar kertas orientasi fisik yang berhasil dihemat (estimasi ~42 lembar per mahasiswa) dan reduksi emisi karbon (~0.21 kg CO2).
 - **Keamanan Privasi:** Seluruh data disimpan secara lokal pada perangkat pengguna (`localStorage.getItem("nyala_user_profile")`). Tidak ada data personal yang dikirimkan ke server tanpa izin.
 - **Sinkronisasi Otomatis:** Perubahan nama atau gugus pada profil secara otomatis menyinkronkan format display name pada prompt AI Companion dan kartu status beranda.
 
