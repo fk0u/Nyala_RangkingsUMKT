@@ -67,15 +67,15 @@ export default function MobileBlogPage() {
         {filteredPosts.map((post) => (
           <Link
             key={post.slug}
-            href={`/blog/${post.slug}`}
-            className="block p-4 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 space-y-3 active:scale-98 transition-transform group shadow-sm"
+            href={`/mobile/blog/${post.slug}`}
+            className="block p-4 rounded-3xl bg-white dark:bg-[#0E1635] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 space-y-3 active:border-b-2 active:translate-y-0.5 transition-all group shadow-sm select-none"
           >
-            <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-navy-100 dark:bg-navy-950">
+            <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900">
               <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[10px] font-mono text-navy-500 dark:text-navy-400">
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
                 <span className="text-nyala-600 dark:text-nyala-400 font-bold">{post.category}</span>
                 <div className="flex items-center gap-1">
                   <Clock weight="bold" className="w-3 h-3" />
@@ -87,7 +87,7 @@ export default function MobileBlogPage() {
                 {post.title}
               </h3>
 
-              <p className="text-xs text-navy-600 dark:text-navy-300 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                 {post.excerpt}
               </p>
             </div>

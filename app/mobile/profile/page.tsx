@@ -6,7 +6,6 @@ import {
   Sparkle, 
   GraduationCap, 
   IdentificationCard, 
-  Users, 
   Sun, 
   Moon, 
   Check, 
@@ -21,7 +20,8 @@ import {
   Heartbeat,
   Trophy,
   Flame,
-  Lightning
+  Lightning,
+  CheckSquare
 } from "@phosphor-icons/react";
 import MascotFlame, { MascotMood } from "@/components/MascotFlame";
 import DuolingoCard from "@/components/flutter/DuolingoCard";
@@ -30,6 +30,7 @@ import FlutterBottomSheet from "@/components/flutter/FlutterBottomSheet";
 import { useTheme } from "@/context/ThemeContext";
 import { useToast } from "@/context/ToastContext";
 import AdminHelpModal from "@/components/AdminHelpModal";
+import { calculateRealStreak, calculateRealXp, dispatchGamificationUpdate } from "@/lib/gamification";
 
 const PRODI_OPTIONS = [
   "S1 Teknik Informatika",
@@ -43,8 +44,6 @@ const PRODI_OPTIONS = [
   "S1 Ilmu Komunikasi",
   "Fakultas Lainnya",
 ];
-
-const GUGUS_OPTIONS = Array.from({ length: 20 }, (_, i) => `Gugus ${String(i + 1).padStart(2, "0")}`);
 
 const MOOD_CHOICES: { mood: MascotMood; label: string }[] = [
   { mood: "excited", label: "Semangat" },
@@ -61,14 +60,16 @@ export default function MobileProfilePage() {
   const [name, setName] = useState("Mahasiswa Baru UMKT");
   const [nim, setNim] = useState("2611102441001");
   const [prodi, setProdi] = useState("S1 Teknik Informatika");
-  const [gugus, setGugus] = useState("Gugus 04");
   const [mascotMood, setMascotMood] = useState<MascotMood>("excited");
   const [adminModalOpen, setAdminModalOpen] = useState(false);
   const [editSheetOpen, setEditSheetOpen] = useState(false);
   const [checklistPercent, setChecklistPercent] = useState(0);
-  const [healthScore, setHealthScore] = useState(85);
+  const [checklistCount, setChecklistCount] = useState(0);
+  const [streakDays, setStreakDays] = useState(1);
+  const [totalXp, setTotalXp] = useState(50);
+  const [levelTitle, setLevelTitle] = useState("Level 1 • MABA Pejuang");
 
-  useEffect(() => {
+  const loadData = () => {
     const saved = localStorage.getItem("nyala_user_profile_v1");
     if (saved) {
       try {
@@ -76,227 +77,217 @@ export default function MobileProfilePage() {
         if (parsed.name) setName(parsed.name);
         if (parsed.nim) setNim(parsed.nim);
         if (parsed.prodi) setProdi(parsed.prodi);
-        if (parsed.gugus) setGugus(parsed.gugus);
         if (parsed.mascotMood) setMascotMood(parsed.mascotMood);
       } catch (e) {
         console.error(e);
       }
+    } else {
+      const savedProdi = localStorage.getItem("nyala_user_prodi");
+      if (savedProdi) setProdi(savedProdi);
     }
 
-    const savedChecklist = localStorage.getItem("nyala_checklist");
-    if (savedChecklist) {
-      try {
-        const parsed = JSON.parse(savedChecklist);
-        const count = Object.values(parsed).filter(Boolean).length;
-        setChecklistPercent(Math.round((count / 11) * 100));
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    const streak = calculateRealStreak();
+    const xpData = calculateRealXp();
+    setStreakDays(streak);
+    setTotalXp(xpData.totalXp);
+    setLevelTitle(xpData.levelTitle);
+    setChecklistCount(xpData.checklistCount);
+    setChecklistPercent(Math.round((xpData.checklistCount / 11) * 100));
+  };
 
-    const savedHealth = localStorage.getItem("nyala_health_logs");
-    if (savedHealth) {
-      try {
-        const parsed = JSON.parse(savedHealth);
-        if (parsed.length > 0 && parsed[0].score) {
-          setHealthScore(parsed[0].score);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
+  useEffect(() => {
+    loadData();
+
+    const handleUpdate = () => {
+      loadData();
+    };
+
+    window.addEventListener("nyala-gamification-update", handleUpdate);
+    return () => window.removeEventListener("nyala-gamification-update", handleUpdate);
   }, []);
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    const profile = { name, nim, prodi, gugus, mascotMood };
+    const profile = { name, nim, prodi, mascotMood };
     localStorage.setItem("nyala_user_profile_v1", JSON.stringify(profile));
     localStorage.setItem("nyala_user_prodi", prodi);
     setEditSheetOpen(false);
-    toast.success("Profil mahasiswa berhasil diperbarui!", "Tersimpan");
+    dispatchGamificationUpdate();
+    toast.showToast("Profil mahasiswa berhasil diperbarui!", "success");
   };
 
   const handleResetData = () => {
     if (confirm("Apakah Anda yakin ingin mereset seluruh data lokal aplikasi Nyala?")) {
-      localStorage.clear();
-      toast.info("Seluruh data lokal telah dibersihkan", "Reset Berhasil");
-      setTimeout(() => window.location.reload(), 1000);
+      localStorage.removeItem("nyala_user_profile_v1");
+      localStorage.removeItem("nyala_checklist");
+      localStorage.removeItem("nyala_health_logs");
+      localStorage.removeItem("nyala_streak_record_v1");
+      localStorage.removeItem("nyala_maba_onboarded_v1");
+      dispatchGamificationUpdate();
+      window.location.reload();
     }
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       
-      {/* ── 1. GAMIFIED PROFILE AVATAR CARD ── */}
-      <DuolingoCard variant="surface" padding="md" className="text-center space-y-4">
-        <div className="flex justify-center">
-          <div className="relative">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-nyala-500/10 dark:bg-nyala-950/80 border-2 border-b-4 border-nyala-500/30 border-b-nyala-600/50 flex items-center justify-center p-2">
-              <MascotFlame size="sm" mood={mascotMood} className="w-14 h-14" />
+      {/* ── 1. USER PROFILE CARD WITH MASCOT ── */}
+      <DuolingoCard variant="surface" padding="lg" className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 dark:bg-amber-950/40 border-2 border-b-4 border-amber-300/40 dark:border-amber-800/40 flex items-center justify-center flex-shrink-0 shadow-sm">
+              <MascotFlame size="sm" mood={mascotMood} className="w-12 h-12" />
             </div>
-            <button
-              onClick={() => setEditSheetOpen(true)}
-              className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full duo-btn-primary flex items-center justify-center shadow-md cursor-pointer"
-              title="Edit Profil"
-            >
-              <PencilSimple weight="bold" className="w-4 h-4" />
-            </button>
+            <div>
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 uppercase border border-amber-200 dark:border-amber-900/50">
+                {levelTitle}
+              </span>
+              <h2 className="text-base font-black text-navy-950 dark:text-white mt-1 leading-snug">
+                {name}
+              </h2>
+              <p className="text-xs text-nyala-600 dark:text-nyala-400 font-bold">
+                {prodi}
+              </p>
+              <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                NIM: {nim}
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="space-y-1">
-          <h1 className="text-lg sm:text-xl font-black text-navy-950 dark:text-white">
-            {name}
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-            NIM: {nim} • {gugus}
-          </p>
-          <span className="inline-block px-3 py-1 rounded-xl bg-nyala-50 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400 font-black text-xs border border-nyala-200 dark:border-nyala-900">
-            {prodi}
-          </span>
+        {/* Real Gamification Badges */}
+        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="p-3 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/60 flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-sm flex-shrink-0">
+              <Flame weight="fill" className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold">Streak Harian</div>
+              <div className="text-xs font-black font-mono text-navy-950 dark:text-white">{streakDays} Hari Aktif</div>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-900/60 flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-sm flex-shrink-0">
+              <Lightning weight="fill" className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold">XP Terkumpul</div>
+              <div className="text-xs font-black font-mono text-navy-950 dark:text-white">{totalXp} XP</div>
+            </div>
+          </div>
         </div>
 
-        {/* Gamified Stats Summary */}
-        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-          <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center border border-slate-200/80 dark:border-slate-700">
-            <span className="text-[9px] text-slate-400 font-bold uppercase block">Streak</span>
-            <span className="text-sm font-black font-mono text-amber-500">🔥 3 Hari</span>
-          </div>
-          <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center border border-slate-200/80 dark:border-slate-700">
-            <span className="text-[9px] text-slate-400 font-bold uppercase block">Checklist</span>
-            <span className="text-sm font-black font-mono text-emerald-500">{checklistPercent}%</span>
-          </div>
-          <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center border border-slate-200/80 dark:border-slate-700">
-            <span className="text-[9px] text-slate-400 font-bold uppercase block">Kesiapan</span>
-            <span className="text-sm font-black font-mono text-nyala-500">{healthScore}%</span>
-          </div>
-        </div>
+        {/* Edit Profile Button */}
+        <button
+          onClick={() => setEditSheetOpen(true)}
+          className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-navy-950 dark:text-white font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"
+        >
+          <PencilSimple weight="bold" className="w-4 h-4 text-nyala-600" />
+          <span>Ubah Biodata Mahasiswa</span>
+        </button>
       </DuolingoCard>
 
-      {/* ── 2. DUOLINGO 3D SETTINGS TILES ── */}
+      {/* ── 2. PREFERENSI & PENGATURAN ── */}
       <div className="space-y-2.5">
-        <span className="text-xs font-black text-slate-400 uppercase tracking-wider block px-1">
-          Pengaturan & Bantuan
-        </span>
+        <h3 className="text-xs font-black text-navy-950 dark:text-white uppercase tracking-wider px-1">
+          Pengaturan Aplikasi
+        </h3>
 
-        {/* Edit Biodata Tile */}
-        <div
-          onClick={() => setEditSheetOpen(true)}
-          className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between gap-3 text-xs cursor-pointer active:border-b-2 active:translate-y-0.5 transition-all select-none"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-blue-50 dark:bg-blue-950/80 text-blue-500 flex items-center justify-center">
-              <IdentificationCard weight="bold" className="w-5 h-5" />
+        <div className="space-y-2">
+          {/* Theme Selector */}
+          <div className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between select-none">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-navy-950 dark:text-white">
+                {theme === "dark" ? <Moon weight="fill" className="w-5 h-5 text-amber-400" /> : <Sun weight="fill" className="w-5 h-5 text-amber-500" />}
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-navy-950 dark:text-white">Tema Antarmuka</h4>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">Mode {theme === "dark" ? "Gelap" : "Terang"}</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
-                Ubah Biodata & Gugus
-              </h3>
-              <p className="text-[10px] text-slate-500">Nama, NIM, Program Studi, & Maskot</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Theme Mode Toggle Tile */}
-        <div className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between gap-3 text-xs select-none">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-amber-50 dark:bg-amber-950/80 text-amber-500 flex items-center justify-center">
-              {theme === "dark" ? <Moon weight="bold" className="w-5 h-5" /> : <Sun weight="bold" className="w-5 h-5" />}
-            </div>
-            <div>
-              <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
-                Tema Tampilan
-              </h3>
-              <p className="text-[10px] text-slate-500">
-                Mode saat ini: {theme === "dark" ? "Mode Gelap (Dark)" : "Mode Terang (Light)"}
-              </p>
-            </div>
+            <button
+              onClick={() => setThemeMode(theme === "dark" ? "light" : "dark")}
+              className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-navy-950 dark:text-white active:scale-95 transition-transform"
+            >
+              Ganti ke {theme === "dark" ? "Light" : "Dark"}
+            </button>
           </div>
 
+          {/* Contact Admin */}
           <button
-            onClick={() => setThemeMode(theme === "dark" ? "light" : "dark")}
-            className="px-3 py-1.5 rounded-xl duo-btn-surface text-xs font-bold"
+            onClick={() => setAdminModalOpen(true)}
+            className="w-full p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between select-none active:border-b-2 active:translate-y-0.5 transition-all text-left"
           >
-            Ganti
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <Headset weight="bold" className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-navy-950 dark:text-white">Bantuan Admin Kampus</h4>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">WhatsApp Helpdesk Gedung C</p>
+              </div>
+            </div>
+            <ArrowSquareOut weight="bold" className="w-4 h-4 text-slate-400" />
           </button>
-        </div>
 
-        {/* Admin Contact Tile */}
-        <div
-          onClick={() => setAdminModalOpen(true)}
-          className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between gap-3 text-xs cursor-pointer active:border-b-2 active:translate-y-0.5 transition-all select-none"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-500 flex items-center justify-center">
-              <Headset weight="bold" className="w-5 h-5" />
+          {/* Reset Data */}
+          <button
+            onClick={handleResetData}
+            className="w-full p-4 rounded-2xl bg-rose-50/60 dark:bg-rose-950/20 border-2 border-rose-200 dark:border-rose-900 border-b-4 border-b-rose-300 dark:border-b-rose-950 flex items-center justify-between select-none active:border-b-2 active:translate-y-0.5 transition-all text-left"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                <Trash weight="bold" className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-rose-700 dark:text-rose-300">Reset Data Aplikasi</h4>
+                <p className="text-[10px] text-rose-500/80">Hapus cache checklist & profil lokal</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
-                Kontak Admin Resmi Gedung C
-              </h3>
-              <p className="text-[10px] text-slate-500">Biro Kemahasiswaan & Helpdesk SIKAD UMKT</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Reset App Data Tile */}
-        <div
-          onClick={handleResetData}
-          className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-rose-200 dark:border-rose-900 border-b-4 border-b-rose-300 dark:border-b-rose-950 flex items-center justify-between gap-3 text-xs cursor-pointer active:border-b-2 active:translate-y-0.5 transition-all select-none"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-rose-50 dark:bg-rose-950/80 text-rose-500 flex items-center justify-center">
-              <Trash weight="bold" className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="font-black text-rose-600 dark:text-rose-400 text-xs sm:text-sm">
-                Reset Data Lokal
-              </h3>
-              <p className="text-[10px] text-slate-500">Bersihkan checklist, mood history, dan profil</p>
-            </div>
-          </div>
+          </button>
         </div>
       </div>
 
-      {/* ── 3. BOTTOM SHEET EDIT PROFIL ── */}
+      {/* ── 3. EDIT PROFILE BOTTOM SHEET MODAL ── */}
       <FlutterBottomSheet
         isOpen={editSheetOpen}
         onClose={() => setEditSheetOpen(false)}
-        title="Edit Profil Mahasiswa Baru"
-        subtitle="Data tersimpan aman di perangkat lokal Anda"
+        title="Ubah Biodata Mahasiswa"
       >
-        <form onSubmit={handleSaveProfile} className="space-y-4 text-xs sm:text-sm">
-          {/* Name Input */}
+        <form onSubmit={handleSaveProfile} className="space-y-4 pb-4">
+          
+          {/* Name Field */}
           <div className="space-y-1">
-            <label className="font-bold text-navy-950 dark:text-white">Nama Lengkap:</label>
+            <label className="text-xs font-bold text-navy-950 dark:text-white">Nama Lengkap:</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 text-navy-950 dark:text-white outline-none focus:border-nyala-500"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-xs text-navy-950 dark:text-white outline-none focus:border-nyala-500"
               required
             />
           </div>
 
-          {/* NIM Input */}
+          {/* NIM Field */}
           <div className="space-y-1">
-            <label className="font-bold text-navy-950 dark:text-white">Nomor Induk Mahasiswa (NIM):</label>
+            <label className="text-xs font-bold text-navy-950 dark:text-white">NIM / No Pendaftaran:</label>
             <input
               type="text"
               value={nim}
               onChange={(e) => setNim(e.target.value)}
-              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 text-navy-950 dark:text-white outline-none focus:border-nyala-500 font-mono"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-xs text-navy-950 dark:text-white font-mono outline-none focus:border-nyala-500"
               required
             />
           </div>
 
-          {/* Program Studi Selector */}
+          {/* Prodi Selector */}
           <div className="space-y-1">
-            <label className="font-bold text-navy-950 dark:text-white">Program Studi:</label>
+            <label className="text-xs font-bold text-navy-950 dark:text-white">Program Studi:</label>
             <select
               value={prodi}
               onChange={(e) => setProdi(e.target.value)}
-              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 text-navy-950 dark:text-white outline-none focus:border-nyala-500"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-xs text-navy-950 dark:text-white outline-none focus:border-nyala-500 cursor-pointer"
             >
               {PRODI_OPTIONS.map((p) => (
                 <option key={p} value={p}>{p}</option>
@@ -304,49 +295,33 @@ export default function MobileProfilePage() {
             </select>
           </div>
 
-          {/* Gugus Selector */}
+          {/* Mascot Mood Selector */}
           <div className="space-y-1">
-            <label className="font-bold text-navy-950 dark:text-white">Gugus MASTA:</label>
-            <select
-              value={gugus}
-              onChange={(e) => setGugus(e.target.value)}
-              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 text-navy-950 dark:text-white outline-none focus:border-nyala-500"
-            >
-              {GUGUS_OPTIONS.map((g) => (
-                <option key={g} value={g}>{g}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Mascot Mood Picker */}
-          <div className="space-y-2">
-            <label className="font-bold text-navy-950 dark:text-white">Ekspresi Maskot Favorit:</label>
-            <div className="grid grid-cols-5 gap-2">
+            <label className="text-xs font-bold text-navy-950 dark:text-white">Ekspresi Maskot Teman:</label>
+            <div className="grid grid-cols-5 gap-1.5 pt-1">
               {MOOD_CHOICES.map((m) => (
                 <button
-                  key={m.mood}
                   type="button"
+                  key={m.mood}
                   onClick={() => setMascotMood(m.mood)}
-                  className={`p-2 rounded-xl border-2 border-b-4 flex flex-col items-center gap-1 ${
+                  className={`p-2 rounded-xl border-2 flex flex-col items-center gap-1 transition-all ${
                     mascotMood === m.mood
-                      ? "bg-nyala-500/10 border-nyala-500 border-b-nyala-700 text-nyala-500 font-bold"
-                      : "border-slate-200 dark:border-slate-800 border-b-slate-300 dark:border-b-slate-900 text-slate-400"
+                      ? "bg-nyala-500/10 border-nyala-500 text-nyala-600 font-bold"
+                      : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500"
                   }`}
                 >
-                  <MascotFlame size="sm" mood={m.mood} className="w-5 h-5" />
-                  <span className="text-[9px]">{m.label}</span>
+                  <MascotFlame size="sm" mood={m.mood} className="w-7 h-7" />
+                  <span className="text-[9px] truncate">{m.label}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full py-4 rounded-2xl duo-btn-primary font-black shadow-md"
-          >
+          {/* Save Button */}
+          <DuolingoButton type="submit" variant="primary" fullWidth size="md">
             Simpan Perubahan
-          </button>
+          </DuolingoButton>
+
         </form>
       </FlutterBottomSheet>
 

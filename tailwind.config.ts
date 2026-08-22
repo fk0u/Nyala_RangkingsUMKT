@@ -11,16 +11,16 @@ const config: Config = {
     extend: {
       colors: {
         nyala: {
-          50: "#FFF7ED",
-          100: "#FFE8DE",
-          200: "#FFCBB5",
-          300: "#FFA885",
-          400: "#FF7D47",
-          500: "#FF5A1F", // Primary Fire Orange
-          600: "#E04500", // Deep Ember (hover/active)
-          700: "#B83400",
-          800: "#912900",
-          900: "#702000",
+          50: "#FFF8F5",
+          100: "#FEECE5",
+          200: "#FED7C7",
+          300: "#FDB69A",
+          400: "#F78A5F",
+          500: "#EA580C", // Warm Terracotta / Soft Ember (Nyaman di mata)
+          600: "#C2410C", // Deep Warm Ember (hover/active)
+          700: "#9A3412",
+          800: "#7C2D12",
+          900: "#5A1E08",
         },
         navy: {
           50: "#F8FAFC",

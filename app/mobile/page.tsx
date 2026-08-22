@@ -13,19 +13,22 @@ import {
   Lightning,
   Trophy,
   CheckCircle,
-  Star,
-  ChatCircleDots
+  Star
 } from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
 import CountdownTimer from "@/components/CountdownTimer";
 import ProgressBar from "@/components/ProgressBar";
-import DuolingoCard from "@/components/flutter/DuolingoCard";
+import { calculateRealStreak, calculateRealXp, dispatchGamificationUpdate } from "@/lib/gamification";
 
 export default function MobileDashboardPage() {
   const [userName, setUserName] = useState("Mahasiswa Baru");
   const [userProdi, setUserProdi] = useState("S1 Teknik Informatika");
   const [checklistPercent, setChecklistPercent] = useState(0);
-  const [healthScore, setHealthScore] = useState(85);
+  const [checklistCount, setChecklistCount] = useState(0);
+  const [totalXp, setTotalXp] = useState(50);
+  const [levelTitle, setLevelTitle] = useState("Level 1 • MABA Pejuang");
+  const [streakDays, setStreakDays] = useState(1);
+
   const [dailyQuests, setDailyQuests] = useState([
     { id: "q1", title: "Cek Jadwal Gelombang IMM", xp: 30, completed: true, href: "/mobile/jadwal" },
     { id: "q2", title: "Lengkapi 3 Berkas Checklist", xp: 50, completed: false, href: "/mobile/checklist" },
@@ -33,7 +36,8 @@ export default function MobileDashboardPage() {
     { id: "q4", title: "Tanya AI Seputar SIKAD & KRS", xp: 20, completed: true, href: "/mobile/companion" },
   ]);
 
-  useEffect(() => {
+  const loadData = () => {
+    // Profile
     const savedProfile = localStorage.getItem("nyala_user_profile_v1");
     if (savedProfile) {
       try {
@@ -43,31 +47,31 @@ export default function MobileDashboardPage() {
       } catch (e) {
         console.error(e);
       }
+    } else {
+      const savedProdi = localStorage.getItem("nyala_user_prodi");
+      if (savedProdi) setUserProdi(savedProdi);
     }
 
-    const savedChecklist = localStorage.getItem("nyala_checklist");
-    if (savedChecklist) {
-      try {
-        const parsed = JSON.parse(savedChecklist);
-        const count = Object.values(parsed).filter(Boolean).length;
-        const pct = Math.round((count / 11) * 100);
-        setChecklistPercent(pct);
-        if (count >= 3) {
-          setDailyQuests((prev) =>
-            prev.map((q) => (q.id === "q2" ? { ...q, completed: true } : q))
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
+    // Real Gamification State
+    const streak = calculateRealStreak();
+    const xpData = calculateRealXp();
+    setStreakDays(streak);
+    setTotalXp(xpData.totalXp);
+    setLevelTitle(xpData.levelTitle);
+    setChecklistCount(xpData.checklistCount);
+    setChecklistPercent(Math.round((xpData.checklistCount / 11) * 100));
+
+    if (xpData.checklistCount >= 3) {
+      setDailyQuests((prev) =>
+        prev.map((q) => (q.id === "q2" ? { ...q, completed: true } : q))
+      );
     }
 
     const savedHealth = localStorage.getItem("nyala_health_logs");
     if (savedHealth) {
       try {
         const parsed = JSON.parse(savedHealth);
-        if (parsed.length > 0 && parsed[0].score) {
-          setHealthScore(parsed[0].score);
+        if (parsed.length > 0) {
           setDailyQuests((prev) =>
             prev.map((q) => (q.id === "q3" ? { ...q, completed: true } : q))
           );
@@ -76,6 +80,21 @@ export default function MobileDashboardPage() {
         console.error(e);
       }
     }
+  };
+
+  useEffect(() => {
+    loadData();
+
+    const handleUpdate = () => {
+      loadData();
+    };
+
+    window.addEventListener("nyala-gamification-update", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("nyala-gamification-update", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
   }, []);
 
   const completedQuestsCount = dailyQuests.filter((q) => q.completed).length;
@@ -91,22 +110,22 @@ export default function MobileDashboardPage() {
         <div className="flex items-center gap-3">
           
           {/* Mascot Flame Character in Action */}
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-nyala-500/20 via-amber-500/15 to-transparent border-2 border-b-4 border-nyala-500/30 border-b-nyala-600/40 flex items-center justify-center p-1 flex-shrink-0 shadow-sm">
-            <MascotFlame size="sm" mood="cheering" className="w-12 h-12 animate-bounce" />
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 dark:bg-amber-950/40 border-2 border-b-4 border-amber-300/40 dark:border-amber-800/40 border-b-amber-400/50 flex items-center justify-center p-1 flex-shrink-0 shadow-sm">
+            <MascotFlame size="sm" mood="cheering" className="w-12 h-12" />
           </div>
 
           {/* Duolingo Character Speech Bubble */}
           <div className="duo-speech-bubble p-3 flex-1">
             <div className="flex items-center justify-between gap-1">
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 uppercase">
-                Level 1 • MABA Pejuang
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-amber-100/80 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 uppercase border border-amber-200 dark:border-amber-900/50">
+                {levelTitle}
               </span>
-              <span className="text-[10px] font-black font-mono text-nyala-500">
-                {completedQuestsCount}/{dailyQuests.length} Selesai
+              <span className="text-[10px] font-black font-mono text-nyala-600 dark:text-nyala-400">
+                {totalXp} XP
               </span>
             </div>
             <h1 className="text-xs sm:text-sm font-black text-navy-950 dark:text-white mt-1 leading-snug">
-              Semangat, {userName}! 🔥
+              Semangat, {userName}!
             </h1>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium line-clamp-1">
               {userProdi}
@@ -114,11 +133,11 @@ export default function MobileDashboardPage() {
           </div>
         </div>
 
-        {/* Level XP Progress Bar (Single Clean Label, No Duplicate 50%) */}
+        {/* Level XP Progress Bar */}
         <div className="space-y-1 pt-1 border-t border-slate-100 dark:border-slate-800/80">
           <div className="flex items-center justify-between text-[10px] font-black text-slate-400">
-            <span>Progress Menuju Level 2</span>
-            <span className="font-mono text-nyala-500 font-black">{questProgressPercent}%</span>
+            <span>Progress Misi Harian ({completedQuestsCount}/{dailyQuests.length})</span>
+            <span className="font-mono text-nyala-600 dark:text-nyala-400 font-black">{questProgressPercent}%</span>
           </div>
           <ProgressBar
             progress={questProgressPercent}
@@ -150,7 +169,7 @@ export default function MobileDashboardPage() {
               href={quest.href}
               className={`p-3.5 rounded-2xl border-2 border-b-4 flex items-center justify-between gap-3 select-none active:border-b-2 active:translate-y-0.5 transition-all shadow-sm ${
                 quest.completed
-                  ? "bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-900 border-b-emerald-400 dark:border-b-emerald-950"
+                  ? "bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-900 border-b-emerald-400 dark:border-b-emerald-950"
                   : "bg-white dark:bg-[#0F172A] border-slate-200 dark:border-slate-800 border-b-slate-300 dark:border-b-slate-900"
               }`}
             >
@@ -213,7 +232,7 @@ export default function MobileDashboardPage() {
             href="/mobile/jadwal"
             className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-5 border-b-slate-300 dark:border-b-slate-900 active:border-b-2 active:translate-y-0.5 transition-all flex flex-col justify-between h-32 select-none shadow-sm"
           >
-            <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center border border-amber-500/20">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-400 flex items-center justify-center border border-amber-500/20">
               <CalendarCheck weight="bold" className="w-5 h-5" />
             </div>
             <div>
@@ -227,7 +246,7 @@ export default function MobileDashboardPage() {
             href="/mobile/panduan-sikad"
             className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-5 border-b-slate-300 dark:border-b-slate-900 active:border-b-2 active:translate-y-0.5 transition-all flex flex-col justify-between h-32 select-none shadow-sm"
           >
-            <div className="w-10 h-10 rounded-xl bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center border border-sky-500/20">
+            <div className="w-10 h-10 rounded-xl bg-sky-500/15 text-sky-700 dark:text-sky-400 flex items-center justify-center border border-sky-500/20">
               <Laptop weight="bold" className="w-5 h-5" />
             </div>
             <div>
@@ -241,7 +260,7 @@ export default function MobileDashboardPage() {
             href="/mobile/panduan-ti"
             className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-5 border-b-slate-300 dark:border-b-slate-900 active:border-b-2 active:translate-y-0.5 transition-all flex flex-col justify-between h-32 select-none shadow-sm"
           >
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/20">
               <Code weight="bold" className="w-5 h-5" />
             </div>
             <div>
@@ -255,12 +274,12 @@ export default function MobileDashboardPage() {
             href="/mobile/checklist"
             className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-5 border-b-slate-300 dark:border-b-slate-900 active:border-b-2 active:translate-y-0.5 transition-all flex flex-col justify-between h-32 select-none shadow-sm"
           >
-            <div className="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center border border-purple-500/20">
+            <div className="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-700 dark:text-purple-400 flex items-center justify-center border border-purple-500/20">
               <CheckSquare weight="bold" className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-xs font-black text-navy-950 dark:text-white">Checklist</h3>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{checklistPercent}% Berkas Siap</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{checklistCount}/11 Berkas Siap</p>
             </div>
           </Link>
 
@@ -268,30 +287,30 @@ export default function MobileDashboardPage() {
       </div>
 
       {/* ── 5. AI COMPANION 3D CTA BANNER ── */}
-      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-nyala-500 via-nyala-600 to-nyala-700 border-2 border-nyala-400 border-b-6 border-b-nyala-900 text-white space-y-3 shadow-lg shadow-nyala-500/25">
+      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-[#C2410C] via-[#9A3412] to-[#0F172A] border-2 border-amber-600/40 border-b-6 border-b-[#070B19] text-white space-y-3 shadow-lg shadow-black/10">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white/20 text-white uppercase inline-block border border-white/20">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white/15 text-white uppercase inline-block border border-white/20">
               AI Companion 24/7
             </span>
             <h3 className="text-base font-black text-white">
               Punya Pertanyaan Seputar Kampus?
             </h3>
-            <p className="text-xs text-white/90 leading-snug">
-              Tanya jadwal gugus, dresscode, hingga cara bayar SPP ke Nyala AI.
+            <p className="text-xs text-slate-200 leading-snug">
+              Tanya jadwal MASTA, dresscode, hingga cara bayar SPP ke Nyala AI.
             </p>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 shadow-inner">
-            <Sparkle weight="fill" className="w-6 h-6 text-white animate-spin" />
+          <div className="w-11 h-11 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center flex-shrink-0 shadow-inner">
+            <Sparkle weight="fill" className="w-5 h-5 text-amber-300 animate-spin" />
           </div>
         </div>
 
         <Link
           href="/mobile/companion"
-          className="w-full py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-nyala-600 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md border-b-4 border-slate-300 active:border-b-2 active:translate-y-0.5 transition-all block text-center"
+          className="w-full py-3.5 rounded-2xl bg-white hover:bg-slate-100 text-navy-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md border-b-4 border-slate-300 active:border-b-2 active:translate-y-0.5 transition-all block text-center"
         >
           <span>Mulai Chat dengan Nyala AI</span>
-          <ArrowRight weight="bold" className="w-4 h-4" />
+          <ArrowRight weight="bold" className="w-4 h-4 text-nyala-600" />
         </Link>
       </div>
 

@@ -322,18 +322,18 @@ Seluruh UKM akan membuka pendaftaran anggota baru pada **Sesi UKM Expo di Tahap 
     coverImage: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=1200&q=80",
     tags: ["MASTA 2026", "Zoom Meeting", "Dresscode", "Tata Tertib"],
     content: `
-Agar partisipasi kalian di Masa Ta’aruf (MASTA) UMKT 2026 berjalan mulus tanpa teguran dari panitia pendamping gugus, ikuti panduan teknis wajib berikut ini.
+Agar partisipasi kalian di Masa Ta’aruf (MASTA) UMKT 2026 berjalan mulus tanpa kendala dari panitia pelaksana, ikuti panduan teknis wajib berikut ini.
 
 ### 1. Format Penamaan Akun Zoom Meeting
 Seluruh peserta wajib menggunakan format nama baku sebelum masuk ke ruang rapat Zoom:
 \`\`\`text
-[Nomor Gugus]_[Nama Lengkap]
-Contoh: Gugus 04_Muhammad Rizky Pratama
+[Prodi]_[Nama Lengkap]
+Contoh: TI_Muhammad Rizky Pratama
 \`\`\`
 *Catatan: Akun yang tidak menggunakan format resmi akan dipindahkan ke Waiting Room oleh host panitia.*
 
 ### 2. Ketentuan Pakaian (Dresscode) Resmi
-- **Pria:** Kemeja putih polos lengan panjang berkerah, celana kain warna hitam formal (bukan jeans/chino ketat), peci hitam (sesuai arahan gugus), dan sepatu formal.
+- **Pria:** Kemeja putih polos lengan panjang berkerah, celana kain warna hitam formal (bukan jeans/chino ketat), peci hitam, dan sepatu formal.
 - **Wanita:** Kemeja/tunik putih polos panjang tidak menerawang, rok panjang kain warna hitam formal (bukan plisket tipis), jilbab warna hitam/putih rapi, dan sepatu formal.
 
 ### 3. Ketentuan Kamera (On-Cam) & Virtual Background
@@ -342,10 +342,10 @@ Contoh: Gugus 04_Muhammad Rizky Pratama
 - Pastikan mikrofon dalam keadaan **Mute** kecuali dipersilakan bertanya oleh moderator.
 
 ### 4. Layanan Bantuan Darurat Saat Sesi Berlangsung
-Jika mengalami mati listrik atau kendala teknis mendadak, segera hubungi pendamping gugus kalian atau kirim pesan ke WhatsApp Biro Kemahasiswaan di \`0822-5087-8843\`.
+Jika mengalami mati listrik atau kendala teknis mendadak, segera hubungi panitia helpdesk atau kirim pesan ke WhatsApp Biro Kemahasiswaan di \`0822-5087-8843\`.
 `,
     keyTakeaways: [
-      "Format nama Zoom wajib: [Nomor Gugus]_[Nama Lengkap].",
+      "Format nama Zoom wajib: [Prodi]_[Nama Lengkap].",
       "Pakaian resmi: Kemeja putih lengan panjang dan bawahan kain hitam formal.",
       "Kamera wajib On-Cam dan mic wajib Mute selama pemaparan materi."
     ]
@@ -1035,7 +1035,7 @@ export const MASTA_STAGES: MastaStage[] = [
     steps: [
       "Senin 24 Agustus (08.00 - 17.00 WITA): Pembukaan dan materi universitas hari 1",
       "Rabu 26 Agustus (08.00 - 17.00 WITA): Materi universitas hari 2 dan kemahasiswaan",
-      "Format nama akun Zoom: [Nomor Gugus]_[Nama Lengkap]",
+      "Format nama akun Zoom: [Prodi]_[Nama Lengkap]",
       "Wajib menyalakan kamera (On-Cam) dan mengisi presensi resmi"
     ],
     tips: "Pastikan kuota cadangan minimal 5GB dan login 15 menit sebelum acara dimulai."
@@ -1093,7 +1093,7 @@ export const INITIAL_CHECKLIST: ChecklistItem[] = [
     id: "chk-3",
     category: "Perangkat & Jaringan",
     title: "Laptop / Smartphone & Zoom Meeting Terbaru",
-    description: "Wajib untuk sesi daring 24 & 26 Agustus 2026 (08.00 - 17.00 WITA). Format nama: [Nomor Gugus]_[Nama Lengkap].",
+    description: "Wajib untuk sesi daring 24 & 26 Agustus 2026 (08.00 - 17.00 WITA). Format nama: [Prodi]_[Nama Lengkap].",
     required: true,
   },
   {

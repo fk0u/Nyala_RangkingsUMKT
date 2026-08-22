@@ -19,28 +19,17 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check user preference cookie (if user explicitly chooses desktop or mobile)
-  const preferViewCookie = request.cookies.get("nyala_view_preference")?.value;
   const userAgent = request.headers.get("user-agent") || "";
   const isMobileOrTablet = MOBILE_OR_TABLET_REGEX.test(userAgent);
 
-  // If user on mobile/tablet and hasn't explicitly chosen desktop
-  if (isMobileOrTablet && preferViewCookie !== "desktop") {
-    // If not already on a /mobile path, redirect to /mobile/$route
+  // STRICT RULE: If user is on a mobile or tablet device, lock strictly to /mobile paths
+  if (isMobileOrTablet) {
     if (!pathname.startsWith("/mobile")) {
       const mobilePath = pathname === "/" ? "/mobile" : `/mobile${pathname}`;
       const url = request.nextUrl.clone();
       url.pathname = mobilePath;
       return NextResponse.redirect(url);
     }
-  }
-
-  // If user on desktop and navigates to root, keep on desktop unless they explicitly visit /mobile
-  if (!isMobileOrTablet && preferViewCookie === "desktop" && pathname.startsWith("/mobile")) {
-    const desktopPath = pathname.replace(/^\/mobile/, "") || "/";
-    const url = request.nextUrl.clone();
-    url.pathname = desktopPath;
-    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();

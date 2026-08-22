@@ -596,7 +596,7 @@ export default function JadwalPage() {
                   Wajib diikuti oleh seluruh mahasiswa baru 2026 dan mahasiswa yang belum mengikuti Masta Maba tahun sebelumnya.
                 </p>
                 <div className="pt-2 border-t border-white/10 text-[11px] text-amber-300 font-mono">
-                  Format Penamaan Akun: [Nomor Gugus]_[Nama Lengkap]
+                  Format Penamaan Akun: [Prodi]_[Nama Lengkap]
                 </div>
               </div>
             </div>

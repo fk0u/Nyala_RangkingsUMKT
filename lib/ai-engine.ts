@@ -45,7 +45,7 @@ AGENDA RESMI & RANGKAIAN MASTA UMKT 2026 (BERDASARKAN EDARAN RESMI 12 SHAFAR 144
    - Sesi Malam (17.00 - 22.00 WITA): PUNCAK MILAD DAN PENUTUPAN MASTA
 
 KETENTUAN DRESSCODE & TATA TERTIB RESMI:
-- Kegiatan Daring (24 & 26 Agustus): Zoom Meeting, On-Cam, format nama: [Nomor Gugus]_[Nama Lengkap].
+- Kegiatan Daring (24 & 26 Agustus): Zoom Meeting, On-Cam, format nama: [Prodi]_[Nama Lengkap].
 - Kegiatan Luring (28 Agustus):
   * Sesi Pagi (UKM Expo): Kaos UMKT (bila tidak ada, kaos olahraga), celana training, sepatu olahraga. Mahasiswi perempuan mengenakan jilbab hitam.
   * Sesi Malam (Puncak Milad):
@@ -382,8 +382,8 @@ Semua pengurusan administrasi beasiswa berpusat di **Biro Kemahasiswaan (Gedung 
 
 ### Format Nama Zoom Wajib:
 \`\`\`text
-[Nomor Gugus]_[Nama Lengkap]
-Contoh: Gugus 04_Muhammad Rizky Pratama
+[Prodi]_[Nama Lengkap]
+Contoh: TI_Muhammad Rizky Pratama
 \`\`\`
 
 ### Aturan Pakaian (Dresscode):
