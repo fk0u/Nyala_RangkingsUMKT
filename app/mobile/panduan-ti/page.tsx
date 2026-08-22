@@ -8,49 +8,72 @@ import {
   MagnifyingGlass, 
   ArrowSquareOut,
   Sparkle,
-  Code
+  Code,
+  GraduationCap,
+  BookOpen,
+  User,
+  CheckCircle
 } from "@phosphor-icons/react";
+import FlutterCard from "@/components/flutter/FlutterCard";
+import FlutterSegmentedTabs from "@/components/flutter/FlutterSegmentedTabs";
+import FlutterListTile from "@/components/flutter/FlutterListTile";
+import FlutterChip from "@/components/flutter/FlutterChip";
 import { PRODI_TI_DATA } from "@/lib/masta-data";
 
 export default function MobilePanduanTiPage() {
-  const [selectedSemester, setSelectedSemester] = useState(1);
+  const [selectedSemester, setSelectedSemester] = useState("1");
   const [searchLecturer, setSearchLecturer] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"Semua" | "Aktif" | "Tugas Belajar (S3)">("Semua");
 
-  const semesterCourses = PRODI_TI_DATA.courses.filter((c) => c.semester === selectedSemester);
+  const semesterNum = parseInt(selectedSemester, 10);
+  const semesterCourses = PRODI_TI_DATA.courses.filter((c) => c.semester === semesterNum);
   const totalSks = semesterCourses.reduce((acc, c) => acc + c.sks, 0);
 
   const filteredLecturers = PRODI_TI_DATA.lecturers.filter((lec) => {
-    return lec.name.toLowerCase().includes(searchLecturer.toLowerCase()) ||
+    const matchStatus = statusFilter === "Semua" || lec.status === statusFilter;
+    const matchSearch = lec.name.toLowerCase().includes(searchLecturer.toLowerCase()) ||
       lec.expertise.toLowerCase().includes(searchLecturer.toLowerCase());
+    return matchStatus && matchSearch;
   });
 
+  const SEMESTER_TABS = [
+    { id: "1", label: "Semester 1" },
+    { id: "2", label: "Semester 2" },
+    { id: "3", label: "Semester 3" },
+    { id: "4", label: "Semester 4" },
+  ];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       
-      {/* Header */}
+      {/* ── 1. HEADER ── */}
       <div className="space-y-1">
         <span className="text-[10px] font-mono font-bold text-nyala-600 dark:text-nyala-400 uppercase tracking-wider block">
-          Program Studi S1 Teknologi Informasi
+          Program Studi S1 Teknologi Informasi • FST UMKT
         </span>
-        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white leading-tight">
-          Kurikulum & Karir Sarjana Komputer
+        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white tracking-tight">
+          Panduan Akademik S.Kom
         </h1>
-        <p className="text-xs text-navy-600 dark:text-navy-300">
-          Panduan paket 20 SKS Semester 1, standar nilai kelulusan, dan profil dosen tetap.
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+          Kurikulum semester 1-4, standar kelulusan, dan direktori dosen tetap.
         </p>
       </div>
 
-      {/* Slogan Pill */}
-      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-red-500/10 to-amber-500/10 dark:from-red-500/15 dark:to-amber-500/15 border border-red-500/25 flex items-center gap-3 shadow-sm">
-        <Terminal weight="bold" className="w-5 h-5 text-red-600 dark:text-nyala-400 flex-shrink-0" />
+      {/* ── 2. SLOGAN BANNER (HIMATIF) ── */}
+      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-red-500/10 via-nyala-500/10 to-amber-500/10 border border-nyala-500/30 flex items-center gap-3">
+        <Terminal weight="bold" className="w-5 h-5 text-nyala-500 flex-shrink-0" />
         <div>
-          <span className="text-[9px] uppercase tracking-wider text-navy-500 dark:text-navy-400 font-bold block">Semboyan Mahasiswa:</span>
-          <span className="text-xs font-black text-red-600 dark:text-nyala-400">HIDUP TEKNIK! NO SKILL NO TRUST!</span>
+          <span className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold block">
+            Semboyan Mahasiswa TI:
+          </span>
+          <span className="text-xs font-black text-nyala-600 dark:text-nyala-400 tracking-wide">
+            HIDUP TEKNIK! NO SKILL NO TRUST!
+          </span>
         </div>
       </div>
 
-      {/* ── VIDEO PLAYER CARD ── */}
-      <div className="rounded-3xl overflow-hidden bg-black border border-navy-200 dark:border-navy-800 shadow-md space-y-2">
+      {/* ── 3. VIDEO ORIENTASI MAHASISWA ── */}
+      <FlutterCard variant="elevated" padding="none" className="overflow-hidden space-y-0">
         <video 
           controls 
           playsInline
@@ -60,98 +83,122 @@ export default function MobilePanduanTiPage() {
         >
           <source src="https://file.garden/aoXG-IHDqFuT7RDT/Mindset_MABA_Informatika.mp4" type="video/mp4" />
         </video>
-        <div className="p-3 bg-white dark:bg-[#0E1635] flex items-center justify-between text-xs border-t border-navy-100 dark:border-navy-800">
+        <div className="p-3.5 flex items-center justify-between text-xs bg-white dark:bg-[#0F172A]">
           <div>
-            <h4 className="font-bold text-navy-950 dark:text-white text-xs">Video Mindset MABA TI</h4>
-            <p className="text-[10px] text-navy-500 dark:text-navy-400">Logika algoritma & etos praktikum</p>
+            <h2 className="font-bold text-navy-950 dark:text-white text-xs">
+              Video Mindset MABA TI
+            </h2>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">
+              Logika algoritma & etos praktikum kampus
+            </p>
           </div>
           <a
             href="https://file.garden/aoXG-IHDqFuT7RDT/Mindset_MABA_Informatika.mp4"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-1.5 rounded-lg bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-navy-600 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-nyala-500 active:scale-95"
+            title="Buka Video"
           >
-            <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
+            <ArrowSquareOut weight="bold" className="w-4 h-4" />
           </a>
         </div>
-      </div>
+      </FlutterCard>
 
-      {/* ── KURIKULUM SEMESTER 1 - 4 ── */}
+      {/* ── 4. KURIKULUM SEMESTER TABS (Hick's Law 1-Tap Switch) ── */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-black text-navy-950 dark:text-white uppercase tracking-wider">
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-sm sm:text-base font-bold text-navy-950 dark:text-white">
             Mata Kuliah TI 2026
-          </h3>
-          <span className="text-xs font-mono font-bold text-nyala-600 dark:text-nyala-400">{totalSks} SKS</span>
+          </h2>
+          <span className="text-xs font-mono font-bold text-nyala-500 bg-nyala-50 dark:bg-nyala-950/80 px-2 py-0.5 rounded-md">
+            Total {totalSks} SKS
+          </span>
         </div>
 
-        {/* Semester Horizontal Tabs */}
-        <div className="grid grid-cols-4 gap-1.5 p-1 rounded-2xl bg-navy-100/80 dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800">
-          {[1, 2, 3, 4].map((sem) => (
-            <button
-              key={sem}
-              onClick={() => setSelectedSemester(sem)}
-              className={`py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                selectedSemester === sem
-                  ? "bg-nyala-600 text-white shadow-sm"
-                  : "text-navy-600 dark:text-navy-400 hover:text-navy-950 dark:hover:text-white"
-              }`}
-            >
-              Sem {sem}
-            </button>
-          ))}
-        </div>
+        <FlutterSegmentedTabs
+          tabs={SEMESTER_TABS}
+          activeTab={selectedSemester}
+          onChange={setSelectedSemester}
+        />
 
-        {/* Course List */}
+        {/* Course List Tiles */}
         <div className="space-y-2">
           {semesterCourses.map((c, i) => (
-            <div key={i} className="p-3.5 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 flex items-center justify-between gap-3 text-xs shadow-sm">
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-mono font-bold text-nyala-600 dark:text-nyala-400">{c.code}</span>
-                  <span className="text-[10px] text-navy-500 dark:text-navy-400">• {c.category}</span>
+            <FlutterListTile
+              key={i}
+              dense
+              leading={
+                <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono font-bold text-xs flex items-center justify-center">
+                  {i + 1}
                 </div>
-                <h4 className="font-bold text-navy-950 dark:text-white text-xs">{c.name}</h4>
-              </div>
-              <span className="font-mono font-bold text-xs px-2.5 py-1 rounded-lg bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-navy-700 dark:text-navy-200">
-                {c.sks} SKS
-              </span>
-            </div>
+              }
+              title={c.name}
+              subtitle={
+                <span className="flex items-center gap-1.5 font-mono text-[11px] text-slate-400">
+                  <span className="text-nyala-500 font-bold">{c.code}</span> • <span>{c.category}</span>
+                </span>
+              }
+              trailing={
+                <span className="text-xs font-mono font-bold px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-navy-950 dark:text-white">
+                  {c.sks} SKS
+                </span>
+              }
+            />
           ))}
         </div>
       </div>
 
-      {/* ── DOSEN DIREKTORI ── */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-black text-navy-950 dark:text-white uppercase tracking-wider">
-            Dosen Tetap TI
-          </h3>
-          <span className="text-[11px] font-mono text-navy-500 dark:text-navy-400">{filteredLecturers.length} Dosen</span>
+      {/* ── 5. DIREKTORI DOSEN TETAP TI ── */}
+      <div className="space-y-3 pt-2">
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-sm sm:text-base font-bold text-navy-950 dark:text-white">
+            Direktori 11 Dosen Tetap
+          </h2>
+          <span className="text-xs font-mono text-slate-400">
+            {filteredLecturers.length} Dosen
+          </span>
         </div>
 
+        {/* Search Bar */}
         <div className="relative">
-          <MagnifyingGlass weight="bold" className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-navy-400" />
+          <MagnifyingGlass weight="bold" className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={searchLecturer}
             onChange={(e) => setSearchLecturer(e.target.value)}
-            placeholder="Cari dosen / bidang riset..."
-            className="w-full pl-8 pr-3 py-2.5 rounded-xl bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 text-xs text-navy-950 dark:text-white placeholder:text-navy-400 outline-none focus:border-nyala-500"
+            placeholder="Cari nama dosen atau bidang riset..."
+            className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 text-xs text-navy-950 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nyala-500 shadow-sm"
           />
         </div>
 
+        {/* Filter Chips */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+          {(["Semua", "Aktif", "Tugas Belajar (S3)"] as const).map((st) => (
+            <FlutterChip
+              key={st}
+              label={st}
+              selected={statusFilter === st}
+              onClick={() => setStatusFilter(st)}
+            />
+          ))}
+        </div>
+
+        {/* Lecturer Cards */}
         <div className="space-y-2">
-          {filteredLecturers.slice(0, 6).map((lec, i) => (
-            <div key={i} className="p-3.5 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 flex items-center justify-between gap-2 text-xs shadow-sm">
-              <div>
-                <h4 className="font-bold text-navy-950 dark:text-white text-xs">{lec.name}</h4>
-                <p className="text-[10px] text-navy-500 dark:text-navy-400">Bidang: {lec.expertise}</p>
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-navy-600 dark:text-navy-300">
-                {lec.status}
-              </span>
-            </div>
+          {filteredLecturers.map((lec, i) => (
+            <FlutterListTile
+              key={i}
+              dense
+              leading={
+                <div className="w-9 h-9 rounded-2xl bg-nyala-50 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400 flex items-center justify-center">
+                  <User weight="bold" className="w-4 h-4" />
+                </div>
+              }
+              title={lec.name}
+              subtitle={`Bidang: ${lec.expertise}`}
+              badge={lec.status}
+              badgeColor={lec.status === "Aktif" ? "emerald" : "slate"}
+            />
           ))}
         </div>
       </div>

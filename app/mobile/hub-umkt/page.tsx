@@ -9,8 +9,12 @@ import {
   Buildings, 
   ArrowClockwise, 
   MagnifyingGlass,
-  ArrowRight
+  ArrowRight,
+  ArrowSquareOut
 } from "@phosphor-icons/react";
+import FlutterCard from "@/components/flutter/FlutterCard";
+import FlutterSegmentedTabs from "@/components/flutter/FlutterSegmentedTabs";
+import FlutterListTile from "@/components/flutter/FlutterListTile";
 import { 
   UMKTBerita, 
   UMKTPengumuman, 
@@ -21,7 +25,7 @@ import {
 } from "@/lib/umkt-api";
 
 export default function MobileHubUMKTPage() {
-  const [activeTab, setActiveTab] = useState<"berita" | "pengumuman" | "event" | "fakultas">("berita");
+  const [activeTab, setActiveTab] = useState<string>("berita");
   const [search, setSearch] = useState("");
   const [beritaList, setBeritaList] = useState<UMKTBerita[]>([]);
   const [pengumumanList, setPengumumanList] = useState<UMKTPengumuman[]>([]);
@@ -52,116 +56,161 @@ export default function MobileHubUMKTPage() {
     loadData();
   }, []);
 
+  const HUB_TABS = [
+    { id: "berita", label: "Berita", icon: Newspaper, badge: beritaList.length || undefined },
+    { id: "pengumuman", label: "Pengumuman", icon: Megaphone, badge: pengumumanList.length || undefined },
+    { id: "event", label: "Event", icon: CalendarCheck, badge: eventList.length || undefined },
+    { id: "fakultas", label: "10 Fakultas", icon: Buildings, badge: fakultasList.length || undefined },
+  ];
+
   const filteredBerita = beritaList.filter((b) =>
     b.judul.toLowerCase().includes(search.toLowerCase()) || cleanHTML(b.isi).toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       
-      {/* Header */}
+      {/* ── 1. HEADER ── */}
       <div className="space-y-1">
-        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white">Hub Warta & 10 Fakultas</h1>
-        <p className="text-xs text-navy-600 dark:text-navy-300">Live feed berita terverifikasi humas dan pengumuman kampus.</p>
+        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white tracking-tight">
+          Hub Warta & 10 Fakultas
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+          Live feed berita terverifikasi humas dan pengumuman resmi kampus.
+        </p>
       </div>
 
-      {/* Search Input */}
+      {/* ── 2. SEARCH INPUT ── */}
       <div className="relative">
-        <MagnifyingGlass weight="bold" className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-400" />
+        <MagnifyingGlass weight="bold" className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari berita atau pengumuman..."
-          className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 text-xs text-navy-950 dark:text-white placeholder:text-navy-400 outline-none focus:border-nyala-500"
+          className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 text-xs text-navy-950 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nyala-500 shadow-sm"
         />
       </div>
 
-      {/* Horizontal Tabs */}
-      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-navy-100/80 dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 overflow-x-auto scrollbar-none">
-        {[
-          { id: "berita", label: "Berita", count: beritaList.length, icon: Newspaper },
-          { id: "pengumuman", label: "Pengumuman", count: pengumumanList.length, icon: Megaphone },
-          { id: "event", label: "Event", count: eventList.length, icon: CalendarCheck },
-          { id: "fakultas", label: "10 Fakultas", count: fakultasList.length, icon: Buildings },
-        ].map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                isActive
-                  ? "bg-nyala-600 text-white shadow-sm"
-                  : "text-navy-600 dark:text-navy-400 hover:text-navy-950 dark:hover:text-white"
-              }`}
-            >
-              <Icon weight={isActive ? "fill" : "bold"} className="w-3.5 h-3.5" />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
+      {/* ── 3. SEGMENTED TABS ── */}
+      <FlutterSegmentedTabs
+        tabs={HUB_TABS}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+      />
 
-      {/* Content Stream */}
-      {loading ? (
-        <div className="py-12 text-center text-xs text-navy-500 dark:text-navy-400 font-mono">
-          Menyinkronkan feed API kampus...
-        </div>
-      ) : (
+      {/* ── 4. TAB 1: BERITA KAMPUS ── */}
+      {activeTab === "berita" && (
         <div className="space-y-3">
-          {activeTab === "berita" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {filteredBerita.slice(0, 10).map((b) => (
-                <div key={b.id} className="p-4 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-2">
-                  {b.foto && (
-                    <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-navy-100 dark:bg-navy-950">
-                      <img src={b.foto} alt={b.judul} className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                  <span className="text-[10px] text-navy-500 dark:text-navy-400 font-mono block">{formatDateIndo(b.tgl_upload)}</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-navy-950 dark:text-white leading-snug">{b.judul}</h4>
-                  <p className="text-[11px] text-navy-600 dark:text-navy-300 line-clamp-2 leading-relaxed">{cleanHTML(b.isi)}</p>
-                </div>
-              ))}
+          {loading ? (
+            <div className="p-8 text-center text-xs text-slate-400 font-medium">
+              Memuat feed berita resmi UMKT...
             </div>
+          ) : filteredBerita.length === 0 ? (
+            <FlutterCard variant="outlined" className="text-center p-6 text-xs text-slate-400">
+              Tidak ada artikel yang cocok dengan pencarian.
+            </FlutterCard>
+          ) : (
+            filteredBerita.map((item, idx) => (
+              <FlutterListTile
+                key={idx}
+                title={item.judul}
+                subtitle={
+                  <span className="space-y-1 block mt-1">
+                    <span className="line-clamp-2 text-slate-500 dark:text-slate-400">
+                      {cleanHTML(item.isi)}
+                    </span>
+                    <span className="text-[10px] text-nyala-500 font-mono font-semibold block">
+                      {formatDateIndo(item.created || item.tanggal || undefined)}
+                    </span>
+                  </span>
+                }
+                trailing={
+                  item.slug ? (
+                    <a
+                      href={`/blog/${item.slug}`}
+                      className="w-8 h-8 rounded-xl bg-nyala-50 dark:bg-nyala-950/80 text-nyala-500 flex items-center justify-center"
+                    >
+                      <ArrowRight weight="bold" className="w-4 h-4" />
+                    </a>
+                  ) : null
+                }
+              />
+            ))
           )}
+        </div>
+      )}
 
-          {activeTab === "pengumuman" && (
-            <div className="space-y-2.5">
-              {pengumumanList.map((p) => (
-                <div key={p.id} className="p-4 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-1.5">
-                  <span className="text-[10px] text-nyala-600 dark:text-nyala-400 font-mono font-bold">{formatDateIndo(p.tgl_upload)}</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-navy-950 dark:text-white">{p.judul}</h4>
-                  <p className="text-[11px] text-navy-600 dark:text-navy-300 line-clamp-2">{cleanHTML(p.isi)}</p>
-                </div>
-              ))}
-            </div>
-          )}
+      {/* ── 5. TAB 2: PENGUMUMAN RESMI ── */}
+      {activeTab === "pengumuman" && (
+        <div className="space-y-3">
+          {pengumumanList.map((item, idx) => (
+            <FlutterListTile
+              key={idx}
+              title={item.judul}
+              subtitle={
+                <span className="space-y-1 block mt-1">
+                  <span className="line-clamp-2 text-slate-500 dark:text-slate-400">
+                    {cleanHTML(item.isi)}
+                  </span>
+                  <span className="text-[10px] text-blue-500 font-mono font-semibold block">
+                    {formatDateIndo(item.created || item.tanggal || undefined)}
+                  </span>
+                </span>
+              }
+              badge="Pengumuman"
+              badgeColor="blue"
+            />
+          ))}
+        </div>
+      )}
 
-          {activeTab === "event" && (
-            <div className="space-y-2.5">
-              {eventList.map((e) => (
-                <div key={e.id} className="p-4 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-1.5">
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-bold">{formatDateIndo(e.tgl_upload)}</span>
-                  <h4 className="text-xs sm:text-sm font-bold text-navy-950 dark:text-white">{e.judul}</h4>
-                  <p className="text-[11px] text-navy-600 dark:text-navy-300 line-clamp-2">{cleanHTML(e.isi)}</p>
-                </div>
-              ))}
-            </div>
-          )}
+      {/* ── 6. TAB 3: EVENT & AGENDA ── */}
+      {activeTab === "event" && (
+        <div className="space-y-3">
+          {eventList.map((ev, idx) => (
+            <FlutterListTile
+              key={idx}
+              title={ev.judul}
+              subtitle={
+                <span className="flex items-center gap-2 text-xs text-slate-500 mt-1">
+                  <span>📅 {formatDateIndo(ev.tgl_event || ev.tanggal || ev.created || undefined)}</span>
+                </span>
+              }
+              badge="Event Kampus"
+              badgeColor="emerald"
+            />
+          ))}
+        </div>
+      )}
 
-          {activeTab === "fakultas" && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {fakultasList.map((f) => (
-                <div key={f.id} className="p-4 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-1">
-                  <span className="text-[10px] text-nyala-600 dark:text-nyala-400 font-bold block">{f.singkatan || "FAKULTAS"}</span>
-                  <h4 className="text-xs font-bold text-navy-950 dark:text-white leading-tight">{f.nama}</h4>
-                </div>
-              ))}
-            </div>
-          )}
+      {/* ── 7. TAB 4: DIREKTORI 10 FAKULTAS ── */}
+      {activeTab === "fakultas" && (
+        <div className="space-y-2">
+          {fakultasList.map((fak, idx) => (
+            <FlutterListTile
+              key={idx}
+              dense
+              title={fak.nama || fak.nama_lembaga || "Fakultas UMKT"}
+              subtitle={
+                <span className="text-xs text-slate-500">
+                  {fak.deskripsi || fak.keterangan || "Fakultas Resmi Universitas Muhammadiyah Kalimantan Timur"}
+                </span>
+              }
+              trailing={
+                fak.url || fak.link ? (
+                  <a
+                    href={fak.url || fak.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-nyala-500"
+                  >
+                    <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
+                  </a>
+                ) : null
+              }
+            />
+          ))}
         </div>
       )}
 

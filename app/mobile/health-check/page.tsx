@@ -13,10 +13,15 @@ import {
   Drop, 
   Lightning, 
   Check, 
-  TrendUp 
+  TrendUp,
+  FloppyDisk,
+  CheckCircle
 } from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
+import FlutterCard from "@/components/flutter/FlutterCard";
+import FlutterListTile from "@/components/flutter/FlutterListTile";
 import { useToast } from "@/context/ToastContext";
+import ProgressBar from "@/components/ProgressBar";
 
 const MOODS = [
   { id: "excited", label: "Semangat", bonus: 25, icon: SmileyXEyes, color: "text-amber-500" },
@@ -27,10 +32,10 @@ const MOODS = [
 ];
 
 const CHECKS = [
-  { id: "sleep", label: "Tidur Cukup (6-8 Jam)", icon: Moon, points: 20 },
-  { id: "food", label: "Sarapan & Nutrisi Sehat", icon: ForkKnife, points: 20 },
-  { id: "water", label: "Hidrasi Air Min. 2 Liter", icon: Drop, points: 20 },
-  { id: "mind", label: "Peregangan & Relaksasi", icon: Lightning, points: 15 },
+  { id: "sleep", label: "Tidur Cukup (6–8 Jam)", icon: Moon, points: 20, desc: "Memulihkan daya ingat dan fokus menyerap materi orientasi" },
+  { id: "food", label: "Sarapan & Nutrisi Sehat", icon: ForkKnife, points: 20, desc: "Energi utama untuk aktif on-camera Zoom seharian" },
+  { id: "water", label: "Hidrasi Air Min. 2 Liter", icon: Drop, points: 20, desc: "Mencegah dehidrasi dan menjaga konsentrasi belajar" },
+  { id: "mind", label: "Peregangan & Relaksasi", icon: Lightning, points: 15, desc: "Relaksasi otot dan mindfulness anti-stres perkuliahan" },
 ];
 
 export default function MobileHealthCheckPage() {
@@ -65,31 +70,48 @@ export default function MobileHealthCheckPage() {
     localStorage.setItem("nyala_health_logs", JSON.stringify([log]));
     localStorage.setItem("nyala_mood_history", JSON.stringify([log]));
     setHasSaved(true);
-    toast.nyala(`Skor kesiapan (${totalScore}%) tersimpan!`, "Tersimpan");
+    toast.nyala(`Skor kesiapan (${totalScore}%) tersimpan di log harian!`, "Tersimpan");
   };
 
   return (
     <div className="space-y-5">
       
-      {/* Header */}
+      {/* ── 1. HEADER ── */}
       <div className="space-y-1">
-        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white">Health Check & Mood MABA</h1>
-        <p className="text-xs text-navy-600 dark:text-navy-300">Pantau stamina fisik dan kesiapan mental setiap hari.</p>
-      </div>
-
-      {/* Readiness Gauge Card */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-3 text-center">
-        <span className="text-[10px] font-mono uppercase tracking-wider text-navy-500 dark:text-navy-400 font-bold">Skor Kesiapan Harian</span>
-        <div className="text-4xl sm:text-5xl font-black font-mono text-nyala-600 dark:text-nyala-400">{totalScore}%</div>
-        <p className="text-xs text-navy-600 dark:text-navy-300 max-w-sm mx-auto">
-          {totalScore >= 80 ? "Kondisi fisik dan mentalmu sangat prima untuk menyerap materi orientasi!" : "Pastikan minum air cukup dan istirahat teratur malam ini."}
+        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white tracking-tight">
+          Health & Mood Tracker
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+          Pantau stamina fisik dan kesiapan mental mahasiswa baru setiap hari.
         </p>
       </div>
 
-      {/* Mood Selector */}
+      {/* ── 2. READINESS SCORE GAUGE CARD ── */}
+      <FlutterCard variant="elevated" className="text-center space-y-3">
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+          Skor Kesiapan Fisik & Mental Hari Ini
+        </span>
+        
+        <div className="text-4xl sm:text-5xl font-black font-mono text-nyala-600 dark:text-nyala-400">
+          {totalScore}%
+        </div>
+
+        <ProgressBar progress={totalScore} size="md" />
+
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto leading-relaxed">
+          {totalScore >= 80
+            ? "✨ Kondisi fisik dan mentalmu sangat prima untuk menyerap materi orientasi kampus!"
+            : "💡 Pastikan minum air cukup dan tidur teratur malam ini agar tetap fokus."}
+        </p>
+      </FlutterCard>
+
+      {/* ── 3. MOOD SELECTOR ── */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-navy-700 dark:text-navy-300 uppercase tracking-wider block">Bagaimana Perasaanmu Hari Ini?</label>
-        <div className="grid grid-cols-5 gap-1.5">
+        <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block px-1">
+          Bagaimana Perasaanmu Hari Ini?
+        </label>
+        
+        <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
           {MOODS.map((m) => {
             const Icon = m.icon;
             const isSelected = selectedMood.id === m.id;
@@ -97,45 +119,69 @@ export default function MobileHealthCheckPage() {
               <button
                 key={m.id}
                 onClick={() => setSelectedMood(m)}
-                className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer shadow-sm ${
+                className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm ${
                   isSelected
-                    ? "bg-nyala-600/15 border-nyala-500 text-navy-950 dark:text-white font-bold"
-                    : "bg-white dark:bg-[#0E1635] border-navy-200 dark:border-navy-800 text-navy-600 dark:text-navy-400"
+                    ? "bg-nyala-500/10 border-nyala-500 text-nyala-600 dark:text-nyala-400 font-bold scale-[1.02]"
+                    : "bg-white dark:bg-[#0F172A] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-nyala-300"
                 }`}
               >
-                <Icon weight="bold" className={`w-5 h-5 ${m.color}`} />
-                <span className="text-[9px] font-bold truncate">{m.label}</span>
+                <Icon weight={isSelected ? "fill" : "bold"} className={`w-6 h-6 ${m.color}`} />
+                <span className="text-[10px] tracking-tight">{m.label}</span>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Physical Checklist */}
+      {/* ── 4. PHYSICAL CHECKS LIST ── */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-navy-700 dark:text-navy-300 uppercase tracking-wider block">Checklist Fisik & Nutrisi:</label>
+        <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block px-1">
+          Checklist Kesiapan Fisik (4 Pilar):
+        </label>
+
         <div className="space-y-2">
           {CHECKS.map((c) => {
-            const Icon = c.icon;
             const isChecked = selectedChecks.includes(c.id);
+            const Icon = c.icon;
             return (
               <div
                 key={c.id}
                 onClick={() => handleToggleCheck(c.id)}
-                className={`p-3.5 rounded-2xl border flex items-center justify-between cursor-pointer select-none active:scale-98 transition-all shadow-sm ${
+                className={`p-3.5 rounded-2xl sm:rounded-3xl border transition-all cursor-pointer select-none active:scale-[0.98] flex items-center justify-between gap-3 shadow-sm ${
                   isChecked
-                    ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30 text-navy-950 dark:text-white"
-                    : "bg-white dark:bg-[#0E1635] border-navy-200/80 dark:border-navy-800 text-navy-600 dark:text-navy-400"
+                    ? "bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-300/80 dark:border-emerald-900/60"
+                    : "bg-white dark:bg-[#0F172A] border-slate-200/80 dark:border-slate-800 hover:border-nyala-300"
                 }`}
               >
-                <div className="flex items-center gap-2.5">
-                  <Icon weight="bold" className="w-4 h-4 text-emerald-500" />
-                  <span className="text-xs sm:text-sm font-bold">{c.label}</span>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div
+                    className={`w-9 h-9 rounded-2xl flex items-center justify-center flex-shrink-0 ${
+                      isChecked
+                        ? "bg-emerald-500 text-white"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-500"
+                    }`}
+                  >
+                    <Icon weight="bold" className="w-5 h-5" />
+                  </div>
+
+                  <div className="min-w-0">
+                    <div className="text-xs sm:text-sm font-bold text-navy-950 dark:text-white truncate">
+                      {c.label}
+                    </div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate font-normal">
+                      {c.desc}
+                    </div>
+                  </div>
                 </div>
-                <div className={`w-5 h-5 rounded-lg border flex items-center justify-center ${
-                  isChecked ? "bg-emerald-500 border-emerald-500 text-white" : "border-navy-300 dark:border-navy-600 bg-navy-50 dark:bg-navy-900"
-                }`}>
-                  {isChecked && <Check weight="bold" className="w-3.5 h-3.5" />}
+
+                <div
+                  className={`w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                    isChecked
+                      ? "bg-emerald-500 text-white"
+                      : "border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800"
+                  }`}
+                >
+                  {isChecked && <Check weight="bold" className="w-4 h-4" />}
                 </div>
               </div>
             );
@@ -143,12 +189,13 @@ export default function MobileHealthCheckPage() {
         </div>
       </div>
 
-      {/* Save Button */}
+      {/* ── 5. SAVE LOG ACTION BUTTON ── */}
       <button
         onClick={handleSave}
-        className="w-full py-3.5 rounded-2xl bg-nyala-600 hover:bg-nyala-500 text-white text-xs font-black shadow-md shadow-nyala-600/20 active:scale-98 transition-all cursor-pointer"
+        className="w-full py-3.5 px-4 rounded-2xl bg-nyala-500 hover:bg-nyala-600 text-white text-xs sm:text-sm font-bold shadow-md shadow-nyala-500/30 flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer"
       >
-        Simpan Evaluasi Hari Ini
+        <FloppyDisk weight="bold" className="w-4 h-4" />
+        <span>{hasSaved ? "Pembaruan Kesiapan Tersimpan!" : "Simpan Catatan Kesiapan Hari Ini"}</span>
       </button>
 
     </div>

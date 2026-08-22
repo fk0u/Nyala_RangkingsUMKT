@@ -119,13 +119,62 @@ Buka browser pada [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Panduan Deployment ke Vercel
+## 📚 Pusat Dokumentasi & Sistem Desain
 
-1. Unggah kode ke repositori Git (GitHub/GitLab).
-2. Buat proyek baru di [dashboard Vercel](https://vercel.com/).
-3. Hubungkan repositori **Nyala**.
-4. Masukkan `ZPI_API_KEY` pada menu _Environment Variables_.
-5. Klik **Deploy**.
+Dokumentasi lengkap proyek disusun secara sistematis di dalam folder `docs/` dan berkas acuan desain `DESIGN.md`:
+
+- 🎨 [**`DESIGN.md`**](file:///d:/Project/Nyala_RangkingsUMKT/DESIGN.md) — *Single Source of Truth* sistem desain antarmuka, token warna, tipografi, dan aturan anti-slop.
+- 📖 [**`docs/README.md`**](file:///d:/Project/Nyala_RangkingsUMKT/docs/README.md) — Indeks navigasi seluruh dokumentasi teknis dan panduan operasional.
+- 🏗️ [**Arsitektur Sistem**](file:///d:/Project/Nyala_RangkingsUMKT/docs/architecture/system-overview.md) | [**Referensi API**](file:///d:/Project/Nyala_RangkingsUMKT/docs/architecture/api-reference.md) | [**Keamanan & Cache**](file:///d:/Project/Nyala_RangkingsUMKT/docs/architecture/security-and-caching.md)
+- 🤖 [**AI Companion Guide**](file:///d:/Project/Nyala_RangkingsUMKT/docs/guides/companion-guide.md) | [**Kurikulum MASTA**](file:///d:/Project/Nyala_RangkingsUMKT/docs/guides/masta-curriculum.md) | [**Simulator SIKAD**](file:///d:/Project/Nyala_RangkingsUMKT/docs/guides/sikad-guide.md)
+- 🚀 [**Panduan Akademik S1 TI**](file:///d:/Project/Nyala_RangkingsUMKT/docs/guides/ti-academics.md) | [**Blog CMS & Scraper**](file:///d:/Project/Nyala_RangkingsUMKT/docs/guides/blog-cms.md) | [**Mobile App & PWA**](file:///d:/Project/Nyala_RangkingsUMKT/docs/guides/mobile-pwa.md)
+- 📜 [**Keputusan Arsitektur (ADR)**](file:///d:/Project/Nyala_RangkingsUMKT/docs/history/architectural-decisions.md) | [**Panduan Deploy Vercel**](file:///d:/Project/Nyala_RangkingsUMKT/docs/deployment/vercel-deployment.md)
+
+---
+
+## Panduan Instalasi & Menjalankan Lokal
+
+### Prasyarat
+
+- Node.js versi 18 ke atas (disarankan Node 20+)
+- NPM atau package manager kompatibel
+
+### 1. Kloning Repositori
+
+```bash
+git clone <repository-url>
+cd Nyala_RangkingsUMKT
+```
+
+### 2. Instalasi Dependensi
+
+```bash
+npm install
+```
+
+### 3. Konfigurasi Environment Variables
+
+Salin berkas contoh konfigurasi:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Buka `.env.local` dan tentukan API Key Zpi Anda (opsional):
+
+```env
+ZPI_API_KEY=zpi_blablablabla
+```
+
+*Catatan: Jika API Key tidak diisi, fitur chat tetap berjalan 100% menggunakan Smart Local Knowledge Engine bawaan.*
+
+### 4. Jalankan Aplikasi
+
+```bash
+npm run dev
+```
+
+Buka browser pada [http://localhost:3000](http://localhost:3000).
 
 ---
 
@@ -135,11 +184,16 @@ Buka browser pada [http://localhost:3000](http://localhost:3000).
 Nyala_RangkingsUMKT/
 ├── app/
 │   ├── api/chat/route.ts       # Endpoint AI Companion (Zpi SDK + Anti-DDoS & Cache)
+│   ├── api/scrape-umkt/route.ts# Scraper Berita Resmi Django REST API UMKT
+│   ├── mobile/                 # Modul True Fluid Responsive Mobile App (/mobile/*)
 │   ├── checklist/page.tsx      # Halaman Checklist Persiapan
 │   ├── companion/page.tsx      # Halaman Tanya Nyala AI Companion
 │   ├── health-check/page.tsx   # Halaman Mood & Health Tracker
-│   ├── jadwal/page.tsx         # Halaman Alur 5 Tahap MASTA
-│   ├── tentang-masta/page.tsx  # Halaman Edukasi & Backlink Resmi
+│   ├── jadwal/page.tsx         # Halaman Alur 5 Tahap MASTA & Countdown
+│   ├── panduan-sikad/page.tsx  # Halaman Panduan & Simulator SIKAD Mahasiswa
+│   ├── panduan-ti/page.tsx     # Halaman Kurikulum & Panduan Akademik TI UMKT
+│   ├── blog/page.tsx           # Halaman Blog & Berita Kampus
+│   ├── adminuse/page.tsx       # Panel Admin Konten & Sync Scraper
 │   ├── globals.css             # Styling & Animasi Tema
 │   ├── layout.tsx              # Root Layout, Metadata SEO, & Navigasi
 │   └── page.tsx                # Beranda / Landing Page
@@ -147,21 +201,25 @@ Nyala_RangkingsUMKT/
 │   ├── BacklinkBanner.tsx      # Komponen Backlink Resmi UMKT
 │   ├── CountdownTimer.tsx      # Hitung Mundur MASTA 2026
 │   ├── Footer.tsx              # Footer Aplikasi & Tautan Penting
-│   ├── MascotFlame.tsx         # Maskot Animasi Nyala
+│   ├── MascotFlame.tsx         # Maskot Animasi Karakter Nyala
 │   ├── MobileNav.tsx           # Navigasi Bawah untuk Mobile
 │   ├── Navbar.tsx              # Navigasi Utama & Switcher Tema
-│   ├── ProgressBar.tsx         # Indikator Progres Animasi
-│   └── ThemeToggle.tsx         # Pengalih Mode Gelap / Terang
+│   ├── CookieConsent.tsx       # Persetujuan Cookie & LocalStorage
+│   └── SkeletonLoader.tsx      # Animasi Shimmer Loading
 ├── context/
-│   └── ThemeContext.tsx        # Penyimpanan Preferensi Tema
+│   ├── ThemeContext.tsx        # Penyimpanan Preferensi Tema (Default Light)
+│   └── ToastContext.tsx        # Sistem Notifikasi Toast Taktil Global
+├── docs/                       # Dokumentasi Teknis & Panduan Lengkap
 ├── lib/
 │   ├── ai-engine.ts            # Integrasi Zpi SDK & Smart Fallback
 │   ├── cache.ts                # Cache Semantik In-Memory (TTL 2 Jam)
-│   ├── masta-data.ts           # Data Rujukan Resmi MASTA UMKT
+│   ├── masta-data.ts           # Data Rujukan Resmi MASTA & Kurikulum UMKT
 │   ├── security.ts             # Rate Limiter, Anti-DDoS, & Input Sanitizer
+│   ├── umkt-api.ts             # API Client & Scraper Resmi UMKT
 │   └── utils.ts                # Helper & Utility Class Merge
 ├── public/
-│   └── manifest.json           # Konfigurasi PWA
+│   └── manifest.json           # Konfigurasi PWA Standalone
+├── DESIGN.md                   # Single Source of Truth Sistem Desain
 ├── tailwind.config.ts          # Token Warna & Radius Desain
 ├── tsconfig.json               # Konfigurasi TypeScript
 └── README.md                   # Dokumentasi Resmi Proyek
@@ -169,9 +227,9 @@ Nyala_RangkingsUMKT/
 
 ---
 
-## Kepatuhan Syarat Kompetisi
+## Kepatuhan Syarat & Kualitas Teknis
 
-1. **Originalitas:** Konsep dan maskot unik Nyala dengan identitas visual terarah.
-2. **Akurasi Materi:** 5 tahapan resmi dan 3 fokus pembinaan disadur langsung dari panduan resmi MASTA UMKT 2026.
-3. **Backlink Aktif:** Tautan aktif yang mudah diakses menuju `https://www.umkt.ac.id/` dan `https://www.umkt.ac.id/kemahasiswaan/`.
-4. **Kualitas Teknis:** Next.js 14 App Router, TypeScript, Tailwind CSS, Framer Motion, sistem keamanan API mandiri, dan lolos uji build produksi.
+1. **Originalitas & Identitas Kuat:** Karakter maskot api unik Nyala dengan desain visual berorientasi keramahan pendampingan (*Warm Fire, Soft Companion*).
+2. **Akurasi Materi & Kedalaman:** Seluruh tahapan, kontak admin, dosen, dan kurikulum disinkronkan secara faktual dengan edaran resmi UMKT.
+3. **Backlink Aktif:** Menghubungkan langsung ke `https://www.umkt.ac.id/`, `https://www.umkt.ac.id/kemahasiswaan/`, dan `https://mahasiswa.umkt.ac.id/`.
+4. **Kualitas Teknis Modern:** Next.js 16 (Turbopack), React 19, Phosphor Icons, Tailwind CSS, Framer Motion, PWA, in-memory semantic cache, dan zero-error production build.

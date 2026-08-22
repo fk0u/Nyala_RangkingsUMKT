@@ -14,9 +14,16 @@ import {
   Trash, 
   Headset, 
   FloppyDisk,
-  ArrowSquareOut
+  ArrowSquareOut,
+  PencilSimple,
+  SlidersHorizontal,
+  CheckCircle,
+  Heartbeat
 } from "@phosphor-icons/react";
 import MascotFlame, { MascotMood } from "@/components/MascotFlame";
+import FlutterCard from "@/components/flutter/FlutterCard";
+import FlutterListTile from "@/components/flutter/FlutterListTile";
+import FlutterBottomSheet from "@/components/flutter/FlutterBottomSheet";
 import { useTheme } from "@/context/ThemeContext";
 import { useToast } from "@/context/ToastContext";
 import AdminHelpModal from "@/components/AdminHelpModal";
@@ -54,11 +61,11 @@ export default function MobileProfilePage() {
   const [gugus, setGugus] = useState("Gugus 04");
   const [mascotMood, setMascotMood] = useState<MascotMood>("excited");
   const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [editSheetOpen, setEditSheetOpen] = useState(false);
   const [checklistPercent, setChecklistPercent] = useState(0);
   const [healthScore, setHealthScore] = useState(85);
 
   useEffect(() => {
-    // Load profile from localStorage
     const saved = localStorage.getItem("nyala_user_profile_v1");
     if (saved) {
       try {
@@ -71,9 +78,6 @@ export default function MobileProfilePage() {
       } catch (e) {
         console.error(e);
       }
-    } else {
-      const savedProdi = localStorage.getItem("nyala_user_prodi");
-      if (savedProdi) setProdi(savedProdi);
     }
 
     const savedChecklist = localStorage.getItem("nyala_checklist");
@@ -102,268 +106,221 @@ export default function MobileProfilePage() {
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    const profileData = {
-      name: name.trim() || "Mahasiswa Baru UMKT",
-      nim: nim.trim() || "2611102441001",
-      prodi,
-      gugus,
-      mascotMood,
-    };
-    localStorage.setItem("nyala_user_profile_v1", JSON.stringify(profileData));
+    const profile = { name, nim, prodi, gugus, mascotMood };
+    localStorage.setItem("nyala_user_profile_v1", JSON.stringify(profile));
     localStorage.setItem("nyala_user_prodi", prodi);
+    setEditSheetOpen(false);
     toast.success("Profil mahasiswa berhasil diperbarui!", "Tersimpan");
   };
 
-  const handleReplayOnboarding = () => {
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("open-nyala-onboarding"));
-    }
-  };
-
   const handleResetData = () => {
-    if (confirm("Apakah Anda yakin ingin mengatur ulang data checklist dan riwayat kesehatan lokal?")) {
-      localStorage.removeItem("nyala_checklist");
-      localStorage.removeItem("nyala_health_logs");
-      localStorage.removeItem("nyala_mood_history");
-      setChecklistPercent(0);
-      setHealthScore(0);
-      toast.nyala("Data lokal berhasil dibersihkan.", "Reset Selesai");
+    if (confirm("Apakah Anda yakin ingin mereset seluruh data lokal aplikasi Nyala?")) {
+      localStorage.clear();
+      toast.info("Seluruh data lokal telah dibersihkan", "Reset Berhasil");
+      setTimeout(() => window.location.reload(), 1000);
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       
-      {/* Header */}
-      <div className="space-y-1">
-        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white">
-          Profil & Pengaturan Mahasiswa
-        </h1>
-        <p className="text-xs text-navy-600 dark:text-navy-300">
-          Personalisasi identitas, program studi, dan preferensi aplikasi Nyala.
-        </p>
-      </div>
-
-      {/* ── 1. AVATAR & MASCOT CARD ── */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-4">
-        
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-nyala-600 to-amber-500 p-1 flex items-center justify-center shadow-lg shadow-nyala-500/20 flex-shrink-0">
-            <div className="w-full h-full rounded-[20px] bg-white dark:bg-[#0A0F24] flex items-center justify-center">
-              <MascotFlame size="md" mood={mascotMood} className="w-10 h-10" />
+      {/* ── 1. PROFILE AVATAR & HEADER CARD ── */}
+      <FlutterCard variant="elevated" className="text-center space-y-4">
+        <div className="flex justify-center">
+          <div className="relative">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-nyala-500/10 dark:bg-nyala-950/80 border-2 border-nyala-500/30 flex items-center justify-center p-2">
+              <MascotFlame size="lg" mood={mascotMood} />
             </div>
+            <button
+              onClick={() => setEditSheetOpen(true)}
+              className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-nyala-500 text-white flex items-center justify-center shadow-md active:scale-95 transition-transform"
+              title="Edit Profil"
+            >
+              <PencilSimple weight="bold" className="w-4 h-4" />
+            </button>
           </div>
+        </div>
 
-          <div className="space-y-1 min-w-0 flex-1">
-            <h2 className="text-base sm:text-lg font-black text-navy-950 dark:text-white truncate">
-              {name}
-            </h2>
-            <div className="flex items-center gap-2 text-xs text-navy-500 dark:text-navy-400 font-mono">
-              <span>{nim}</span>
-              <span>•</span>
-              <span className="text-nyala-600 dark:text-nyala-400 font-bold">{gugus}</span>
+        <div className="space-y-1">
+          <h1 className="text-lg sm:text-xl font-bold text-navy-950 dark:text-white">
+            {name}
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+            NIM: {nim} • {gugus}
+          </p>
+          <span className="inline-block px-3 py-1 rounded-full bg-nyala-50 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400 font-bold text-xs">
+            {prodi}
+          </span>
+        </div>
+
+        {/* Mini Stats Summary */}
+        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center">
+            <span className="text-[10px] text-slate-400 font-medium uppercase block">Checklist Berkas</span>
+            <span className="text-base font-black font-mono text-emerald-500">{checklistPercent}%</span>
+          </div>
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center">
+            <span className="text-[10px] text-slate-400 font-medium uppercase block">Skor Kesiapan</span>
+            <span className="text-base font-black font-mono text-nyala-500">{healthScore}%</span>
+          </div>
+        </div>
+      </FlutterCard>
+
+      {/* ── 2. SETTINGS LIST (Flutter ListTile Group) ── */}
+      <div className="space-y-2.5">
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block px-1">
+          Pengaturan & Bantuan
+        </span>
+
+        {/* Edit Biodata Tile */}
+        <FlutterListTile
+          leading={
+            <div className="w-9 h-9 rounded-2xl bg-blue-50 dark:bg-blue-950/80 text-blue-500 flex items-center justify-center">
+              <IdentificationCard weight="bold" className="w-5 h-5" />
             </div>
-          </div>
-        </div>
+          }
+          title="Ubah Biodata & Gugus"
+          subtitle="Nama, NIM, Program Studi, & Pilihan Maskot"
+          onClick={() => setEditSheetOpen(true)}
+        />
 
-        {/* Mascot Mood Selector */}
-        <div className="space-y-2 pt-2 border-t border-navy-100 dark:border-navy-800">
-          <label className="text-[11px] font-bold text-navy-500 dark:text-navy-400 uppercase tracking-wider block">
-            Gaya Maskot Nyala:
-          </label>
-          <div className="grid grid-cols-5 gap-1.5">
-            {MOOD_CHOICES.map((m) => {
-              const isSelected = mascotMood === m.mood;
-              return (
-                <button
-                  key={m.mood}
-                  type="button"
-                  onClick={() => setMascotMood(m.mood)}
-                  className={`py-2 px-1 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1 cursor-pointer ${
-                    isSelected
-                      ? "bg-nyala-600 text-white shadow-sm"
-                      : "bg-navy-50 dark:bg-navy-950 text-navy-700 dark:text-navy-300 border border-navy-100 dark:border-navy-800"
-                  }`}
-                >
-                  <span className="text-[10px] truncate">{m.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        {/* Theme Mode Toggle Tile */}
+        <FlutterListTile
+          leading={
+            <div className="w-9 h-9 rounded-2xl bg-amber-50 dark:bg-amber-950/80 text-amber-500 flex items-center justify-center">
+              {theme === "dark" ? <Moon weight="bold" className="w-5 h-5" /> : <Sun weight="bold" className="w-5 h-5" />}
+            </div>
+          }
+          title="Tema Tampilan"
+          subtitle={`Mode saat ini: ${theme === "dark" ? "Mode Gelap (Dark)" : "Mode Terang (Light)"}`}
+          trailing={
+            <button
+              onClick={() => setThemeMode(theme === "dark" ? "light" : "dark")}
+              className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-navy-950 dark:text-white active:scale-95"
+            >
+              Ganti
+            </button>
+          }
+        />
 
+        {/* Admin Contact Tile */}
+        <FlutterListTile
+          leading={
+            <div className="w-9 h-9 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-500 flex items-center justify-center">
+              <Headset weight="bold" className="w-5 h-5" />
+            </div>
+          }
+          title="Kontak Admin Resmi Gedung C"
+          subtitle="Biro Kemahasiswaan & Helpdesk SIKAD UMKT"
+          onClick={() => setAdminModalOpen(true)}
+        />
+
+        {/* Reset App Data Tile */}
+        <FlutterListTile
+          leading={
+            <div className="w-9 h-9 rounded-2xl bg-rose-50 dark:bg-rose-950/80 text-rose-500 flex items-center justify-center">
+              <Trash weight="bold" className="w-5 h-5" />
+            </div>
+          }
+          title="Reset Data Lokal"
+          subtitle="Bersihkan checklist, mood history, dan profil"
+          onClick={handleResetData}
+        />
       </div>
 
-      {/* ── 2. STATS OVERVIEW CARDS ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <div className="p-4 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 space-y-1">
-          <span className="text-[10px] text-navy-500 dark:text-navy-400 uppercase tracking-wider font-bold block">Checklist Berkas</span>
-          <span className="text-xl font-black font-mono text-nyala-600 dark:text-nyala-400">{checklistPercent}%</span>
-          <span className="text-[10px] text-navy-400 block">Kesiapan Berkas</span>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 space-y-1">
-          <span className="text-[10px] text-navy-500 dark:text-navy-400 uppercase tracking-wider font-bold block">Skor Stamina</span>
-          <span className="text-xl font-black font-mono text-emerald-500">{healthScore}%</span>
-          <span className="text-[10px] text-navy-400 block">Kondisi Fisik/Mental</span>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 space-y-1 col-span-2 sm:col-span-1">
-          <span className="text-[10px] text-navy-500 dark:text-navy-400 uppercase tracking-wider font-bold block">Angkatan Kuliah</span>
-          <span className="text-xl font-black font-mono text-amber-500">2026</span>
-          <span className="text-[10px] text-navy-400 block">MABA UMKT</span>
-        </div>
-      </div>
-
-      {/* ── 3. EDIT PROFILE FORM ── */}
-      <form onSubmit={handleSaveProfile} className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-4">
-        
-        <h3 className="text-sm font-black text-navy-950 dark:text-white uppercase tracking-wider">
-          Data Identitas Mahasiswa
-        </h3>
-
-        <div className="space-y-3">
+      {/* ── 3. BOTTOM SHEET EDIT PROFIL ── */}
+      <FlutterBottomSheet
+        isOpen={editSheetOpen}
+        onClose={() => setEditSheetOpen(false)}
+        title="Edit Profil Mahasiswa Baru"
+        subtitle="Data tersimpan aman di perangkat lokal Anda"
+      >
+        <form onSubmit={handleSaveProfile} className="space-y-4 text-xs sm:text-sm">
+          {/* Name Input */}
           <div className="space-y-1">
-            <label className="text-xs font-bold text-navy-700 dark:text-navy-300">Nama Lengkap:</label>
+            <label className="font-bold text-navy-950 dark:text-white">Nama Lengkap:</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Contoh: Muhammad Rizky"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-xs text-navy-950 dark:text-white outline-none focus:border-nyala-500"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 text-navy-950 dark:text-white outline-none focus:border-nyala-500"
+              required
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-navy-700 dark:text-navy-300">NIM / Nomor Registrasi:</label>
-              <input
-                type="text"
-                value={nim}
-                onChange={(e) => setNim(e.target.value)}
-                placeholder="Contoh: 2611102441001"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-xs font-mono text-navy-950 dark:text-white outline-none focus:border-nyala-500"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-navy-700 dark:text-navy-300">Gugus MASTA:</label>
-              <select
-                value={gugus}
-                onChange={(e) => setGugus(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-xs font-bold text-navy-950 dark:text-white outline-none focus:border-nyala-500"
-              >
-                {GUGUS_OPTIONS.map((g) => (
-                  <option key={g} value={g}>{g}</option>
-                ))}
-              </select>
-            </div>
+          {/* NIM Input */}
+          <div className="space-y-1">
+            <label className="font-bold text-navy-950 dark:text-white">Nomor Induk Mahasiswa (NIM):</label>
+            <input
+              type="text"
+              value={nim}
+              onChange={(e) => setNim(e.target.value)}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 text-navy-950 dark:text-white outline-none focus:border-nyala-500 font-mono"
+              required
+            />
           </div>
 
+          {/* Program Studi Selector */}
           <div className="space-y-1">
-            <label className="text-xs font-bold text-navy-700 dark:text-navy-300">Program Studi:</label>
+            <label className="font-bold text-navy-950 dark:text-white">Program Studi:</label>
             <select
               value={prodi}
               onChange={(e) => setProdi(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-xs font-bold text-navy-950 dark:text-white outline-none focus:border-nyala-500"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 text-navy-950 dark:text-white outline-none focus:border-nyala-500"
             >
               {PRODI_OPTIONS.map((p) => (
                 <option key={p} value={p}>{p}</option>
               ))}
             </select>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          className="w-full py-3 rounded-2xl bg-nyala-600 hover:bg-nyala-500 text-white text-xs font-black shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
-        >
-          <FloppyDisk weight="bold" className="w-4 h-4" />
-          <span>Simpan Perubahan Profil</span>
-        </button>
-
-      </form>
-
-      {/* ── 4. THEME & APP PREFERENCES ── */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-4">
-        
-        <h3 className="text-sm font-black text-navy-950 dark:text-white uppercase tracking-wider">
-          Tema & Pengaturan Aplikasi
-        </h3>
-
-        {/* Light / Dark Mode Toggle */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-navy-700 dark:text-navy-300">Mode Tampilan:</label>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => setThemeMode("light")}
-              className={`p-3 rounded-2xl border flex items-center justify-center gap-2 text-xs font-bold transition-all cursor-pointer ${
-                theme === "light"
-                  ? "bg-nyala-600 text-white shadow-sm border-nyala-600"
-                  : "bg-navy-50 dark:bg-navy-950 text-navy-700 dark:text-navy-300 border-navy-200 dark:border-navy-800"
-              }`}
+          {/* Gugus Selector */}
+          <div className="space-y-1">
+            <label className="font-bold text-navy-950 dark:text-white">Gugus MASTA:</label>
+            <select
+              value={gugus}
+              onChange={(e) => setGugus(e.target.value)}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 text-navy-950 dark:text-white outline-none focus:border-nyala-500"
             >
-              <Sun weight="fill" className="w-4 h-4 text-amber-400" />
-              <span>Light Mode (Default)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setThemeMode("dark")}
-              className={`p-3 rounded-2xl border flex items-center justify-center gap-2 text-xs font-bold transition-all cursor-pointer ${
-                theme === "dark"
-                  ? "bg-nyala-600 text-white shadow-sm border-nyala-600"
-                  : "bg-navy-50 dark:bg-navy-950 text-navy-700 dark:text-navy-300 border-navy-200 dark:border-navy-800"
-              }`}
-            >
-              <Moon weight="fill" className="w-4 h-4 text-sky-400" />
-              <span>Dark Mode</span>
-            </button>
+              {GUGUS_OPTIONS.map((g) => (
+                <option key={g} value={g}>{g}</option>
+              ))}
+            </select>
           </div>
-        </div>
 
-        {/* Quick Utility Actions */}
-        <div className="space-y-2 pt-2 border-t border-navy-100 dark:border-navy-800">
-          <button
-            type="button"
-            onClick={handleReplayOnboarding}
-            className="w-full p-3 rounded-2xl bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-navy-800 text-navy-800 dark:text-navy-200 flex items-center justify-between text-xs font-bold hover:border-nyala-500 cursor-pointer transition-colors"
-          >
-            <div className="flex items-center gap-2.5">
-              <Compass weight="bold" className="w-4 h-4 text-nyala-500" />
-              <span>Buka Kembali Onboarding Slider</span>
+          {/* Mascot Mood Picker */}
+          <div className="space-y-2">
+            <label className="font-bold text-navy-950 dark:text-white">Ekspresi Maskot Favorit:</label>
+            <div className="grid grid-cols-5 gap-2">
+              {MOOD_CHOICES.map((m) => (
+                <button
+                  key={m.mood}
+                  type="button"
+                  onClick={() => setMascotMood(m.mood)}
+                  className={`p-2 rounded-xl border flex flex-col items-center gap-1 ${
+                    mascotMood === m.mood
+                      ? "bg-nyala-500/10 border-nyala-500 text-nyala-500 font-bold"
+                      : "border-slate-200 dark:border-slate-800 text-slate-400"
+                  }`}
+                >
+                  <MascotFlame size="sm" mood={m.mood} className="w-5 h-5" />
+                  <span className="text-[9px]">{m.label}</span>
+                </button>
+              ))}
             </div>
-            <ArrowSquareOut weight="bold" className="w-4 h-4 text-navy-400" />
-          </button>
+          </div>
 
+          {/* Submit Button */}
           <button
-            type="button"
-            onClick={() => setAdminModalOpen(true)}
-            className="w-full p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 flex items-center justify-between text-xs font-bold hover:bg-emerald-500/20 cursor-pointer transition-colors"
+            type="submit"
+            className="w-full py-3.5 rounded-2xl bg-nyala-500 text-white font-bold shadow-md active:scale-98 transition-transform"
           >
-            <div className="flex items-center gap-2.5">
-              <Headset weight="bold" className="w-4 h-4 text-emerald-500" />
-              <span>Kontak Admin Resmi Gedung C</span>
-            </div>
-            <ArrowSquareOut weight="bold" className="w-4 h-4 text-emerald-500" />
+            Simpan Perubahan
           </button>
+        </form>
+      </FlutterBottomSheet>
 
-          <button
-            type="button"
-            onClick={handleResetData}
-            className="w-full p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 flex items-center justify-between text-xs font-bold hover:bg-rose-500/20 cursor-pointer transition-colors"
-          >
-            <div className="flex items-center gap-2.5">
-              <Trash weight="bold" className="w-4 h-4 text-rose-500" />
-              <span>Bersihkan Riwayat Checklist & Mood</span>
-            </div>
-            <span className="text-[10px] font-mono text-rose-400">Reset</span>
-          </button>
-        </div>
-
-      </div>
-
+      {/* Admin Help Modal */}
       <AdminHelpModal
         isOpen={adminModalOpen}
         onClose={() => setAdminModalOpen(false)}

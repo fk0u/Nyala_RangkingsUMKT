@@ -8,9 +8,16 @@ import {
   Plus, 
   ArrowCounterClockwise, 
   Trash,
-  Funnel
+  CheckCircle,
+  FileText,
+  TShirt,
+  Laptop,
+  Heartbeat
 } from "@phosphor-icons/react";
 import ProgressBar from "@/components/ProgressBar";
+import FlutterCard from "@/components/flutter/FlutterCard";
+import FlutterChip from "@/components/flutter/FlutterChip";
+import FlutterListTile from "@/components/flutter/FlutterListTile";
 import { INITIAL_CHECKLIST, ChecklistItem } from "@/lib/masta-data";
 import { useToast } from "@/context/ToastContext";
 
@@ -68,7 +75,13 @@ export default function MobileChecklistPage() {
     toast.success("Item persiapan ditambahkan!", "Ditambahkan");
   };
 
-  const categories = ["Semua", "Dokumen & Identitas", "Pakaian & Atribut", "Perangkat & Jaringan", "Kesehatan & Mental"];
+  const categories = [
+    { label: "Semua", icon: CheckSquare },
+    { label: "Dokumen & Identitas", icon: FileText },
+    { label: "Pakaian & Atribut", icon: TShirt },
+    { label: "Perangkat & Jaringan", icon: Laptop },
+    { label: "Kesehatan & Mental", icon: Heartbeat },
+  ];
 
   const filteredItems = items.filter((item) => {
     if (activeCategory === "Semua") return true;
@@ -78,89 +91,130 @@ export default function MobileChecklistPage() {
   return (
     <div className="space-y-5">
       
-      {/* Header */}
+      {/* ── 1. HEADER ── */}
       <div className="space-y-1">
-        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white">Checklist Berkas & Perlengkapan</h1>
-        <p className="text-xs text-navy-600 dark:text-navy-300">Pantau kelengkapan dokumen resmi dan atribut orientasi.</p>
+        <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white tracking-tight">
+          Checklist Berkas & Perlengkapan
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+          Pantau kelengkapan dokumen resmi dan atribut orientasi MASTA 2026.
+        </p>
       </div>
 
-      {/* Progress Card */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0E1635] border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-3">
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-bold text-navy-950 dark:text-white">Status Kelengkapan:</span>
-          <span className="font-mono font-bold text-nyala-600 dark:text-nyala-400">{completedCount} dari {totalCount} Selesai ({progressPercent}%)</span>
+      {/* ── 2. FLUTTER STYLE READINESS PROGRESS CARD ── */}
+      <FlutterCard variant="elevated" className="space-y-3">
+        <div className="flex items-center justify-between text-xs sm:text-sm">
+          <div className="flex items-center gap-2 font-bold text-navy-950 dark:text-white">
+            <CheckCircle weight="fill" className="w-5 h-5 text-emerald-500" />
+            <span>Kesiapan MABA:</span>
+          </div>
+          <span className="font-mono font-bold text-nyala-600 dark:text-nyala-400">
+            {completedCount} / {totalCount} Selesai ({progressPercent}%)
+          </span>
         </div>
+        
         <ProgressBar progress={progressPercent} size="md" />
+
+        <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+          <span>Tersimpan di perangkat lokal</span>
+          {progressPercent === 100 && (
+            <span className="text-emerald-500 font-bold">✨ Siap 100%!</span>
+          )}
+        </div>
+      </FlutterCard>
+
+      {/* ── 3. FLUTTER CATEGORY CHIPS ── */}
+      <div className="space-y-1.5">
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+          Filter Kategori:
+        </span>
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          {categories.map((cat) => (
+            <FlutterChip
+              key={cat.label}
+              label={cat.label}
+              icon={cat.icon}
+              selected={activeCategory === cat.label}
+              onClick={() => setActiveCategory(cat.label)}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Category Pills */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-              activeCategory === cat
-                ? "bg-nyala-600 text-white shadow-sm"
-                : "bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 text-navy-700 dark:text-navy-300 hover:border-nyala-500"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Checklist Stream */}
-      <div className="space-y-2">
+      {/* ── 4. CHECKLIST LIST (Flutter ListTile with Custom Checkbox) ── */}
+      <div className="space-y-2.5">
         {filteredItems.map((item) => {
-          const isDone = !!checkedState[item.id];
+          const isChecked = Boolean(checkedState[item.id]);
+
           return (
             <div
               key={item.id}
               onClick={() => handleToggle(item.id)}
-              className={`p-3.5 sm:p-4 rounded-2xl border transition-all flex items-start gap-3 cursor-pointer select-none active:scale-98 shadow-sm ${
-                isDone
-                  ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/30 text-navy-600 dark:text-navy-300"
-                  : "bg-white dark:bg-[#0E1635] border-navy-200/80 dark:border-navy-800 text-navy-950 dark:text-white"
+              className={`p-4 rounded-2xl sm:rounded-3xl border transition-all cursor-pointer select-none active:scale-[0.98] flex items-start gap-3.5 ${
+                isChecked
+                  ? "bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-300/80 dark:border-emerald-900/60 shadow-sm"
+                  : "bg-white dark:bg-[#0F172A] border-slate-200/80 dark:border-slate-800 shadow-sm hover:border-nyala-300"
               }`}
             >
+              {/* Checkbox Trigger */}
               <div
-                className={`w-5 h-5 rounded-lg border mt-0.5 flex items-center justify-center transition-colors ${
-                  isDone
-                    ? "bg-emerald-500 border-emerald-500 text-white"
-                    : "border-navy-300 dark:border-navy-600 bg-navy-50 dark:bg-navy-900"
+                className={`w-6 h-6 rounded-xl flex items-center justify-center transition-all flex-shrink-0 mt-0.5 ${
+                  isChecked
+                    ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30"
+                    : "border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800"
                 }`}
               >
-                {isDone && <Check weight="bold" className="w-3.5 h-3.5" />}
+                {isChecked && <Check weight="bold" className="w-4 h-4" />}
               </div>
 
-              <div className="flex-1 space-y-0.5">
-                <h4 className={`text-xs sm:text-sm font-bold ${isDone ? "line-through text-navy-400" : "text-navy-950 dark:text-white"}`}>
-                  {item.title}
-                </h4>
-                {item.description && (
-                  <p className="text-[11px] text-navy-500 dark:text-navy-400 leading-snug">{item.description}</p>
-                )}
+              {/* Title & Description */}
+              <div className="min-w-0 flex-1 space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span
+                    className={`text-xs sm:text-sm font-bold leading-snug ${
+                      isChecked
+                        ? "line-through text-slate-400 dark:text-slate-500"
+                        : "text-navy-950 dark:text-white"
+                    }`}
+                  >
+                    {item.title}
+                  </span>
+                  {item.required && (
+                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400">
+                      Wajib
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
+                  {item.description}
+                </p>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Add Custom Item Form */}
-      <form onSubmit={handleAddItem} className="flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-[#0E1635] border border-navy-200 dark:border-navy-800 shadow-sm">
+      {/* ── 5. QUICK ADD CUSTOM ITEM FORM ── */}
+      <form
+        onSubmit={handleAddItem}
+        className="flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200/80 dark:border-slate-800 shadow-sm"
+      >
         <input
           type="text"
           value={newItemTitle}
           onChange={(e) => setNewItemTitle(e.target.value)}
-          placeholder="Tambah persiapan pribadi..."
-          className="flex-1 px-3 py-1.5 bg-transparent text-xs text-navy-950 dark:text-white placeholder:text-navy-400 outline-none"
+          placeholder="+ Tambah catatan perlengkapan sendiri..."
+          className="flex-1 px-3.5 py-2.5 text-xs text-navy-950 dark:text-white bg-transparent placeholder-slate-400 focus:outline-none"
         />
+
         <button
           type="submit"
-          className="p-2 rounded-xl bg-nyala-600 hover:bg-nyala-500 text-white text-xs font-bold active:scale-90 transition-transform cursor-pointer shadow-sm"
+          disabled={!newItemTitle.trim()}
+          className="px-4 py-2.5 rounded-xl bg-nyala-500 text-white text-xs font-bold active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1.5 flex-shrink-0"
         >
-          <Plus weight="bold" className="w-4 h-4" />
+          <Plus weight="bold" className="w-3.5 h-3.5" />
+          <span>Tambah</span>
         </button>
       </form>
 
