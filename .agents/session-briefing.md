@@ -8,14 +8,15 @@
 
 ## Key Accomplishments in This Session
 1. **Sistem Desain Duolingo 3D Gamification UI Kit ([`DESIGN.md`](file:///d:/Project/Nyala_RangkingsUMKT/DESIGN.md))**:
-   - **Tactile 3D Buttons & Cards**: Mengimplementasikan tombol dan kartu fisik tebal bergaya Duolingo dengan border bawah 4px (`border-b-4`, `duo-btn-primary`, `duo-btn-emerald`, `duo-btn-sky`, `duo-card`).
+   - **Anti-Flat 3D Tactile Tokens**: Menerapkan tombol dan kartu 3D bertekstur tebal dengan border bawah fisik 5px (`border-b-[5px]`), glossy top highlights, dan bayangan taktil (`duo-card`, `duo-btn-primary`, `duo-btn-emerald`, `duo-speech-bubble`).
+   - **Kehadiran Karakter Maskot Nyala di Konten Utama**: Menampilkan karakter Maskot Flame animasi ceria (`mood="cheering"`) di hero greeting utama yang berinteraksi langsung dengan mahasiswa melalui **Duolingo 3D Speech Bubble**.
+   - **Perbaikan Bug Label Persentase & Clean Hierarchy**: Memperbaiki bug duplikasi label `50% 50%` pada bar progress level dan memastikan tampilan countdown timer bebas nesting ganda.
    - **Strict Ban on Mobile Capsule Pills**: Menghilangkan seluruh bilah mengambang berbentuk pil/kapsul di mobile; menggantinya dengan **Solid Full-Width Docked Bottom Bar** yang rata dan presisi.
-   - **Multifunctional Action Launcher Dock**: Mengganti tombol tengah mobile dengan tombol aksi 3D multifungsional (`GridFour`) yang membuka **Floating Action Menu Dock** (`DuolingoActionMenuDock`) berisi 8 menu jalan pintas (Tanya AI, Jadwal, SIKAD, Kurikulum TI, Checklist, Mood Tracker, Admin Gedung C, Hub Warta).
-   - **Gamification Engine**: Misi Harian MABA (*Daily Quests*), sistem perolehan energi XP (`⚡ 140 XP`), Flame Streak (`🔥 3d`), dan Level Status Mahasiswa.
-2. **Redesain Menyeluruh Seluruh Halaman Mobile ([`app/mobile/`](file:///d:/Project/Nyala_RangkingsUMKT/app/mobile/))**:
-   - `DuolingoSegmentedTabs` (3D tab buttons), `DuolingoCard`, `DuolingoButton` terpasang di Beranda, Jadwal, SIKAD, Kurikulum TI, Checklist, Health Check, Hub UMKT, dan Profil.
-3. **Verifikasi Kompilasi Produksi**:
-   - `npm run build` sukses 100% (**36 rute statis & dinamis + Proxy Middleware**, waktu kompilasi 3.5s, 0 error, Exit Code 0).
+   - **Multifunctional Action Launcher Dock**: Tombol tengah aksi 3D multifungsional (`GridFour`) yang membuka **Floating Action Menu Dock** (`DuolingoActionMenuDock`) berisi 8 menu jalan pintas.
+2. **Verifikasi Kompilasi Produksi**:
+   - `npm run build` sukses 100% (**36 rute statis & dinamis + Proxy Middleware**, kompilasi 3.4s, 0 error, Exit Code 0).
+
+
 
 
 

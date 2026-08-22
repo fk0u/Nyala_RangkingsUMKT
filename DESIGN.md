@@ -152,6 +152,8 @@ Nyala menerapkan strategi **Dual-Platform & Duolingo 3D Gamification UI**:
 Sistem melarang keras praktik-praktik desain murahan berikut:
 
 - ❌ **Dilarang di Mobile:** Penggunaan **Pill / Capsule floating bar** pada navigasi mobile. Wajib gunakan *Solid Full-Width Docked Bottom Bar*.
+- ❌ **Dilarang:** Redundansi grafis (misal: maskot/ilustrasi yang sama berulang kali di header dan kartu konten tepat di bawahnya).
+- ❌ **Dilarang:** *Cards inside cards* (pembungkus kartu di dalam kartu dengan judul ganda yang berulang).
 - ❌ **Dilarang:** Emoji berlebihan sebagai pengganti ikon profesional. Gunakan paket resmi `@phosphor-icons/react`.
 - ❌ **Dilarang:** Gradien ungu neon (*AI Cyberpunk slop*).
 - ❌ **Dilarang:** Huruf miring (*italic*) pada judul utama.

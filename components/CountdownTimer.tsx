@@ -78,39 +78,39 @@ export const COUNTDOWN_MILESTONES: CountdownMilestone[] = [
   {
     id: "ukm-expo",
     name: "UKM Expo Sesi 1 di Kampus UMKT",
-    shortName: "28 Agt • UKM Expo",
+    shortName: "28 Agt • UKM Expo 1",
     category: "Puncak Luring",
     locationType: "Luring (Kampus UMKT)",
-    targetISO: "2026-08-28T06:30:00+08:00",
-    endISO: "2026-08-28T11:30:00+08:00",
-    badge: "28 Agustus 2026 (Pagi)",
-    timeWITA: "06.30 - 11.30 WITA",
-    description: "Parade dan pendaftaran seluruh UKM dan komunitas mahasiswa di lapangan kampus UMKT."
+    targetISO: "2026-08-28T07:30:00+08:00",
+    endISO: "2026-08-28T17:00:00+08:00",
+    badge: "28 Agustus 2026",
+    timeWITA: "07.30 - 17.00 WITA",
+    description: "Parade expo UKM dan display booth organisasi kemahasiswaan di lapangan utama Kampus UMKT."
   },
   {
-    id: "puncak-milad",
-    name: "Puncak Milad UMKT & Penutupan MASTA 2026",
-    shortName: "28 Agt • Puncak Milad",
+    id: "inaugurasi",
+    name: "Inaugurasi & Malam Puncak MASTA 2026",
+    shortName: "29 Agt • Puncak",
     category: "Puncak Luring",
     locationType: "Luring (Kampus UMKT)",
-    targetISO: "2026-08-28T17:00:00+08:00",
-    endISO: "2026-08-28T22:00:00+08:00",
-    badge: "28 Agustus 2026 (Malam)",
-    timeWITA: "17.00 - 22.00 WITA",
-    description: "Malam inaugurasi, penampilan seni, apresiasi mahasiswa berprestasi, dan penutupan resmi rangkaian orientasi."
+    targetISO: "2026-08-29T18:30:00+08:00",
+    endISO: "2026-08-29T22:30:00+08:00",
+    badge: "29 Agustus 2026",
+    timeWITA: "18.30 - 22.30 WITA",
+    description: "Malam keakraban, inaugurasi penyematan almamater resmi, konser musik dan apresiasi mahasiswa berprestasi."
   },
   {
     id: "kuliah-perdana",
-    name: "Kuliah Perdana Semester Ganjil 2026/2027",
-    shortName: "31 Agt • Kuliah",
+    name: "Hari Pertama Perkuliahan Semester Ganjil 2026/2027",
+    shortName: "07 Sep • Kuliah",
     category: "Kuliah",
     locationType: "Ruang Kuliah",
-    targetISO: "2026-08-31T08:00:00+08:00",
-    endISO: "2026-08-31T17:00:00+08:00",
-    badge: "31 Agustus 2026",
-    timeWITA: "Sesuai Jadwal SIKAD",
-    description: "Hari pertama perkuliahan tatap muka di ruang kelas dan laboratorium masing-masing program studi."
-  },
+    targetISO: "2026-09-07T07:30:00+08:00",
+    endISO: "2026-09-07T17:00:00+08:00",
+    badge: "07 September 2026",
+    timeWITA: "07.30 WITA Mulai",
+    description: "Awal resmi perkuliahan aktif Semester 1 tahun akademik 2026/2027 di seluruh fakultas UMKT."
+  }
 ];
 
 export interface TimeRemaining {
@@ -121,7 +121,11 @@ export interface TimeRemaining {
   totalMs: number;
 }
 
-export default function CountdownTimer() {
+interface CountdownTimerProps {
+  variant?: "default" | "duolingo-mobile";
+}
+
+export default function CountdownTimer({ variant = "default" }: CountdownTimerProps) {
   const [selectedId, setSelectedId] = useState<string>("auto");
   const [isAutoMode, setIsAutoMode] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
@@ -210,6 +214,95 @@ export default function CountdownTimer() {
     }
   };
 
+  // ── DUOLINGO MOBILE 3D LAYOUT (SINGLE-LAYER, ZERO REDUNDANCY) ──
+  if (variant === "duolingo-mobile") {
+    return (
+      <div className="duo-card p-4 sm:p-5 space-y-3.5 select-none">
+        
+        {/* Header Strip */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className={`w-2.5 h-2.5 rounded-full ${
+              eventStatus === "live" ? "bg-rose-500 animate-ping" : "bg-nyala-500"
+            }`} />
+            <h2 className="text-xs font-black uppercase tracking-wider text-navy-950 dark:text-white">
+              Hitung Mundur MASTA IMM
+            </h2>
+          </div>
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-nyala-50 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400">
+            {activeMilestone.badge}
+          </span>
+        </div>
+
+        {/* Milestone Title & Location */}
+        <div className="space-y-1">
+          <h3 className="text-sm sm:text-base font-black text-navy-950 dark:text-white leading-snug">
+            {activeMilestone.name}
+          </h3>
+          <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+            <span>{activeMilestone.timeWITA}</span>
+            <span>•</span>
+            <span>{activeMilestone.locationType}</span>
+          </div>
+        </div>
+
+        {/* 4 Chunky Digital Clock Boxes */}
+        <div className="grid grid-cols-4 gap-2 text-center">
+          {[
+            { label: "HARI", value: timeLeft.days },
+            { label: "JAM", value: timeLeft.hours },
+            { label: "MENIT", value: timeLeft.minutes },
+            { label: "DETIK", value: timeLeft.seconds },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="py-2.5 px-1 rounded-2xl bg-slate-100/80 dark:bg-[#1E293B] border-2 border-slate-200/80 dark:border-slate-700/80 border-b-4 border-b-slate-300 dark:border-b-slate-900 text-center"
+            >
+              <span className="block text-xl sm:text-2xl font-black font-mono tracking-tight text-navy-950 dark:text-white">
+                {String(item.value).padStart(2, "0")}
+              </span>
+              <span className="block text-[9px] font-black uppercase tracking-wider text-slate-400 mt-0.5">
+                {item.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Filter / Milestone Horizontal Selector */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
+          <button
+            onClick={() => handleSelectMilestone("auto")}
+            className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border-2 border-b-4 whitespace-nowrap transition-all active:border-b-2 active:translate-y-0.5 ${
+              isAutoMode
+                ? "bg-navy-950 dark:bg-white text-white dark:text-navy-950 border-navy-950 dark:border-white border-b-black dark:border-b-slate-300"
+                : "bg-white dark:bg-[#1E293B] text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 border-b-slate-300 dark:border-b-slate-900"
+            }`}
+          >
+            Otomatis
+          </button>
+          {COUNTDOWN_MILESTONES.slice(0, 4).map((m) => {
+            const isSelected = !isAutoMode && selectedId === m.id;
+            return (
+              <button
+                key={m.id}
+                onClick={() => handleSelectMilestone(m.id)}
+                className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border-2 border-b-4 whitespace-nowrap transition-all active:border-b-2 active:translate-y-0.5 ${
+                  isSelected
+                    ? "bg-nyala-500 text-white border-nyala-600 border-b-nyala-800"
+                    : "bg-white dark:bg-[#1E293B] text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 border-b-slate-300 dark:border-b-slate-900"
+                }`}
+              >
+                {m.shortName}
+              </button>
+            );
+          })}
+        </div>
+
+      </div>
+    );
+  }
+
+  // ── DEFAULT DESKTOP LAYOUT ──
   return (
     <div className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-navy-900/90 border border-navy-200/80 dark:border-navy-800 shadow-sm space-y-6">
       
