@@ -118,19 +118,19 @@ export default function MobileAppLayout({
         <div className="max-w-lg mx-auto flex items-center justify-between">
           
           {PRIMARY_MOBILE_TABS.map((tab) => {
-            // Prominent Chunky 3D Action Launcher Menu Button
+            // Refined 3D Tactile Center Action Button
             if (tab.isActionLauncher) {
               return (
                 <div key="action-launcher" className="flex-1 flex justify-center">
                   <button
                     onClick={() => setMenuDockOpen(true)}
-                    className="relative -top-4 flex flex-col items-center group active:scale-95 transition-transform select-none cursor-pointer"
+                    className="relative -top-3.5 flex flex-col items-center group active:scale-95 transition-transform select-none cursor-pointer"
                     title="Pusat Navigasi & Menu MABA"
                   >
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-b from-nyala-500 to-nyala-600 text-white flex items-center justify-center shadow-xl shadow-nyala-600/30 border-2 border-white dark:border-[#0E1635] border-b-6 border-b-nyala-900 active:border-b-2 active:translate-y-1">
-                      <GridFour weight="bold" className="w-7 h-7 text-white" />
+                    <div className="w-13 h-13 rounded-2xl bg-gradient-to-b from-nyala-500 to-nyala-600 text-white flex items-center justify-center shadow-lg shadow-nyala-600/25 border-2 border-white dark:border-[#0E1635] border-b-[5px] border-b-nyala-800 active:border-b-2 active:translate-y-1 transition-all">
+                      <GridFour weight="fill" className="w-6 h-6 text-white" />
                     </div>
-                    <span className="text-[10px] font-black text-nyala-600 dark:text-nyala-400 mt-1 tracking-tight">
+                    <span className="text-[10px] font-black text-nyala-600 dark:text-nyala-400 mt-0.5 tracking-tight">
                       Menu
                     </span>
                   </button>

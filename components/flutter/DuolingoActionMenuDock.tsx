@@ -43,7 +43,7 @@ export default function DuolingoActionMenuDock({
     {
       id: "jadwal",
       title: "Jadwal & Rundown",
-      desc: "3 Gelombang MASTA IMM",
+      desc: "Rangkaian Agenda MABA",
       href: "/mobile/jadwal",
       icon: CalendarCheck,
       color: "bg-amber-500 border-amber-700 text-white",

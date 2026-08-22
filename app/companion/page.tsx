@@ -18,52 +18,54 @@ import {
   Headset,
   WhatsappLogo,
   ArrowSquareOut,
-  Info
+  Info,
+  CheckCircle,
+  ShieldCheck
 } from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
 import BacklinkBanner from "@/components/BacklinkBanner";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import AdminHelpModal from "@/components/AdminHelpModal";
 import { useToast } from "@/context/ToastContext";
-import { OFFICIAL_LINKS, OFFICIAL_CONTACTS } from "@/lib/masta-data";
+import { QA_CATEGORIES, VERIFIED_QA_DATABASE } from "@/lib/qa-knowledge-base";
+import { dispatchGamificationUpdate } from "@/lib/gamification";
 
 interface Message {
   id: string;
   role: "assistant" | "user";
   content: string;
   timestamp: string;
+  suggestedFollowups?: string[];
 }
-
-const QUICK_PROMPTS = [
-  "Kontak & WhatsApp Admin UMKT?",
-  "Mata kuliah Semester 1 TI 2026?",
-  "Cara pengisian KRS di SIKAD?",
-  "Berapa batas minimal presensi?",
-  "Standar nilai kelulusan prodi TI?",
-  "Agenda Kalender Akademik 2026?",
-  "Ketentuan dresscode & on-cam Zoom?",
-  "Info beasiswa KIP-Kuliah & Tahfidz?"
-];
 
 export default function CompanionPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome-1",
       role: "assistant",
-      content: `Halo! Saya **Nyala**, asisten virtual pendamping Mahasiswa Baru UMKT 2026.
+      content: `Halo! Saya **Nyala**, asisten virtual terpadu pendamping Mahasiswa Baru **Universitas Muhammadiyah Kalimantan Timur (UMKT) 2026**.
 
-Silakan ajukan pertanyaan seputar:
-- **KRS & Portal SIKAD** ([mahasiswa.umkt.ac.id](https://mahasiswa.umkt.ac.id/))
-- **Kurikulum & Perkuliahan Prodi TI 2026**
-- **Kontak Layanan Biro Kemahasiswaan & Admin PMB**
-- **Jadwal 3 Gelombang MASTA & Panduan Beasiswa**
+Basis data saya telah terkalibrasi dengan edaran resmi kampus dan **Lomba Pemeringkatan UMKT 2026**:
+- 🔑 **Kredensial SIKAD:** NIM 13 Digit & Password default Nomor Registrasi \`12xxxxxx\`
+- 📋 **KRS & Dosen PA:** Alur pengisian paket 20 SKS & etika chat WA Dosen Pembimbing
+- 📅 **Jadwal MABA:** Rangkaian Universitas, Fakultas, IMM 3 Gelombang, & UKM Expo
+- 👔 **Tata Tertib & Zoom:** Format penamaan \`[Prodi]_[Nama Lengkap]\` & Dresscode
+- 🏛️ **Kontak Admin:** WhatsApp Biro Kemahasiswaan Gedung C Lt. 1 ([0822-5087-8843](https://wa.me/6282250878843))
+- 🏆 **Inovasi Pemeringkatan:** Karya MABA Al-Ghani Desta Setyawan ([@kou.sozo](https://instagram.com/kou.sozo))
 
-Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.`,
+Silakan ajukan pertanyaan atau pilih salah satu kategori siap jawab di bawah ini:`,
       timestamp: "Baru saja",
+      suggestedFollowups: [
+        "Bagaimana cara login dan apa username password SIKAD?",
+        "Apa saja rangkaian lengkap kegiatan orientasi MABA?",
+        "Apa format resmi nama akun Zoom?",
+        "Di mana lokasi Biro Kemahasiswaan dan jam operasionalnya?"
+      ]
     },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -77,6 +79,10 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
+
+  const filteredQuestions = selectedCategory === "all"
+    ? VERIFIED_QA_DATABASE
+    : VERIFIED_QA_DATABASE.filter((q) => q.category === selectedCategory);
 
   const handleSendMessage = async (textToSend?: string) => {
     const messageContent = (textToSend || input).trim();
@@ -95,6 +101,11 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
     setIsLoading(true);
 
     try {
+      // Catat interaksi untuk XP gamifikasi
+      const curCount = parseInt(localStorage.getItem("nyala_ai_interactions") || "0", 10);
+      localStorage.setItem("nyala_ai_interactions", String(curCount + 1));
+      dispatchGamificationUpdate();
+
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -108,135 +119,122 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Gagal memproses pesan.");
-      }
-
       const botMessage: Message = {
-        id: `bot-${Date.now()}`,
+        id: `assistant-${Date.now()}`,
         role: "assistant",
-        content: data.reply || "Maaf, Nyala belum dapat memproses jawaban tersebut.",
+        content: data.response || data.reply || "Maaf, terjadi kendala saat memproses jawaban.",
         timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
       };
 
       setMessages((prev) => [...prev, botMessage]);
-    } catch (err: any) {
-      console.error("Chat error:", err);
-      toast.error("Gagal terhubung ke AI. Silakan coba kembali.", "Kendala Jaringan");
-      
-      const fallbackMsg: Message = {
-        id: `bot-fallback-${Date.now()}`,
-        role: "assistant",
-        content: "Mohon maaf, koneksi ke server sedang mengalami kendala. Jika kamu butuh bantuan darurat, silakan langsung hubungi WhatsApp resmi **Biro Kemahasiswaan Gedung C Lt. 1 di [0822-5087-8843](https://wa.me/6282250878843)** atau **Admin PMB di [+62 812-3001-7008](https://wa.me/6281230017008)** ya!",
-        timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
-      };
-      setMessages((prev) => [...prev, fallbackMsg]);
+    } catch (error) {
+      console.error(error);
+      toast.error("Gagal terhubung ke AI server", "Koneksi Error");
     } finally {
       setIsLoading(false);
-      inputRef.current?.focus();
     }
   };
 
-  const handleClearHistory = () => {
-    if (confirm("Hapus seluruh riwayat percakapan?")) {
+  const handleCopyMessage = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    toast.success("Teks jawaban berhasil disalin!", "Tersalin");
+    setTimeout(() => {
+      setCopiedId(null);
+    }, 2000);
+  };
+
+  const handleClearChat = () => {
+    if (confirm("Apakah Anda yakin ingin menghapus seluruh riwayat percakapan?")) {
       setMessages([
         {
           id: `welcome-${Date.now()}`,
           role: "assistant",
-          content: "Riwayat telah dibersihkan. Halo lagi! Apa yang bisa Nyala bantu hari ini?",
+          content: "Riwayat percakapan telah dibersihkan. Ada yang bisa Nyala bantu kembali seputar UMKT?",
           timestamp: "Baru saja",
         },
       ]);
-      toast.info("Riwayat chat berhasil dibersihkan.", "Chat Direset");
+      toast.info("Riwayat chat berhasil dibersihkan", "Reset Percakapan");
     }
   };
 
-  const handleCopyMessage = (content: string, id: string) => {
-    navigator.clipboard.writeText(content);
-    setCopiedId(id);
-    toast.success("Teks pesan disalin ke papan klip.", "Tersalin");
-    setTimeout(() => setCopiedId(null), 2000);
-  };
-
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       
-      {/* Header Info */}
-      <div className="rounded-3xl p-6 bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <MascotFlame size="md" mood={isLoading ? "thinking" : "happy"} />
-            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white dark:border-navy-900" />
+      {/* 1. Header Banner */}
+      <div className="glass-card rounded-3xl p-6 sm:p-8 border border-navy-200/80 dark:border-navy-800 bg-gradient-to-br from-orange-500/10 via-amber-500/5 to-transparent text-navy-950 dark:text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="space-y-2 text-center md:text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-nyala-500/15 border border-nyala-500/30 text-nyala-600 dark:text-nyala-400 font-mono text-xs font-bold">
+            <ShieldCheck weight="fill" className="w-4 h-4" />
+            <span>Karya Inovasi Lomba Pemeringkatan UMKT 2026</span>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-black text-navy-900 dark:text-white">
-                Tanya Nyala AI
-              </h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 text-xs font-bold font-mono">
-                v2.0 Markdown
-              </span>
-            </div>
-            <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 mt-0.5">
-              Sahabat AI resmi MABA UMKT 2026. Faktual, cerdas, dan responsif.
-            </p>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
+            Nyala AI Companion
+          </h1>
+          <p className="text-xs sm:text-sm text-navy-600 dark:text-navy-300 max-w-xl leading-relaxed">
+            Asisten cerdas berbasis data terverifikasi untuk membantu menjawab seluruh pertanyaan seputar SIKAD, KRS, kurikulum, dan tata tertib orientasi MABA.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <button
-            onClick={() => setIsAdminModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-bold transition-colors"
-            title="Hubungi Admin Resmi UMKT"
-          >
-            <Headset weight="bold" className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Kontak Admin</span>
-          </button>
-
-          <button
-            onClick={handleClearHistory}
-            className="p-2 rounded-xl text-navy-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
-            title="Bersihkan Percakapan"
-          >
-            <Trash weight="bold" className="w-5 h-5" />
-          </button>
+        <div className="flex items-center gap-3">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 dark:bg-amber-950/40 border-2 border-b-4 border-amber-300/40 dark:border-amber-800/40 flex items-center justify-center p-2 shadow-xs">
+            <MascotFlame size="sm" mood="cheering" className="w-12 h-12" />
+          </div>
         </div>
       </div>
 
-      {/* Fast Admin Escalation Banner */}
-      <div className="rounded-2xl p-3.5 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/20 border border-emerald-200 dark:border-emerald-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-emerald-900 dark:text-emerald-200">
-        <div className="flex items-center gap-2">
-          <Headset weight="bold" className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-          <span>
-            <strong>Perlu konfirmasi berkas atau dispensasi?</strong> Admin Resmi UMKT siap melayani via WhatsApp:
-          </span>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-          <a
-            href="https://wa.me/6281230017008?text=Halo%20Admin%20PMB%20UMKT%2C%20saya%20Mahasiswa%20Baru%202026%20ingin%20bertanya."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1 transition-colors"
-          >
-            <WhatsappLogo weight="fill" className="w-3.5 h-3.5" />
-            <span>Admin PMB</span>
-          </a>
-          <a
-            href="https://wa.me/6282250878843?text=Halo%20Biro%20Kemahasiswaan%20UMKT%20(Gedung%20C%20Lt.%201)%2C%20saya%20MABA%202026%20ingin%20konsultasi."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1 transition-colors"
-          >
-            <WhatsappLogo weight="fill" className="w-3.5 h-3.5" />
-            <span>Biro Kemahasiswaan (Gd. C)</span>
-          </a>
-        </div>
-      </div>
-
-      {/* Chat Container */}
-      <div className="glass-card rounded-3xl border border-navy-200/60 dark:border-navy-800 flex flex-col h-[560px] sm:h-[620px] shadow-xl overflow-hidden">
+      {/* 2. Main Chat Box */}
+      <div className="glass-card rounded-3xl border border-navy-200/80 dark:border-navy-800 bg-white/70 dark:bg-navy-950/70 shadow-xl overflow-hidden flex flex-col h-[640px]">
         
-        {/* Messages List Area */}
+        {/* Chat Header Control */}
+        <div className="p-4 border-b border-navy-200/80 dark:border-navy-800 bg-navy-50/50 dark:bg-navy-900/50 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-mono font-bold text-navy-700 dark:text-navy-300">
+              Respon Cepat Basis Data Terverifikasi
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsAdminModalOpen(true)}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-xs font-bold transition-all"
+            >
+              <Headset weight="bold" className="w-3.5 h-3.5" />
+              <span>Admin Gedung C</span>
+            </button>
+
+            <button
+              onClick={handleClearChat}
+              className="p-2 rounded-xl text-navy-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+              title="Bersihkan Percakapan"
+            >
+              <Trash weight="bold" className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Category Filter Tabs */}
+        <div className="px-4 py-2 bg-navy-100/50 dark:bg-navy-900/80 border-b border-navy-200/60 dark:border-navy-800/60 flex items-center gap-2 overflow-x-auto scrollbar-none select-none">
+          {QA_CATEGORIES.map((cat) => {
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all active:scale-95 cursor-pointer border ${
+                  isSelected
+                    ? "bg-nyala-600 text-white border-nyala-700 shadow-xs"
+                    : "bg-white dark:bg-navy-800 text-navy-600 dark:text-navy-300 border-navy-200 dark:border-navy-700 hover:bg-navy-50"
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Chat Scroll View */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
           <AnimatePresence initial={false}>
             {messages.map((message) => {
@@ -245,87 +243,69 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
               return (
                 <motion.div
                   key={message.id}
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className={`flex items-start gap-2.5 sm:gap-3.5 group ${
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={`flex items-start gap-3 ${
                     isBot ? "justify-start" : "justify-end"
                   }`}
                 >
                   {/* Bot Avatar */}
                   {isBot && (
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-nyala-500/15 border border-nyala-500/30 flex items-center justify-center text-nyala-600 dark:text-nyala-400 mt-1">
-                      <Sparkle weight="fill" className="w-4 h-4 text-nyala-500" />
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-nyala-500/10 dark:bg-nyala-500/20 border border-nyala-500/30 flex items-center justify-center text-nyala-500 mt-1">
+                      <Sparkle weight="fill" className="w-4 h-4" />
                     </div>
                   )}
 
-                  {/* Message Bubble with ReactMarkdown */}
+                  {/* Message Bubble */}
                   <div
-                    className={`max-w-[88%] sm:max-w-[82%] rounded-2xl p-4 sm:p-5 text-xs sm:text-sm leading-relaxed relative ${
+                    className={`max-w-[85%] sm:max-w-[78%] rounded-2xl p-4 text-xs sm:text-sm shadow-sm ${
                       isBot
-                        ? "bg-cream-100 dark:bg-navy-800 text-navy-900 dark:text-slate-100 border border-amber-200/60 dark:border-navy-700 shadow-sm"
-                        : "bg-navy-900 dark:bg-nyala-600 text-white shadow-md font-normal rounded-tr-none"
+                        ? "bg-white dark:bg-navy-900 border border-navy-200/80 dark:border-navy-800 text-navy-900 dark:text-navy-100 rounded-tl-xs"
+                        : "bg-nyala-600 text-white rounded-tr-xs font-medium"
                     }`}
                   >
-                    <div className="font-sans prose prose-xs dark:prose-invert max-w-none text-xs sm:text-sm">
-                      {isBot ? (
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm]}
-                          components={{
-                            p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
-                            strong: ({ children }) => <strong className="font-extrabold text-navy-900 dark:text-white">{children}</strong>,
-                            ul: ({ children }) => <ul className="list-disc pl-4 my-2 space-y-1">{children}</ul>,
-                            ol: ({ children }) => <ol className="list-decimal pl-4 my-2 space-y-1">{children}</ol>,
-                            li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-                            h1: ({ children }) => <h1 className="text-base font-black mt-3 mb-1.5 text-navy-900 dark:text-white">{children}</h1>,
-                            h2: ({ children }) => <h2 className="text-sm font-bold mt-2.5 mb-1 text-navy-900 dark:text-white">{children}</h2>,
-                            h3: ({ children }) => <h3 className="text-xs font-bold mt-2 mb-1 text-navy-900 dark:text-white">{children}</h3>,
-                            table: ({ children }) => (
-                              <div className="overflow-x-auto my-3 rounded-lg border border-navy-200 dark:border-navy-700">
-                                <table className="w-full text-xs text-left border-collapse">{children}</table>
-                              </div>
-                            ),
-                            th: ({ children }) => <th className="px-3 py-2 bg-navy-100/70 dark:bg-navy-900 font-bold border-b border-navy-200 dark:border-navy-700">{children}</th>,
-                            td: ({ children }) => <td className="px-3 py-1.5 border-b border-navy-100 dark:border-navy-800">{children}</td>,
-                            code: ({ children }) => (
-                              <code className="px-1.5 py-0.5 rounded bg-navy-200/60 dark:bg-navy-900 font-mono text-[11px] text-nyala-600 dark:text-nyala-300">
-                                {children}
-                              </code>
-                            ),
-                            a: ({ href, children }) => (
-                              <a
-                                href={href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-nyala-600 dark:text-nyala-400 font-bold underline hover:text-nyala-700 inline-flex items-center gap-0.5"
-                              >
-                                {children}
-                              </a>
-                            ),
-                            blockquote: ({ children }) => (
-                              <blockquote className="border-l-4 border-nyala-500 pl-3 my-2 text-xs italic text-navy-600 dark:text-navy-300 bg-nyala-500/5 py-1 rounded-r">
-                                {children}
-                              </blockquote>
-                            ),
-                          }}
-                        >
-                          {message.content}
-                        </ReactMarkdown>
-                      ) : (
-                        <div className="whitespace-pre-wrap">{message.content}</div>
-                      )}
+                    {/* Bot Verified Badge */}
+                    {isBot && (
+                      <div className="flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-bold pb-2 mb-2 border-b border-navy-100 dark:border-navy-800">
+                        <CheckCircle weight="fill" className="w-3.5 h-3.5" />
+                        <span>Terverifikasi Panduan UMKT 2026</span>
+                      </div>
+                    )}
+
+                    <div className="prose prose-xs sm:prose-sm dark:prose-invert max-w-none space-y-2 leading-relaxed">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {message.content}
+                      </ReactMarkdown>
                     </div>
 
+                    {/* Suggested Followups */}
+                    {message.suggestedFollowups && message.suggestedFollowups.length > 0 && (
+                      <div className="pt-3 mt-3 border-t border-navy-100 dark:border-navy-800 space-y-1.5">
+                        <span className="text-[10px] font-bold text-navy-400 dark:text-navy-500 uppercase tracking-wider block">
+                          Pertanyaan Lanjutan Terkait:
+                        </span>
+                        <div className="flex flex-col gap-1">
+                          {message.suggestedFollowups.map((followup, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => handleSendMessage(followup)}
+                              className="text-left text-xs font-bold p-2 rounded-xl bg-navy-50 dark:bg-navy-800 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-nyala-600 dark:text-nyala-400 border border-navy-200/60 dark:border-navy-700 active:scale-98 transition-all flex items-center justify-between"
+                            >
+                              <span>{followup}</span>
+                              <Sparkle weight="fill" className="w-3 h-3 text-amber-500 flex-shrink-0 ml-1" />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between mt-2 pt-1 border-t border-navy-100/60 dark:border-navy-700/50">
-                      <span
-                        className={`text-[10px] font-medium ${
-                          isBot ? "text-navy-400 dark:text-navy-400" : "text-navy-300 dark:text-nyala-100"
-                        }`}
-                      >
+                      <span className={`text-[10px] font-mono ${isBot ? "text-navy-400" : "text-white/70"}`}>
                         {message.timestamp}
                       </span>
 
-                      {/* Copy Action Microinteraction */}
                       {isBot && (
                         <button
                           onClick={() => handleCopyMessage(message.content, message.id)}
@@ -333,16 +313,15 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
                           title="Salin Pesan"
                         >
                           {copiedId === message.id ? (
-                            <Check weight="bold" className="w-3 h-3 text-emerald-500" />
+                            <Check weight="bold" className="w-3.5 h-3.5 text-emerald-500" />
                           ) : (
-                            <Copy weight="bold" className="w-3 h-3" />
+                            <Copy weight="bold" className="w-3.5 h-3.5" />
                           )}
                         </button>
                       )}
                     </div>
                   </div>
 
-                  {/* User Avatar */}
                   {!isBot && (
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-navy-800 dark:bg-navy-700 text-white flex items-center justify-center mt-1">
                       <User weight="bold" className="w-4 h-4" />
@@ -353,7 +332,6 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
             })}
           </AnimatePresence>
 
-          {/* Skeleton Shimmer Loading Indicator */}
           {isLoading && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -363,7 +341,7 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-nyala-500/15 border border-nyala-500/30 flex items-center justify-center text-nyala-500 animate-pulse">
                 <Sparkle weight="fill" className="w-4 h-4" />
               </div>
-              <div className="bg-cream-100 dark:bg-navy-800 rounded-2xl p-4 border border-amber-200/60 dark:border-navy-700 shadow-sm max-w-sm">
+              <div className="bg-white dark:bg-navy-900 rounded-2xl p-4 border border-navy-200 dark:border-navy-800 shadow-sm max-w-sm">
                 <SkeletonLoader count={2} />
               </div>
             </motion.div>
@@ -372,25 +350,25 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick Prompts Carousel */}
-        <div className="px-4 py-2 border-t border-navy-100 dark:border-navy-800/60 bg-white/50 dark:bg-navy-900/50 flex items-center gap-2 overflow-x-auto scrollbar-none">
+        {/* Quick Prompts Bar */}
+        <div className="px-4 py-2 border-t border-navy-200/80 dark:border-navy-800 bg-navy-50/50 dark:bg-navy-900/50 flex items-center gap-2 overflow-x-auto scrollbar-none select-none">
           <span className="text-[11px] font-bold text-navy-400 dark:text-navy-500 uppercase tracking-wider flex items-center gap-1 flex-shrink-0">
             <Lightning weight="fill" className="w-3 h-3 text-nyala-500" />
-            <span>Saran:</span>
+            <span>Topik ({filteredQuestions.length}):</span>
           </span>
-          {QUICK_PROMPTS.map((prompt) => (
+          {filteredQuestions.slice(0, 8).map((q) => (
             <button
-              key={prompt}
-              onClick={() => handleSendMessage(prompt)}
+              key={q.id}
+              onClick={() => handleSendMessage(q.question)}
               disabled={isLoading}
-              className="text-xs px-3 py-1.5 rounded-full bg-white dark:bg-navy-800 border border-navy-200/80 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:border-nyala-500 hover:text-nyala-600 dark:hover:text-nyala-400 whitespace-nowrap transition-all shadow-xs disabled:opacity-50"
+              className="text-xs px-3 py-1.5 rounded-xl bg-white dark:bg-navy-800 border border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-300 hover:border-nyala-500 hover:text-nyala-600 dark:hover:text-nyala-400 whitespace-nowrap transition-all shadow-2xs disabled:opacity-50"
             >
-              {prompt}
+              {q.question}
             </button>
           ))}
         </div>
 
-        {/* Input Form Box */}
+        {/* Input Form */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -411,7 +389,7 @@ Ketik pertanyaanmu di bawah untuk mendapatkan informasi resmi dan terverifikasi.
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="p-2.5 sm:px-5 sm:py-2.5 rounded-2xl bg-nyala-600 hover:bg-nyala-700 disabled:opacity-40 text-white font-bold text-xs sm:text-sm shadow-md shadow-nyala-600/20 transition-all flex items-center justify-center gap-2 flex-shrink-0"
+            className="p-2.5 sm:px-5 sm:py-2.5 rounded-2xl bg-nyala-600 hover:bg-nyala-700 disabled:opacity-40 text-white font-bold text-xs sm:text-sm shadow-md shadow-nyala-600/20 transition-all flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer"
           >
             <span className="hidden sm:inline">Kirim</span>
             <PaperPlaneRight weight="bold" className="w-4 h-4" />

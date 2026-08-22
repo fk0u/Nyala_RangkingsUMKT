@@ -522,11 +522,11 @@ export const SIKAD_GUIDES: SikadGuideSection[] = [
     summary: "SIKAD (Sistem Informasi Akademik) adalah pusat data aktivitas perkuliahanmu dari semester awal hingga wisuda.",
     steps: [
       "Buka browser dan akses portal resmi: https://mahasiswa.umkt.ac.id/",
-      "Masukkan NIM (Nomor Induk Mahasiswa) resmi yang kamu terima saat registrasi ulang.",
-      "Ketik password default (biasanya tanggal lahir atau password sementara dari Biro Akademik BAAK).",
+      "Masukkan Username: NIM (Nomor Induk Mahasiswa) 13 digit resmi (contoh: 2611102441001).",
+      "Masukkan Password Default: Nomor Registrasi Pendaftaran yang diawali angka 12xxxxxx.",
       "Setelah berhasil login pertama kali, segera perbarui password di menu Profil untuk keamanan akun."
     ],
-    tips: "Jangan pernah membagikan password SIKAD kepada siapa pun karena memuat data KRS, riwayat pembayaran, dan nilai akademikmu.",
+    tips: "Password awal default SIKAD adalah Nomor Registrasi Pendaftaran yang diawali 12xxxxxx. Jangan pernah membagikan password kepada orang lain.",
     portalUrl: "https://mahasiswa.umkt.ac.id/",
     iconName: "KeyRound"
   },
@@ -1187,7 +1187,7 @@ export const MASTA_FAQS: FAQItem[] = [
   },
   {
     question: "Bagaimana cara mengakses portal mahasiswa SIKAD UMKT?",
-    answer: "Portal SIKAD UMKT dapat diakses melalui link resmi https://mahasiswa.umkt.ac.id/ menggunakan NIM sebagai username dan password default yang telah dibagikan saat registrasi ulang.",
+    answer: "Portal SIKAD UMKT dapat diakses melalui link resmi https://mahasiswa.umkt.ac.id/ menggunakan Username: NIM 13 digit (contoh: 2611102441001) dan Password Default: Nomor Registrasi Pendaftaran yang diawali 12xxxxxx.",
     category: "SIKAD"
   },
   {

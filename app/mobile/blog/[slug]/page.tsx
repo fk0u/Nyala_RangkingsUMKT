@@ -231,9 +231,9 @@ export default function MobileBlogArticleDetailPage() {
           </h3>
 
           <div className="space-y-2">
-            {relatedPosts.map((rel) => (
+            {relatedPosts.map((rel, idx) => (
               <Link
-                key={rel.slug}
+                key={`rel-post-${rel.slug || idx}-${idx}`}
                 href={`/mobile/blog/${rel.slug}`}
                 className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 block space-y-1 active:border-b-2 active:translate-y-0.5 transition-all select-none"
               >

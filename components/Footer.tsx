@@ -153,24 +153,41 @@ export default function Footer() {
 
           </div>
 
-          {/* Bottom Credits */}
-          <div className="pt-6 border-t border-navy-200/60 dark:border-navy-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-navy-500 dark:text-navy-400">
-            <p>
-              © 2026 Nyala. Karya inovasi{" "}
-              <a
-                href="https://instagram.com/kou.sozo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-nyala-600 dark:text-nyala-400 hover:underline inline-flex items-center gap-0.5"
-              >
-                @kou.sozo
-              </a>
-            </p>
+          {/* Bottom Credits & Transparency Disclaimer */}
+          <div className="pt-6 border-t border-navy-200/60 dark:border-navy-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-navy-500 dark:text-navy-400">
+            <div className="space-y-1 text-center md:text-left">
+              <p>
+                © 2026 Nyala. Inisiatif independen Mahasiswa Baru UMKT:{" "}
+                <strong className="font-bold text-navy-900 dark:text-white">Al-Ghani Desta Setyawan</strong> (
+                <a
+                  href="https://instagram.com/kou.sozo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-nyala-600 dark:text-nyala-400 hover:underline"
+                >
+                  @kou.sozo
+                </a>
+                {" • "}
+                <a
+                  href="https://kou.bio"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-navy-700 dark:text-slate-300 hover:underline inline-flex items-center gap-0.5"
+                >
+                  kou.bio
+                  <ArrowSquareOut weight="bold" className="w-3 h-3" />
+                </a>
+                )
+              </p>
+              <p className="text-[11px] text-slate-400 italic">
+                *Catatan: Seluruh data dirangkum dari pengumuman resmi kampus, namun belum sepenuhnya tervalidasi panitia pusat. Konfirmasi resmi tetap merujuk ke BAAK / Biro Kemahasiswaan.
+              </p>
+            </div>
             
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 flex-shrink-0">
               <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-navy-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>Sistem Operasional Optimal</span>
+                <span>Live Portal MABA</span>
               </span>
               <button
                 onClick={() => {

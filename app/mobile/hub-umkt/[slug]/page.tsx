@@ -236,9 +236,9 @@ export default function MobileHubArticleDetailPage() {
           </h3>
 
           <div className="space-y-2">
-            {relatedArticles.map((rel) => (
+            {relatedArticles.map((rel, idx) => (
               <Link
-                key={rel.id}
+                key={`rel-art-${rel.id || rel.slug || idx}-${idx}`}
                 href={`/mobile/hub-umkt/${rel.slug || generateSlug(rel.judul, rel.id)}`}
                 className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 block space-y-1 active:border-b-2 active:translate-y-0.5 transition-all select-none"
               >

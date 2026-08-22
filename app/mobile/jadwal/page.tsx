@@ -29,10 +29,10 @@ export default function MobileJadwalPage() {
   const [selectedScheduleDetail, setSelectedScheduleDetail] = useState<any | null>(null);
 
   const JADWAL_TABS = [
-    { id: "waves", label: "3 Gelombang", icon: CalendarCheck },
-    { id: "full-schedule", label: "Rangkaian", icon: Clock },
+    { id: "waves", label: "MASTA IMM", icon: CalendarCheck },
+    { id: "full-schedule", label: "Semua Agenda", icon: Clock },
     { id: "dresscode", label: "Pakaian", icon: TShirt },
-    { id: "sanksi", label: "Sanksi", icon: WarningCircle },
+    { id: "sanksi", label: "Tata Tertib", icon: WarningCircle },
   ];
 
   const activeWaveData = MASTA_WAVES_RUNDOWN_2026.find((w) => w.waveNumber === selectedWave);
@@ -43,10 +43,10 @@ export default function MobileJadwalPage() {
       {/* ── 1. HEADER ── */}
       <div className="space-y-1">
         <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white tracking-tight">
-          Jadwal & Rundown MASTA IMM
+          Jadwal & Rundown Kegiatan MABA
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
-          Panduan resmi 3 Gelombang (18–20 Agustus 2026) & rundown harian.
+          Rangkaian resmi MASTA Universitas, Fakultas, IMM 3 Gelombang, dan UKM Expo 2026.
         </p>
       </div>
 
@@ -243,7 +243,7 @@ export default function MobileJadwalPage() {
             </div>
 
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Pastikan hadir 15 menit sebelum kegiatan dimulai. Peserta wajib mematuhi seluruh protokol dan arahan panitia MASTA IMM.
+              Pastikan hadir 15 menit sebelum kegiatan dimulai. Peserta wajib mematuhi seluruh protokol dan tata tertib dari panitia pelaksana kegiatan.
             </p>
           </div>
         )}

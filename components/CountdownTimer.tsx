@@ -226,7 +226,7 @@ export default function CountdownTimer({ variant = "default" }: CountdownTimerPr
               eventStatus === "live" ? "bg-rose-500 animate-ping" : "bg-nyala-500"
             }`} />
             <h2 className="text-xs font-black uppercase tracking-wider text-navy-950 dark:text-white">
-              Hitung Mundur MASTA IMM
+              Hitung Mundur Kegiatan MABA
             </h2>
           </div>
           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-nyala-50 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400">

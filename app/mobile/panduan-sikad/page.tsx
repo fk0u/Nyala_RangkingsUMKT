@@ -32,9 +32,9 @@ export default function MobilePanduanSikadPage() {
 
   const SIKAD_STEPS = [
     {
-      title: "1. Login NIM & Password",
-      desc: "Buka portal mahasiswa.umkt.ac.id. Masukkan NIM 9 digit dan password awal yang tertera pada lembar bukti registrasi PMB.",
-      tips: "Jika lupa password, segera hubungi Helpdesk IT Gedung E atau klik tautan 'Lupa Password'.",
+      title: "1. Login NIM & Password Default",
+      desc: "Buka portal mahasiswa.umkt.ac.id. Masukkan NIM 13 digit (contoh: 2611102441001) sebagai Username, dan Password default adalah Nomor Registrasi Pendaftaran yang diawali angka 12xxxxxx.",
+      tips: "Setelah login pertama kali berhasil, segera ganti password di menu Pengaturan Akun demi keamanan biodata.",
     },
     {
       title: "2. Pengisian KRS Online",

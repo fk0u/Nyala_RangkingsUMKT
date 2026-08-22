@@ -4,11 +4,18 @@ Dokumen ini menjelaskan operasional **Sistem Informasi Akademik (SIKAD)** Univer
 
 ---
 
-## 1. Fungsi Utama Portal SIKAD
+## 1. Kredensial Login SIKAD Resmi
+- **Username:** NIM (Nomor Induk Mahasiswa) resmi sepanjang **13 digit** (contoh: `2611102441001`).
+- **Password Default:** Nomor Registrasi Pendaftaran yang diawali angka **`12xxxxxx`**.
+- **Keamanan:** Setelah login pertama kali berhasil, mahasiswa sangat disarankan untuk segera mengganti password di menu Pengaturan Akun SIKAD.
+
+---
+
+## 2. Fungsi Utama Portal SIKAD
 
 SIKAD merupakan pusat layanan digital terpadu bagi seluruh aktivitas akademik mahasiswa UMKT:
 
-1. **Dashboard & Biodata:** Menampilkan status registrasi semester, Nomor Induk Mahasiswa (NIM), data Dosen Pembimbing Akademik (PA), serta pengumuman penting universitas.
+1. **Dashboard & Biodata:** Menampilkan status registrasi semester, Nomor Induk Mahasiswa (NIM 13 digit), data Dosen Pembimbing Akademik (PA), serta pengumuman penting universitas.
 2. **KRS Online (Kartu Rencana Studi):** Tempat pemilihan mata kuliah semester baru, pemilihan jadwal kelas, dan pengajuan validasi ke Dosen PA.
 3. **Jadwal Kuliah Mingguan:** Kalender jadwal perkuliahan, kode ruangan, dan tautan kelas online (Zoom/OpenLearning).
 4. **Presensi Kuliah Digital:** Pelacak kehadiran perkuliahan dengan **aturan ambang batas minimum 75%** agar berhak mengikuti Ujian Akhir Semester (UAS).

@@ -103,7 +103,7 @@ export default function MobileChecklistPage() {
           Checklist Berkas & Kelengkapan
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
-          Daftar 11 berkas & perangkat wajib MASTA IMM 2026.
+          Daftar 11 berkas & perangkat wajib Orientasi MABA 2026.
         </p>
       </div>
 
