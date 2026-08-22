@@ -47,11 +47,15 @@ const nextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+            value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), display-capture=()",
           },
           {
             key: "Strict-Transport-Security",
             value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups",
           },
           {
             key: "Content-Security-Policy",
@@ -60,9 +64,9 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
-              "img-src 'self' data: blob: https://www.umkt.ac.id https://web.umkt.ac.id https://media.umkt.ac.id https://images.unsplash.com https://file.garden",
+              "img-src 'self' data: blob: https://www.umkt.ac.id https://web.umkt.ac.id https://media.umkt.ac.id https://images.unsplash.com https://file.garden https://kou.bio",
               "media-src 'self' https://file.garden blob: data:",
-              "connect-src 'self' https://web.umkt.ac.id https://*.umkt.ac.id https://zpi.sh https://*.zpi.sh https://file.garden",
+              "connect-src 'self' https://web.umkt.ac.id https://*.umkt.ac.id https://zpi.sh https://*.zpi.sh https://file.garden https://kou.bio",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
@@ -71,7 +75,7 @@ const nextConfig = {
         ],
       },
       {
-        // Long-term Caching for Favicons and Static Manifest
+        // Long-term Caching for Favicons, PWA Manifest, and Static Fonts
         source: "/(favicon.svg|manifest.json)",
         headers: [
           {

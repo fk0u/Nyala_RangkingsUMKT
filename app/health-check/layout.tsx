@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Health Check & Stamina Tracker MABA UMKT 2026",
     description: "Evaluasi kesiapan fisik, mental, dan catatan hidrasi Anda bersama maskot Nyala.",
-    url: "https://nyala.umkt.ac.id/health-check",
+    url: "https://nyala-umkt.vercel.app/health-check",
     type: "website",
     images: [
       {
-        url: "https://nyala.umkt.ac.id/opengraph-image",
+        url: "https://nyala-umkt.vercel.app/opengraph-image",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Health Check & Stamina Tracker MABA UMKT 2026",
     description: "Evaluasi kesiapan fisik, mental, dan stamina harian MABA UMKT 2026.",
-    images: ["https://nyala.umkt.ac.id/twitter-image"],
+    images: ["https://nyala-umkt.vercel.app/twitter-image"],
   },
 };
 

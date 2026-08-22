@@ -6,6 +6,7 @@ import { getCacheStats } from "@/lib/cache";
 const ALLOWED_ORIGINS = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "https://nyala-umkt.vercel.app",
   "https://nyala.umkt.ac.id",
 ];
 

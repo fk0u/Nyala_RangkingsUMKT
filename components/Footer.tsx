@@ -177,7 +177,7 @@ export default function Footer() {
                   kou.bio
                   <ArrowSquareOut weight="bold" className="w-3 h-3" />
                 </a>
-                ) — Bertemakan <strong className="font-bold text-emerald-600 dark:text-emerald-400">Keberlanjutan Kampus (Sustainability & 100% Paperless Orientation)</strong> untuk <strong className="font-bold text-nyala-600 dark:text-nyala-400">Submission Lomba Pengembangan Web Pemeringkatan UMKT (rankings.umkt.ac.id)</strong> yang mendukung <strong>SDGs Goal 4, 9, 12, & 13</strong>.
+                ) — Bertemakan <strong className="font-bold text-emerald-600 dark:text-emerald-400">Keberlanjutan Kampus (Sustainability & 100% Paperless Orientation)</strong> untuk <strong className="font-bold text-nyala-600 dark:text-nyala-400">Submission Lomba Pengembangan Web Pemeringkatan UMKT (umkt.ac.id/pemeringkatan)</strong> yang mendukung <strong>SDGs Goal 4, 9, 12, & 13</strong>.
               </p>
               <p className="text-[11px] text-slate-400 italic">
                 *Catatan: Seluruh data dirangkum dari pengumuman resmi kampus untuk kebutuhan perlombaan dan panduan MABA, namun belum sepenuhnya tervalidasi panitia pusat. Konfirmasi resmi tetap merujuk ke BAAK / Biro Kemahasiswaan.

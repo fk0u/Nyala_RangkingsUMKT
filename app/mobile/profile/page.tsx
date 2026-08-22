@@ -290,7 +290,7 @@ export default function MobileProfilePage() {
                 Karya Inovasi Web MABA
               </span>
               <span className="font-mono text-[10px] text-amber-700 dark:text-amber-300 font-bold">
-                rankings.umkt.ac.id
+                umkt.ac.id/pemeringkatan
               </span>
             </div>
             <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">

@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Hub UMKT Live - Sinkronisasi API 10 Fakultas & Berita Kampus",
     description: "Pantau feed berita live, agenda event kampus, pengumuman resmi, dan direktori 10 fakultas Universitas Muhammadiyah Kalimantan Timur.",
-    url: "https://nyala.umkt.ac.id/hub-umkt",
+    url: "https://nyala-umkt.vercel.app/hub-umkt",
     type: "website",
     images: [
       {
-        url: "https://nyala.umkt.ac.id/hub-umkt/opengraph-image",
+        url: "https://nyala-umkt.vercel.app/hub-umkt/opengraph-image",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Hub UMKT Live - Sinkronisasi API 10 Fakultas & Berita Kampus",
     description: "Pantau feed berita live, event kampus, dan direktori 10 fakultas UMKT.",
-    images: ["https://nyala.umkt.ac.id/hub-umkt/opengraph-image"],
+    images: ["https://nyala-umkt.vercel.app/hub-umkt/opengraph-image"],
   },
 };
 

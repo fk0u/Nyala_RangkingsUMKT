@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Panduan MABA & Warta Edukasi UMKT 2026",
     description: "Artikel panduan survival MABA, info beasiswa, alur KRS, organisasi UKM, dan warta kampus UMKT 2026.",
-    url: "https://nyala.umkt.ac.id/blog",
+    url: "https://nyala-umkt.vercel.app/blog",
     type: "website",
     images: [
       {
-        url: "https://nyala.umkt.ac.id/blog/opengraph-image",
+        url: "https://nyala-umkt.vercel.app/blog/opengraph-image",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Panduan MABA & Warta Edukasi UMKT 2026",
     description: "Artikel panduan survival MABA, info beasiswa, alur KRS, dan warta kampus UMKT 2026.",
-    images: ["https://nyala.umkt.ac.id/blog/opengraph-image"],
+    images: ["https://nyala-umkt.vercel.app/blog/opengraph-image"],
   },
 };
 

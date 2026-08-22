@@ -73,7 +73,7 @@ export const OFFICIAL_SDGS: { [key: number]: SDGInfo } = {
     color: "#19486A",
     icon: "🤝",
     description: "Memperkuat sarana pelaksanaan dan merevitalisasi kemitraan global untuk pembangunan berkelanjutan.",
-    umktImplementation: "Kemitraan riset UMKT dengan universitas internasional dan integrasi portal pemeringkatan (rankings.umkt.ac.id).",
+    umktImplementation: "Kemitraan riset UMKT dengan universitas internasional dan integrasi portal pemeringkatan (umkt.ac.id/pemeringkatan).",
   },
 };
 

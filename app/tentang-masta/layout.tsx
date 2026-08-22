@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Tentang MASTA UMKT 2026 - Nilai AIK, Tata Tertib & Sanksi",
     description: "Pelajari filosofi, tata tertib resmi, pilar AIK, dan alur kelulusan sertifikat MASTA UMKT 2026.",
-    url: "https://nyala.umkt.ac.id/tentang-masta",
+    url: "https://nyala-umkt.vercel.app/tentang-masta",
     type: "website",
     images: [
       {
-        url: "https://nyala.umkt.ac.id/opengraph-image",
+        url: "https://nyala-umkt.vercel.app/opengraph-image",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Tentang MASTA UMKT 2026 - Nilai AIK, Tata Tertib & Sanksi",
     description: "Pelajari filosofi, tata tertib resmi, pilar AIK, dan 5 alur MASTA UMKT 2026.",
-    images: ["https://nyala.umkt.ac.id/twitter-image"],
+    images: ["https://nyala-umkt.vercel.app/twitter-image"],
   },
 };
 

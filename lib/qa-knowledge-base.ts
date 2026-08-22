@@ -442,7 +442,7 @@ Aplikasi **Nyala** dirancang dan dikembangkan secara mandiri oleh **Al-Ghani Des
 3. **SDGs 4 (Pendidikan Berkualitas & Inklusif):** Akses informasi transparan tanpa batasan kuota berkat fitur offline-first PWA dan AI Companion deterministik.
 4. **SDGs 9 (Inovasi & Infrastruktur Digital):** Arsitektur komputasi ringan berkecepatan tinggi yang ramah energi server (*low energy digital footprint*).
 
-> *Catatan Transparansi:* Disusun untuk **Submission Lomba Pengembangan Web Pemeringkatan UMKT (rankings.umkt.ac.id)**. Seluruh data dirangkum dari pengumuman resmi kampus.`,
+> *Catatan Transparansi:* Disusun untuk **Submission Lomba Pengembangan Web Pemeringkatan UMKT (umkt.ac.id/pemeringkatan)**. Seluruh data dirangkum dari pengumuman resmi kampus.`,
     suggestedFollowups: ["Bagaimana cara kerja Eco-Impact Tracker?", "Bagaimana cara login portal SIKAD?"]
   },
   {

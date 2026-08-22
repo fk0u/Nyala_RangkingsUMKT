@@ -140,13 +140,13 @@ export default function SDGBadge({
                 Pemeringkatan UMKT 2026
               </span>
               <a
-                href="https://rankings.umkt.ac.id"
+                href="https://www.umkt.ac.id/pemeringkatan/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-nyala-600 dark:text-nyala-400 font-bold hover:underline"
               >
                 <Globe weight="bold" className="w-3.5 h-3.5" />
-                <span>rankings.umkt.ac.id</span>
+                <span>umkt.ac.id/pemeringkatan</span>
               </a>
             </div>
           </div>

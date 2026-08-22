@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Jadwal & Rundown Resmi MASTA UMKT 2026",
     description: "Cek jadwal pembagian gelombang, sesi pagi/siang 9 fakultas, dan rundown lengkap MASTA UMKT 2026.",
-    url: "https://nyala.umkt.ac.id/jadwal",
+    url: "https://nyala-umkt.vercel.app/jadwal",
     type: "website",
     images: [
       {
-        url: "https://nyala.umkt.ac.id/jadwal/opengraph-image",
+        url: "https://nyala-umkt.vercel.app/jadwal/opengraph-image",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Jadwal & Rundown Resmi MASTA UMKT 2026",
     description: "Jadwal MASTA IMM, Daring Zoom, UKM Expo, dan Puncak Milad UMKT 2026.",
-    images: ["https://nyala.umkt.ac.id/jadwal/opengraph-image"],
+    images: ["https://nyala-umkt.vercel.app/jadwal/opengraph-image"],
   },
 };
 

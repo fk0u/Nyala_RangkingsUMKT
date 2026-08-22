@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Checklist Persiapan & Berkas Wajib MABA UMKT 2026",
     description: "Centang kelengkapan berkas, seragam MASTA, dan aktivasi sistem akademik Anda.",
-    url: "https://nyala.umkt.ac.id/checklist",
+    url: "https://nyala-umkt.vercel.app/checklist",
     type: "website",
     images: [
       {
-        url: "https://nyala.umkt.ac.id/opengraph-image",
+        url: "https://nyala-umkt.vercel.app/opengraph-image",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Checklist Persiapan & Berkas Wajib MABA UMKT 2026",
     description: "Centang kelengkapan berkas, seragam MASTA, dan aktivasi akun SIKAD.",
-    images: ["https://nyala.umkt.ac.id/twitter-image"],
+    images: ["https://nyala-umkt.vercel.app/twitter-image"],
   },
 };
 

@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Simulator & Panduan SIKAD Mahasiswa UMKT 1:1",
     description: "Pelajari simulasi KRS Online, presensi minimal 75%, tagihan BRIVA, dan KHS di portal resmi mahasiswa.umkt.ac.id.",
-    url: "https://nyala.umkt.ac.id/panduan-sikad",
+    url: "https://nyala-umkt.vercel.app/panduan-sikad",
     type: "website",
     images: [
       {
-        url: "https://nyala.umkt.ac.id/panduan-sikad/opengraph-image",
+        url: "https://nyala-umkt.vercel.app/panduan-sikad/opengraph-image",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Simulator & Panduan SIKAD Mahasiswa UMKT 1:1",
     description: "Pelajari simulasi alur KRS Online, presensi 75%, tagihan BRIVA, dan KHS.",
-    images: ["https://nyala.umkt.ac.id/panduan-sikad/opengraph-image"],
+    images: ["https://nyala-umkt.vercel.app/panduan-sikad/opengraph-image"],
   },
 };
 

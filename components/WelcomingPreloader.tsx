@@ -106,7 +106,7 @@ export default function WelcomingPreloader({ children }: WelcomingPreloaderProps
           <div className="text-center space-y-1 pb-2">
             <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-slate-500 dark:text-slate-400">
               <ShieldCheck weight="fill" className="w-3.5 h-3.5 text-nyala-600" />
-              <span>Submission Lomba Pemeringkatan UMKT (rankings.umkt.ac.id)</span>
+              <span>Submission Lomba Pemeringkatan UMKT (umkt.ac.id/pemeringkatan)</span>
             </div>
             <p className="text-[10px] text-slate-400 font-medium">
               Karya Al-Ghani Desta Setyawan (@kou.sozo)

@@ -357,7 +357,7 @@ export default function MobileDashboardPage() {
         </div>
 
         <p className="leading-relaxed">
-          Aplikasi ini dikembangkan oleh Mahasiswa Baru UMKT: <strong className="text-navy-900 dark:text-white">Al-Ghani Desta Setyawan</strong> bertemakan <strong className="text-emerald-600 dark:text-emerald-400">Keberlanjutan Kampus (Sustainability & 100% Paperless Orientation)</strong> sebagai karya *submission* resmi untuk <strong className="text-nyala-600 dark:text-nyala-400">Lomba Pengembangan Web yang diselenggarakan oleh Pemeringkatan UMKT (rankings.umkt.ac.id)</strong> yang mendukung capaian <strong>SDGs Goal 4 (Pendidikan Berkualitas), 9 (Inovasi), 12 (Konsumsi Bertanggung Jawab), & 13 (Aksi Iklim)</strong>.
+          Aplikasi ini dikembangkan oleh Mahasiswa Baru UMKT: <strong className="text-navy-900 dark:text-white">Al-Ghani Desta Setyawan</strong> bertemakan <strong className="text-emerald-600 dark:text-emerald-400">Keberlanjutan Kampus (Sustainability & 100% Paperless Orientation)</strong> sebagai karya *submission* resmi untuk <strong className="text-nyala-600 dark:text-nyala-400">Lomba Pengembangan Web yang diselenggarakan oleh Pemeringkatan UMKT (umkt.ac.id/pemeringkatan)</strong> yang mendukung capaian <strong>SDGs Goal 4 (Pendidikan Berkualitas), 9 (Inovasi), 12 (Konsumsi Bertanggung Jawab), & 13 (Aksi Iklim)</strong>.
         </p>
 
         <div className="flex items-center gap-3 pt-1 border-t border-slate-200/60 dark:border-slate-800/60 font-bold text-[10px]">
@@ -383,12 +383,12 @@ export default function MobileDashboardPage() {
           </a>
           <span>•</span>
           <a
-            href="https://rankings.umkt.ac.id"
+            href="https://www.umkt.ac.id/pemeringkatan/"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-slate-500 hover:text-navy-900 dark:hover:text-white hover:underline"
           >
-            <span>rankings.umkt.ac.id</span>
+            <span>umkt.ac.id/pemeringkatan</span>
             <ArrowSquareOut weight="bold" className="w-2.5 h-2.5" />
           </a>
         </div>

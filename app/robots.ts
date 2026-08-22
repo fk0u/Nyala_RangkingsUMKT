@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://nyala.umkt.ac.id";
+  const baseUrl = "https://nyala-umkt.vercel.app";
 
   return {
     rules: [
@@ -15,7 +15,13 @@ export default function robots(): MetadataRoute.Robots {
           "/api/admin-auth/*",
         ],
       },
+      {
+        userAgent: "Googlebot",
+        allow: "/",
+        disallow: ["/adminuse", "/api/admin-auth"],
+      },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }

@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Panduan & Kurikulum Prodi Teknologi Informasi UMKT 2026",
     description: "Kenali kurikulum, standar nilai kelulusan, video mindset MABA, dan peminatan Jaringan & Komputasi Cerdas di Prodi TI UMKT.",
-    url: "https://nyala.umkt.ac.id/panduan-ti",
+    url: "https://nyala-umkt.vercel.app/panduan-ti",
     type: "website",
     images: [
       {
-        url: "https://nyala.umkt.ac.id/panduan-ti/opengraph-image",
+        url: "https://nyala-umkt.vercel.app/panduan-ti/opengraph-image",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Panduan & Kurikulum Prodi Teknologi Informasi UMKT 2026",
     description: "Kenali kurikulum, standar nilai kelulusan, video mindset MABA, dan peminatan Jaringan & Komputasi Cerdas di Prodi TI UMKT.",
-    images: ["https://nyala.umkt.ac.id/panduan-ti/opengraph-image"],
+    images: ["https://nyala-umkt.vercel.app/panduan-ti/opengraph-image"],
   },
 };
 
