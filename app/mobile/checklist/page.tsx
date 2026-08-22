@@ -21,6 +21,7 @@ import DuolingoButton from "@/components/flutter/DuolingoButton";
 import DuolingoSegmentedTabs from "@/components/flutter/DuolingoSegmentedTabs";
 import { INITIAL_CHECKLIST, ChecklistItem } from "@/lib/masta-data";
 import { useToast } from "@/context/ToastContext";
+import { dispatchGamificationUpdate } from "@/lib/gamification";
 
 export default function MobileChecklistPage() {
   const [items, setItems] = useState<ChecklistItem[]>(INITIAL_CHECKLIST);
@@ -48,6 +49,7 @@ export default function MobileChecklistPage() {
     const next = { ...checkedState, [id]: !checkedState[id] };
     setCheckedState(next);
     localStorage.setItem("nyala_checklist", JSON.stringify(next));
+    dispatchGamificationUpdate();
 
     if (next[id]) {
       const allDone = items.every((item) => next[item.id]);
@@ -132,6 +134,16 @@ export default function MobileChecklistPage() {
             ? "🎉 Hebat! Seluruh perlengkapanmu sudah siap 100% untuk orientasi kampus!"
             : "🔥 Lengkapi sisa checklist di bawah agar tidak ada berkas yang tertinggal."}
         </p>
+
+        {/* Eco-Paperless Badge */}
+        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] text-emerald-600 dark:text-emerald-400 font-bold select-none">
+          <span className="flex items-center gap-1">
+            <span>🌱</span> 100% Paperless MABA Checklist
+          </span>
+          <span className="font-mono text-[9px] bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+            Hemat ~{completedCount || 1} Lembar Kertas (SDGs 12)
+          </span>
+        </div>
       </DuolingoCard>
 
       {/* ── 3. DUOLINGO 3D SEGMENTED TABS (NO PILL CAPSULE) ── */}

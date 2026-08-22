@@ -424,25 +424,45 @@ Peserta yang melanggar tata tertib atau tidak menghadiri rangkaian tanpa izin re
     suggestedFollowups: ["Di mana lokasi Biro Kemahasiswaan?", "Bagaimana kurikulum semester 1 prodi TI?"]
   },
 
-  // ── KATEGORI 7: INOVASI & PEMERINGKATAN UMKT 2026 ──
+  // ── KATEGORI 7: INOVASI & PEMERINGKATAN UMKT 2026 (SUSTAINABILITY & SDGS) ──
   {
     id: "qa-pemeringkatan-umkt",
     category: "pemeringkatan",
-    categoryLabel: "Inovasi Pemeringkatan",
+    categoryLabel: "Inovasi Keberlanjutan",
     categoryIcon: "ShieldCheck",
-    question: "Apa latar belakang aplikasi Nyala dan keikutsertaannya dalam Lomba Pemeringkatan UMKT?",
-    keywords: ["pemeringkatan", "lomba", "inovasi", "pengembang", "al-ghani", "desta", "setyawan", "kou.sozo", "kou.bio", "karya", "maba 2026"],
-    answer: `🏆 **Tentang Nyala — Inovasi Digital Mahasiswa Baru UMKT 2026**:
+    question: "Apa latar belakang aplikasi Nyala dan kaitannya dengan tema Keberlanjutan (Sustainability) di Lomba Pemeringkatan UMKT?",
+    keywords: ["pemeringkatan", "lomba", "inovasi", "pengembang", "al-ghani", "desta", "setyawan", "kou.sozo", "kou.bio", "karya", "maba 2026", "sustainability", "keberlanjutan", "sdgs"],
+    answer: `🌿 **Nyala — Inovasi Keberlanjutan & Paperless Orientasi MABA UMKT 2026**:
 
-Aplikasi **Nyala** dirancang dan dikembangkan secara independen oleh **Al-Ghani Desta Setyawan** (Mahasiswa Baru UMKT 2026, Instagram: [**@kou.sozo**](https://instagram.com/kou.sozo) • Portfolio: [**kou.bio**](https://kou.bio)).
+Aplikasi **Nyala** dirancang dan dikembangkan secara mandiri oleh **Al-Ghani Desta Setyawan** (Mahasiswa Baru UMKT 2026, Instagram: [**@kou.sozo**](https://instagram.com/kou.sozo) • Portfolio: [**kou.bio**](https://kou.bio)) dengan mengusung tema **Inovasi Digital Keberlanjutan (*Sustainability & Green Campus*)**.
 
-### 🎯 Tujuan & Keikutsertaan Lomba Pemeringkatan UMKT:
-1. **Solusi Transisi MABA (Zero-Confusion):** Mengintegrasikan seluruh informasi akademik SIKAD, kurikulum, warta API real-time, dan tata tertib orientasi dalam satu antarmuka modern Flutter/Duolingo 3D UI Kit.
-2. **Pilar SDGs Kampus (Quality Education & Innovation):** Mendukung keterbukaan informasi digitalisasi kampus selaras dengan target *Sustainable Development Goals* (SDGs Goal 4 & Goal 9).
-3. **Karya Kompetisi Pemeringkatan UMKT:** Disusun sebagai bukti nyata bahwa mahasiswa baru mampu menciptakan inovasi teknologi yang berdampak langsung bagi 3.755+ rekan seangkatan.
+### 🌍 4 Pilar SDGs yang Didukung Nyala:
+1. **SDGs 12 (Konsumsi & Produksi Bertanggung Jawab):** Mengubah orientasi fisik yang boros kertas menjadi **100% Paperless Digital Ecosystem** (menghemat ~15 lembar kertas per mahasiswa).
+2. **SDGs 13 (Aksi Iklim & Reduksi Emisi):** Memangkas emisi karbon (*carbon footprint*) dari pencetakan dan distribusi modul fisik.
+3. **SDGs 4 (Pendidikan Berkualitas & Inklusif):** Akses informasi transparan tanpa batasan kuota berkat fitur offline-first PWA dan AI Companion deterministik.
+4. **SDGs 9 (Inovasi & Infrastruktur Digital):** Arsitektur komputasi ringan berkecepatan tinggi yang ramah energi server (*low energy digital footprint*).
 
-> *Catatan Transparansi:* Seluruh data dirangkum dengan itikad baik dari pengumuman resmi kampus, namun belum sepenuhnya tervalidasi panitia pusat. Konfirmasi resmi tetap merujuk ke BAAK / Biro Kemahasiswaan.`,
-    suggestedFollowups: ["Bagaimana cara login portal SIKAD?", "Apa saja 4 modul utama aplikasi Nyala?"]
+> *Catatan Transparansi:* Disusun untuk **Submission Lomba Pengembangan Web Pemeringkatan UMKT (rankings.umkt.ac.id)**. Seluruh data dirangkum dari pengumuman resmi kampus.`,
+    suggestedFollowups: ["Bagaimana cara kerja Eco-Impact Tracker?", "Bagaimana cara login portal SIKAD?"]
+  },
+  {
+    id: "qa-sustainability-paperless",
+    category: "pemeringkatan",
+    categoryLabel: "Kampus Paperless",
+    categoryIcon: "ShieldCheck",
+    question: "Bagaimana cara kerja Eco-Impact Tracker dan perhitungan penghematan kertas di Nyala?",
+    keywords: ["eco impact", "kertas", "hemat kertas", "paperless", "jejak karbon", "co2", "air", "green campus", "lingkungan", "lca"],
+    answer: `🌱 **Sistem Perhitungan Eco-Impact Tracker Nyala**:
+
+Eco-Impact Tracker menghitung kontribusi nyata setiap mahasiswa baru dalam pelestarian lingkungan berdasarkan standar *Life Cycle Assessment (LCA)* industri kertas:
+
+### 📊 Metrik Perhitungan Nyata:
+- **Kertas Dihemat:** Base 8 lembar (buku panduan & rundown digital) + 1 lembar per item checklist digital yang diselesaikan.
+- **Reduksi Emisi CO₂:** \`Kertas Dihemat × 0.015 kg CO₂e\` (mengurangi jejak emisi produksi pulp & logistik).
+- **Air Bersih Dihemat:** \`Kertas Dihemat × 0.3 Liter air\` (penghematan air proses industri kertas).
+
+💡 *Kamu dapat memantau akumulasi penghematan kertas dan jejak karbon pribadimu langsung di menu **Profil Mahasiswa**!*`,
+    suggestedFollowups: ["Berapa lembar kertas yang bisa dihemat 3.755 MABA?", "Apa saja fitur utama aplikasi Nyala?"]
   }
 ];
 

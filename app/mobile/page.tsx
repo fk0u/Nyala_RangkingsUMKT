@@ -349,13 +349,15 @@ export default function MobileDashboardPage() {
         <div className="flex items-center justify-between flex-wrap gap-1">
           <span className="font-bold text-navy-950 dark:text-white flex items-center gap-1.5">
             <ShieldCheck weight="fill" className="w-4 h-4 text-nyala-600" />
-            Inisiatif Independen Mahasiswa
+            Karya Inovasi Keberlanjutan (Sustainability)
           </span>
-          <span className="font-mono text-[10px] text-slate-400">MABA UMKT 2026</span>
+          <span className="font-mono text-[10px] text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-300/40">
+            Pemeringkatan UMKT • SDGs
+          </span>
         </div>
 
         <p className="leading-relaxed">
-          Aplikasi ini dikembangkan secara sukarela oleh Mahasiswa Baru UMKT: <strong className="text-navy-900 dark:text-white">Al-Ghani Desta Setyawan</strong> untuk mempermudah adaptasi teman-teman seangkatan.
+          Aplikasi ini dikembangkan oleh Mahasiswa Baru UMKT: <strong className="text-navy-900 dark:text-white">Al-Ghani Desta Setyawan</strong> bertemakan <strong className="text-emerald-600 dark:text-emerald-400">Keberlanjutan Kampus (Sustainability & 100% Paperless Orientation)</strong> sebagai karya *submission* resmi untuk <strong className="text-nyala-600 dark:text-nyala-400">Lomba Pengembangan Web yang diselenggarakan oleh Pemeringkatan UMKT (rankings.umkt.ac.id)</strong> yang mendukung capaian <strong>SDGs Goal 4 (Pendidikan Berkualitas), 9 (Inovasi), 12 (Konsumsi Bertanggung Jawab), & 13 (Aksi Iklim)</strong>.
         </p>
 
         <div className="flex items-center gap-3 pt-1 border-t border-slate-200/60 dark:border-slate-800/60 font-bold text-[10px]">
@@ -379,10 +381,20 @@ export default function MobileDashboardPage() {
             <span>kou.bio</span>
             <ArrowSquareOut weight="bold" className="w-2.5 h-2.5" />
           </a>
+          <span>•</span>
+          <a
+            href="https://rankings.umkt.ac.id"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-slate-500 hover:text-navy-900 dark:hover:text-white hover:underline"
+          >
+            <span>rankings.umkt.ac.id</span>
+            <ArrowSquareOut weight="bold" className="w-2.5 h-2.5" />
+          </a>
         </div>
 
         <p className="text-[10px] text-slate-400 italic pt-0.5">
-          *Catatan: Seluruh data dirangkum dari edaran resmi kampus, namun belum sepenuhnya tervalidasi panitia pusat. Konfirmasi resmi tetap merujuk ke BAAK / Biro Kemahasiswaan.
+          *Catatan: Seluruh data dirangkum dari edaran resmi kampus untuk keperluan perlombaan & panduan MABA, namun belum sepenuhnya divalidasi resmi oleh panitia pusat. Konfirmasi resmi tetap merujuk ke BAAK / Biro Kemahasiswaan.
         </p>
       </div>
 

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { 
   House, 
   CalendarCheck, 
-  Laptop, 
+  Newspaper, 
   User,
   MagnifyingGlass, 
   Flame, 
@@ -61,7 +61,7 @@ export default function MobileAppLayout({
     { href: "/mobile", label: "Beranda", icon: House },
     { href: "/mobile/jadwal", label: "Jadwal", icon: CalendarCheck },
     { isActionLauncher: true, label: "Menu" },
-    { href: "/mobile/panduan-sikad", label: "SIKAD", icon: Laptop },
+    { href: "/mobile/hub-umkt", label: "Warta", icon: Newspaper },
     { href: "/mobile/profile", label: "Profil", icon: User },
   ];
 

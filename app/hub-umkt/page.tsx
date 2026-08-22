@@ -23,7 +23,9 @@ import {
   WarningCircle,
   Funnel,
   ArrowRight,
-  Student
+  Student,
+  MapPin,
+  GraduationCap
 } from "@phosphor-icons/react";
 import { 
   fetchUMKTHub, 
@@ -37,8 +39,29 @@ import {
   extractImageFromHTML,
   generateSlug
 } from "@/lib/umkt-api";
+import { UMKT_10_FAKULTAS } from "@/lib/faculty-data";
 import { useToast } from "@/context/ToastContext";
 import MascotFlame from "@/components/MascotFlame";
+import SDGBadge from "@/components/SDGBadge";
+import { BeritaSkeletonGrid } from "@/components/SkeletonLoader";
+
+const BERITA_CATEGORIES = [
+  { id: "all", label: "Semua Kategori" },
+  { id: "sdgs", label: "🌿 SDGs & Keberlanjutan" },
+  { id: "kabar kampus", label: "Kabar Kampus" },
+  { id: "feature", label: "Feature" },
+  { id: "artikel & opini", label: "Artikel & Opini" },
+  { id: "riset & pengabdian", label: "Riset & Pengabdian" },
+  { id: "UMKT info", label: "UMKT Info" },
+  { id: "english corner", label: "English Corner" },
+];
+
+const BERITA_LEMBAGA = [
+  { id: "all", label: "Semua Sumber Lembaga", code: "ALL" },
+  { id: "lmbg1111", label: "Fakultas Sains dan Teknologi", code: "FST", badge: "lmbg1111" },
+  { id: "lmbg1110", label: "Fakultas Ekonomi Bisnis dan Politik", code: "FEBP", badge: "lmbg1110" },
+  { id: "lmbg1109", label: "Fakultas Kesehatan Masyarakat", code: "FKM", badge: "lmbg1109" },
+];
 
 export default function HubUMKTPage() {
   const [activeTab, setActiveTab] = useState<"all" | "berita" | "pengumuman" | "event" | "fakultas" | "unit">("all");
@@ -48,12 +71,22 @@ export default function HubUMKTPage() {
   const [lastUpdate, setLastUpdate] = useState<string>("");
   const toast = useToast();
 
+  // News Specific States (Pagination, Category & Faculty Source)
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedLembaga, setSelectedLembaga] = useState("all");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest" | "title_asc" | "title_desc">("newest");
+  const [beritaPage, setBeritaPage] = useState(1);
+  const [beritaTotalCount, setBeritaTotalCount] = useState(0);
+  const [beritaLoading, setBeritaLoading] = useState(false);
+
   // Data Stores
   const [beritaList, setBeritaList] = useState<UMKTBerita[]>([]);
   const [pengumumanList, setPengumumanList] = useState<UMKTPengumuman[]>([]);
   const [eventList, setEventList] = useState<UMKTEvent[]>([]);
   const [fakultasList, setFakultasList] = useState<UMKTFakultas[]>([]);
   const [informasiList, setInformasiList] = useState<UMKTInformasi[]>([]);
+
+  const PAGE_SIZE = 9;
 
   const loadData = async () => {
     setLoading(true);
@@ -63,12 +96,15 @@ export default function HubUMKTPage() {
       const payload = data.data || data.hub || {};
 
       if (payload) {
-        setBeritaList(payload.berita || []);
         setPengumumanList(payload.pengumuman || []);
         setEventList(payload.event || []);
         setFakultasList(payload.fakultas || []);
         setInformasiList(payload.informasi || []);
         setLastUpdate(payload.lastUpdate?.[0]?.tanggal_formatted || new Date().toISOString());
+        if (selectedCategory === "all" && selectedLembaga === "all") {
+          setBeritaList(payload.berita || []);
+          setBeritaTotalCount(payload.beritaTotal || payload.berita?.length || 0);
+        }
       }
     } catch (err) {
       console.error("Gagal memuat data API UMKT:", err);
@@ -82,18 +118,69 @@ export default function HubUMKTPage() {
     loadData();
   }, []);
 
-  // Filter Berita
-  const filteredBerita = beritaList.filter((b) => {
-    const matchesSearch =
-      b.judul.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      b.isi.toLowerCase().includes(searchQuery.toLowerCase());
+  // Dynamic Berita Fetcher
+  const fetchBeritaDynamic = async () => {
+    setBeritaLoading(true);
+    try {
+      let url = `/api/umkt-portal?page=${beritaPage}&page_size=${PAGE_SIZE}`;
 
-    const matchesSDG =
-      selectedSDG === "all" ||
-      (Array.isArray(b.sdgs) && b.sdgs.some((s) => s.sdgs.toLowerCase().includes(selectedSDG.toLowerCase())));
+      if (selectedLembaga !== "all") {
+        url += `&type=berita-lembaga&kode_lembaga=${selectedLembaga}`;
+        if (searchQuery.trim()) url += `&search=${encodeURIComponent(searchQuery.trim())}`;
+      } else {
+        url += `&type=berita`;
+        const queryTerm = selectedCategory !== "all"
+          ? (searchQuery.trim() ? `${selectedCategory} ${searchQuery.trim()}` : selectedCategory)
+          : searchQuery.trim();
+        if (queryTerm) url += `&search=${encodeURIComponent(queryTerm)}`;
+      }
 
-    return matchesSearch && matchesSDG;
-  });
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.status === "success" && data.data) {
+        setBeritaList(data.data.results || []);
+        setBeritaTotalCount(data.data.count || 0);
+      } else {
+        setBeritaList([]);
+        setBeritaTotalCount(0);
+      }
+    } catch (err) {
+      console.error("Gagal memuat berita dinamis:", err);
+    } finally {
+      setBeritaLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBeritaDynamic();
+  }, [selectedCategory, selectedLembaga, beritaPage]);
+
+  // Client-side sorting on active page
+  const sortedBerita = React.useMemo(() => {
+    const list = [...beritaList];
+    if (sortOrder === "title_asc") {
+      return list.sort((a, b) => a.judul.localeCompare(b.judul));
+    }
+    if (sortOrder === "title_desc") {
+      return list.sort((a, b) => b.judul.localeCompare(a.judul));
+    }
+    if (sortOrder === "oldest") {
+      return list.sort((a, b) => {
+        const dateA = new Date(a.created || a.tanggal || a.tgl_upload || 0).getTime();
+        const dateB = new Date(b.created || b.tanggal || b.tgl_upload || 0).getTime();
+        return dateA - dateB;
+      });
+    }
+    // newest (default)
+    return list.sort((a, b) => {
+      const dateA = new Date(a.created || a.tanggal || a.tgl_upload || 0).getTime();
+      const dateB = new Date(b.created || b.tanggal || b.tgl_upload || 0).getTime();
+      return dateB - dateA;
+    });
+  }, [beritaList, sortOrder]);
+
+  const totalPages = Math.ceil(beritaTotalCount / PAGE_SIZE) || 1;
 
   // Filter Pengumuman
   const filteredPengumuman = pengumumanList.filter((p) => {
@@ -111,13 +198,6 @@ export default function HubUMKTPage() {
     );
   });
 
-  // Filter Fakultas
-  const filteredFakultas = fakultasList.filter((f) => {
-    const name = (f.nama || f.nama_lembaga || "").toLowerCase();
-    const shortName = (f.singkatan || f.kode_lembaga || "").toLowerCase();
-    return name.includes(searchQuery.toLowerCase()) || shortName.includes(searchQuery.toLowerCase());
-  });
-
   // Filter Unit
   const filteredUnit = informasiList.filter((u) => {
     const name = (u.nama || u.nama_lembaga || "").toLowerCase();
@@ -125,7 +205,7 @@ export default function HubUMKTPage() {
     return name.includes(searchQuery.toLowerCase()) || desc.includes(searchQuery.toLowerCase());
   });
 
-  const spotlightArticle = beritaList[0];
+  const spotlightArticle = sortedBerita[0];
 
   return (
     <div className="space-y-12 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -209,13 +289,7 @@ export default function HubUMKTPage() {
                   {Array.isArray(spotlightArticle.sdgs) && spotlightArticle.sdgs.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {spotlightArticle.sdgs.map((sdg) => (
-                        <span
-                          key={sdg.id}
-                          className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white shadow-sm"
-                          style={{ backgroundColor: sdg.color || "#FF5A1F" }}
-                        >
-                          {sdg.sdgs}
-                        </span>
+                        <SDGBadge key={sdg.id} sdg={sdg} size="sm" />
                       ))}
                     </div>
                   )}
@@ -302,88 +376,267 @@ export default function HubUMKTPage() {
         <div className="space-y-12">
           
           {/* A. BERITA SECTION */}
-          {(activeTab === "all" || activeTab === "berita") && filteredBerita.length > 0 && (
+          {(activeTab === "all" || activeTab === "berita") && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Newspaper weight="bold" className="w-5 h-5 text-nyala-500" />
-                  <h3 className="text-xl font-black text-navy-900 dark:text-white tracking-tight">
-                    Warta Berita Kampus ({filteredBerita.length})
-                  </h3>
+              
+              {/* Berita Header & Toolbar */}
+              <div className="p-6 rounded-3xl glass-card border border-navy-200/80 dark:border-navy-800 space-y-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <Newspaper weight="bold" className="w-6 h-6 text-nyala-500" />
+                      <h3 className="text-2xl font-black text-navy-950 dark:text-white tracking-tight">
+                        Warta Berita Kampus UMKT
+                      </h3>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                      Menampilkan <strong className="text-navy-950 dark:text-white font-bold">{beritaTotalCount}</strong> berita resmi terpublikasi (Halaman {beritaPage} dari {totalPages})
+                    </p>
+                  </div>
+
+                  {/* Sort Controls & Reset */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-700 px-3 py-1.5 rounded-xl text-xs font-bold text-navy-900 dark:text-white">
+                      <span className="text-slate-400">Urutkan:</span>
+                      <select
+                        value={sortOrder}
+                        onChange={(e) => setSortOrder(e.target.value as any)}
+                        className="bg-transparent outline-none cursor-pointer font-bold"
+                      >
+                        <option value="newest">Tanggal Terbaru</option>
+                        <option value="oldest">Tanggal Terlama</option>
+                        <option value="title_asc">Judul (A - Z)</option>
+                        <option value="title_desc">Judul (Z - A)</option>
+                      </select>
+                    </div>
+
+                    {(selectedCategory !== "all" || selectedLembaga !== "all" || searchQuery.trim()) && (
+                      <button
+                        onClick={() => {
+                          setSelectedCategory("all");
+                          setSelectedLembaga("all");
+                          setSearchQuery("");
+                          setBeritaPage(1);
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 text-xs font-bold hover:bg-rose-100 transition-colors flex items-center gap-1 cursor-pointer"
+                      >
+                        <ArrowClockwise weight="bold" className="w-3.5 h-3.5" />
+                        <span>Reset</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Filter Row 1: Kategori Topik */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none select-none">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">
+                    Topik:
+                  </span>
+                  {BERITA_CATEGORIES.map((cat) => {
+                    const isCatActive = selectedCategory === cat.id && selectedLembaga === "all";
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => {
+                          setSelectedLembaga("all");
+                          setSelectedCategory(cat.id);
+                          setBeritaPage(1);
+                        }}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all active:scale-95 cursor-pointer border ${
+                          isCatActive
+                            ? "bg-nyala-600 text-white border-nyala-700 shadow-xs"
+                            : "bg-white dark:bg-navy-900 text-navy-700 dark:text-slate-300 border-navy-200 dark:border-navy-700 hover:bg-navy-50"
+                        }`}
+                      >
+                        {cat.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Filter Row 2: Sumber Fakultas / Lembaga */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none select-none pt-1 border-t border-navy-100 dark:border-navy-800">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">
+                    Sumber Fakultas:
+                  </span>
+                  {BERITA_LEMBAGA.map((lem) => {
+                    const isLemActive = selectedLembaga === lem.id;
+                    return (
+                      <button
+                        key={lem.id}
+                        onClick={() => {
+                          setSelectedCategory("all");
+                          setSelectedLembaga(lem.id);
+                          setBeritaPage(1);
+                        }}
+                        className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all active:scale-95 cursor-pointer border ${
+                          isLemActive
+                            ? "bg-blue-600 text-white border-blue-700 shadow-xs"
+                            : "bg-white dark:bg-navy-900 text-navy-700 dark:text-slate-300 border-navy-200 dark:border-navy-700 hover:bg-navy-50"
+                        }`}
+                      >
+                        {lem.code === "ALL" ? "Universitas (Semua Lembaga)" : `${lem.code} — ${lem.label}`}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredBerita.map((item) => {
-                  const slug = generateSlug(item.judul, item.id);
-                  const cover = item.foto || extractImageFromHTML(item.isi) || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80";
+              {/* News Cards Grid */}
+              {beritaLoading ? (
+                <div className="py-6">
+                  <BeritaSkeletonGrid count={6} />
+                </div>
+              ) : sortedBerita.length === 0 ? (
+                <div className="py-16 text-center glass-card rounded-3xl border border-navy-200 dark:border-navy-800 p-8 space-y-3">
+                  <p className="text-sm text-slate-400">Tidak ada artikel yang cocok dengan filter atau kata kunci saat ini.</p>
+                  <button
+                    onClick={() => {
+                      setSelectedCategory("all");
+                      setSelectedLembaga("all");
+                      setSearchQuery("");
+                      setBeritaPage(1);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-nyala-600 text-white font-bold text-xs hover:bg-nyala-700 transition-colors cursor-pointer"
+                  >
+                    Tampilkan Semua Berita
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {sortedBerita.map((item) => {
+                    const slug = item.slug || generateSlug(item.judul, item.id);
+                    const cover = item.thumbnail || item.foto || extractImageFromHTML(item.isi) || "https://media.umkt.ac.id/web/thumbnail/lmbg1001/ra727/d57ad51df8464ec18e2f81a4dcc6b7c2.webp";
 
-                  return (
-                    <article
-                      key={`berita-${item.id}`}
-                      className="group flex flex-col justify-between rounded-3xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500/50 hover:shadow-xl transition-all"
-                    >
-                      {/* Image Thumbnail */}
-                      <Link href={`/hub-umkt/${slug}`} className="block relative aspect-video overflow-hidden bg-navy-950">
-                        <img
-                          src={cover}
-                          alt={item.judul}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-                          {Array.isArray(item.sdgs) && item.sdgs.slice(0, 1).map((s) => (
-                            <span
-                              key={s.id}
-                              className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white shadow-sm"
-                              style={{ backgroundColor: s.color || "#FF5A1F" }}
-                            >
-                              {s.sdgs}
+                    return (
+                      <article
+                        key={`berita-${item.id || slug}`}
+                        className="group flex flex-col justify-between rounded-3xl overflow-hidden glass-card border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500/50 hover:shadow-xl transition-all"
+                      >
+                        {/* Image Thumbnail */}
+                        <Link href={`/hub-umkt/${slug}`} className="block relative aspect-video overflow-hidden bg-navy-950">
+                          <img
+                            src={cover}
+                            alt={item.judul}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                          <div className="absolute top-3 right-3 flex flex-wrap gap-1">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white shadow-sm bg-black/60 backdrop-blur-sm">
+                              {item.kode_lembaga ? item.kode_lembaga.toUpperCase() : "Humas UMKT"}
                             </span>
-                          ))}
-                        </div>
-                      </Link>
-
-                      {/* Content */}
-                      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between text-xs text-navy-400">
-                            <span className="font-semibold text-nyala-600 dark:text-nyala-400">
-                              {item.tags || "Warta Kampus"}
-                            </span>
-                            <span>{formatDateIndo(item.tgl_upload)}</span>
                           </div>
 
-                          <Link href={`/hub-umkt/${slug}`}>
-                            <h4 className="text-base font-bold text-navy-900 dark:text-white leading-snug group-hover:text-nyala-500 transition-colors line-clamp-2">
-                              {item.judul}
-                            </h4>
-                          </Link>
+                          {/* SDG Badge overlay */}
+                          {Array.isArray(item.sdgs) && item.sdgs.length > 0 && (
+                            <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+                              {item.sdgs.slice(0, 2).map((sdg) => (
+                                <SDGBadge key={sdg.id} sdg={sdg} size="sm" />
+                              ))}
+                            </div>
+                          )}
+                        </Link>
 
-                          <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-2 leading-relaxed">
-                            {cleanHTML(item.isi)}
-                          </p>
+                        {/* Content */}
+                        <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between text-xs text-navy-400">
+                              <span className="font-semibold text-nyala-600 dark:text-nyala-400 font-mono">
+                                {formatDateIndo(item.created || item.tanggal || item.tgl_upload)}
+                              </span>
+                              <span>Liputan Resmi</span>
+                            </div>
+
+                            <Link href={`/hub-umkt/${slug}`}>
+                              <h4 className="text-base font-bold text-navy-900 dark:text-white leading-snug group-hover:text-nyala-500 transition-colors line-clamp-2">
+                                {item.judul}
+                              </h4>
+                            </Link>
+
+                            <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-2 leading-relaxed">
+                              {cleanHTML(item.isi)}
+                            </p>
+                          </div>
+
+                          {/* Read CTA */}
+                          <div className="pt-2 border-t border-navy-100 dark:border-navy-800 flex items-center justify-between">
+                            <span className="text-[11px] text-navy-400 flex items-center gap-1 font-mono">
+                              <Clock weight="bold" className="w-3.5 h-3.5" />
+                              <span>Warta Kampus</span>
+                            </span>
+
+                            <Link
+                              href={`/hub-umkt/${slug}`}
+                              className="inline-flex items-center gap-1 text-xs font-bold text-nyala-600 dark:text-nyala-400 hover:gap-2 transition-all"
+                            >
+                              <span>Baca Lengkap</span>
+                              <ArrowRight weight="bold" className="w-3.5 h-3.5" />
+                            </Link>
+                          </div>
                         </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              )}
 
-                        {/* Read CTA */}
-                        <div className="pt-2 border-t border-navy-100 dark:border-navy-800 flex items-center justify-between">
-                          <span className="text-[11px] text-navy-400 flex items-center gap-1">
-                            <Clock weight="bold" className="w-3.5 h-3.5" />
-                            <span>3 menit baca</span>
-                          </span>
+              {/* Desktop Pagination Bar */}
+              {totalPages > 1 && (
+                <div className="p-4 rounded-3xl glass-card border border-navy-200/80 dark:border-navy-800 flex items-center justify-between shadow-sm">
+                  <button
+                    disabled={beritaPage <= 1 || beritaLoading}
+                    onClick={() => {
+                      setBeritaPage((p) => Math.max(1, p - 1));
+                      window.scrollTo({ top: 400, behavior: "smooth" });
+                    }}
+                    className="px-4 py-2 rounded-xl bg-navy-50 dark:bg-navy-900 disabled:opacity-40 text-navy-900 dark:text-white font-bold text-xs flex items-center gap-1.5 hover:bg-navy-100 dark:hover:bg-navy-800 transition-all cursor-pointer"
+                  >
+                    <span>← Halaman Sebelumnya</span>
+                  </button>
 
-                          <Link
-                            href={`/hub-umkt/${slug}`}
-                            className="inline-flex items-center gap-1 text-xs font-bold text-nyala-600 dark:text-nyala-400 hover:gap-2 transition-all"
-                          >
-                            <span>Baca Lengkap</span>
-                            <ArrowRight weight="bold" className="w-3.5 h-3.5" />
-                          </Link>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
+                  {/* Page Numbers */}
+                  <div className="flex items-center gap-1 font-mono text-xs">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      const pNum = i + 1;
+                      const isCurrent = beritaPage === pNum;
+                      return (
+                        <button
+                          key={pNum}
+                          onClick={() => {
+                            setBeritaPage(pNum);
+                            window.scrollTo({ top: 400, behavior: "smooth" });
+                          }}
+                          className={`w-8 h-8 rounded-xl font-bold flex items-center justify-center transition-all cursor-pointer ${
+                            isCurrent
+                              ? "bg-nyala-600 text-white shadow-xs"
+                              : "bg-white dark:bg-navy-900 text-navy-700 dark:text-slate-300 border border-navy-200 dark:border-navy-800 hover:bg-navy-50"
+                          }`}
+                        >
+                          {pNum}
+                        </button>
+                      );
+                    })}
+                    {totalPages > 5 && (
+                      <span className="text-slate-400 px-1">... {totalPages}</span>
+                    )}
+                  </div>
+
+                  <button
+                    disabled={beritaPage >= totalPages || beritaLoading}
+                    onClick={() => {
+                      setBeritaPage((p) => Math.min(totalPages, p + 1));
+                      window.scrollTo({ top: 400, behavior: "smooth" });
+                    }}
+                    className="px-4 py-2 rounded-xl bg-nyala-600 disabled:opacity-40 text-white font-bold text-xs flex items-center gap-1.5 hover:bg-nyala-700 transition-all cursor-pointer shadow-xs"
+                  >
+                    <span>Halaman Selanjutnya →</span>
+                  </button>
+                </div>
+              )}
+
             </div>
           )}
 
@@ -506,53 +759,119 @@ export default function HubUMKTPage() {
           )}
 
           {/* D. 10 FAKULTAS RESMI */}
-          {(activeTab === "all" || activeTab === "fakultas") && filteredFakultas.length > 0 && (
+          {(activeTab === "all" || activeTab === "fakultas") && (
             <div className="space-y-6">
-              <div className="flex items-center gap-2">
-                <Buildings weight="bold" className="w-5 h-5 text-purple-500" />
-                <h3 className="text-xl font-black text-navy-900 dark:text-white tracking-tight">
-                  10 Fakultas Resmi Universitas Muhammadiyah Kalimantan Timur
-                </h3>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Buildings weight="bold" className="w-5 h-5 text-purple-500" />
+                  <h3 className="text-xl font-black text-navy-900 dark:text-white tracking-tight">
+                    Direktori 10 Fakultas Resmi Universitas Muhammadiyah Kalimantan Timur
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-slate-400">10 Fakultas • 30+ Program Studi</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {filteredFakultas.map((item) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {UMKT_10_FAKULTAS.filter((fak) =>
+                  fak.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  fak.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  fak.programs.some((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                ).map((fak) => (
                   <div
-                    key={`fakultas-${item.id}`}
-                    className="p-5 rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 hover:border-purple-500/50 hover:shadow-lg transition-all flex items-start gap-4"
+                    key={`fakultas-${fak.id}`}
+                    className="rounded-3xl glass-card border border-navy-200/60 dark:border-navy-800 hover:border-nyala-500/50 hover:shadow-xl transition-all flex flex-col justify-between overflow-hidden group"
                   >
-                    <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0 border border-purple-500/20">
-                      <Buildings weight="bold" className="w-6 h-6" />
-                    </div>
+                    {fak.imageUrl && (
+                      <div className="relative w-full h-40 overflow-hidden bg-slate-100 dark:bg-navy-900">
+                        <img
+                          src={fak.imageUrl}
+                          alt={fak.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white">
+                          <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${fak.badgeBg} ${fak.badgeText} backdrop-blur-sm`}>
+                            {fak.code}
+                          </span>
+                          <span className="text-[11px] font-mono drop-shadow-md">
+                            {fak.programs.length} Prodi
+                          </span>
+                        </div>
+                      </div>
+                    )}
 
-                    <div className="space-y-1.5 flex-1">
+                    <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                      <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-navy-100 dark:bg-navy-800 text-navy-600 dark:text-navy-400 font-bold">
-                          {item.singkatan || `FAK #${item.id}`}
-                        </span>
-                        {item.link && (
-                          <a
-                            href={item.link.startsWith("http") ? item.link : `https://${item.link}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-navy-400 hover:text-purple-500"
-                          >
-                            <ArrowSquareOut weight="bold" className="w-4 h-4" />
-                          </a>
-                        )}
+                        <div className="flex items-center gap-3">
+                          <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${fak.colorClass} text-white flex items-center justify-center font-black text-sm shadow-md`}>
+                            {fak.code}
+                          </div>
+                          <div>
+                            <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${fak.badgeBg} ${fak.badgeText}`}>
+                              {fak.code}
+                            </span>
+                            <div className="text-[11px] text-slate-400 font-medium mt-0.5">
+                              {fak.programs.length} Program Studi
+                            </div>
+                          </div>
+                        </div>
+
+                        <a
+                          href={fak.websiteUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-navy-800 text-slate-500 hover:text-nyala-600 flex items-center justify-center hover:scale-105 transition-all"
+                          title={`Kunjungi Website ${fak.code}`}
+                        >
+                          <ArrowSquareOut weight="bold" className="w-4 h-4" />
+                        </a>
                       </div>
 
-                      <h4 className="text-sm font-bold text-navy-900 dark:text-white leading-snug">
-                        {item.nama}
+                      <h4 className="text-base font-black text-navy-900 dark:text-white leading-tight group-hover:text-nyala-600 dark:group-hover:text-nyala-400 transition-colors">
+                        {fak.name}
                       </h4>
 
-                      {item.keterangan && (
-                        <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-2">
-                          {item.keterangan}
-                        </p>
-                      )}
+                      <p className="text-xs text-navy-600 dark:text-navy-300 line-clamp-2 leading-relaxed">
+                        {fak.description}
+                      </p>
+
+                      <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-navy-50/70 dark:bg-navy-900/80 p-2 rounded-xl border border-navy-100 dark:border-navy-800">
+                        <MapPin weight="bold" className="w-3.5 h-3.5 text-nyala-600 flex-shrink-0" />
+                        <span className="truncate">{fak.buildingLocation}</span>
+                      </div>
+
+                      <div className="space-y-1 pt-1">
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          Program Studi:
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {fak.programs.map((prog, pIdx) => (
+                            <span
+                              key={pIdx}
+                              className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white dark:bg-navy-900 text-navy-800 dark:text-slate-200 border border-navy-200/80 dark:border-navy-700"
+                            >
+                              {prog.name} ({prog.degree})
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t border-navy-100 dark:border-navy-800/80 flex items-center justify-between">
+                      <a
+                        href={fak.websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-bold text-nyala-600 dark:text-nyala-400 hover:underline"
+                      >
+                        <span>Portal Web Fakultas</span>
+                        <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
+                      </a>
                     </div>
                   </div>
+                </div>
                 ))}
               </div>
             </div>

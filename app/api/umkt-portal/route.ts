@@ -73,7 +73,8 @@ export async function GET(request: NextRequest) {
 
     // 2. Specific Endpoint Queries
     let endpoint = "berita/";
-    if (type === "event") endpoint = "event/";
+    if (type === "berita-lembaga") endpoint = "berita-lembaga/";
+    else if (type === "event") endpoint = "event/";
     else if (type === "pengumuman") endpoint = "pengumuman/";
     else if (type === "info-fakultas") endpoint = "info-fakultas/";
     else if (type === "informasi") endpoint = "informasi/";
@@ -83,6 +84,10 @@ export async function GET(request: NextRequest) {
     const params: Record<string, string | number> = {};
     if (page) params.page = page;
     if (search) params.search = search;
+    const kodeLembaga = searchParams.get("kode_lembaga");
+    if (kodeLembaga) params.kode_lembaga = kodeLembaga;
+    const pageSize = searchParams.get("page_size");
+    if (pageSize) params.page_size = pageSize;
 
     const data = await fetchUMKTApi<any>(endpoint, params, 120);
 

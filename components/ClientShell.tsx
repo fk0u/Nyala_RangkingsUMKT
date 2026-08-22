@@ -10,6 +10,7 @@ import CommandSearchModal from "./CommandSearchModal";
 import MascotPageTransition from "./MascotPageTransition";
 import RegisterServiceWorker from "./RegisterServiceWorker";
 import MobileOnboarding from "./MobileOnboarding";
+import WelcomingPreloader from "./WelcomingPreloader";
 
 export default function ClientShell({
   children,
@@ -36,7 +37,7 @@ export default function ClientShell({
   // When on dedicated /mobile routes, render only the native mobile experience without root web shell
   if (isMobileRoute) {
     return (
-      <>
+      <WelcomingPreloader>
         <RegisterServiceWorker />
         <MascotPageTransition>
           {children}
@@ -45,12 +46,12 @@ export default function ClientShell({
           isOpen={searchOpen}
           onClose={() => setSearchOpen(false)}
         />
-      </>
+      </WelcomingPreloader>
     );
   }
 
   return (
-    <>
+    <WelcomingPreloader>
       <RegisterServiceWorker />
       <div className="flex flex-col min-h-screen">
         <TopNotificationBar onOpenSearch={() => setSearchOpen(true)} />
@@ -68,6 +69,6 @@ export default function ClientShell({
           onClose={() => setSearchOpen(false)}
         />
       </div>
-    </>
+    </WelcomingPreloader>
   );
 }
