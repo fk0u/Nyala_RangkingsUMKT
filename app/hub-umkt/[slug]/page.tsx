@@ -27,6 +27,7 @@ import {
   UMKTBerita, 
   formatDateIndo, 
   cleanHTML, 
+  sanitizeArticleHTML,
   extractImageFromHTML,
   generateSlug 
 } from "@/lib/umkt-api";
@@ -271,7 +272,7 @@ export default function HubArticleDetailPage() {
           {/* Render raw HTML safely with enhanced styling */}
           <div
             className="prose prose-navy dark:prose-invert max-w-none prose-img:rounded-3xl prose-img:shadow-md prose-a:text-nyala-600 prose-headings:font-black prose-p:leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: article.isi }}
+            dangerouslySetInnerHTML={{ __html: sanitizeArticleHTML(article.isi) }}
           />
         </div>
 

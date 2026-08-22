@@ -21,6 +21,7 @@ import {
   UMKTBerita, 
   formatDateIndo, 
   cleanHTML, 
+  sanitizeArticleHTML,
   generateSlug 
 } from "@/lib/umkt-api";
 import { useToast } from "@/context/ToastContext";
@@ -200,7 +201,7 @@ export default function MobileHubArticleDetailPage() {
           className={`prose prose-sm dark:prose-invert max-w-none text-navy-900 dark:text-slate-200 leading-relaxed font-sans ${
             fontSize === "large" ? "text-sm sm:text-base leading-loose" : "text-xs sm:text-sm"
           }`}
-          dangerouslySetInnerHTML={{ __html: article.isi }}
+          dangerouslySetInnerHTML={{ __html: sanitizeArticleHTML(article.isi) }}
         />
 
         {/* Share Buttons */}

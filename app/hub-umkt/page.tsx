@@ -547,7 +547,7 @@ export default function HubUMKTPage() {
                               </h4>
                             </Link>
 
-                            <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-2 leading-relaxed">
+                            <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
                               {cleanHTML(item.isi)}
                             </p>
 
@@ -677,7 +677,7 @@ export default function HubUMKTPage() {
                           {item.judul}
                         </h4>
 
-                        <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-3">
+                        <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-3">
                           {cleanHTML(item.isi)}
                         </p>
                       </div>

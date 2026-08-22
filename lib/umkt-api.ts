@@ -185,6 +185,24 @@ export function stripHtml(html?: string): string {
 export const cleanHTML = stripHtml;
 
 /**
+ * Sanitize HTML content from CMS to work seamlessly in both Light and Dark modes
+ * Strips hardcoded inline font colors, background colors, and styling artifacts
+ */
+export function sanitizeArticleHTML(html?: string): string {
+  if (!html) return "";
+  return html
+    // Remove inline color styles like color: rgb(0,0,0) or color: #000 or color: black
+    .replace(/color\s*:\s*[^;"]+;?/gi, "")
+    // Remove inline background-color styles like background-color: rgb(255,255,255)
+    .replace(/background-color\s*:\s*[^;"]+;?/gi, "")
+    // Remove empty style attributes
+    .replace(/style\s*=\s*["']\s*["']/gi, "")
+    // Remove old font tags with color attribute
+    .replace(/<font[^>]*color=[^>]*>/gi, "<span>")
+    .replace(/<\/font>/gi, "</span>");
+}
+
+/**
  * Format ISO Date into Indonesian Friendly Date
  */
 export function formatIndonesianDate(isoString?: string): string {

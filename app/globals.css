@@ -346,3 +346,47 @@ body {
     padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 16px));
   }
 }
+
+/* ─── Article Prose Dark Mode Fix (Stripping Destructive Inline Styles from CMS) ─── */
+.dark .prose,
+.dark .prose p,
+.dark .prose span,
+.dark .prose div,
+.dark .prose li,
+.dark .prose td,
+.dark .prose th,
+.dark .prose font {
+  color: #E2E8F0 !important;
+  background-color: transparent !important;
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6,
+.dark .prose strong,
+.dark .prose b {
+  color: #FFFFFF !important;
+}
+
+.dark .prose a {
+  color: #FB923C !important;
+  text-decoration: underline;
+}
+
+.dark .prose a:hover {
+  color: #F97316 !important;
+}
+
+.dark .prose blockquote {
+  border-left-color: #F97316 !important;
+  color: #CBD5E1 !important;
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}
+
+.dark .prose code {
+  color: #FDBA74 !important;
+  background-color: #1E293B !important;
+}

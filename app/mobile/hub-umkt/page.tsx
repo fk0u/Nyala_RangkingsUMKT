@@ -450,7 +450,7 @@ export default function MobileHubUMKTPage() {
                         </div>
                       </div>
 
-                      <p className="line-clamp-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                      <p className="line-clamp-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                         {cleanHTML(item.isi)}
                       </p>
 
