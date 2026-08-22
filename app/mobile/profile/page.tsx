@@ -18,11 +18,14 @@ import {
   PencilSimple,
   SlidersHorizontal,
   CheckCircle,
-  Heartbeat
+  Heartbeat,
+  Trophy,
+  Flame,
+  Lightning
 } from "@phosphor-icons/react";
 import MascotFlame, { MascotMood } from "@/components/MascotFlame";
-import FlutterCard from "@/components/flutter/FlutterCard";
-import FlutterListTile from "@/components/flutter/FlutterListTile";
+import DuolingoCard from "@/components/flutter/DuolingoCard";
+import DuolingoButton from "@/components/flutter/DuolingoButton";
 import FlutterBottomSheet from "@/components/flutter/FlutterBottomSheet";
 import { useTheme } from "@/context/ThemeContext";
 import { useToast } from "@/context/ToastContext";
@@ -124,16 +127,16 @@ export default function MobileProfilePage() {
   return (
     <div className="space-y-5">
       
-      {/* ── 1. PROFILE AVATAR & HEADER CARD ── */}
-      <FlutterCard variant="elevated" className="text-center space-y-4">
+      {/* ── 1. GAMIFIED PROFILE AVATAR CARD ── */}
+      <DuolingoCard variant="surface" padding="md" className="text-center space-y-4">
         <div className="flex justify-center">
           <div className="relative">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-nyala-500/10 dark:bg-nyala-950/80 border-2 border-nyala-500/30 flex items-center justify-center p-2">
-              <MascotFlame size="lg" mood={mascotMood} />
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-nyala-500/10 dark:bg-nyala-950/80 border-2 border-b-4 border-nyala-500/30 border-b-nyala-600/50 flex items-center justify-center p-2">
+              <MascotFlame size="sm" mood={mascotMood} className="w-14 h-14" />
             </div>
             <button
               onClick={() => setEditSheetOpen(true)}
-              className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-nyala-500 text-white flex items-center justify-center shadow-md active:scale-95 transition-transform"
+              className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full duo-btn-primary flex items-center justify-center shadow-md cursor-pointer"
               title="Edit Profil"
             >
               <PencilSimple weight="bold" className="w-4 h-4" />
@@ -142,90 +145,117 @@ export default function MobileProfilePage() {
         </div>
 
         <div className="space-y-1">
-          <h1 className="text-lg sm:text-xl font-bold text-navy-950 dark:text-white">
+          <h1 className="text-lg sm:text-xl font-black text-navy-950 dark:text-white">
             {name}
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
             NIM: {nim} • {gugus}
           </p>
-          <span className="inline-block px-3 py-1 rounded-full bg-nyala-50 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400 font-bold text-xs">
+          <span className="inline-block px-3 py-1 rounded-xl bg-nyala-50 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400 font-black text-xs border border-nyala-200 dark:border-nyala-900">
             {prodi}
           </span>
         </div>
 
-        {/* Mini Stats Summary */}
-        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center">
-            <span className="text-[10px] text-slate-400 font-medium uppercase block">Checklist Berkas</span>
-            <span className="text-base font-black font-mono text-emerald-500">{checklistPercent}%</span>
+        {/* Gamified Stats Summary */}
+        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center border border-slate-200/80 dark:border-slate-700">
+            <span className="text-[9px] text-slate-400 font-bold uppercase block">Streak</span>
+            <span className="text-sm font-black font-mono text-amber-500">🔥 3 Hari</span>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center">
-            <span className="text-[10px] text-slate-400 font-medium uppercase block">Skor Kesiapan</span>
-            <span className="text-base font-black font-mono text-nyala-500">{healthScore}%</span>
+          <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center border border-slate-200/80 dark:border-slate-700">
+            <span className="text-[9px] text-slate-400 font-bold uppercase block">Checklist</span>
+            <span className="text-sm font-black font-mono text-emerald-500">{checklistPercent}%</span>
+          </div>
+          <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-[#1E293B] text-center border border-slate-200/80 dark:border-slate-700">
+            <span className="text-[9px] text-slate-400 font-bold uppercase block">Kesiapan</span>
+            <span className="text-sm font-black font-mono text-nyala-500">{healthScore}%</span>
           </div>
         </div>
-      </FlutterCard>
+      </DuolingoCard>
 
-      {/* ── 2. SETTINGS LIST (Flutter ListTile Group) ── */}
+      {/* ── 2. DUOLINGO 3D SETTINGS TILES ── */}
       <div className="space-y-2.5">
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block px-1">
+        <span className="text-xs font-black text-slate-400 uppercase tracking-wider block px-1">
           Pengaturan & Bantuan
         </span>
 
         {/* Edit Biodata Tile */}
-        <FlutterListTile
-          leading={
+        <div
+          onClick={() => setEditSheetOpen(true)}
+          className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between gap-3 text-xs cursor-pointer active:border-b-2 active:translate-y-0.5 transition-all select-none"
+        >
+          <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-2xl bg-blue-50 dark:bg-blue-950/80 text-blue-500 flex items-center justify-center">
               <IdentificationCard weight="bold" className="w-5 h-5" />
             </div>
-          }
-          title="Ubah Biodata & Gugus"
-          subtitle="Nama, NIM, Program Studi, & Pilihan Maskot"
-          onClick={() => setEditSheetOpen(true)}
-        />
+            <div>
+              <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
+                Ubah Biodata & Gugus
+              </h3>
+              <p className="text-[10px] text-slate-500">Nama, NIM, Program Studi, & Maskot</p>
+            </div>
+          </div>
+        </div>
 
         {/* Theme Mode Toggle Tile */}
-        <FlutterListTile
-          leading={
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between gap-3 text-xs select-none">
+          <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-2xl bg-amber-50 dark:bg-amber-950/80 text-amber-500 flex items-center justify-center">
               {theme === "dark" ? <Moon weight="bold" className="w-5 h-5" /> : <Sun weight="bold" className="w-5 h-5" />}
             </div>
-          }
-          title="Tema Tampilan"
-          subtitle={`Mode saat ini: ${theme === "dark" ? "Mode Gelap (Dark)" : "Mode Terang (Light)"}`}
-          trailing={
-            <button
-              onClick={() => setThemeMode(theme === "dark" ? "light" : "dark")}
-              className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-navy-950 dark:text-white active:scale-95"
-            >
-              Ganti
-            </button>
-          }
-        />
+            <div>
+              <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
+                Tema Tampilan
+              </h3>
+              <p className="text-[10px] text-slate-500">
+                Mode saat ini: {theme === "dark" ? "Mode Gelap (Dark)" : "Mode Terang (Light)"}
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setThemeMode(theme === "dark" ? "light" : "dark")}
+            className="px-3 py-1.5 rounded-xl duo-btn-surface text-xs font-bold"
+          >
+            Ganti
+          </button>
+        </div>
 
         {/* Admin Contact Tile */}
-        <FlutterListTile
-          leading={
+        <div
+          onClick={() => setAdminModalOpen(true)}
+          className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between gap-3 text-xs cursor-pointer active:border-b-2 active:translate-y-0.5 transition-all select-none"
+        >
+          <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-500 flex items-center justify-center">
               <Headset weight="bold" className="w-5 h-5" />
             </div>
-          }
-          title="Kontak Admin Resmi Gedung C"
-          subtitle="Biro Kemahasiswaan & Helpdesk SIKAD UMKT"
-          onClick={() => setAdminModalOpen(true)}
-        />
+            <div>
+              <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
+                Kontak Admin Resmi Gedung C
+              </h3>
+              <p className="text-[10px] text-slate-500">Biro Kemahasiswaan & Helpdesk SIKAD UMKT</p>
+            </div>
+          </div>
+        </div>
 
         {/* Reset App Data Tile */}
-        <FlutterListTile
-          leading={
+        <div
+          onClick={handleResetData}
+          className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-rose-200 dark:border-rose-900 border-b-4 border-b-rose-300 dark:border-b-rose-950 flex items-center justify-between gap-3 text-xs cursor-pointer active:border-b-2 active:translate-y-0.5 transition-all select-none"
+        >
+          <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-2xl bg-rose-50 dark:bg-rose-950/80 text-rose-500 flex items-center justify-center">
               <Trash weight="bold" className="w-5 h-5" />
             </div>
-          }
-          title="Reset Data Lokal"
-          subtitle="Bersihkan checklist, mood history, dan profil"
-          onClick={handleResetData}
-        />
+            <div>
+              <h3 className="font-black text-rose-600 dark:text-rose-400 text-xs sm:text-sm">
+                Reset Data Lokal
+              </h3>
+              <p className="text-[10px] text-slate-500">Bersihkan checklist, mood history, dan profil</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ── 3. BOTTOM SHEET EDIT PROFIL ── */}
@@ -297,10 +327,10 @@ export default function MobileProfilePage() {
                   key={m.mood}
                   type="button"
                   onClick={() => setMascotMood(m.mood)}
-                  className={`p-2 rounded-xl border flex flex-col items-center gap-1 ${
+                  className={`p-2 rounded-xl border-2 border-b-4 flex flex-col items-center gap-1 ${
                     mascotMood === m.mood
-                      ? "bg-nyala-500/10 border-nyala-500 text-nyala-500 font-bold"
-                      : "border-slate-200 dark:border-slate-800 text-slate-400"
+                      ? "bg-nyala-500/10 border-nyala-500 border-b-nyala-700 text-nyala-500 font-bold"
+                      : "border-slate-200 dark:border-slate-800 border-b-slate-300 dark:border-b-slate-900 text-slate-400"
                   }`}
                 >
                   <MascotFlame size="sm" mood={m.mood} className="w-5 h-5" />
@@ -313,7 +343,7 @@ export default function MobileProfilePage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3.5 rounded-2xl bg-nyala-500 text-white font-bold shadow-md active:scale-98 transition-transform"
+            className="w-full py-4 rounded-2xl duo-btn-primary font-black shadow-md"
           >
             Simpan Perubahan
           </button>

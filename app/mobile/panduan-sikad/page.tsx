@@ -3,23 +3,18 @@
 import React, { useState } from "react";
 import { 
   Laptop, 
-  Table, 
-  Calendar, 
-  CreditCard, 
-  Star, 
-  CheckCircle, 
   ArrowSquareOut,
-  ShieldCheck,
   CaretRight,
   Copy,
   Check,
   ChatCenteredText,
   Clock,
-  WarningCircle
+  WarningCircle,
+  Lightbulb
 } from "@phosphor-icons/react";
-import FlutterCard from "@/components/flutter/FlutterCard";
-import FlutterSegmentedTabs from "@/components/flutter/FlutterSegmentedTabs";
-import FlutterListTile from "@/components/flutter/FlutterListTile";
+import DuolingoCard from "@/components/flutter/DuolingoCard";
+import DuolingoButton from "@/components/flutter/DuolingoButton";
+import DuolingoSegmentedTabs from "@/components/flutter/DuolingoSegmentedTabs";
 import { OFFICIAL_LINKS } from "@/lib/masta-data";
 import { useToast } from "@/context/ToastContext";
 
@@ -101,12 +96,12 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh.`;
         </p>
       </div>
 
-      {/* ── 2. OFFICIAL SIKAD LINK BANNER ── */}
+      {/* ── 2. OFFICIAL SIKAD 3D BUTTON BANNER ── */}
       <a
         href={OFFICIAL_LINKS.sikadMahasiswa}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-4 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-nyala-600 to-nyala-500 hover:from-nyala-500 hover:to-nyala-600 text-white flex items-center justify-between text-xs sm:text-sm font-bold shadow-md shadow-nyala-500/20 active:scale-[0.98] transition-all"
+        className="w-full p-4 rounded-2xl duo-btn-primary flex items-center justify-between text-xs sm:text-sm font-black shadow-md block"
       >
         <div className="flex items-center gap-2.5">
           <Laptop weight="bold" className="w-5 h-5" />
@@ -115,31 +110,32 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh.`;
         <ArrowSquareOut weight="bold" className="w-4 h-4" />
       </a>
 
-      {/* ── 3. SEGMENTED TABS (Hick's Law 1-Tap Filter) ── */}
-      <FlutterSegmentedTabs
+      {/* ── 3. DUOLINGO 3D SEGMENTED TABS (NO CAPSULE BAR) ── */}
+      <DuolingoSegmentedTabs
         tabs={SIKAD_TABS}
         activeTab={activeTab}
         onChange={setActiveTab}
+        gridCols={3}
       />
 
-      {/* ── 4. TAB 1: 5 LANGKAH SIKAD (Interactive Carousel Deck) ── */}
+      {/* ── 4. TAB 1: 5 LANGKAH SIKAD (DUOLINGO 3D CARD) ── */}
       {activeTab === "langkah" && (
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-black text-slate-400 uppercase tracking-wider">
               Alur Pengoperasian Sistem
             </span>
-            <span className="text-xs font-mono text-nyala-500 font-bold">
+            <span className="text-xs font-mono text-nyala-500 font-black">
               Langkah {activeStep + 1} / 5
             </span>
           </div>
 
-          <FlutterCard variant="elevated" className="space-y-4">
+          <DuolingoCard variant="surface" padding="md" className="space-y-4">
             <div className="space-y-1.5">
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-nyala-100 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400 uppercase inline-block">
                 Langkah {activeStep + 1}
               </span>
-              <h2 className="text-base sm:text-lg font-bold text-navy-950 dark:text-white">
+              <h2 className="text-base sm:text-lg font-black text-navy-950 dark:text-white">
                 {SIKAD_STEPS[activeStep].title}
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed pt-1">
@@ -147,19 +143,22 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh.`;
               </p>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-navy-950/80 border border-amber-200 dark:border-navy-800 text-xs text-amber-900 dark:text-amber-300 space-y-1">
-              <span className="font-bold block">💡 Tips Penting Senior:</span>
+            <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-xs text-amber-900 dark:text-amber-300 space-y-1">
+              <div className="flex items-center gap-1.5 font-black text-xs">
+                <Lightbulb weight="fill" className="w-4 h-4 text-amber-500" />
+                <span>Tips Penting Senior:</span>
+              </div>
               <p className="text-[11px] text-amber-800 dark:text-slate-300 leading-snug">
                 {SIKAD_STEPS[activeStep].tips}
               </p>
             </div>
 
-            {/* Navigation Step Buttons */}
+            {/* Step Actions */}
             <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
               <button
                 disabled={activeStep === 0}
                 onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
-                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 disabled:opacity-30 cursor-pointer active:scale-95 transition-all"
+                className="px-4 py-2 rounded-xl duo-btn-surface text-xs disabled:opacity-30 cursor-pointer"
               >
                 ← Sebelumnya
               </button>
@@ -167,28 +166,28 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh.`;
               <button
                 disabled={activeStep === SIKAD_STEPS.length - 1}
                 onClick={() => setActiveStep((prev) => Math.min(SIKAD_STEPS.length - 1, prev + 1))}
-                className="px-4 py-2 rounded-xl bg-nyala-500 text-white text-xs font-bold disabled:opacity-30 cursor-pointer active:scale-95 transition-all shadow-sm"
+                className="px-4 py-2 rounded-xl duo-btn-primary text-xs disabled:opacity-30 cursor-pointer"
               >
                 Selanjutnya →
               </button>
             </div>
-          </FlutterCard>
+          </DuolingoCard>
         </div>
       )}
 
       {/* ── 5. TAB 2: TEMPLATE ETIKA CHAT DOSEN PA ── */}
       {activeTab === "etika-chat" && (
         <div className="space-y-4">
-          <FlutterCard variant="elevated" className="space-y-3">
+          <DuolingoCard variant="surface" padding="md" className="space-y-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-navy-950 dark:text-white font-bold text-sm">
+              <div className="flex items-center gap-2 text-navy-950 dark:text-white font-black text-xs sm:text-sm">
                 <ChatCenteredText weight="bold" className="w-5 h-5 text-nyala-500" />
                 <span>Template WhatsApp Konfirmasi KRS</span>
               </div>
 
               <button
                 onClick={handleCopyChat}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-nyala-500 text-white text-xs font-bold active:scale-95 transition-all shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl duo-btn-primary text-xs"
               >
                 {copied ? <Check weight="bold" className="w-3.5 h-3.5" /> : <Copy weight="bold" className="w-3.5 h-3.5" />}
                 <span>{copied ? "Tersalin!" : "Salin Pesan"}</span>
@@ -198,35 +197,35 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh.`;
             <pre className="p-4 rounded-2xl bg-slate-50 dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 text-[11px] text-slate-700 dark:text-slate-300 whitespace-pre-wrap font-sans leading-relaxed">
               {CHAT_TEMPLATE}
             </pre>
-          </FlutterCard>
+          </DuolingoCard>
         </div>
       )}
 
       {/* ── 6. TAB 3: ATURAN PRESENSI 75% ── */}
       {activeTab === "presensi" && (
         <div className="space-y-4">
-          <FlutterCard variant="elevated" className="border-rose-300 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20 space-y-3">
-            <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
+          <DuolingoCard variant="surface" padding="md" className="border-rose-300 dark:border-rose-900 bg-rose-50/40 dark:bg-rose-950/20 space-y-3">
+            <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-black text-xs sm:text-sm">
               <WarningCircle weight="fill" className="w-5 h-5" />
               <span>Regulasi Wajib Presensi Minimal 75%</span>
             </div>
             <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
               Sesuai SK Rektor UMKT, mahasiswa wajib menghadiri minimal 12 dari total 16 pertemuan kuliah per semester.
             </p>
-          </FlutterCard>
+          </DuolingoCard>
 
           <div className="grid grid-cols-2 gap-3">
-            <FlutterCard variant="outlined" className="text-center space-y-1">
+            <DuolingoCard variant="surface" padding="sm" className="text-center space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400">Total Sesi Kuliah</span>
-              <div className="text-xl font-black font-mono text-navy-950 dark:text-white">16 Pertemuan</div>
+              <div className="text-xl font-black font-mono text-navy-950 dark:text-white">16 Sesi</div>
               <span className="text-[10px] text-slate-500">14 Kuliah + UTS + UAS</span>
-            </FlutterCard>
+            </DuolingoCard>
 
-            <FlutterCard variant="outlined" className="text-center space-y-1">
+            <DuolingoCard variant="surface" padding="sm" className="text-center space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400">Batas Minimum</span>
               <div className="text-xl font-black font-mono text-emerald-500">12 Kehadiran</div>
               <span className="text-[10px] text-slate-500">Maks. 4x Alpa/Izin</span>
-            </FlutterCard>
+            </DuolingoCard>
           </div>
         </div>
       )}

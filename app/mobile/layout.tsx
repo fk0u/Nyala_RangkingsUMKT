@@ -6,29 +6,24 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   House, 
-  Sparkle, 
   CalendarCheck, 
-  Globe, 
   Laptop, 
-  Code, 
-  MagnifyingGlass, 
-  GridFour, 
-  X,
-  CheckSquare,
-  Heartbeat,
-  Headset,
-  BookOpenText,
-  Monitor,
-  Compass,
   User,
-  ArrowSquareOut
+  MagnifyingGlass, 
+  Flame, 
+  Lightning,
+  Sparkle,
+  GridFour,
+  Headset,
+  CheckSquare
 } from "@phosphor-icons/react";
-import MascotFlame, { MascotMood } from "@/components/MascotFlame";
+import MascotFlame from "@/components/MascotFlame";
 import ThemeToggle from "@/components/ThemeToggle";
 import CommandSearchModal from "@/components/CommandSearchModal";
 import MobileOnboarding from "@/components/MobileOnboarding";
 import CookieConsent from "@/components/CookieConsent";
 import AdminHelpModal from "@/components/AdminHelpModal";
+import DuolingoActionMenuDock from "@/components/flutter/DuolingoActionMenuDock";
 
 export default function MobileAppLayout({
   children,
@@ -38,95 +33,78 @@ export default function MobileAppLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
-  const [menuDrawerOpen, setMenuDrawerOpen] = useState(false);
+  const [menuDockOpen, setMenuDockOpen] = useState(false);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [streakDays, setStreakDays] = useState(3);
+  const [totalXp, setTotalXp] = useState(140);
 
-  const handleSwitchToDesktop = () => {
-    document.cookie = "nyala_view_preference=desktop; path=/; max-age=31536000";
-    const desktopPath = pathname.replace(/^\/mobile/, "") || "/";
-    router.push(desktopPath);
-  };
-
-  const handleReplayOnboarding = () => {
-    setMenuDrawerOpen(false);
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("open-nyala-onboarding"));
+  useEffect(() => {
+    // Calculate gamified XP & Streak based on checklist & health logs
+    const savedChecklist = localStorage.getItem("nyala_checklist");
+    if (savedChecklist) {
+      try {
+        const parsed = JSON.parse(savedChecklist);
+        const count = Object.values(parsed).filter(Boolean).length;
+        setTotalXp(100 + count * 15);
+      } catch (e) {
+        console.error(e);
+      }
     }
-  };
+  }, [pathname]);
 
   const PRIMARY_MOBILE_TABS = [
     { href: "/mobile", label: "Beranda", icon: House },
     { href: "/mobile/jadwal", label: "Jadwal", icon: CalendarCheck },
-    { href: "/mobile/companion", label: "Tanya AI", icon: Sparkle, isCenter: true },
+    { isActionLauncher: true, label: "Menu" },
     { href: "/mobile/panduan-sikad", label: "SIKAD", icon: Laptop },
     { href: "/mobile/profile", label: "Profil", icon: User },
-  ];
-
-  const DRAWER_ITEMS = [
-    { href: "/mobile/hub-umkt", label: "Hub Warta UMKT", desc: "Live API berita & direktori 10 fakultas", icon: Globe, color: "bg-blue-500/10 text-blue-500 dark:text-blue-400" },
-    { href: "/mobile/panduan-ti", label: "Kurikulum Prodi TI", desc: "Paket 20 SKS, standar nilai & dosen", icon: Code, color: "bg-red-500/10 text-red-500 dark:text-red-400" },
-    { href: "/mobile/checklist", label: "Checklist Persiapan", desc: "Berkas wajib & perlengkapan seragam", icon: CheckSquare, color: "bg-amber-500/10 text-amber-500 dark:text-amber-400" },
-    { href: "/mobile/health-check", label: "Health & Mood Check", desc: "Evaluasi kesiapan fisik & mental", icon: Heartbeat, color: "bg-rose-500/10 text-rose-500 dark:text-rose-400" },
-    { href: "/mobile/blog", label: "Majalah Edukasi MABA", desc: "Tips adaptasi, kos & beasiswa", icon: BookOpenText, color: "bg-indigo-500/10 text-indigo-500 dark:text-indigo-400" },
-    { href: "/mobile/tentang-masta", label: "Pedoman & Nilai AIK", desc: "Tata tertib & esensi orientasi", icon: Compass, color: "bg-emerald-500/10 text-emerald-500 dark:text-emerald-400" },
   ];
 
   return (
     <div className="min-h-screen bg-[#FAFAF9] dark:bg-[#070B19] text-navy-950 dark:text-white flex flex-col selection:bg-nyala-500 selection:text-white transition-colors duration-200">
       
-      {/* ── 1. NATIVE APPLICATION TOP HEADER BAR ── */}
-      <header className="sticky top-0 z-40 bg-white/90 dark:bg-[#070B19]/90 backdrop-blur-xl border-b border-navy-200/80 dark:border-navy-800/80 px-4 sm:px-6 lg:px-8 py-3 transition-colors">
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
+      {/* ── 1. DUOLINGO-STYLE GAMIFIED TOP BAR ── */}
+      <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#0E1635]/95 backdrop-blur-xl border-b-2 border-slate-200 dark:border-slate-800 px-3 sm:px-6 py-2.5 transition-colors">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
           
-          {/* Brand & Active Identity */}
-          <Link href="/mobile" className="flex items-center gap-3 active:scale-95 transition-transform">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-nyala-600 via-nyala-500 to-amber-400 p-0.5 shadow-md flex items-center justify-center">
-              <div className="w-full h-full rounded-[14px] bg-white dark:bg-[#0A0F24] flex items-center justify-center">
-                <MascotFlame size="sm" mood="excited" className="w-6 h-6" />
-              </div>
+          {/* Brand & Mascot */}
+          <Link href="/mobile" className="flex items-center gap-2 active:scale-95 transition-transform select-none">
+            <div className="w-9 h-9 rounded-2xl bg-nyala-500/15 border-2 border-nyala-500/30 flex items-center justify-center">
+              <MascotFlame size="sm" mood="excited" className="w-6 h-6" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-base sm:text-lg font-black tracking-tight text-navy-950 dark:text-white leading-none">
-                  Nyala <span className="text-nyala-600 dark:text-nyala-500">MABA</span>
-                </span>
-                <span className="text-[9px] font-bold font-mono px-1.5 py-0.5 rounded bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 border border-nyala-500/20">
-                  UMKT 2026
-                </span>
-              </div>
-              <span className="text-[11px] text-navy-500 dark:text-navy-400 font-medium hidden sm:block">
-                Aplikasi Pendamping Resmi Mahasiswa Baru
+            <div className="leading-tight">
+              <span className="text-base font-black tracking-tight text-navy-950 dark:text-white block">
+                Nyala <span className="text-nyala-500">MABA</span>
               </span>
             </div>
           </Link>
 
-          {/* Action Tools */}
-          <div className="flex items-center gap-2">
+          {/* Gamification Stats (Streak & XP) */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            
+            {/* Flame Streak Badge */}
+            <div className="px-2.5 py-1 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-900/80 flex items-center gap-1 text-amber-600 dark:text-amber-400 font-mono font-black text-xs">
+              <Flame weight="fill" className="w-4 h-4 text-nyala-500 animate-pulse" />
+              <span>{streakDays}d</span>
+            </div>
+
+            {/* XP Energy Badge */}
+            <div className="px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-900/80 flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-mono font-black text-xs">
+              <Lightning weight="fill" className="w-3.5 h-3.5 text-emerald-500" />
+              <span>{totalXp} XP</span>
+            </div>
+
+            {/* Search Tool */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-navy-100/80 dark:bg-navy-900/90 border border-navy-200 dark:border-navy-800 text-navy-600 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white active:scale-95 transition-all cursor-pointer text-xs"
+              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 active:scale-90 transition-transform"
+              title="Cari Materi"
             >
-              <MagnifyingGlass weight="bold" className="w-4 h-4 text-nyala-500" />
-              <span className="hidden md:inline">Cari materi (Ctrl+K)...</span>
+              <MagnifyingGlass weight="bold" className="w-4 h-4" />
             </button>
 
+            {/* Theme Toggle */}
             <ThemeToggle />
-
-            <button
-              onClick={() => setAdminModalOpen(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-500/20 active:scale-95 transition-all cursor-pointer"
-            >
-              <Headset weight="bold" className="w-4 h-4" />
-              <span>Admin Gedung C</span>
-            </button>
-
-            <button
-              onClick={() => setMenuDrawerOpen(true)}
-              className="p-2.5 rounded-xl bg-navy-100/80 dark:bg-navy-900/90 border border-navy-200 dark:border-navy-800 text-navy-700 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white active:scale-90 transition-transform cursor-pointer"
-              title="Semua Modul"
-            >
-              <GridFour weight="bold" className="w-4 h-4" />
-            </button>
           </div>
 
         </div>
@@ -137,55 +115,50 @@ export default function MobileAppLayout({
         {children}
       </main>
 
-      {/* ── 3. NATIVE FLOATING BOTTOM APP DOCK BAR ── */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 flex justify-center pointer-events-none px-4 pb-safe pb-3">
-        <div className="w-full max-w-md bg-white/95 dark:bg-[#0E1530]/95 backdrop-blur-2xl border border-navy-200/80 dark:border-navy-800/90 shadow-2xl rounded-3xl px-3 py-2 pointer-events-auto flex items-center justify-around">
+      {/* ── 3. DUOLINGO FULL-WIDTH SOLID BOTTOM BAR (STRICTLY NO FLOATING CAPSULE PILL) ── */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-[#0E1635] border-t-2 border-slate-200 dark:border-slate-800 px-2 py-1.5 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        <div className="max-w-lg mx-auto flex items-center justify-around">
           
-          {PRIMARY_MOBILE_TABS.map((tab) => {
-            const isActive = pathname === tab.href;
-            const Icon = tab.icon;
-
-            if (tab.isCenter) {
+          {PRIMARY_MOBILE_TABS.map((tab, idx) => {
+            // Center Multifunctional Action Launcher Button
+            if (tab.isActionLauncher) {
               return (
-                <Link
-                  key={tab.href}
-                  href={tab.href}
-                  className="relative -top-4 flex flex-col items-center group active:scale-90 transition-transform"
+                <button
+                  key="action-launcher"
+                  onClick={() => setMenuDockOpen(true)}
+                  className="relative -top-2 flex flex-col items-center group active:scale-90 transition-transform select-none cursor-pointer"
+                  title="Pusat Navigasi MABA"
                 >
-                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-tr from-nyala-600 via-nyala-500 to-amber-400 text-white flex items-center justify-center shadow-lg shadow-nyala-500/40 border-2 border-white dark:border-[#0A0F24] relative">
-                    <Sparkle weight="fill" className="w-6 h-6 animate-pulse text-white" />
-                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white dark:border-[#0A0F24]" />
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-nyala-600 to-nyala-500 text-white flex items-center justify-center shadow-md shadow-nyala-500/40 border-2 border-white dark:border-[#0E1635] border-b-4 border-b-nyala-800 active:border-b-2 active:translate-y-0.5">
+                    <GridFour weight="bold" className="w-6 h-6 text-white" />
                   </div>
-                  <span className="text-[10px] font-black text-nyala-600 dark:text-nyala-400 mt-1">
-                    {tab.label}
+                  <span className="text-[10px] font-black text-nyala-600 dark:text-nyala-400 mt-0.5">
+                    Menu
                   </span>
-                </Link>
+                </button>
               );
             }
+
+            const isActive = pathname === tab.href;
+            const Icon = tab.icon!;
 
             return (
               <Link
                 key={tab.href}
-                href={tab.href}
-                className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all relative active:scale-90 min-w-[56px] ${
+                href={tab.href!}
+                className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all select-none active:scale-90 min-w-[60px] ${
                   isActive
-                    ? "text-nyala-600 dark:text-nyala-400 font-extrabold"
-                    : "text-navy-500 dark:text-navy-400 hover:text-navy-950 dark:hover:text-white font-medium"
+                    ? "text-nyala-600 dark:text-nyala-400 font-black"
+                    : "text-slate-400 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white font-bold"
                 }`}
               >
-                {isActive && (
-                  <motion.div
-                    layoutId="mobile-app-tab-active"
-                    className="absolute inset-0 bg-nyala-500/10 dark:bg-nyala-500/15 rounded-2xl -z-10"
-                    transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                <div className={`p-1 rounded-xl transition-colors ${isActive ? "bg-nyala-500/10 dark:bg-nyala-500/20" : ""}`}>
+                  <Icon
+                    weight={isActive ? "fill" : "bold"}
+                    className={`w-5 h-5 ${isActive ? "text-nyala-500" : ""}`}
                   />
-                )}
-
-                <Icon
-                  weight={isActive ? "fill" : "bold"}
-                  className={`w-5 h-5 transition-transform ${isActive ? "scale-110 text-nyala-500" : ""}`}
-                />
-                <span className="text-[10px] tracking-tight mt-1">
+                </div>
+                <span className="text-[10px] tracking-tight mt-0.5">
                   {tab.label}
                 </span>
               </Link>
@@ -195,81 +168,12 @@ export default function MobileAppLayout({
         </div>
       </nav>
 
-      {/* ── 4. NATIVE DRAWER ACTION SHEET ── */}
-      <AnimatePresence>
-        {menuDrawerOpen && (
-          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-navy-950/70 backdrop-blur-md p-0 sm:p-4">
-            <div className="absolute inset-0" onClick={() => setMenuDrawerOpen(false)} />
-
-            <motion.div
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: "100%", opacity: 0 }}
-              transition={{ type: "spring", stiffness: 350, damping: 32 }}
-              className="relative z-10 w-full max-w-lg bg-white dark:bg-[#0F1738] rounded-t-[2.5rem] sm:rounded-[2.5rem] p-6 pb-safe border border-navy-200/80 dark:border-navy-800 shadow-2xl space-y-5 max-h-[85vh] overflow-y-auto"
-            >
-              {/* Pull Bar for mobile */}
-              <div className="w-12 h-1 rounded-full bg-navy-200 dark:bg-navy-700 mx-auto -mt-2 sm:hidden" />
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-base font-black text-navy-950 dark:text-white">Menu Modul & Ekosistem</h3>
-                  <p className="text-xs text-navy-500 dark:text-navy-400">Seluruh modul resmi Nyala MABA UMKT 2026</p>
-                </div>
-                <button
-                  onClick={() => setMenuDrawerOpen(false)}
-                  className="p-2 rounded-full bg-navy-100 dark:bg-navy-900 text-navy-600 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white cursor-pointer"
-                >
-                  <X weight="bold" className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Drawer Menu List */}
-              <div className="space-y-2">
-                {DRAWER_ITEMS.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMenuDrawerOpen(false)}
-                      className="p-3.5 rounded-2xl bg-navy-50 dark:bg-navy-900/90 border border-navy-100 dark:border-navy-800/80 flex items-center gap-3.5 active:scale-98 transition-transform hover:border-nyala-500/50"
-                    >
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold ${item.color}`}>
-                        <Icon weight="bold" className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-xs font-bold text-navy-950 dark:text-white">{item.label}</h4>
-                        <p className="text-[10px] text-navy-500 dark:text-navy-400">{item.desc}</p>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-
-              {/* Action Row: Onboarding Replay & Desktop Switch */}
-              <div className="pt-2 border-t border-navy-100 dark:border-navy-800 space-y-2">
-                <button
-                  onClick={handleReplayOnboarding}
-                  className="w-full p-3 rounded-xl bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-xs font-bold text-navy-700 dark:text-navy-300 flex items-center justify-center gap-2 cursor-pointer hover:text-navy-950 dark:hover:text-white transition-colors"
-                >
-                  <Compass weight="bold" className="w-4 h-4 text-nyala-500" />
-                  <span>Putar Ulang Pengantar Onboarding</span>
-                </button>
-
-                <button
-                  onClick={handleSwitchToDesktop}
-                  className="w-full p-3 rounded-xl bg-navy-50 dark:bg-navy-900 border border-navy-200 dark:border-navy-800 text-xs font-bold text-navy-700 dark:text-navy-300 flex items-center justify-center gap-2 cursor-pointer hover:text-navy-950 dark:hover:text-white transition-colors"
-                >
-                  <Monitor weight="bold" className="w-4 h-4 text-sky-500" />
-                  <span>Alihkan ke Tampilan Desktop Web</span>
-                </button>
-              </div>
-
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      {/* ── 4. MULTIFUNCTIONAL ACTION MENU DOCK ── */}
+      <DuolingoActionMenuDock
+        isOpen={menuDockOpen}
+        onClose={() => setMenuDockOpen(false)}
+        onOpenAdminHelp={() => setAdminModalOpen(true)}
+      />
 
       {/* Global Modals & Notifications */}
       <CommandSearchModal

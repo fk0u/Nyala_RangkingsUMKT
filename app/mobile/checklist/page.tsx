@@ -12,12 +12,13 @@ import {
   FileText,
   TShirt,
   Laptop,
-  Heartbeat
+  Heartbeat,
+  Star
 } from "@phosphor-icons/react";
 import ProgressBar from "@/components/ProgressBar";
-import FlutterCard from "@/components/flutter/FlutterCard";
-import FlutterChip from "@/components/flutter/FlutterChip";
-import FlutterListTile from "@/components/flutter/FlutterListTile";
+import DuolingoCard from "@/components/flutter/DuolingoCard";
+import DuolingoButton from "@/components/flutter/DuolingoButton";
+import DuolingoSegmentedTabs from "@/components/flutter/DuolingoSegmentedTabs";
 import { INITIAL_CHECKLIST, ChecklistItem } from "@/lib/masta-data";
 import { useToast } from "@/context/ToastContext";
 
@@ -62,31 +63,36 @@ export default function MobileChecklistPage() {
     if (!newItemTitle.trim()) return;
 
     const newItem: ChecklistItem = {
-      id: `custom-${Date.now()}`,
+      id: `custom_${Date.now()}`,
+      category: "Perangkat & Jaringan",
       title: newItemTitle.trim(),
-      description: "Persiapan tambahan mandiri mahasiswa baru.",
-      category: "Dokumen & Identitas",
+      description: "Catatan perlengkapan tambahan pribadi",
       required: false,
     };
 
-    const updated = [...items, newItem];
-    setItems(updated);
+    setItems([...items, newItem]);
     setNewItemTitle("");
-    toast.success("Item persiapan ditambahkan!", "Ditambahkan");
+    toast.success("Item checklist berhasil ditambahkan!");
   };
 
-  const categories = [
-    { label: "Semua", icon: CheckSquare },
-    { label: "Dokumen & Identitas", icon: FileText },
-    { label: "Pakaian & Atribut", icon: TShirt },
-    { label: "Perangkat & Jaringan", icon: Laptop },
-    { label: "Kesehatan & Mental", icon: Heartbeat },
+  const handleReset = () => {
+    if (confirm("Reset seluruh checklist ke awal?")) {
+      setCheckedState({});
+      localStorage.removeItem("nyala_checklist");
+      toast.info("Checklist telah direset ke awal");
+    }
+  };
+
+  const CATEGORY_TABS = [
+    { id: "Semua", label: "Semua" },
+    { id: "Dokumen & Identitas", label: "Dokumen" },
+    { id: "Pakaian & Atribut", label: "Pakaian" },
+    { id: "Perangkat & Jaringan", label: "Perangkat" },
   ];
 
-  const filteredItems = items.filter((item) => {
-    if (activeCategory === "Semua") return true;
-    return item.category === activeCategory;
-  });
+  const filteredItems = items.filter(
+    (it) => activeCategory === "Semua" || it.category === activeCategory
+  );
 
   return (
     <div className="space-y-5">
@@ -94,129 +100,135 @@ export default function MobileChecklistPage() {
       {/* ── 1. HEADER ── */}
       <div className="space-y-1">
         <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white tracking-tight">
-          Checklist Berkas & Perlengkapan
+          Checklist Berkas & Kelengkapan
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
-          Pantau kelengkapan dokumen resmi dan atribut orientasi MASTA 2026.
+          Daftar 11 berkas & perangkat wajib MASTA IMM 2026.
         </p>
       </div>
 
-      {/* ── 2. FLUTTER STYLE READINESS PROGRESS CARD ── */}
-      <FlutterCard variant="elevated" className="space-y-3">
-        <div className="flex items-center justify-between text-xs sm:text-sm">
-          <div className="flex items-center gap-2 font-bold text-navy-950 dark:text-white">
-            <CheckCircle weight="fill" className="w-5 h-5 text-emerald-500" />
-            <span>Kesiapan MABA:</span>
-          </div>
-          <span className="font-mono font-bold text-nyala-600 dark:text-nyala-400">
-            {completedCount} / {totalCount} Selesai ({progressPercent}%)
+      {/* ── 2. GAMIFIED PROGRESS GAUGE (DUOLINGO 3D CARD) ── */}
+      <DuolingoCard variant="surface" padding="md" className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-black text-slate-400 uppercase tracking-wider">
+            Status Kesiapan Mahasiswa
+          </span>
+          <span className="text-xs font-mono font-black text-emerald-500">
+            {completedCount} / {totalCount} Selesai
           </span>
         </div>
-        
-        <ProgressBar progress={progressPercent} size="md" />
 
-        <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-          <span>Tersimpan di perangkat lokal</span>
-          {progressPercent === 100 && (
-            <span className="text-emerald-500 font-bold">✨ Siap 100%!</span>
-          )}
+        <div className="flex items-center gap-4">
+          <div className="text-3xl sm:text-4xl font-black font-mono text-nyala-500">
+            {progressPercent}%
+          </div>
+          <div className="flex-1">
+            <ProgressBar progress={progressPercent} size="md" />
+          </div>
         </div>
-      </FlutterCard>
 
-      {/* ── 3. FLUTTER CATEGORY CHIPS ── */}
-      <div className="space-y-1.5">
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-          Filter Kategori:
-        </span>
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-          {categories.map((cat) => (
-            <FlutterChip
-              key={cat.label}
-              label={cat.label}
-              icon={cat.icon}
-              selected={activeCategory === cat.label}
-              onClick={() => setActiveCategory(cat.label)}
-            />
-          ))}
-        </div>
-      </div>
+        <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
+          {progressPercent === 100
+            ? "🎉 Hebat! Seluruh perlengkapanmu sudah siap 100% untuk orientasi kampus!"
+            : "🔥 Lengkapi sisa checklist di bawah agar tidak ada berkas yang tertinggal."}
+        </p>
+      </DuolingoCard>
 
-      {/* ── 4. CHECKLIST LIST (Flutter ListTile with Custom Checkbox) ── */}
+      {/* ── 3. DUOLINGO 3D SEGMENTED TABS (NO PILL CAPSULE) ── */}
+      <DuolingoSegmentedTabs
+        tabs={CATEGORY_TABS}
+        activeTab={activeCategory}
+        onChange={setActiveCategory}
+        gridCols={4}
+      />
+
+      {/* ── 4. CHECKLIST 3D GAMIFIED ITEMS ── */}
       <div className="space-y-2.5">
         {filteredItems.map((item) => {
-          const isChecked = Boolean(checkedState[item.id]);
-
+          const isChecked = !!checkedState[item.id];
           return (
             <div
               key={item.id}
               onClick={() => handleToggle(item.id)}
-              className={`p-4 rounded-2xl sm:rounded-3xl border transition-all cursor-pointer select-none active:scale-[0.98] flex items-start gap-3.5 ${
+              className={`p-3.5 rounded-2xl border-2 border-b-4 flex items-center justify-between gap-3 cursor-pointer select-none active:border-b-2 active:translate-y-0.5 transition-all ${
                 isChecked
-                  ? "bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-300/80 dark:border-emerald-900/60 shadow-sm"
-                  : "bg-white dark:bg-[#0F172A] border-slate-200/80 dark:border-slate-800 shadow-sm hover:border-nyala-300"
+                  ? "bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-900 border-b-emerald-400 dark:border-b-emerald-950"
+                  : "bg-white dark:bg-[#0F172A] border-slate-200 dark:border-slate-800 border-b-slate-300 dark:border-b-slate-900"
               }`}
             >
-              {/* Checkbox Trigger */}
-              <div
-                className={`w-6 h-6 rounded-xl flex items-center justify-center transition-all flex-shrink-0 mt-0.5 ${
-                  isChecked
-                    ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30"
-                    : "border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800"
-                }`}
-              >
-                {isChecked && <Check weight="bold" className="w-4 h-4" />}
-              </div>
+              <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className={`w-7 h-7 rounded-xl flex items-center justify-center font-bold flex-shrink-0 transition-colors ${
+                    isChecked
+                      ? "bg-emerald-500 text-white"
+                      : "border-2 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
+                  }`}
+                >
+                  {isChecked && <Check weight="bold" className="w-4 h-4" />}
+                </div>
 
-              {/* Title & Description */}
-              <div className="min-w-0 flex-1 space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span
-                    className={`text-xs sm:text-sm font-bold leading-snug ${
+                <div className="min-w-0">
+                  <div
+                    className={`text-xs sm:text-sm font-bold truncate ${
                       isChecked
-                        ? "line-through text-slate-400 dark:text-slate-500"
+                        ? "text-emerald-900 dark:text-emerald-300 line-through opacity-80"
                         : "text-navy-950 dark:text-white"
                     }`}
                   >
                     {item.title}
-                  </span>
-                  {item.required && (
-                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400">
-                      Wajib
-                    </span>
+                  </div>
+                  {item.description && (
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                      {item.description}
+                    </div>
                   )}
                 </div>
+              </div>
 
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
-                  {item.description}
-                </p>
+              <div className="flex-shrink-0">
+                <span
+                  className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded uppercase ${
+                    item.required
+                      ? "bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-500"
+                  }`}
+                >
+                  {item.required ? "Wajib" : "Opsional"}
+                </span>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* ── 5. QUICK ADD CUSTOM ITEM FORM ── */}
-      <form
-        onSubmit={handleAddItem}
-        className="flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200/80 dark:border-slate-800 shadow-sm"
-      >
+      {/* ── 5. ADD CUSTOM ITEM FORM ── */}
+      <form onSubmit={handleAddItem} className="flex gap-2 pt-2">
         <input
           type="text"
           value={newItemTitle}
           onChange={(e) => setNewItemTitle(e.target.value)}
-          placeholder="+ Tambah catatan perlengkapan sendiri..."
-          className="flex-1 px-3.5 py-2.5 text-xs text-navy-950 dark:text-white bg-transparent placeholder-slate-400 focus:outline-none"
+          placeholder="Tambah catatan perlengkapan sendiri..."
+          className="flex-1 px-4 py-2.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 text-xs text-navy-950 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nyala-500"
         />
-
         <button
           type="submit"
-          disabled={!newItemTitle.trim()}
-          className="px-4 py-2.5 rounded-xl bg-nyala-500 text-white text-xs font-bold active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1.5 flex-shrink-0"
+          className="px-4 py-2.5 rounded-2xl duo-btn-primary text-xs flex items-center gap-1 flex-shrink-0"
         >
-          <Plus weight="bold" className="w-3.5 h-3.5" />
+          <Plus weight="bold" className="w-4 h-4" />
           <span>Tambah</span>
         </button>
       </form>
+
+      {/* ── 6. RESET BUTTON ── */}
+      <div className="pt-2 text-center">
+        <button
+          onClick={handleReset}
+          className="text-xs text-slate-400 hover:text-rose-500 font-bold inline-flex items-center gap-1.5 cursor-pointer"
+        >
+          <ArrowCounterClockwise weight="bold" className="w-3.5 h-3.5" />
+          <span>Reset Status Centang Checklist</span>
+        </button>
+      </div>
 
     </div>
   );

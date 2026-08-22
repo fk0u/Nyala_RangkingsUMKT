@@ -12,9 +12,8 @@ import {
   ArrowRight,
   ArrowSquareOut
 } from "@phosphor-icons/react";
-import FlutterCard from "@/components/flutter/FlutterCard";
-import FlutterSegmentedTabs from "@/components/flutter/FlutterSegmentedTabs";
-import FlutterListTile from "@/components/flutter/FlutterListTile";
+import DuolingoCard from "@/components/flutter/DuolingoCard";
+import DuolingoSegmentedTabs from "@/components/flutter/DuolingoSegmentedTabs";
 import { 
   UMKTBerita, 
   UMKTPengumuman, 
@@ -88,15 +87,16 @@ export default function MobileHubUMKTPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Cari berita atau pengumuman..."
-          className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 text-xs text-navy-950 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nyala-500 shadow-sm"
+          className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 text-xs text-navy-950 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nyala-500 shadow-sm"
         />
       </div>
 
-      {/* ── 3. SEGMENTED TABS ── */}
-      <FlutterSegmentedTabs
+      {/* ── 3. DUOLINGO 3D SEGMENTED TABS ── */}
+      <DuolingoSegmentedTabs
         tabs={HUB_TABS}
         activeTab={activeTab}
         onChange={setActiveTab}
+        gridCols={4}
       />
 
       {/* ── 4. TAB 1: BERITA KAMPUS ── */}
@@ -107,35 +107,37 @@ export default function MobileHubUMKTPage() {
               Memuat feed berita resmi UMKT...
             </div>
           ) : filteredBerita.length === 0 ? (
-            <FlutterCard variant="outlined" className="text-center p-6 text-xs text-slate-400">
+            <DuolingoCard variant="surface" padding="md" className="text-center text-xs text-slate-400">
               Tidak ada artikel yang cocok dengan pencarian.
-            </FlutterCard>
+            </DuolingoCard>
           ) : (
             filteredBerita.map((item, idx) => (
-              <FlutterListTile
+              <div
                 key={idx}
-                title={item.judul}
-                subtitle={
-                  <span className="space-y-1 block mt-1">
-                    <span className="line-clamp-2 text-slate-500 dark:text-slate-400">
-                      {cleanHTML(item.isi)}
-                    </span>
-                    <span className="text-[10px] text-nyala-500 font-mono font-semibold block">
-                      {formatDateIndo(item.created || item.tanggal || undefined)}
-                    </span>
-                  </span>
-                }
-                trailing={
-                  item.slug ? (
+                className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 space-y-2 select-none"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
+                    {item.judul}
+                  </h3>
+                  {item.slug && (
                     <a
                       href={`/blog/${item.slug}`}
-                      className="w-8 h-8 rounded-xl bg-nyala-50 dark:bg-nyala-950/80 text-nyala-500 flex items-center justify-center"
+                      className="p-1.5 rounded-xl bg-nyala-500 text-white flex-shrink-0"
                     >
-                      <ArrowRight weight="bold" className="w-4 h-4" />
+                      <ArrowRight weight="bold" className="w-3.5 h-3.5" />
                     </a>
-                  ) : null
-                }
-              />
+                  )}
+                </div>
+
+                <p className="line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
+                  {cleanHTML(item.isi)}
+                </p>
+
+                <span className="text-[10px] text-nyala-500 font-mono font-bold block">
+                  {formatDateIndo(item.created || item.tanggal || undefined)}
+                </span>
+              </div>
             ))
           )}
         </div>
@@ -145,22 +147,27 @@ export default function MobileHubUMKTPage() {
       {activeTab === "pengumuman" && (
         <div className="space-y-3">
           {pengumumanList.map((item, idx) => (
-            <FlutterListTile
+            <div
               key={idx}
-              title={item.judul}
-              subtitle={
-                <span className="space-y-1 block mt-1">
-                  <span className="line-clamp-2 text-slate-500 dark:text-slate-400">
-                    {cleanHTML(item.isi)}
-                  </span>
-                  <span className="text-[10px] text-blue-500 font-mono font-semibold block">
-                    {formatDateIndo(item.created || item.tanggal || undefined)}
-                  </span>
+              className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 space-y-2"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 uppercase">
+                  Pengumuman Resmi
                 </span>
-              }
-              badge="Pengumuman"
-              badgeColor="blue"
-            />
+                <span className="text-[10px] text-slate-400 font-mono">
+                  {formatDateIndo(item.created || item.tanggal || undefined)}
+                </span>
+              </div>
+
+              <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
+                {item.judul}
+              </h3>
+
+              <p className="line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
+                {cleanHTML(item.isi)}
+              </p>
+            </div>
           ))}
         </div>
       )}
@@ -169,17 +176,23 @@ export default function MobileHubUMKTPage() {
       {activeTab === "event" && (
         <div className="space-y-3">
           {eventList.map((ev, idx) => (
-            <FlutterListTile
+            <div
               key={idx}
-              title={ev.judul}
-              subtitle={
-                <span className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                  <span>📅 {formatDateIndo(ev.tgl_event || ev.tanggal || ev.created || undefined)}</span>
+              className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 space-y-2"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 uppercase">
+                  Agenda Kampus
                 </span>
-              }
-              badge="Event Kampus"
-              badgeColor="emerald"
-            />
+                <span className="text-[10px] text-slate-400 font-mono">
+                  📅 {formatDateIndo(ev.tgl_event || ev.tanggal || ev.created || undefined)}
+                </span>
+              </div>
+
+              <h3 className="font-black text-navy-950 dark:text-white text-xs sm:text-sm">
+                {ev.judul}
+              </h3>
+            </div>
           ))}
         </div>
       )}
@@ -188,28 +201,30 @@ export default function MobileHubUMKTPage() {
       {activeTab === "fakultas" && (
         <div className="space-y-2">
           {fakultasList.map((fak, idx) => (
-            <FlutterListTile
+            <div
               key={idx}
-              dense
-              title={fak.nama || fak.nama_lembaga || "Fakultas UMKT"}
-              subtitle={
-                <span className="text-xs text-slate-500">
+              className="p-3.5 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 flex items-center justify-between gap-3 text-xs"
+            >
+              <div>
+                <h3 className="font-black text-navy-950 dark:text-white text-xs">
+                  {fak.nama || fak.nama_lembaga || "Fakultas UMKT"}
+                </h3>
+                <p className="text-[10px] text-slate-500">
                   {fak.deskripsi || fak.keterangan || "Fakultas Resmi Universitas Muhammadiyah Kalimantan Timur"}
-                </span>
-              }
-              trailing={
-                fak.url || fak.link ? (
-                  <a
-                    href={fak.url || fak.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-nyala-500"
-                  >
-                    <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
-                  </a>
-                ) : null
-              }
-            />
+                </p>
+              </div>
+
+              {fak.url || fak.link ? (
+                <a
+                  href={fak.url || fak.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-xl duo-btn-surface flex-shrink-0"
+                >
+                  <ArrowSquareOut weight="bold" className="w-3.5 h-3.5" />
+                </a>
+              ) : null}
+            </div>
           ))}
         </div>
       )}

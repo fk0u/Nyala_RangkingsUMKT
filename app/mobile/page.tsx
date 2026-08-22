@@ -2,253 +2,316 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { 
   CalendarCheck, 
   Laptop, 
-  Sparkle, 
   Code, 
-  Globe, 
   CheckSquare, 
-  Heartbeat, 
-  BookOpenText, 
-  Compass, 
+  Sparkle, 
   ArrowRight,
-  CaretRight,
-  Headset,
-  MapPin,
-  Clock,
-  User,
-  ShieldCheck,
+  Flame,
+  Lightning,
+  Trophy,
   CheckCircle,
-  Bell
+  Clock,
+  Heartbeat,
+  Globe,
+  Star
 } from "@phosphor-icons/react";
 import MascotFlame, { MascotMood } from "@/components/MascotFlame";
 import CountdownTimer from "@/components/CountdownTimer";
-import FlutterCard from "@/components/flutter/FlutterCard";
-import FlutterListTile from "@/components/flutter/FlutterListTile";
-import FlutterChip from "@/components/flutter/FlutterChip";
+import ProgressBar from "@/components/ProgressBar";
+import DuolingoCard from "@/components/flutter/DuolingoCard";
+import DuolingoButton from "@/components/flutter/DuolingoButton";
 
-export default function MobileAppHomePage() {
-  const [checklistProgress, setChecklistProgress] = useState(0);
-  const [todayMood, setTodayMood] = useState<string | null>(null);
+export default function MobileDashboardPage() {
   const [userName, setUserName] = useState("Mahasiswa Baru");
   const [userProdi, setUserProdi] = useState("S1 Teknik Informatika");
-  const [heroMood, setHeroMood] = useState<MascotMood>("excited");
+  const [checklistPercent, setChecklistPercent] = useState(0);
+  const [healthScore, setHealthScore] = useState(85);
+  const [xpEarned, setXpEarned] = useState(140);
+  const [dailyQuests, setDailyQuests] = useState([
+    { id: "q1", title: "Cek Jadwal Gelombang IMM", xp: 30, completed: true, href: "/mobile/jadwal" },
+    { id: "q2", title: "Lengkapi 3 Berkas Checklist", xp: 50, completed: false, href: "/mobile/checklist" },
+    { id: "q3", title: "Catat Kesiapan Fisik & Mood", xp: 40, completed: false, href: "/mobile/health-check" },
+    { id: "q4", title: "Tanya AI Seputar SIKAD & KRS", xp: 20, completed: true, href: "/mobile/companion" },
+  ]);
 
   useEffect(() => {
-    const profile = localStorage.getItem("nyala_user_profile_v1");
-    if (profile) {
+    const savedProfile = localStorage.getItem("nyala_user_profile_v1");
+    if (savedProfile) {
       try {
-        const p = JSON.parse(profile);
-        if (p.name) setUserName(p.name);
-        if (p.prodi) setUserProdi(p.prodi);
-        if (p.mascotMood) setHeroMood(p.mascotMood);
+        const parsed = JSON.parse(savedProfile);
+        if (parsed.name) setUserName(parsed.name.split(" ")[0]);
+        if (parsed.prodi) setUserProdi(parsed.prodi);
       } catch (e) {
         console.error(e);
       }
-    } else {
-      const prodi = localStorage.getItem("nyala_user_prodi");
-      if (prodi) setUserProdi(prodi);
     }
 
     const savedChecklist = localStorage.getItem("nyala_checklist");
     if (savedChecklist) {
       try {
         const parsed = JSON.parse(savedChecklist);
-        const checkedCount = Object.values(parsed).filter(Boolean).length;
-        setChecklistProgress(Math.round((checkedCount / 11) * 100));
+        const count = Object.values(parsed).filter(Boolean).length;
+        const pct = Math.round((count / 11) * 100);
+        setChecklistPercent(pct);
+        if (count >= 3) {
+          setDailyQuests((prev) =>
+            prev.map((q) => (q.id === "q2" ? { ...q, completed: true } : q))
+          );
+        }
       } catch (e) {
         console.error(e);
       }
     }
 
-    const savedMoods = localStorage.getItem("nyala_mood_history");
-    if (savedMoods) {
+    const savedHealth = localStorage.getItem("nyala_health_logs");
+    if (savedHealth) {
       try {
-        const parsed = JSON.parse(savedMoods);
-        if (parsed.length > 0) setTodayMood(parsed[0].label || "Semangat");
+        const parsed = JSON.parse(savedHealth);
+        if (parsed.length > 0 && parsed[0].score) {
+          setHealthScore(parsed[0].score);
+          setDailyQuests((prev) =>
+            prev.map((q) => (q.id === "q3" ? { ...q, completed: true } : q))
+          );
+        }
       } catch (e) {
         console.error(e);
       }
     }
   }, []);
 
-  const QUICK_ACTION_CHIPS = [
-    { label: "Jadwal MASTA", href: "/mobile/jadwal", icon: CalendarCheck },
-    { label: "KRS SIKAD", href: "/mobile/panduan-sikad", icon: Laptop },
-    { label: "Kurikulum TI", href: "/mobile/panduan-ti", icon: Code },
-    { label: "Checklist", href: "/mobile/checklist", icon: CheckSquare },
-    { label: "Health Check", href: "/mobile/health-check", icon: Heartbeat },
-    { label: "Warta Kampus", href: "/mobile/hub-umkt", icon: Globe },
-  ];
-
-  const CORE_WIDGET_APPS = [
-    {
-      title: "Jadwal & Rundown MASTA",
-      subtitle: "3 Gelombang IMM, Zoom Daring & Puncak Milad",
-      badge: "Wajib MABA",
-      badgeColor: "orange" as const,
-      icon: CalendarCheck,
-      href: "/mobile/jadwal",
-      color: "bg-nyala-50 dark:bg-nyala-950/60 text-nyala-500",
-    },
-    {
-      title: "Simulator & Panduan SIKAD",
-      subtitle: "Alur KRS Online, Presensi 75% & Etika Chat Dosen PA",
-      badge: "Akademik",
-      badgeColor: "blue" as const,
-      icon: Laptop,
-      href: "/mobile/panduan-sikad",
-      color: "bg-sky-50 dark:bg-sky-950/60 text-sky-500",
-    },
-    {
-      title: "Kurikulum S1 Teknologi Informasi",
-      subtitle: "Paket 20 SKS Semester 1-4 & Direktori 11 Dosen",
-      badge: "Prodi FST",
-      badgeColor: "emerald" as const,
-      icon: Code,
-      href: "/mobile/panduan-ti",
-      color: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-500",
-    },
-    {
-      title: "Checklist Persiapan & Berkas",
-      subtitle: "11 Item wajib: Identitas, Pakaian & Tata Tertib",
-      badge: `${checklistProgress}% Siap`,
-      badgeColor: checklistProgress === 100 ? ("emerald" as const) : ("slate" as const),
-      icon: CheckSquare,
-      href: "/mobile/checklist",
-      color: "bg-amber-50 dark:bg-amber-950/60 text-amber-500",
-    },
-  ];
+  const completedQuestsCount = dailyQuests.filter((q) => q.completed).length;
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-5">
       
-      {/* ── 1. USER GREETING & MASCOT STATUS WIDGET (Flutter Style Hero Card) ── */}
-      <FlutterCard variant="elevated" className="relative overflow-hidden bg-gradient-to-br from-white via-white to-nyala-50/40 dark:from-[#0F172A] dark:via-[#0F172A] dark:to-nyala-950/20 border-slate-200 dark:border-slate-800">
-        <div className="flex items-center justify-between gap-4">
-          <div className="space-y-1.5 min-w-0 flex-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-nyala-100 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400 text-[11px] font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-nyala-500 animate-pulse" />
-              <span>Sahabat MABA UMKT 2026</span>
+      {/* ── 1. GAMIFIED GREETING & LEVEL BAR ── */}
+      <DuolingoCard variant="surface" padding="md" className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 rounded-2xl bg-nyala-500/15 border-2 border-nyala-500/30 flex items-center justify-center p-1">
+              <MascotFlame size="sm" mood="cheering" className="w-10 h-10" />
             </div>
-            
-            <h1 className="text-xl sm:text-2xl font-black text-navy-950 dark:text-white tracking-tight leading-tight">
-              Hai, {userName}! 👋
-            </h1>
-            
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium truncate">
-              {userProdi} • Siap menyambut orientasi kampus?
-            </p>
-
-            {/* Quick Readiness Metrics */}
-            <div className="pt-2 flex items-center gap-2 sm:gap-3 flex-wrap">
-              <Link
-                href="/mobile/checklist"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 active:scale-95 transition-transform"
-              >
-                <CheckCircle weight="fill" className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Checklist: {checklistProgress}%</span>
-              </Link>
-
-              <Link
-                href="/mobile/health-check"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 active:scale-95 transition-transform"
-              >
-                <Heartbeat weight="fill" className="w-3.5 h-3.5 text-rose-500" />
-                <span>Mood: {todayMood || "Prima"}</span>
-              </Link>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 uppercase">
+                  Level 1 • MABA Pejuang
+                </span>
+              </div>
+              <h1 className="text-base sm:text-lg font-black text-navy-950 dark:text-white">
+                Hai, {userName}! 🔥
+              </h1>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                {userProdi}
+              </p>
             </div>
           </div>
 
-          <div className="flex-shrink-0 flex flex-col items-center">
-            <MascotFlame size="md" mood={heroMood} className="w-16 h-16 sm:w-20 sm:h-20" />
+          <div className="text-right">
+            <div className="text-xs font-black font-mono text-nyala-500">
+              {completedQuestsCount}/{dailyQuests.length} Misi Selesai
+            </div>
+            <div className="text-[10px] text-slate-400">
+              +140 XP Terkumpul
+            </div>
           </div>
         </div>
-      </FlutterCard>
 
-      {/* ── 2. QUICK ACTION CATEGORY CHIPS (Thumb-Reachable 1-Tap Scroll) ── */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-            Akses Pintas Cepat
+        {/* Level XP Progress Bar */}
+        <div className="space-y-1 pt-1">
+          <div className="flex items-center justify-between text-[10px] font-bold text-slate-400">
+            <span>Progress Menuju Level 2</span>
+            <span>{Math.round((completedQuestsCount / dailyQuests.length) * 100)}%</span>
+          </div>
+          <ProgressBar
+            progress={Math.round((completedQuestsCount / dailyQuests.length) * 100)}
+            size="sm"
+          />
+        </div>
+      </DuolingoCard>
+
+      {/* ── 2. COUNTDOWN TIMER GAMIFIED CARD ── */}
+      <DuolingoCard variant="surface" padding="md" className="space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Clock weight="bold" className="w-4 h-4 text-nyala-500" />
+            <h2 className="text-xs font-black uppercase tracking-wider text-slate-600 dark:text-slate-300">
+              Hitung Mundur MASTA IMM
+            </h2>
+          </div>
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-nyala-50 dark:bg-nyala-950/80 text-nyala-600 dark:text-nyala-400">
+            18–20 Agt 2026
           </span>
-          <Link href="/mobile/companion" className="text-xs font-bold text-nyala-500 hover:text-nyala-600 flex items-center gap-1">
-            <span>Tanya AI</span>
-            <CaretRight weight="bold" className="w-3 h-3" />
-          </Link>
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-          {QUICK_ACTION_CHIPS.map((chip) => (
-            <Link key={chip.href} href={chip.href}>
-              <FlutterChip
-                label={chip.label}
-                icon={chip.icon}
-              />
+        <CountdownTimer />
+      </DuolingoCard>
+
+      {/* ── 3. MISI HARIAN MABA (DUOLINGO DAILY QUESTS) ── */}
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-1.5 text-xs font-black text-navy-950 dark:text-white uppercase tracking-wider">
+            <Trophy weight="fill" className="w-4 h-4 text-amber-500" />
+            <span>Misi Harian MABA</span>
+          </div>
+          <span className="text-[10px] font-mono font-bold text-slate-400">
+            Reset Tiap 24 Jam
+          </span>
+        </div>
+
+        <div className="space-y-2">
+          {dailyQuests.map((quest) => (
+            <Link
+              key={quest.id}
+              href={quest.href}
+              className={`p-3.5 rounded-2xl border-2 border-b-4 flex items-center justify-between gap-3 select-none active:border-b-2 active:translate-y-0.5 transition-all ${
+                quest.completed
+                  ? "bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-900 border-b-emerald-400 dark:border-b-emerald-950"
+                  : "bg-white dark:bg-[#0F172A] border-slate-200 dark:border-slate-800 border-b-slate-300 dark:border-b-slate-900"
+              }`}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold flex-shrink-0 ${
+                    quest.completed
+                      ? "bg-emerald-500 text-white"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                  }`}
+                >
+                  {quest.completed ? (
+                    <CheckCircle weight="fill" className="w-5 h-5" />
+                  ) : (
+                    <Star weight="bold" className="w-4 h-4 text-amber-500" />
+                  )}
+                </div>
+
+                <div className="min-w-0">
+                  <div className={`text-xs font-bold truncate ${
+                    quest.completed
+                      ? "text-emerald-900 dark:text-emerald-300 line-through opacity-80"
+                      : "text-navy-950 dark:text-white"
+                  }`}>
+                    {quest.title}
+                  </div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                    Hadiah: +{quest.xp} XP
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-shrink-0">
+                <span className={`text-[10px] font-black px-2 py-1 rounded-lg ${
+                  quest.completed
+                    ? "bg-emerald-500 text-white"
+                    : "bg-nyala-500 text-white"
+                }`}>
+                  {quest.completed ? "Selesai" : "Mulai"}
+                </span>
+              </div>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* ── 3. LIVE COUNTDOWN & NOTIFICATION WIDGET ── */}
-      <CountdownTimer />
-
-      {/* ── 4. FEATURE WIDGET LIST (Flutter ListTile System) ── */}
-      <div className="space-y-3">
+      {/* ── 4. 4 MODUL UTAMA AKADEMIK & KAMPUS (DUOLINGO 3D CARDS) ── */}
+      <div className="space-y-2.5 pt-1">
         <div className="flex items-center justify-between px-1">
-          <h2 className="text-sm sm:text-base font-bold text-navy-950 dark:text-white">
-            Modul Utama Pembinaan
-          </h2>
-          <span className="text-xs text-slate-400 font-medium">4 Modul Inti</span>
+          <span className="text-xs font-black text-navy-950 dark:text-white uppercase tracking-wider">
+            Modul Utama Nyala
+          </span>
+          <span className="text-[10px] text-slate-400">4 Panduan Inti</span>
         </div>
 
-        <div className="grid grid-cols-1 gap-2.5 sm:gap-3">
-          {CORE_WIDGET_APPS.map((widget) => {
-            const Icon = widget.icon;
-            return (
-              <Link key={widget.href} href={widget.href}>
-                <FlutterListTile
-                  leading={
-                    <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center font-bold ${widget.color}`}>
-                      <Icon weight="bold" className="w-5 h-5" />
-                    </div>
-                  }
-                  title={widget.title}
-                  subtitle={widget.subtitle}
-                  badge={widget.badge}
-                  badgeColor={widget.badgeColor}
-                />
-              </Link>
-            );
-          })}
+        <div className="grid grid-cols-2 gap-2.5">
+          
+          {/* Jadwal Card */}
+          <Link
+            href="/mobile/jadwal"
+            className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 active:border-b-2 active:translate-y-0.5 transition-all flex flex-col justify-between h-32 select-none"
+          >
+            <div className="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <CalendarCheck weight="bold" className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xs font-black text-navy-950 dark:text-white">Jadwal MASTA</h3>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">3 Gelombang IMM</p>
+            </div>
+          </Link>
+
+          {/* SIKAD Card */}
+          <Link
+            href="/mobile/panduan-sikad"
+            className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 active:border-b-2 active:translate-y-0.5 transition-all flex flex-col justify-between h-32 select-none"
+          >
+            <div className="w-9 h-9 rounded-xl bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center">
+              <Laptop weight="bold" className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xs font-black text-navy-950 dark:text-white">SIKAD & KRS</h3>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">Chat Dosen PA</p>
+            </div>
+          </Link>
+
+          {/* Kurikulum TI Card */}
+          <Link
+            href="/mobile/panduan-ti"
+            className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 active:border-b-2 active:translate-y-0.5 transition-all flex flex-col justify-between h-32 select-none"
+          >
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <Code weight="bold" className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xs font-black text-navy-950 dark:text-white">Kurikulum TI</h3>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">20 SKS & 11 Dosen</p>
+            </div>
+          </Link>
+
+          {/* Checklist Card */}
+          <Link
+            href="/mobile/checklist"
+            className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-slate-200 dark:border-slate-800 border-b-4 border-b-slate-300 dark:border-b-slate-900 active:border-b-2 active:translate-y-0.5 transition-all flex flex-col justify-between h-32 select-none"
+          >
+            <div className="w-9 h-9 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+              <CheckSquare weight="bold" className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xs font-black text-navy-950 dark:text-white">Checklist</h3>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">{checklistPercent}% Berkas Siap</p>
+            </div>
+          </Link>
+
         </div>
       </div>
 
-      {/* ── 5. ASISTEN DIGITAL NYALA CTA BANNER ── */}
-      <Link href="/mobile/companion" className="block active:scale-[0.98] transition-transform">
-        <div className="rounded-2xl sm:rounded-3xl p-5 bg-gradient-to-tr from-navy-950 via-[#0E1635] to-nyala-950 text-white border border-nyala-500/30 shadow-lg relative overflow-hidden">
-          <div className="relative z-10 flex items-center justify-between gap-4">
-            <div className="space-y-1 max-w-sm">
-              <div className="flex items-center gap-1.5 text-nyala-400 text-xs font-bold">
-                <Sparkle weight="fill" className="w-4 h-4 animate-spin" />
-                <span>Zpi AI Companion Terintegrasi</span>
-              </div>
-              <h3 className="text-base font-bold text-white tracking-tight">
-                Punya Pertanyaan Seputar Kampus?
-              </h3>
-              <p className="text-xs text-slate-300">
-                Tanyakan teknis Zoom On-Cam, seragam, jadwal atau dosen ke Nyala 24/7.
-              </p>
-            </div>
-
-            <div className="w-10 h-10 rounded-2xl bg-nyala-500 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-nyala-500/40">
-              <ArrowRight weight="bold" className="w-5 h-5" />
-            </div>
+      {/* ── 5. AI COMPANION 3D CTA BANNER ── */}
+      <DuolingoCard variant="primary" padding="md" className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white/20 text-white uppercase inline-block">
+              AI Companion 24/7
+            </span>
+            <h3 className="text-base font-black text-white">
+              Punya Pertanyaan Seputar Kampus?
+            </h3>
+            <p className="text-xs text-white/90 leading-snug">
+              Tanya jadwal gugus, dresscode, hingga cara bayar SPP ke Nyala AI.
+            </p>
+          </div>
+          <div className="w-12 h-12 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0">
+            <Sparkle weight="fill" className="w-6 h-6 text-white animate-spin" />
           </div>
         </div>
-      </Link>
+
+        <Link
+          href="/mobile/companion"
+          className="w-full py-3 rounded-xl bg-white hover:bg-slate-50 text-nyala-600 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md border-b-4 border-slate-300 active:border-b-2 active:translate-y-0.5 transition-all block text-center"
+        >
+          <span>Mulai Chat dengan Nyala AI</span>
+          <ArrowRight weight="bold" className="w-4 h-4" />
+        </Link>
+      </DuolingoCard>
 
     </div>
   );

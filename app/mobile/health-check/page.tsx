@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { 
   Heartbeat, 
   SmileyXEyes, 
@@ -13,13 +13,12 @@ import {
   Drop, 
   Lightning, 
   Check, 
-  TrendUp,
   FloppyDisk,
-  CheckCircle
+  Star
 } from "@phosphor-icons/react";
 import MascotFlame from "@/components/MascotFlame";
-import FlutterCard from "@/components/flutter/FlutterCard";
-import FlutterListTile from "@/components/flutter/FlutterListTile";
+import DuolingoCard from "@/components/flutter/DuolingoCard";
+import DuolingoButton from "@/components/flutter/DuolingoButton";
 import { useToast } from "@/context/ToastContext";
 import ProgressBar from "@/components/ProgressBar";
 
@@ -86,13 +85,13 @@ export default function MobileHealthCheckPage() {
         </p>
       </div>
 
-      {/* ── 2. READINESS SCORE GAUGE CARD ── */}
-      <FlutterCard variant="elevated" className="text-center space-y-3">
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+      {/* ── 2. READINESS GAUGE (DUOLINGO 3D CARD) ── */}
+      <DuolingoCard variant="surface" padding="md" className="text-center space-y-3">
+        <span className="text-xs font-black text-slate-400 uppercase tracking-wider block">
           Skor Kesiapan Fisik & Mental Hari Ini
         </span>
         
-        <div className="text-4xl sm:text-5xl font-black font-mono text-nyala-600 dark:text-nyala-400">
+        <div className="text-4xl sm:text-5xl font-black font-mono text-nyala-500">
           {totalScore}%
         </div>
 
@@ -103,11 +102,11 @@ export default function MobileHealthCheckPage() {
             ? "✨ Kondisi fisik dan mentalmu sangat prima untuk menyerap materi orientasi kampus!"
             : "💡 Pastikan minum air cukup dan tidur teratur malam ini agar tetap fokus."}
         </p>
-      </FlutterCard>
+      </DuolingoCard>
 
-      {/* ── 3. MOOD SELECTOR ── */}
+      {/* ── 3. MOOD SELECTOR 3D BUTTONS ── */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block px-1">
+        <label className="text-xs font-black text-slate-400 uppercase tracking-wider block px-1">
           Bagaimana Perasaanmu Hari Ini?
         </label>
         
@@ -119,10 +118,10 @@ export default function MobileHealthCheckPage() {
               <button
                 key={m.id}
                 onClick={() => setSelectedMood(m)}
-                className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm ${
+                className={`p-3 rounded-2xl border-2 border-b-4 flex flex-col items-center gap-1.5 transition-all cursor-pointer select-none active:border-b-2 active:translate-y-0.5 ${
                   isSelected
-                    ? "bg-nyala-500/10 border-nyala-500 text-nyala-600 dark:text-nyala-400 font-bold scale-[1.02]"
-                    : "bg-white dark:bg-[#0F172A] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-nyala-300"
+                    ? "bg-nyala-500/10 border-nyala-500 border-b-nyala-700 text-nyala-600 dark:text-nyala-400 font-black"
+                    : "bg-white dark:bg-[#0F172A] border-slate-200 dark:border-slate-800 border-b-slate-300 dark:border-b-slate-900 text-slate-500"
                 }`}
               >
                 <Icon weight={isSelected ? "fill" : "bold"} className={`w-6 h-6 ${m.color}`} />
@@ -133,9 +132,9 @@ export default function MobileHealthCheckPage() {
         </div>
       </div>
 
-      {/* ── 4. PHYSICAL CHECKS LIST ── */}
+      {/* ── 4. PHYSICAL CHECKS QUEST TILES ── */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block px-1">
+        <label className="text-xs font-black text-slate-400 uppercase tracking-wider block px-1">
           Checklist Kesiapan Fisik (4 Pilar):
         </label>
 
@@ -147,10 +146,10 @@ export default function MobileHealthCheckPage() {
               <div
                 key={c.id}
                 onClick={() => handleToggleCheck(c.id)}
-                className={`p-3.5 rounded-2xl sm:rounded-3xl border transition-all cursor-pointer select-none active:scale-[0.98] flex items-center justify-between gap-3 shadow-sm ${
+                className={`p-3.5 rounded-2xl border-2 border-b-4 transition-all cursor-pointer select-none active:border-b-2 active:translate-y-0.5 flex items-center justify-between gap-3 ${
                   isChecked
-                    ? "bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-300/80 dark:border-emerald-900/60"
-                    : "bg-white dark:bg-[#0F172A] border-slate-200/80 dark:border-slate-800 hover:border-nyala-300"
+                    ? "bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-900 border-b-emerald-400 dark:border-b-emerald-950"
+                    : "bg-white dark:bg-[#0F172A] border-slate-200 dark:border-slate-800 border-b-slate-300 dark:border-b-slate-900"
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -174,14 +173,19 @@ export default function MobileHealthCheckPage() {
                   </div>
                 </div>
 
-                <div
-                  className={`w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                    isChecked
-                      ? "bg-emerald-500 text-white"
-                      : "border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800"
-                  }`}
-                >
-                  {isChecked && <Check weight="bold" className="w-4 h-4" />}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-[10px] font-mono font-bold text-emerald-500">
+                    +{c.points} XP
+                  </span>
+                  <div
+                    className={`w-6 h-6 rounded-xl flex items-center justify-center ${
+                      isChecked
+                        ? "bg-emerald-500 text-white"
+                        : "border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800"
+                    }`}
+                  >
+                    {isChecked && <Check weight="bold" className="w-4 h-4" />}
+                  </div>
                 </div>
               </div>
             );
@@ -189,13 +193,13 @@ export default function MobileHealthCheckPage() {
         </div>
       </div>
 
-      {/* ── 5. SAVE LOG ACTION BUTTON ── */}
+      {/* ── 5. SAVE BUTTON (DUOLINGO 3D BUTTON) ── */}
       <button
         onClick={handleSave}
-        className="w-full py-3.5 px-4 rounded-2xl bg-nyala-500 hover:bg-nyala-600 text-white text-xs sm:text-sm font-bold shadow-md shadow-nyala-500/30 flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer"
+        className="w-full py-4 px-4 rounded-2xl duo-btn-primary text-xs sm:text-sm font-black flex items-center justify-center gap-2"
       >
         <FloppyDisk weight="bold" className="w-4 h-4" />
-        <span>{hasSaved ? "Pembaruan Kesiapan Tersimpan!" : "Simpan Catatan Kesiapan Hari Ini"}</span>
+        <span>{hasSaved ? "Pembaruan Kesiapan Tersimpan!" : "Simpan Catatan Kesiapan Hari Ini (+30 XP)"}</span>
       </button>
 
     </div>

@@ -96,23 +96,22 @@ Tipografi mengedepankan legibilitas prima di perangkat layar ponsel maupun layar
 
 ---
 
-## 5. Layout Principles & Flutter UI Kit Architecture
+## 5. Layout Principles & Duolingo Gamified UI Architecture
 
-Nyala menerapkan strategi **Dual-Platform & Flutter UI Kit Experience**:
+Nyala menerapkan strategi **Dual-Platform & Duolingo 3D Gamification UI**:
 
 1. **Desktop Web Experience (`/`):**
    - Header navigasi transparan dengan kaca buram (*glassmorphism* `backdrop-blur-md`).
    - Grid bento responsif dengan batas lebar maksimum `max-w-7xl` terpusat.
    - Kolom asimetris untuk menyajikan panduan dan maskot secara berdampingan.
 2. **True Fluid Mobile & Tablet App Experience (`/mobile/*`):**
-   - Mengadopsi arsitektur **Flutter UI Kit (Material 3 & Cupertino Hybrid)**:
-     - `FlutterScaffold`: App shell dengan safe-area insets dan auto-spacing.
-     - `FlutterAppBar`: Sticky header transparan dengan tombol kembali adaptif dan action tools.
-     - `FlutterSegmentedTabs`: Tab segmentasi berbasis pill dengan animasi pegas meluncur (`framer-motion` spring) untuk navigasi instan tanpa scroll panjang.
-     - `FlutterListTile`: Baris data terstandarisasi (Leading, Title, Subtitle, Trailing Status).
-     - `FlutterBottomSheet`: Panel modal interaktif dengan drag handle untuk detail mendalam tanpa berpindah halaman.
-     - `FlutterCard` & `FlutterChip`: Kartu berkontur halus `rounded-3xl` dan filter chips 1-tap.
-   - *Floating Bottom Dock Bar* dengan sensor sentuh haptik visual.
+   - Mengadopsi arsitektur **Duolingo Gamified 3D UI Kit**:
+     - **Tactile 3D Buttons (`border-b-4`):** Tombol fisik dengan ketebalan border bawah 4px (`duo-btn-primary`, `duo-btn-emerald`, `duo-btn-sky`, `duo-btn-surface`) yang memberikan sensasi tekan mainan taktil (`active:border-b-2 active:translate-y-0.5`).
+     - **3D Gamified Cards (`DuolingoCard`):** Kartu berbingkai tegas `border-2 border-b-4` dengan radius `rounded-3xl`.
+     - **3D Segmented Tabs (`DuolingoSegmentedTabs`):** Tab selector berbasis kartu 3D dengan respons tekan fisik tebal (`border-b-4`) alih-alih pill/capsule tipis.
+     - **Solid Full-Width Bottom Bar:** Navigasi bawah docked rata (*full-width solid bottom bar*) tanpa celah mengambang capsule.
+     - **Multifunctional Action Launcher:** Tombol tengah 3D `GridFour` yang membuka **Floating Action Menu Dock (`DuolingoActionMenuDock`)** berisi 8 rute jalan pintas (Tanya AI, Jadwal, SIKAD, Kurikulum TI, Checklist, Health & Mood, Hub Warta, Admin Gedung C).
+     - **Gamification Engine:** Sistem Flame Streak harian (`🔥 3d`), pengumpulan energi XP (`⚡ 140 XP`), dan Misi Harian MABA (*Daily Quests*).
    - Tidak ada *horizontal overflow* pada semua ukuran layar mulai dari 320px hingga tablet 1024px.
 
 ---
@@ -120,15 +119,15 @@ Nyala menerapkan strategi **Dual-Platform & Flutter UI Kit Experience**:
 ## 6. Psikologi Desain & Prinsip UX (Best UX Standards)
 
 1. **Hick's Law (Reduksi Waktu Keputusan):**
-   - Menggantikan scroll panjang tak berujung dengan **Segmented Tabs 1-Tap**, **Filter Chips**, dan **Quick Overview Cards**.
+   - Menggantikan scroll panjang tak berujung dengan **3D Segmented Tabs 1-Tap**, **Filter Chips**, dan **Quick Launch Cards**.
 2. **Fitts's Law & Thumb-Zone Reachability (Ergonomi Ponsel/Tablet):**
-   - Seluruh kontrol kritis diletakkan di **40% area bawah layar** dengan ukuran target sentuh minimum `48px × 48px`.
+   - Seluruh kontrol kritis dan tombol launcher diletakkan di **40% area bawah layar** dengan ukuran target sentuh minimum `48px × 48px`.
 3. **Miller's Law (Chunking 3–5 Item):**
    - Data dipadatkan ke dalam widget mandiri terstruktur agar mudah dicerna tanpa membuat mata lelah.
 4. **Law of Common Region & Visual Hierarchy:**
-   - Pembagian area visual tegas dengan kartu bersudut melengkung `rounded-3xl` dan border subtil.
-5. **Immediate Feedback & Tactile Motion:**
-   - Animasi pegas taktil `active:scale-[0.96]`, shimmer loader presisi, dan notifikasi toast/bottom sheet instan.
+   - Pembagian area visual tegas dengan kartu berkontur tebal `rounded-3xl` dan border 3D.
+5. **Gamification & Immediate Feedback:**
+   - Efek tekan taktil `border-b-4 -> border-b-2`, reward perolehan XP, dan selebrasi konfeti saat checklist 100%.
 
 ---
 
@@ -152,6 +151,7 @@ Nyala menerapkan strategi **Dual-Platform & Flutter UI Kit Experience**:
 
 Sistem melarang keras praktik-praktik desain murahan berikut:
 
+- ❌ **Dilarang di Mobile:** Penggunaan **Pill / Capsule floating bar** pada navigasi mobile. Wajib gunakan *Solid Full-Width Docked Bottom Bar*.
 - ❌ **Dilarang:** Emoji berlebihan sebagai pengganti ikon profesional. Gunakan paket resmi `@phosphor-icons/react`.
 - ❌ **Dilarang:** Gradien ungu neon (*AI Cyberpunk slop*).
 - ❌ **Dilarang:** Huruf miring (*italic*) pada judul utama.
