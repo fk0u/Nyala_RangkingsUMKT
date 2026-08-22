@@ -45,6 +45,22 @@ export default function MobileAppLayout({
   useEffect(() => {
     refreshGamification();
 
+    // Safeguard: If on wide screen desktop (> 1024px) without mobile touch/emulation, redirect to desktop web
+    const checkDesktopBypass = () => {
+      if (typeof window !== "undefined") {
+        const isWideScreen = window.innerWidth > 1024;
+        const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+        const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isWideScreen && !isTouch && !isMobileUA) {
+          window.location.replace("/");
+        }
+      }
+    };
+
+    checkDesktopBypass();
+    window.addEventListener("resize", checkDesktopBypass);
+
     const handleUpdate = () => {
       refreshGamification();
     };
@@ -52,6 +68,7 @@ export default function MobileAppLayout({
     window.addEventListener("nyala-gamification-update", handleUpdate);
     window.addEventListener("storage", handleUpdate);
     return () => {
+      window.removeEventListener("resize", checkDesktopBypass);
       window.removeEventListener("nyala-gamification-update", handleUpdate);
       window.removeEventListener("storage", handleUpdate);
     };

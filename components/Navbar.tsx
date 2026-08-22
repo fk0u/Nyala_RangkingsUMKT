@@ -17,7 +17,7 @@ import {
   List,
   X,
   Newspaper,
-  Headset,
+  WhatsappLogo,
   DeviceMobile,
 } from "@phosphor-icons/react";
 import ThemeToggle from "./ThemeToggle";
@@ -51,10 +51,10 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-white/90 dark:bg-navy-950/90 backdrop-blur-xl border-b border-navy-200/50 dark:border-navy-800/60 shadow-[0_1px_3px_0_rgba(0,0,0,.04)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+      <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-navy-950/95 backdrop-blur-xl border-b border-navy-200/60 dark:border-navy-800/80 shadow-xs transition-colors select-none">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
-          {/* ── Brand ── */}
+          {/* ── 1. Brand Logo ── */}
           <Link href="/" id="navbar-brand-link" className="flex items-center gap-2.5 group flex-shrink-0">
             <motion.div
               id="navbar-brand-mascot"
@@ -69,7 +69,7 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
               transition={{ duration: 0.85, ease: "easeOut" }}
               className="relative flex items-center justify-center"
             >
-              <MascotFlame size="sm" className="w-7 h-7 group-hover:scale-110 transition-transform" />
+              <MascotFlame size="sm" className="w-8 h-8 group-hover:scale-110 transition-transform" />
               {isDockedLanding && (
                 <motion.div
                   initial={{ scale: 0, opacity: 1 }}
@@ -79,31 +79,24 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
                 />
               )}
             </motion.div>
-            <span className="text-lg font-black tracking-tight text-navy-900 dark:text-white">
+            <span className="text-xl font-black tracking-tight text-navy-950 dark:text-white">
               Nyala
             </span>
-            <span className="hidden sm:inline px-1.5 py-0.5 text-[9px] font-extrabold uppercase rounded bg-nyala-500/12 text-nyala-600 dark:text-nyala-400 border border-nyala-500/20">
+            <span className="hidden sm:inline px-2 py-0.5 text-[9px] font-black uppercase rounded-full bg-nyala-500/10 text-nyala-600 dark:text-nyala-400 border border-nyala-500/20 font-mono">
               UMKT '26
             </span>
           </Link>
 
-          {/* ── Desktop Nav ── */}
-          <nav className="hidden lg:flex items-center gap-0.5">
+          {/* ── 2. Center Nav Links (Spacious, Clean Typography) ── */}
+          <nav className="hidden lg:flex items-center gap-1">
 
             <NavLink href="/" label="Beranda" active={pathname === "/"} />
 
-            {/* Hub UMKT Live API */}
+            {/* Hub Warta Live API */}
             <NavLink 
               href="/hub-umkt" 
-              label="Hub Kampus UMKT" 
+              label="Hub Warta" 
               active={pathname.startsWith("/hub-umkt")} 
-            />
-
-            {/* Panduan MABA */}
-            <NavLink 
-              href="/blog" 
-              label="Panduan MABA" 
-              active={pathname.startsWith("/blog")} 
             />
 
             {/* Akademik Dropdown */}
@@ -149,15 +142,15 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
                 href="/jadwal"
                 icon={<CalendarCheck weight="bold" className="w-4 h-4" />}
                 color="amber"
-                title="Alur 5 Tahap MASTA"
-                desc="Timeline interaktif & pro-tips"
+                title="Rundown & Jadwal MASTA"
+                desc="Timeline 3 gelombang & pro-tips"
               />
               <DropdownItem
                 href="/checklist"
                 icon={<CheckSquare weight="bold" className="w-4 h-4" />}
                 color="emerald"
                 title="Checklist Perlengkapan"
-                desc="Berkas, pakaian & task kustom"
+                desc="11 berkas wajib & task kustom"
               />
               <DropdownItem
                 href="/health-check"
@@ -168,66 +161,66 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
               />
             </Dropdown>
 
-            <NavLink
-              href="/companion"
-              label="Tanya Nyala"
-              active={pathname === "/companion"}
-              accent
+            {/* Panduan Blog */}
+            <NavLink 
+              href="/blog" 
+              label="Panduan Blog" 
+              active={pathname.startsWith("/blog")} 
             />
           </nav>
 
-          {/* ── Right Controls ── */}
-          <div className="flex items-center gap-2">
+          {/* ── 3. Right Slot (Balanced, Non-Cluttered Controls) ── */}
+          <div className="flex items-center gap-2.5">
             
-            {/* Direct Admin Help Button */}
-            <button
-              onClick={() => setAdminModalOpen(true)}
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-colors"
-              title="Hubungi Admin PMB / Kemahasiswaan Gedung C"
-            >
-              <Headset weight="bold" className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>Admin UMKT</span>
-            </button>
-
+            {/* Search Input Trigger */}
             {onOpenSearch && (
               <button
                 onClick={onOpenSearch}
-                className="p-2 rounded-xl text-navy-500 dark:text-navy-400 hover:text-navy-900 dark:hover:text-white hover:bg-navy-100 dark:hover:bg-navy-800 transition-colors"
-                title="Pencarian (Ctrl+K)"
+                className="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-navy-900 hover:bg-slate-200 dark:hover:bg-navy-800 border border-slate-200/80 dark:border-navy-800 transition-all cursor-pointer"
+                title="Cari Materi (Ctrl+K)"
               >
-                <MagnifyingGlass weight="bold" className="w-4 h-4" />
+                <MagnifyingGlass weight="bold" className="w-4 h-4 text-slate-400" />
+                <span className="hidden xl:inline text-xs font-medium">Cari info...</span>
+                <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-navy-800 text-[10px] font-mono font-bold text-slate-400 border border-slate-200 dark:border-navy-700 shadow-2xs">
+                  ⌘K
+                </kbd>
               </button>
             )}
 
+            {/* Admin Help Button */}
+            <button
+              onClick={() => setAdminModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-all active:scale-95 cursor-pointer"
+              title="Hubungi Admin WhatsApp Resmi Gedung C"
+            >
+              <WhatsappLogo weight="fill" className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span className="hidden sm:inline">Admin UMKT</span>
+            </button>
+
+            {/* Theme Toggle */}
             <ThemeToggle />
 
-            <Link
-              href="/mobile"
-              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-navy-600 dark:text-navy-300 hover:text-navy-950 dark:hover:text-white bg-navy-100 dark:bg-navy-900 border border-navy-200 dark:border-navy-800 transition-colors"
-              title="Buka Versi Mobile App (App Store Mode)"
-            >
-              <DeviceMobile weight="bold" className="w-3.5 h-3.5 text-nyala-500" />
-              <span>Mobile App</span>
-            </Link>
-
+            {/* Primary Action Button: Tanya Nyala AI */}
             <Link
               href="/companion"
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nyala-500 hover:bg-nyala-600 text-white text-xs font-bold shadow-sm hover:shadow-md transition-all active:scale-[0.97]"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-nyala-600 to-amber-500 hover:from-nyala-500 hover:to-amber-400 text-white text-xs font-extrabold shadow-md shadow-nyala-500/20 hover:shadow-lg transition-all active:scale-95 flex-shrink-0"
             >
-              <Sparkle weight="fill" className="w-3.5 h-3.5" />
-              <span>Chat AI</span>
+              <Sparkle weight="fill" className="w-4 h-4 text-white" />
+              <span className="hidden sm:inline">Tanya Nyala AI</span>
+              <span className="sm:hidden">AI</span>
             </Link>
 
+            {/* Mobile Menu Hamburger */}
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden p-2 rounded-xl text-navy-600 dark:text-navy-300 hover:bg-navy-100 dark:hover:bg-navy-800"
+              className="lg:hidden p-2 rounded-xl text-navy-600 dark:text-navy-300 hover:bg-navy-100 dark:hover:bg-navy-800 transition-colors"
             >
-              {mobileOpen ? <X weight="bold" className="w-5 h-5" /> : <List weight="bold" className="w-5 h-5" />}
+              {mobileOpen ? <X weight="bold" className="w-6 h-6" /> : <List weight="bold" className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
-        {/* ── Mobile Menu ── */}
+        {/* ── Mobile Dropdown Menu for Small Screens ── */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
@@ -238,45 +231,33 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
             >
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { href: "/panduan-ti", label: "Akademik TI", icon: Code, color: "text-nyala-500" },
+                  { href: "/hub-umkt", label: "Hub Warta", icon: Newspaper, color: "text-nyala-500" },
+                  { href: "/panduan-ti", label: "Akademik TI", icon: Code, color: "text-emerald-500" },
                   { href: "/panduan-sikad", label: "SIKAD UMKT", icon: Laptop, color: "text-blue-500" },
-                  { href: "/jadwal", label: "Alur MASTA", icon: CalendarCheck, color: "text-amber-500" },
-                  { href: "/checklist", label: "Checklist", icon: CheckSquare, color: "text-emerald-500" },
+                  { href: "/jadwal", label: "Jadwal MASTA", icon: CalendarCheck, color: "text-amber-500" },
+                  { href: "/checklist", label: "Checklist MABA", icon: CheckSquare, color: "text-purple-500" },
                   { href: "/health-check", label: "Health Check", icon: Heartbeat, color: "text-rose-500" },
-                  { href: "/blog", label: "Blog & Tips", icon: Newspaper, color: "text-indigo-500" },
-                  { href: "/companion", label: "Tanya AI", icon: Sparkle, color: "text-nyala-500" },
+                  { href: "/blog", label: "Panduan Blog", icon: Newspaper, color: "text-indigo-500" },
+                  { href: "/companion", label: "Tanya Nyala AI", icon: Sparkle, color: "text-nyala-500" },
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="p-3 rounded-xl bg-navy-50 dark:bg-navy-900 border border-navy-100 dark:border-navy-800 flex items-center gap-2.5"
+                      className="flex items-center gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-800 text-xs font-bold text-navy-900 dark:text-white active:scale-95 transition-all"
                     >
                       <Icon weight="bold" className={`w-4 h-4 ${item.color}`} />
-                      <span className="text-xs font-bold text-navy-900 dark:text-white">{item.label}</span>
+                      <span>{item.label}</span>
                     </Link>
                   );
                 })}
               </div>
-
-              {/* Mobile Admin Contact Action */}
-              <button
-                onClick={() => {
-                  setMobileOpen(false);
-                  setAdminModalOpen(true);
-                }}
-                className="w-full p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center justify-center gap-2"
-              >
-                <Headset weight="bold" className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Hubungi Admin Resmi UMKT (Gedung C & PMB)</span>
-              </button>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
 
-      {/* Global Admin Help Modal */}
       <AdminHelpModal
         isOpen={adminModalOpen}
         onClose={() => setAdminModalOpen(false)}
@@ -285,35 +266,25 @@ export default function Navbar({ onOpenSearch }: { onOpenSearch?: () => void }) 
   );
 }
 
-/* ── Reusable Sub-Components ── */
-
 function NavLink({
   href,
   label,
   active,
-  accent,
 }: {
   href: string;
   label: string;
   active: boolean;
-  accent?: boolean;
 }) {
   return (
     <Link
       href={href}
-      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+      className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
         active
-          ? "text-nyala-600 dark:text-nyala-400 bg-nyala-500/8"
-          : "text-navy-600 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white hover:bg-navy-100/50 dark:hover:bg-navy-800/50"
-      } ${accent ? "flex items-center gap-1.5" : ""}`}
+          ? "text-nyala-600 dark:text-nyala-400 bg-nyala-500/10"
+          : "text-slate-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-900"
+      }`}
     >
-      {accent && <Sparkle weight="fill" className="w-3.5 h-3.5 text-nyala-500" />}
       {label}
-      {accent && (
-        <span className="text-[8px] font-extrabold px-1.5 py-0.5 rounded-full bg-nyala-500 text-white leading-none">
-          AI
-        </span>
-      )}
     </Link>
   );
 }
@@ -338,26 +309,35 @@ function Dropdown({
       onMouseLeave={() => setOpen(false)}
     >
       <button
-        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 ${
-          active
-            ? "text-nyala-600 dark:text-nyala-400 bg-nyala-500/8"
-            : "text-navy-600 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white hover:bg-navy-100/50 dark:hover:bg-navy-800/50"
+        type="button"
+        onClick={() => setOpen(!open)}
+        className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          active || open
+            ? "text-nyala-600 dark:text-nyala-400 bg-nyala-500/10"
+            : "text-slate-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-900"
         }`}
       >
-        {label}
-        <CaretDown weight="bold" className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} />
+        <span>{label}</span>
+        <CaretDown
+          weight="bold"
+          className={`w-3.5 h-3.5 transition-transform duration-200 ${
+            open ? "rotate-180 text-nyala-500" : "text-slate-400"
+          }`}
+        />
       </button>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.12 }}
-            className="absolute top-full left-0 w-72 mt-1 p-1.5 rounded-xl bg-white dark:bg-navy-900 border border-navy-200 dark:border-navy-800 shadow-xl space-y-0.5"
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className="absolute left-0 top-full pt-1.5 w-72 z-50"
           >
-            {children}
+            <div className="rounded-2xl bg-white dark:bg-navy-900 border-2 border-slate-200 dark:border-navy-800 shadow-xl p-2 space-y-1">
+              {children}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -380,32 +360,41 @@ function DropdownItem({
   desc: string;
   badge?: string;
 }) {
-  const colorMap: Record<string, string> = {
-    nyala: "bg-nyala-500/10 text-nyala-600 group-hover:bg-nyala-600 group-hover:text-white",
-    amber: "bg-amber-500/10 text-amber-600 group-hover:bg-amber-600 group-hover:text-white",
-    emerald: "bg-emerald-500/10 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white",
-    rose: "bg-rose-500/10 text-rose-600 group-hover:bg-rose-600 group-hover:text-white",
-    slate: "bg-slate-500/10 text-slate-700 dark:text-slate-300 group-hover:bg-slate-700 group-hover:text-white",
+  const colorMap: { [k: string]: string } = {
+    nyala: "bg-nyala-500/10 text-nyala-600 dark:text-nyala-400",
+    blue: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+    purple: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
+    amber: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    emerald: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    rose: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
   };
 
   return (
     <Link
       href={href}
-      className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-navy-50 dark:hover:bg-navy-800/60 transition-colors group"
+      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-navy-800/80 transition-colors group"
     >
-      <div className={`p-1.5 rounded-lg transition-colors ${colorMap[color] || colorMap.nyala}`}>
+      <div
+        className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
+          colorMap[color] || "bg-slate-100 text-slate-600"
+        }`}
+      >
         {icon}
       </div>
-      <div className="min-w-0">
-        <div className="flex items-center gap-1.5">
-          <span className="text-xs font-bold text-navy-900 dark:text-white truncate">{title}</span>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between gap-1">
+          <span className="text-xs font-bold text-navy-900 dark:text-white group-hover:text-nyala-600 dark:group-hover:text-nyala-400 transition-colors">
+            {title}
+          </span>
           {badge && (
-            <span className="text-[9px] px-1.5 rounded bg-navy-100 dark:bg-navy-800 text-navy-500 dark:text-navy-400 font-semibold flex-shrink-0">
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-nyala-500/10 text-nyala-600 dark:text-nyala-400">
               {badge}
             </span>
           )}
         </div>
-        <p className="text-[11px] text-navy-500 dark:text-navy-400 truncate">{desc}</p>
+        <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">
+          {desc}
+        </p>
       </div>
     </Link>
   );

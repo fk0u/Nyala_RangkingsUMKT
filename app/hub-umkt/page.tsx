@@ -529,15 +529,6 @@ export default function HubUMKTPage() {
                               {item.kode_lembaga ? item.kode_lembaga.toUpperCase() : "Humas UMKT"}
                             </span>
                           </div>
-
-                          {/* SDG Badge overlay */}
-                          {Array.isArray(item.sdgs) && item.sdgs.length > 0 && (
-                            <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-                              {item.sdgs.slice(0, 2).map((sdg) => (
-                                <SDGBadge key={sdg.id} sdg={sdg} size="sm" />
-                              ))}
-                            </div>
-                          )}
                         </Link>
 
                         {/* Content */}
@@ -559,6 +550,15 @@ export default function HubUMKTPage() {
                             <p className="text-xs text-navy-500 dark:text-navy-400 line-clamp-2 leading-relaxed">
                               {cleanHTML(item.isi)}
                             </p>
+
+                            {/* SDG Badges placed below summary text */}
+                            {Array.isArray(item.sdgs) && item.sdgs.length > 0 && (
+                              <div className="flex flex-wrap gap-1 pt-1">
+                                {item.sdgs.slice(0, 2).map((sdg) => (
+                                  <SDGBadge key={sdg.id} sdg={sdg} size="sm" />
+                                ))}
+                              </div>
+                            )}
                           </div>
 
                           {/* Read CTA */}

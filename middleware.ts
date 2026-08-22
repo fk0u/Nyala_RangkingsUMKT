@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-// Regex to detect Mobile and Tablet User Agents
+// Regex to detect Mobile and Tablet User Agents (including Chrome/Edge DevTools Device Simulation)
 const MOBILE_OR_TABLET_REGEX = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet|kindle|silk|playbook/i;
 
 export function middleware(request: NextRequest) {
@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
   const userAgent = request.headers.get("user-agent") || "";
   const isMobileOrTablet = MOBILE_OR_TABLET_REGEX.test(userAgent);
 
-  // STRICT RULE: If user is on a mobile or tablet device, lock strictly to /mobile paths
+  // RULE 1: Mobile/Tablet devices are locked to /mobile/*
   if (isMobileOrTablet) {
     if (!pathname.startsWith("/mobile")) {
       const mobilePath = pathname === "/" ? "/mobile" : `/mobile${pathname}`;
@@ -30,6 +30,29 @@ export function middleware(request: NextRequest) {
       url.pathname = mobilePath;
       return NextResponse.redirect(url);
     }
+  }
+
+  // RULE 2: Desktop browsers (without DevTools mobile simulation) are blocked from /mobile/*
+  if (!isMobileOrTablet && pathname.startsWith("/mobile")) {
+    let desktopTarget = "/";
+    if (pathname.startsWith("/mobile/jadwal")) desktopTarget = "/jadwal";
+    else if (pathname.startsWith("/mobile/panduan-sikad")) desktopTarget = "/panduan-sikad";
+    else if (pathname.startsWith("/mobile/panduan-ti")) desktopTarget = "/panduan-ti";
+    else if (pathname.startsWith("/mobile/checklist")) desktopTarget = "/checklist";
+    else if (pathname.startsWith("/mobile/health-check")) desktopTarget = "/health-check";
+    else if (pathname.startsWith("/mobile/companion")) desktopTarget = "/companion";
+    else if (pathname.startsWith("/mobile/hub-umkt")) {
+      desktopTarget = pathname.replace("/mobile/hub-umkt", "/hub-umkt") || "/hub-umkt";
+    }
+    else if (pathname.startsWith("/mobile/blog")) {
+      desktopTarget = pathname.replace("/mobile/blog", "/blog") || "/blog";
+    }
+    else if (pathname.startsWith("/mobile/tentang-masta")) desktopTarget = "/tentang-masta";
+    else if (pathname.startsWith("/mobile/profile")) desktopTarget = "/";
+
+    const url = request.nextUrl.clone();
+    url.pathname = desktopTarget;
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();

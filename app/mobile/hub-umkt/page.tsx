@@ -437,15 +437,6 @@ export default function MobileHubUMKTPage() {
                         <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm text-white text-[9px] font-mono font-bold">
                           {item.kode_lembaga ? item.kode_lembaga.toUpperCase() : "Humas UMKT"}
                         </div>
-
-                        {/* SDG Badge overlay if exists */}
-                        {Array.isArray(item.sdgs) && item.sdgs.length > 0 && (
-                          <div className="absolute top-2.5 left-2.5 flex flex-wrap gap-1">
-                            {item.sdgs.slice(0, 2).map((sdg) => (
-                              <SDGBadge key={sdg.id} sdg={sdg} size="sm" />
-                            ))}
-                          </div>
-                        )}
                       </div>
                     )}
 
@@ -462,6 +453,15 @@ export default function MobileHubUMKTPage() {
                       <p className="line-clamp-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                         {cleanHTML(item.isi)}
                       </p>
+
+                      {/* SDG Badges placed below summary text */}
+                      {Array.isArray(item.sdgs) && item.sdgs.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-0.5">
+                          {item.sdgs.slice(0, 2).map((sdg) => (
+                            <SDGBadge key={sdg.id} sdg={sdg} size="sm" />
+                          ))}
+                        </div>
+                      )}
 
                       <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800/80 text-[10px] font-mono">
                         <span className="text-nyala-600 dark:text-nyala-400 font-bold">
