@@ -7,12 +7,13 @@
 - **Architecture:** Dual Platform Web & True Fluid Responsive Native App (/mobile/*) + Next.js Middleware Auto-Routing + Default Light Mode + Dedicated Profile Module + Cookie Consent.
 
 ## Key Accomplishments in This Session
-1. **Perbaikan Syntax di [`lib/umkt-api.ts`](file:///d:/Project/Nyala_RangkingsUMKT/lib/umkt-api.ts)**:
-   - Memperbaiki penutupan blok fungsi `stripHtml()` sebelum deklarasi `export const cleanHTML`, menyelesaikan build error pada Turbopack secara instan.
-2. **Perbaikan Teks Berita di Dark Mode (Teks Putih & Kontras Jelas)**:
-   - [`lib/umkt-api.ts`](file:///d:/Project/Nyala_RangkingsUMKT/lib/umkt-api.ts): Menambahkan helper `sanitizeArticleHTML()` untuk membersihkan atribut inline `style="color: #000000"` dan `style="background-color: ..."` bawaan CMS WordPress UMKT.
-   - [`app/globals.css`](file:///d:/Project/Nyala_RangkingsUMKT/app/globals.css): Menambahkan CSS rule override `.dark .prose *` (`color: #E2E8F0 !important; background-color: transparent !important;`) sehingga seluruh paragraf dan elemen HTML detail berita otomatis tampil terang di Dark Mode.
-   - [`app/hub-umkt/page.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/hub-umkt/page.tsx) & [`app/mobile/hub-umkt/page.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/mobile/hub-umkt/page.tsx): Memperbaiki kontras teks ringkasan kartu warta menjadi `dark:text-slate-300`.
+1. **Sistem Lengkap Error Pages (404, 500 & Loading States)**:
+   - [`app/not-found.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/not-found.tsx) & [`app/mobile/not-found.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/mobile/not-found.tsx): Halaman 404 interaktif dengan animasi Maskot Nyala bingung, pesan ramah MABA, tombol kembali ke Beranda, dan shortcut navigasi cepat.
+   - [`app/error.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/error.tsx) & [`app/mobile/error.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/mobile/error.tsx): Error Boundary 500 dengan tombol coba muat ulang (`reset()`), kode digest, dan akses instan ke WhatsApp Admin Gedung C.
+   - [`app/global-error.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/global-error.tsx): Fallback error halaman tingkat root layout dengan styling inline anti-crash.
+   - [`app/loading.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/loading.tsx) & [`app/mobile/loading.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/mobile/loading.tsx): Indikator loading shimmer animasi maskot saat transisi antar rute.
+2. **Perbaikan Syntax & Dark Mode pada Berita**:
+   - Membersihkan inline color CMS dengan `sanitizeArticleHTML()` dan override CSS `.dark .prose *` agar seluruh teks warta otomatis putih di Dark Mode.
 2. **Redesign Header Desktop (Zero-Clutter & Balanced Layout)**:
    - [`components/TopNotificationBar.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/components/TopNotificationBar.tsx) & [`components/Navbar.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/components/Navbar.tsx): Ditata ulang dengan tipografi lega, navigasi terstruktur, tombol pencarian minimalis (`⌘K`), 1 tombol Admin WhatsApp resmi Gedung C, dan 1 tombol utama *Tanya Nyala AI* bergradasi tanpa tombol bertumpuk.
 3. **Durasi Splash Screen Optimal (~2.2 Detik) & Fix Z-Index**:
