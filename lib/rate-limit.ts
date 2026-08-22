@@ -13,12 +13,12 @@ const ipStore = new Map<string, RateLimitRecord>();
 if (typeof setInterval !== "undefined") {
   setInterval(() => {
     const now = Date.now();
-    for (const [ip, record] of ipStore.entries()) {
-      record.timestamps = record.timestamps.filter((t) => now - t < 300_000);
+    ipStore.forEach((record, ip) => {
+      record.timestamps = record.timestamps.filter((t: number) => now - t < 300_000);
       if (record.timestamps.length === 0) {
         ipStore.delete(ip);
       }
-    }
+    });
   }, 300_000);
 }
 
@@ -36,7 +36,7 @@ export function checkRateLimit(
   }
 
   // Filter timestamps within the active window
-  record.timestamps = record.timestamps.filter((t) => now - t < windowMs);
+  record.timestamps = record.timestamps.filter((t: number) => now - t < windowMs);
 
   if (record.timestamps.length >= limit) {
     const oldest = record.timestamps[0];

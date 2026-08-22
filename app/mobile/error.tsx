@@ -23,7 +23,7 @@ export default function MobileError({
     <div className="p-4 sm:p-5 max-w-lg mx-auto space-y-5 pb-24">
       
       {/* 500 Main Card */}
-      <DuolingoCard variant="elevated" className="text-center p-6 space-y-4">
+      <DuolingoCard variant="surface" className="text-center p-6 space-y-4">
         <div className="w-24 h-24 mx-auto flex items-center justify-center">
           <MascotFlame size="lg" mood="nervous" />
         </div>
@@ -58,7 +58,7 @@ export default function MobileError({
           </DuolingoButton>
 
           <Link href="/mobile" className="block w-full">
-            <DuolingoButton variant="secondary" fullWidth size="md">
+            <DuolingoButton variant="surface" fullWidth size="md">
               <House weight="bold" className="w-4 h-4 mr-1.5" />
               <span>Kembali ke Beranda</span>
             </DuolingoButton>

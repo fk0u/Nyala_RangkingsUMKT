@@ -28,5 +28,8 @@
    - [`middleware.ts`](file:///d:/Project/Nyala_RangkingsUMKT/middleware.ts): Browser desktop standar yang membuka rute `/mobile/*` dialihkan otomatis ke rute web desktop padanannya, kecuali jika menggunakan **DevTools Toggle Device Toolbar (F12 / Ctrl+Shift+M)**.
 8. **Sistem SDG Badge Resmi PBB & Penataan Kartu Warta**:
    - SDG Badge diletakkan rapi di bawah teks ringkasan kartu berita dengan modal interaktif penjelasan target global PBB.
-9. **Verifikasi Kompilasi Produksi**:
-   - `npm run build` sukses 100% (**38 rute statis & dinamis + Proxy Middleware**, kompilasi 6.3s, 0 error, Exit Code 0).
+9. **Penyelesaian Bug Slug Detail Warta ([`lib/umkt-api.ts`](file:///d:/Project/Nyala_RangkingsUMKT/lib/umkt-api.ts), [`app/hub-umkt/[slug]/page.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/hub-umkt/[slug]/page.tsx), [`app/mobile/hub-umkt/[slug]/page.tsx`](file:///d:/Project/Nyala_RangkingsUMKT/app/mobile/hub-umkt/[slug]/page.tsx))**:
+   - Memperbaiki algoritma pencarian artikel warta di halaman detail. Sebelumnya, ketiadaan pencocokan langsung `b.slug === rawSlug` serta fallback `list[0]` menyebabkan semua artikel membuka berita pertama ("si A").
+   - Menghadirkan fungsi `fetchUMKTArticleBySlug()` dengan multi-tier matching (exact slug, decoded slug, generated slug, substring, dan dynamic search query across 2.100+ berita UMKT).
+10. **Verifikasi Kompilasi Produksi**:
+   - `npm run build` sukses 100% (**36 rute statis & dinamis + Proxy Middleware**, kompilasi 2.9s, 0 error, Exit Code 0).

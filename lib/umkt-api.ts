@@ -249,3 +249,87 @@ export async function fetchUMKTHub() {
   const res = await fetch("/api/umkt-portal?type=all-hub");
   return await res.json();
 }
+
+/**
+ * Robust fetcher to find an article by its slug from the official UMKT API.
+ * Performs multi-tier matching: exact slug, decoded slug, generated slug, partial slug,
+ * and automatic API search fallback across all 2,100+ articles.
+ */
+export async function fetchUMKTArticleBySlug(rawSlug: string): Promise<{
+  article: UMKTBerita | null;
+  relatedArticles: UMKTBerita[];
+}> {
+  if (!rawSlug) return { article: null, relatedArticles: [] };
+
+  try {
+    const decodedSlug = decodeURIComponent(rawSlug).trim();
+
+    // Helper matcher
+    const matchArticle = (list: UMKTBerita[]): UMKTBerita | null => {
+      // 1. Exact slug match
+      let match = list.find((b) => b.slug === decodedSlug || b.slug === rawSlug);
+      if (match) return match;
+
+      // 2. Generated slug match
+      match = list.find((b) => generateSlug(b.judul, b.id) === decodedSlug || generateSlug(b.judul) === decodedSlug);
+      if (match) return match;
+
+      // 3. Substring slug match
+      match = list.find((b) => (b.slug && decodedSlug.includes(b.slug)) || (b.slug && b.slug.includes(decodedSlug)));
+      if (match) return match;
+
+      // 4. URL matching
+      match = list.find((b) => b.url && (b.url.includes(decodedSlug) || b.url.includes(rawSlug)));
+      if (match) return match;
+
+      return null;
+    };
+
+    // 1. Fetch latest 30 articles from API as the primary pool
+    const latestRes = await fetch("/api/umkt-portal?type=berita&page_size=30");
+    const latestData = await latestRes.json();
+    const primaryList: UMKTBerita[] = latestData.data?.results || (Array.isArray(latestData.data) ? latestData.data : []) || latestData.berita || [];
+
+    let found = matchArticle(primaryList);
+
+    // 2. If not found in the latest 30, query the backend search filter across all 2,100+ articles
+    if (!found) {
+      const words = decodedSlug
+        .split("-")
+        .filter((w) => w.length >= 3 && !/^\d+$/.test(w));
+
+      for (let i = 0; i < Math.min(3, words.length); i++) {
+        const queryTerm = words.slice(i, i + 2).join(" ");
+        if (!queryTerm) continue;
+
+        try {
+          const searchRes = await fetch(`/api/umkt-portal?type=berita&search=${encodeURIComponent(queryTerm)}`);
+          const searchData = await searchRes.json();
+          const searchList: UMKTBerita[] = searchData.data?.results || (Array.isArray(searchData.data) ? searchData.data : []) || [];
+          
+          const searchMatch = matchArticle(searchList);
+          if (searchMatch) {
+            found = searchMatch;
+            break;
+          }
+        } catch {
+          // ignore search failure, continue to next query
+        }
+      }
+    }
+
+    // 3. Build related articles (excluding the active article)
+    const related = primaryList
+      .filter((b) => (found ? b.slug !== found.slug && b.judul !== found.judul : true))
+      .slice(0, 3);
+
+    return {
+      article: found || null,
+      relatedArticles: related,
+    };
+  } catch (err) {
+    console.error("Error fetching article by slug:", err);
+    return { article: null, relatedArticles: [] };
+  }
+}
+

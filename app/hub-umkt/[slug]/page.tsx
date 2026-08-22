@@ -29,7 +29,8 @@ import {
   cleanHTML, 
   sanitizeArticleHTML,
   extractImageFromHTML,
-  generateSlug 
+  generateSlug,
+  fetchUMKTArticleBySlug
 } from "@/lib/umkt-api";
 import { useToast } from "@/context/ToastContext";
 import MascotFlame from "@/components/MascotFlame";
@@ -54,29 +55,9 @@ export default function HubArticleDetailPage() {
     async function loadArticle() {
       setLoading(true);
       try {
-        const res = await fetch("/api/umkt-portal?type=berita");
-        const data = await res.json();
-        const list: UMKTBerita[] = data.data?.results || (Array.isArray(data.data) ? data.data : []) || data.berita || [];
-
-        if (list.length > 0) {
-          // Match by id at end of slug (e.g., "judul-berita-2199" -> 2199) or slug match
-          const idMatch = rawSlug.match(/-(\d+)$/);
-          const targetId = idMatch ? parseInt(idMatch[1], 10) : null;
-
-          let found = targetId ? list.find(b => b.id === targetId) : null;
-          
-          if (!found) {
-            found = list.find(b => generateSlug(b.judul, b.id) === rawSlug);
-          }
-
-          if (!found && list.length > 0) {
-            // Fallback to first article if not found
-            found = list[0];
-          }
-
-          setArticle(found || null);
-          setRelatedArticles(list.filter(b => b.id !== (found?.id || 0)).slice(0, 3));
-        }
+        const result = await fetchUMKTArticleBySlug(rawSlug);
+        setArticle(result.article);
+        setRelatedArticles(result.relatedArticles);
       } catch (err) {
         console.error("Gagal memuat detail warta:", err);
       } finally {
@@ -321,7 +302,7 @@ export default function HubArticleDetailPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {relatedArticles.map((rel) => {
-                const relSlug = generateSlug(rel.judul, rel.id);
+                const relSlug = rel.slug || generateSlug(rel.judul, rel.id);
                 const relCover = rel.foto || extractImageFromHTML(rel.isi) || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80";
 
                 return (

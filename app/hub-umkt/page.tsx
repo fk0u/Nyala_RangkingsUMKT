@@ -296,7 +296,7 @@ export default function HubUMKTPage() {
                 </div>
 
                 <Link
-                  href={`/hub-umkt/${generateSlug(spotlightArticle.judul, spotlightArticle.id)}`}
+                  href={`/hub-umkt/${spotlightArticle.slug || generateSlug(spotlightArticle.judul, spotlightArticle.id)}`}
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-nyala-600 to-amber-500 hover:from-nyala-500 hover:to-amber-400 text-white text-xs font-extrabold shadow-lg shadow-nyala-500/25 transition-all active:scale-95 w-full sm:w-auto"
                 >
                   <span>Baca Selengkapnya</span>

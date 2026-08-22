@@ -22,7 +22,8 @@ import {
   formatDateIndo, 
   cleanHTML, 
   sanitizeArticleHTML,
-  generateSlug 
+  generateSlug,
+  fetchUMKTArticleBySlug 
 } from "@/lib/umkt-api";
 import { useToast } from "@/context/ToastContext";
 import DuolingoCard from "@/components/flutter/DuolingoCard";
@@ -44,27 +45,9 @@ export default function MobileHubArticleDetailPage() {
     async function loadArticle() {
       setLoading(true);
       try {
-        const res = await fetch("/api/umkt-portal?type=berita");
-        const data = await res.json();
-        const list: UMKTBerita[] = data.data?.results || (Array.isArray(data.data) ? data.data : []) || data.berita || [];
-
-        if (list.length > 0) {
-          const idMatch = rawSlug.match(/-(\d+)$/);
-          const targetId = idMatch ? parseInt(idMatch[1], 10) : null;
-
-          let found = targetId ? list.find(b => b.id === targetId) : null;
-          
-          if (!found) {
-            found = list.find(b => generateSlug(b.judul, b.id) === rawSlug);
-          }
-
-          if (!found && list.length > 0) {
-            found = list[0];
-          }
-
-          setArticle(found || null);
-          setRelatedArticles(list.filter(b => b.id !== (found?.id || 0)).slice(0, 3));
-        }
+        const result = await fetchUMKTArticleBySlug(rawSlug);
+        setArticle(result.article);
+        setRelatedArticles(result.relatedArticles);
       } catch (err) {
         console.error("Gagal memuat warta mobile:", err);
       } finally {
